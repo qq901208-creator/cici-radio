@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+:root {
+  --brand-yellow: #f5d558;
+  --brand-cream: #ebecd7;
+  --brand-orange: #ef6f20;
+  --brand-light-yellow: #ffefa6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand-orange);
+  outline-offset: 2px;
+}
