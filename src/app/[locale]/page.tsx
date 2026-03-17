@@ -1,35 +1,45 @@
-import { getTranslations } from 'next-intl/server'
-import { Link } from '@/i18n/routing'
 import { SHOWS } from '@/data/shows'
+import { Link } from '@/i18n/routing'
 
-export default async function HomePage({
+export default async function ShowsPage({
   params,
 }: {
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
-  const t = await getTranslations('hero')
 
   return (
-    <>
-      {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, #f5d558 0%, #ffefa6 50%, #ef6f20 100%)' }}
-        className="relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6 py-24 md:py-32">
-          <span className="inline-block bg-white/40 text-gray-800 text-xs font-bold px-3 py-1 rounded-full mb-6">
-            🎤 Taiwan Comedy Guide · 台灣喜劇資訊站
-          </span>
-          <h1 className="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-6">
-            {t('title')}
-          </h1>
-          <p className="text-lg text-gray-700 mb-10 max-w-xl">
-            {t('subtitle')}
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/shows"
-              className="bg-gray-900 text-white font-bold px-8 py-4 rounded-full hover:bg-gray-800 transition-colors">
-              {t('cta')}
-            </Link>
-            <Link href="/open-mic"
-              className="bg-white/70 text-gray-900 font-bold px-8 py-4 rounded-full hover:bg-white transition-colors">
-              {t('ctaOpenMic')
+    <div className="max-w-6xl mx-auto px-6 py-10">
+      <h1 className="text-3xl font-black mb-8">
+        {locale === 'zh' ? '所有演出' : 'All Shows'}
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {SHOWS.map(show => (
+          <Link
+            key={show.id}
+            href={`/show/${show.slug}`}
+            className="bg-white rounded-2xl p-5 hover:shadow-md transition-shadow block"
+          >
+            <span
+              className="text-xs font-bold text-white px-2 py-1 rounded-full mb-3 inline-block"
+              style={{ backgroundColor: '#ef6f20' }}
+            >
+              {show.type}
+            </span>
+            <h2 className="font-bold text-gray-900 mb-2">
+              {locale === 'zh' ? show.title.zh : show.title.en}
+            </h2>
+            <p className="text-sm text-gray-500">📅 {show.date} {show.time}</p>
+            <p className="text-sm text-gray-500">📍 {show.venue}</p>
+            <p className="text-sm text-gray-500 mt-1">🎟 {show.ticketPlatform}</p>
+            {show.price && (
+              <p className="text-sm font-bold mt-2" style={{ color: '#ef6f20' }}>
+                {show.price}
+              </p>
+            )}
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
