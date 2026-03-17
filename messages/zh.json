@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "shows": "演出資訊",
+    "openMic": "Open Mic",
+    "venues": "場地地圖",
+    "courses": "喜劇課程"
+  },
+  "hero": {
+    "title": "一站掌握全台喜劇演出資訊",
+    "subtitle": "查演出、找場地、報名 Open Mic，全都在這裡",
+    "cta": "查看所有演出",
+    "ctaOpenMic": "Open Mic 報名"
+  },
+  "filter": {
+    "title": "篩選演出",
+    "venue": "場地",
+    "weekday": "星期",
+    "type": "類型",
+    "platform": "售票平台",
+    "all": "全部",
+    "reset": "清除篩選",
+    "noResults": "找不到符合條件的演出"
+  },
+  "show": {
+    "buyTicket": "購票",
+    "free": "免費入場",
+    "performers": "表演者",
+    "venue": "場地",
+    "date": "日期",
+    "time": "時間",
+    "type": "類型",
+    "platform": "售票平台",
+    "price": "票價",
+    "moreShows": "更多演出"
+  },
+  "openMic": {
+    "title": "Open Mic 報名資訊",
+    "subtitle": "以下資料由 Google Sheets 即時同步更新",
+    "signup": "立即報名",
+    "deadline": "報名截止",
+    "host": "主持人",
+    "free": "免費",
+    "notes": "備註",
+    "noData": "目前沒有即將舉行的 Open Mic"
+  },
+  "venues": {
+    "title": "台灣喜劇場地地圖",
+    "subtitle": "探索全台灣的喜劇演出場地",
+    "viewShows": "查看演出"
+  },
+  "courses": {
+    "title": "喜劇課程與講座",
+    "subtitle": "提升你的喜劇技巧，找到適合你的課程"
+  },
+  "footer": {
+    "tagline": "台灣現場喜劇資訊平台",
+    "contact": "聯絡我們",
+    "links": "快速連結",
+    "social": "追蹤我們",
+    "rights": "© 2025 嘻嘻哪裡唷 cici._.radio. All rights reserved."
+  },
+  "meta": {
+    "siteDe
