@@ -35,7 +35,7 @@
   },
   "openMic": {
     "title": "Open Mic 報名資訊",
-    "subtitle": "以下資料由 Google Sheets 即時同步更新",
+    "subtitle": "資料由 Google Sheets 即時同步",
     "signup": "立即報名",
     "deadline": "報名截止",
     "host": "主持人",
@@ -50,14 +50,19 @@
   },
   "courses": {
     "title": "喜劇課程與講座",
-    "subtitle": "提升你的喜劇技巧，找到適合你的課程"
+    "subtitle": "提升你的喜劇技巧"
   },
   "footer": {
     "tagline": "台灣現場喜劇資訊平台",
     "contact": "聯絡我們",
     "links": "快速連結",
     "social": "追蹤我們",
-    "rights": "© 2025 嘻嘻哪裡唷 cici._.radio. All rights reserved."
+    "rights": "2025 cici._.radio. All rights reserved."
   },
   "meta": {
-    "siteDe
+    "siteDescription": "整合台灣喜劇演出資訊，包含單口喜劇、即興劇場、Open Mic 報名，全台最完整的喜劇資訊平台。",
+    "showsDescription": "台灣所有喜劇演出資訊",
+    "openMicDescription": "台灣 Open Mic 報名資訊",
+    "venuesDescription": "台灣喜劇演出場地地圖"
+  }
+}
