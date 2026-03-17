@@ -61,7 +61,7 @@ export const VENUES: Venue[] = [
     address: '台北市中正區八德路一段1號',
     addressEn: 'No.1, Sec. 1, Bade Rd., Taipei',
     lat: 25.0461,
-    lng: 121.5190,
+    lng: 121.519,
     city: 'taipei',
   },
 ]
@@ -110,4 +110,44 @@ export const SHOWS: Show[] = [
     id: '003',
     slug: 'improv-spring-2025',
     title: { zh: '即興喜劇春季演出', en: 'Improv Spring Showcase 2025' },
-    image: '/shows/placeholder.jpg'
+    image: '/shows/placeholder.jpg',
+    date: '2025-04-05',
+    time: '15:00',
+    weekday: '六',
+    venue: 'Legacy Taipei',
+    venueId: 'legacy',
+    type: 'Improv',
+    ticketPlatform: 'ACCUPASS',
+    ticketUrl: 'https://www.accupass.com/',
+    description: {
+      zh: '春季即興喜劇展演。',
+      en: 'Spring improv showcase.',
+    },
+    price: 'NT$350',
+  },
+]
+
+export function getShowBySlug(slug: string) {
+  return SHOWS.find(s => s.slug === slug)
+}
+
+export function getVenueById(id: string) {
+  return VENUES.find(v => v.id === id)
+}
+
+export function formatDate(dateStr: string, locale: 'zh' | 'en' = 'zh'): string {
+  const date = new Date(dateStr)
+  if (locale === 'zh') {
+    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
+  }
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}
+
+export const PLATFORM_COLORS: Record<TicketPlatform, string> = {
+  KKTIX: 'bg-red-500',
+  ACCUPASS: 'bg-blue-500',
+  OPENTIX: 'bg-green-600',
+  Eventbrite: 'bg-orange-500',
+  '現場購票': 'bg-gray-500',
+  '免費': 'bg-emerald-500',
+}
