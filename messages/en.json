@@ -1,0 +1,68 @@
+{
+  "nav": {
+    "shows": "Shows",
+    "openMic": "Open Mic",
+    "venues": "Venues",
+    "courses": "Courses"
+  },
+  "hero": {
+    "title": "Discover Comedy Shows Across Taiwan",
+    "subtitle": "Find shows, venues, and open mic opportunities in one place",
+    "cta": "Browse All Shows",
+    "ctaOpenMic": "Open Mic Sign Up"
+  },
+  "filter": {
+    "title": "Filter Shows",
+    "venue": "Venue",
+    "weekday": "Weekday",
+    "type": "Type",
+    "platform": "Ticket Platform",
+    "all": "All",
+    "reset": "Clear Filters",
+    "noResults": "No shows match your filters"
+  },
+  "show": {
+    "buyTicket": "Get Tickets",
+    "free": "Free Entry",
+    "performers": "Performers",
+    "venue": "Venue",
+    "date": "Date",
+    "time": "Time",
+    "type": "Type",
+    "platform": "Ticket Platform",
+    "price": "Price",
+    "moreShows": "More Shows"
+  },
+  "openMic": {
+    "title": "Open Mic Sign-Up Info",
+    "subtitle": "Data synced live from Google Sheets",
+    "signup": "Sign Up",
+    "deadline": "Sign-up Deadline",
+    "host": "Host",
+    "free": "Free",
+    "notes": "Notes",
+    "noData": "No upcoming open mics right now"
+  },
+  "venues": {
+    "title": "Comedy Venue Map Taiwan",
+    "subtitle": "Explore comedy venues across Taiwan",
+    "viewShows": "View Shows"
+  },
+  "courses": {
+    "title": "Comedy Courses & Workshops",
+    "subtitle": "Level up your comedy skills"
+  },
+  "footer": {
+    "tagline": "Taiwan Live Comedy Information Platform",
+    "contact": "Contact",
+    "links": "Quick Links",
+    "social": "Follow Us",
+    "rights": "© 2025 嘻嘻哪裡唷 cici._.radio. All rights reserved."
+  },
+  "meta": {
+    "siteDescription": "Your guide to stand-up comedy, improv, and open mic shows across Taiwan.",
+    "showsDescription": "All comedy shows in Taiwan, filterable by venue, type, and ticket platform",
+    "openMicDescription": "Open mic sign-up info in Taiwan, updated in real-time",
+    "venuesDescription": "Comedy venue map for Taiwan"
+  }
+}
