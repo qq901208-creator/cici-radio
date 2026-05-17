@@ -1465,11 +1465,12 @@ function showSortKey(s){
 function isExpired(dateStr, timeStr){
   if(!dateStr) return false;
   const now = new Date();
-  // 多日期（逗號分隔）取第一個；去除中文年月日；斜線改橫線
-  const raw = String(dateStr).split(',')[0].trim()
+  // 多日期（逗號分隔）取**最後一個**（最後上課日）
+  const dates = String(dateStr).split(',').map(s=>s.trim()).filter(Boolean);
+  const lastDate = dates[dates.length-1];
+  const raw = lastDate
     .replace(/年/,'-').replace(/月/,'-').replace(/日/,'')
     .replace(/\//g,'-').replace(/\./g,'-').trim();
-  // 驗證格式
   if(!/^\d{4}-\d{1,2}-\d{1,2}$/.test(raw)) return false;
   if(timeStr && timeStr.trim()){
     const times = timeStr.split('–');
@@ -2092,13 +2093,15 @@ function saveCourse(status){
   if(startTime) timeStr=startAmpm+startTime;
   if(startTime&&endTime) timeStr+=('–'+endAmpm+endTime);
   const dateVal=document.getElementById('c-date').value.trim();
-  const firstDate=(dateVal.split(',')[0]||'').trim();
+  const dateParts=(dateVal.split(',').map(s=>s.trim()).filter(Boolean));
+  const firstDate=dateParts[0]||'';
+  const lastDate=dateParts[dateParts.length-1]||firstDate;
   if(isDuplicateCourse(title, firstDate, eCourseId||undefined)){
     showToast('⚠️ 已有同名稱、同日期的課程，請確認是否重複','err');
     return;
   }
   const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
-  const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,type:ctype,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,status};
+  const item={title,date:lastDate,dateDisplay:dateVal,time:timeStr,type:ctype,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,status};
   window.FB.save('courses', eCourseId||null, item).then(newId=>{
     if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
     else COURSES.push({id:newId,...item});
