@@ -1181,16 +1181,25 @@ async function loadAllData() {
     ]);
     window.SHOWS    = showsSnap.docs.map(d=>({id:d.id,...d.data()}));
     window.MICS     = micsSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window.VENUES   = venuesSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a._order??999)-(b._order??999));
+    // ★ VENUES 合併邏輯：以 DEFAULT_VENUES 為底，Firebase 同 id 的資料覆蓋，Firebase 獨有的資料附加
+    const fbVenues = venuesSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const mergedVenues = window.DEFAULT_VENUES.map(def => {
+      const fb = fbVenues.find(v=>v.id===def.id);
+      return fb ? {...def,...fb} : def;
+    });
+    // 附加 Firebase 有但 DEFAULT 沒有的場地
+    fbVenues.forEach(fb => {
+      if(!mergedVenues.find(v=>v.id===fb.id)) mergedVenues.push(fb);
+    });
+    window.VENUES = mergedVenues.sort((a,b)=>(a._order??999)-(b._order??999));
     window.COURSES  = coursesSnap.docs.map(d=>({id:d.id,...d.data()}));
     window.COMMENTS = commentsSnap.docs.map(d=>({id:d.id,...d.data()}));
     // Fallback to defaults if Firestore is empty
     if(!window.SHOWS.length)    window.SHOWS    = window.DEFAULT_SHOWS;
     if(!window.MICS.length)     window.MICS     = window.DEFAULT_MICS;
-    if(!window.VENUES.length)   window.VENUES   = window.DEFAULT_VENUES;
     if(!window.COURSES.length)  window.COURSES  = window.DEFAULT_COURSES;
     if(!window.COMMENTS.length) window.COMMENTS = window.DEFAULT_COMMENTS;
-    // ★ 關鍵：同步 window.SHOWS 到全域 SHOWS 變數，確保所有裝置都讀 Firestore
+    // ★ 同步 window 變數到全域變數，確保所有裝置都讀 Firestore
     SHOWS    = window.SHOWS;
     MICS     = window.MICS;
     VENUES   = window.VENUES;
