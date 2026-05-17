@@ -29,10 +29,10 @@ body{font-family:var(--f-bo);background:var(--cr);color:var(--tm);line-height:1.
 .nav-logo-icon img{width:100%;height:100%;object-fit:cover;display:block}
 .nav-logo-txt .zh{font-family:var(--f-zh);font-size:.85rem;font-weight:700;color:var(--y);display:block;line-height:1.2}
 .nav-logo-txt .en{font-family:var(--f-di);font-size:.62rem;font-weight:700;color:var(--or);letter-spacing:.07em;text-transform:uppercase;display:block}
-.nav-links{display:flex;list-style:none;margin-left:auto;gap:1px}
+.nav-links{display:flex;list-style:none;gap:1px}
 .nav-links a{display:block;padding:6px 10px;font-size:.79rem;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;border-radius:var(--r-sm);font-family:var(--f-zh);transition:color .15s,background .15s;white-space:nowrap;cursor:pointer}
 .nav-links a:hover,.nav-links a.active{color:var(--y);background:rgba(245,213,88,.1)}
-.nav-right{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.nav-right{display:flex;align-items:center;gap:9px;flex-shrink:0;margin-left:auto}
 .lang-pill{display:flex;background:rgba(255,255,255,.08);border-radius:var(--r-pill);overflow:hidden;border:1px solid rgba(245,213,88,.22)}
 .lang-btn{padding:5px 11px;font-size:.74rem;font-weight:500;color:rgba(255,255,255,.52);cursor:pointer;border:none;background:transparent;font-family:var(--f-zh);transition:all .15s}
 .lang-btn.on{background:var(--y);color:var(--sd);font-weight:700}
@@ -95,8 +95,8 @@ body{font-family:var(--f-bo);background:var(--cr);color:var(--tm);line-height:1.
 .show-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-lg);overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;color:var(--tm);display:flex;flex-direction:column;position:relative;cursor:pointer}
 .show-card:hover{transform:translateY(-4px);box-shadow:var(--sh);border-color:var(--or)}
 .sc-img{width:100%;height:160px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--py),var(--y))}
-.sc-img img.sc-poster{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;z-index:1;display:block;background:var(--ww)}
-.sc-img img.sc-poster[src=""]{display:none}
+.sc-img img.sc-poster{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;z-index:2;display:block!important;background:var(--ww)}
+.sc-img img.sc-poster[src=""]{display:none!important}
 .sc-img .sc-emoji{font-size:2.6rem;position:relative;z-index:0}
 .sc-types{position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-wrap:wrap;z-index:2;max-width:calc(100% - 16px)}
 .sc-type-tag{font-size:.63rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);font-family:var(--f-zh)}
@@ -469,6 +469,8 @@ body.edit .edit-bar{display:flex!important}
   .nav-links.open li a:hover,.nav-links.open li a.active{color:var(--y)}
   .hamburger{display:flex!important}
   .lang-pill{display:flex}
+  #nav .nav-links:not(.open){display:none!important}
+  .nav-right{margin-left:auto}
   /* 演出卡片圖片手機版 */
   .sc-img{height:180px}
   .sc-img img.sc-poster{display:block!important;width:100%;height:100%;object-fit:contain;background:var(--ww)}
@@ -535,7 +537,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </h1>
     <p class="hero-sub">CICI._.RADIO</p>
     <p class="hero-desc editable" contenteditable="false">
-      <span class="zh-text">人工整理全台售票喜劇演出、Open Mic 報名資訊與喜劇據點，目前以售票演出為主，若有遺漏歡迎回報！</span>
+      <span class="zh-text">歡迎來到現場喜劇的大平台！<br>本站整理全台喜劇售票演出、Open Mic 報名資訊等多種內容<br>今天你想看些什麼呢？快來找找吧！</span>
       <span class="en-text">Hand-curated comedy show listings, open mic info, and venues across Taiwan. Focused on ticketed shows — let us know if we missed anything!</span>
     </p>
     <div class="hero-ctas">
@@ -869,7 +871,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <div class="ft-bottom">
     <p class="ft-copy">© 2026 嘻嘻哪裡唷 · Cici Radio Comedy Guide Taiwan</p>
     <div>
-      <p class="ft-disc"><span class="zh-text">本站為非營利公益性質，以售票演出為主，由人工整理與更新。若有資訊有誤或遺漏，歡迎透過聯絡我們回報～</span><span class="en-text">Non-profit, hand-curated. Focused on ticketed shows. Found something wrong? Let us know!</span></p>
+      <p class="ft-disc"><span class="zh-text">本站為非營利公益性質，以售票演出為主，由人工整理與更新<br>若有資訊有誤或遺漏，歡迎透過聯絡我們回報</span><span class="en-text">Non-profit, hand-curated. Focused on ticketed shows.<br>Found something wrong? Let us know!</span></p>
       <!-- Hidden admin entry — low key, general users won't notice -->
       <div style="text-align:right;margin-top:8px">
         <span class="admin-link" onclick="openAuthModal()" title="管理入口">管理入口</span>
@@ -1140,7 +1142,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <a class="report-channel" href="https://www.instagram.com/cici._.radio/" target="_blank" rel="noopener">
       <div class="report-ch-icon">📷</div>
       <div class="report-ch-info">
-        <strong>Instagram DM</strong>
+        <strong>Instagram 私訊</strong>
         <span>@cici._.radio</span>
       </div>
     </a>
@@ -1410,7 +1412,7 @@ function showCardHTML(s) {
   const emojiMap = {opmic:'🎤',standup:'🎙️',improv:'🎭',mancai:'🥢',mixed:'🎪',special:'⭐',english:'🇬🇧',podcast:'📻',other:'🎬'};
   const emoji = emojiMap[types[0]] || '🎭';
   const posterEl = (s.image && s.image.trim())
-    ? `<img class="sc-poster" src="${s.image.trim()}" alt="${s.title}" loading="lazy" onerror="this.style.display='none';this.nextSibling&&(this.nextSibling.style.zIndex='1')">`
+    ? `<img class="sc-poster" src="${s.image.trim()}" alt="${s.title}" onerror="this.style.display='none'">`
     : '';
   const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
   const expiredTag = isExpired(s.date) ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">已過期</span>` : '';
@@ -1528,11 +1530,9 @@ function courseCardHTML(c) {
       <p class="cc-desc">${c.description||''}</p>
     </div>
     ${c.imgSrc?`<div class="cc-imgsrc">${c.imgSrc}</div>`:''}
-    <div class="cc-foot"><span class="cc-plat">${(c.platform||'').toUpperCase()}</span>
-      <div style="display:flex;align-items:center;gap:8px">
-        <a href="${c.url||'#'}" class="cc-link" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">立即報名</span><span class="en-text">Sign Up</span> ↗</a>
-        <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.7">詳情 ↗</span>
-      </div>
+    <div class="cc-foot">
+      ${(c.url&&c.url!=='#')?`<a href="${c.url}" class="cc-link" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">立即報名 ↗</span><span class="en-text">Sign Up ↗</span></a>`:'<span></span>'}
+      <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.7">詳情 ↗</span>
     </div>
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openCourseModal('${c.id}')">✏️</button>
@@ -1999,6 +1999,15 @@ function saveCourse(status){
 function delCourse(id){if(!confirm('確定刪除？'))return;window.FB.del('courses',id).then(()=>{COURSES=COURSES.filter(x=>x.id!==id);renderCourses();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
 function saveAll(){showToast('✅ 所有變更已儲存','ok');}
+
+// ── 管理模式關閉提醒 ──
+window.addEventListener('beforeunload', e => {
+  if (editMode) {
+    e.preventDefault();
+    e.returnValue = '你目前在管理模式，離開前請確認已儲存所有變更。';
+    return e.returnValue;
+  }
+});
 
 // ── VENUE / AREA MANAGER ──
 // Default lists stored in localStorage for quick access
