@@ -469,6 +469,16 @@ body.edit .edit-bar{display:flex!important}
   .nav-links.open li a:hover,.nav-links.open li a.active{color:var(--y)}
   .hamburger{display:flex!important}
   .lang-pill{display:flex}
+  /* 演出卡片圖片手機版 */
+  .sc-img{height:180px}
+  .sc-img img.sc-poster{display:block!important;width:100%;height:100%;object-fit:contain;background:var(--ww)}
+  /* 留言板手機版 */
+  .fp-compose-row{flex-direction:column;gap:10px}
+  .fp-av{width:36px;height:36px;font-size:.95rem}
+  .fp-inner{width:100%}
+  .fp-nr{flex-direction:column;gap:6px}
+  .fp-ni{width:100%}
+  .sec{padding:44px 4vw}
 }
 .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:8px 6px;border:none;background:transparent;margin-left:6px;flex-shrink:0}
 .hamburger span{display:block;width:22px;height:2.5px;background:#fff;border-radius:2px;transition:all .22s}
@@ -857,7 +867,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </ul></div>
   </div>
   <div class="ft-bottom">
-    <p class="ft-copy">© 2025 嘻嘻哪裡唷 · Cici Radio Comedy Guide Taiwan</p>
+    <p class="ft-copy">© 2026 嘻嘻哪裡唷 · Cici Radio Comedy Guide Taiwan</p>
     <div>
       <p class="ft-disc"><span class="zh-text">本站為非營利公益性質，以售票演出為主，由人工整理與更新。若有資訊有誤或遺漏，歡迎透過聯絡我們回報～</span><span class="en-text">Non-profit, hand-curated. Focused on ticketed shows. Found something wrong? Let us know!</span></p>
       <!-- Hidden admin entry — low key, general users won't notice -->
@@ -1019,21 +1029,31 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   </div>
 </div></div>
 
-<!-- Course Modal — no Open Mic / English Comedy types -->
+<!-- Course Modal -->
 <div class="modal-ov" id="modal-course"><div class="modal">
   <button class="modal-close" onclick="closeModal('course')">✕</button>
   <div class="modal-title" id="modal-course-title">新增課程</div>
-  <div class="fg single" style="margin-bottom:12px"><div class="fg-g">
-    <label class="fl">URL 自動解析</label>
-    <div class="parse-row"><input class="fi" type="url" id="c-url" placeholder="https://kktix.com/..."><button class="parse-btn" id="c-parse-btn" onclick="parseCourseUrl()">⟳ 解析</button></div>
-    <div class="ps" id="c-ps"></div>
-    <div class="pp" id="c-pp"><div style="font-size:.77rem;font-weight:700;color:var(--ts);margin-bottom:6px">✓ 已自動填入，請確認</div><img id="c-pp-img" src="" alt="" style="display:none;width:100%;height:88px;object-fit:cover;border-radius:7px;margin-bottom:6px"><div class="pp-name" id="c-pp-name"></div><div class="pp-meta" id="c-pp-meta"></div></div>
-  </div></div>
-  <hr class="fdiv">
   <div class="fg">
     <div class="fg-g full"><label class="fl">課程名稱 <span class="req">*</span></label><input class="fi" type="text" id="c-title"></div>
-    <div class="fg-g"><label class="fl">日期</label><input class="fi" type="date" id="c-date"></div>
-    <div class="fg-g"><label class="fl">時間</label><input class="fi" type="text" id="c-time" placeholder="e.g. 14:00–18:00"></div>
+    <div class="fg-g full">
+      <label class="fl">日期（可多選，用逗號分隔）</label>
+      <input class="fi" type="text" id="c-date" placeholder="e.g. 2026-05-20, 2026-05-27, 2026-06-03">
+      <div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:4px">單一日期或多個日期皆可，用逗號分隔</div>
+    </div>
+    <div class="fg-g">
+      <label class="fl">開始時間</label>
+      <div style="display:flex;gap:6px;align-items:center">
+        <select class="fs" id="c-time-start-ampm" style="width:80px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
+        <input class="fi" type="text" id="c-time-start" placeholder="2:00" style="flex:1">
+      </div>
+    </div>
+    <div class="fg-g">
+      <label class="fl">結束時間</label>
+      <div style="display:flex;gap:6px;align-items:center">
+        <select class="fs" id="c-time-end-ampm" style="width:80px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
+        <input class="fi" type="text" id="c-time-end" placeholder="6:00" style="flex:1">
+      </div>
+    </div>
     <div class="fg-g"><label class="fl">類型</label>
       <select class="fs" id="c-type">
         <option value="standup">站立喜劇 Stand-up</option>
@@ -1044,11 +1064,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div class="fg-g"><label class="fl">主辦 / 講師</label><input class="fi" type="text" id="c-organizer"></div>
     <div class="fg-g"><label class="fl">地點</label><input class="fi" type="text" id="c-location" placeholder="e.g. 台北市 / 線上 Online"></div>
+    <div class="fg-g full"><label class="fl">地址</label><input class="fi" type="text" id="c-address" placeholder="e.g. 台北市中山區復興北路480號"></div>
     <div class="fg-g"><label class="fl">費用</label><input class="fi" type="text" id="c-fee" placeholder="e.g. NT$2,800"></div>
     <div class="fg-g"><label class="fl">平台</label><select class="fs" id="c-platform"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="google-form">Google 表單</option><option value="other">其他</option></select></div>
     <div class="fg-g full"><label class="fl">報名連結</label><input class="fi" type="url" id="c-signupurl" placeholder="https://..."></div>
     <div class="fg-g full">
-      <label class="fl">課程圖片網址</label>
+      <label class="fl">課程圖片</label>
       <div style="display:flex;align-items:center;gap:0;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-md);overflow:hidden;background:#fff;margin-bottom:6px">
         <span style="padding:9px 11px;background:var(--cr);font-size:.78rem;font-family:var(--f-bo);color:var(--ts);white-space:nowrap;border-right:1.5px solid rgba(45,43,31,.1);flex-shrink:0">https://lh3.googleusercontent.com/d/</span>
         <input class="fi" type="text" id="c-image-id" placeholder="貼上 Google Drive 檔案 ID"
@@ -1059,12 +1080,14 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <input type="hidden" id="c-image">
       <div id="c-img-hint" class="img-url-hint"></div>
       <img id="c-img-prev" class="img-prev-inline" src="" alt="">
-      <div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:4px;line-height:1.6">
-        💡 從 Google Drive 分享連結取出 ID，例如：<br>
-        <span style="color:var(--or);word-break:break-all">https://drive.google.com/file/d/<strong>這段就是ID</strong>/view</span>
+    </div>
+    <div class="fg-g full">
+      <label class="fl">圖片來源備註</label>
+      <div style="display:flex;align-items:center;gap:0;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-md);overflow:hidden;background:#fff">
+        <span style="padding:9px 11px;background:var(--cr);font-size:.86rem;font-family:var(--f-zh);color:var(--ts);white-space:nowrap;border-right:1.5px solid rgba(45,43,31,.1)">圖片來源：</span>
+        <input class="fi" type="text" id="c-imgsrc" placeholder="官方 Facebook" style="border:none;border-radius:0;flex:1;background:#fff">
       </div>
     </div>
-    <div class="fg-g full"><label class="fl">圖片來源</label><input class="fi" type="text" id="c-imgsrc"></div>
     <div class="fg-g full"><label class="fl">課程簡介</label><textarea class="fta" id="c-desc"></textarea></div>
     <div class="fg-g"><label class="fl">狀態</label><select class="fs" id="c-status"><option value="published">已發布</option><option value="pending">待確認</option><option value="hidden">隱藏</option></select></div>
   </div>
@@ -1073,6 +1096,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <button class="fa-draft" onclick="saveCourse('pending')">儲存草稿</button>
     <button class="fa-pub" onclick="saveCourse('published')">✓ 確認發布</button>
   </div>
+</div></div>
+
+<!-- Course Detail Modal -->
+<div class="modal-ov" id="modal-course-detail"><div class="modal" style="max-width:600px">
+  <button class="modal-close" onclick="closeModal('course-detail')">✕</button>
+  <div id="course-detail-body"></div>
 </div></div>
 
 <!-- Venue Detail Modal -->
@@ -1400,7 +1429,7 @@ function showCardHTML(s) {
       ${s.price?`<div class="sc-price">💰 ${s.price}</div>`:''}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px">
         ${(s.ticketUrl&&s.ticketUrl!=='#'&&!s.soldOut)
-          ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">🎟 馬上購票</span><span class="en-text">🎟 Buy Tickets</span></a>`
+          ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">馬上購票</span><span class="en-text">Buy Tickets</span></a>`
           : s.soldOut
             ? `<span style="font-size:.74rem;color:#8b1a1a;font-family:var(--f-zh)">已售完</span>`
             : `<span></span>`
@@ -1408,7 +1437,7 @@ function showCardHTML(s) {
         <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);display:flex;align-items:center;gap:3px;opacity:.7"><span class="zh-text">詳情</span><span class="en-text">Details</span> ↗</span>
       </div>
     </div>
-    ${s.imgSrc?`<div class="sc-imgsrc">📷 ${s.imgSrc}</div>`:''}
+    ${s.imgSrc?`<div class="sc-imgsrc">${s.imgSrc}</div>`:''}
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openShowModal('${s.id}')">✏️</button>
       <button class="ca-btn ca-del" onclick="event.stopPropagation();delShow('${s.id}')">🗑</button>
@@ -1489,29 +1518,63 @@ function courseCardHTML(c) {
   const emj = {standup:'🎙️',improv:'🎭',mancai:'🥢',other:'📚'};
   const imgEl = c.image ? `<img src="${c.image}" alt="" onerror="this.style.display='none'">` : '';
   const lbl = getLang()==='en' ? m.labelEn : m.label;
-  return `<div class="course-card" data-id="${c.id}">
+  const expiredOverlay = isExpired(c.date) ? `style="opacity:.55"` : '';
+  return `<div class="course-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')" ${expiredOverlay}>
     <div class="cc-img" style="background:${m.bg}">${imgEl}<span style="font-size:2.4rem;position:relative;z-index:1">${emj[c.type]||'📚'}</span><span class="cc-cat" style="background:${m.tag};color:${m.tagC}">${lbl}</span></div>
     <div class="cc-body">
       <div class="cc-title">${c.title}</div>
-      <div class="cc-meta"><span>📅 ${c.date}</span>${c.time?`<span>🕑 ${c.time}</span>`:''}<span>📍 ${c.location||''}</span>${c.organizer?`<span>👤 ${c.organizer}</span>`:''}</div>
-      ${c.fee?`<div style="font-size:.79rem;font-weight:700;color:var(--or)">💰 ${c.fee}</div>`:''}
+      <div class="cc-meta"><span>📅 ${c.dateDisplay||c.date}</span>${c.time?`<span>${c.time}</span>`:''}<span>📍 ${c.location||''}</span>${c.organizer?`<span>${c.organizer}</span>`:''}</div>
+      ${c.fee?`<div style="font-size:.79rem;font-weight:700;color:var(--or)">${c.fee}</div>`:''}
       <p class="cc-desc">${c.description||''}</p>
     </div>
-    ${c.imgSrc?`<div class="cc-imgsrc">📷 ${c.imgSrc}</div>`:''}
-    <div class="cc-foot"><span class="cc-plat">${(c.platform||'').toUpperCase()}</span><a href="${c.url||'#'}" class="cc-link" target="_blank" rel="noopener"><span class="zh-text">立即報名</span><span class="en-text">Sign Up</span> ↗</a></div>
+    ${c.imgSrc?`<div class="cc-imgsrc">${c.imgSrc}</div>`:''}
+    <div class="cc-foot"><span class="cc-plat">${(c.platform||'').toUpperCase()}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <a href="${c.url||'#'}" class="cc-link" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">立即報名</span><span class="en-text">Sign Up</span> ↗</a>
+        <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.7">詳情 ↗</span>
+      </div>
+    </div>
     <div class="card-eo">
-      <button class="ca-btn ca-edit" onclick="openCourseModal('${c.id}')">✏️</button>
-      <button class="ca-btn ca-del" onclick="delCourse('${c.id}')">🗑</button>
+      <button class="ca-btn ca-edit" onclick="event.stopPropagation();openCourseModal('${c.id}')">✏️</button>
+      <button class="ca-btn ca-del" onclick="event.stopPropagation();delCourse('${c.id}')">🗑</button>
     </div>
   </div>`;
 }
 function renderCourses() {
   const g=document.getElementById('courses-grid'); if(!g)return;
-  const fil=COURSES.filter(c=>c.status!=='hidden'&&(fCtype==='all'||c.type===fCtype)).sort((a,b)=>a.date.localeCompare(b.date));
-  g.innerHTML=fil.length?fil.map(courseCardHTML).join(''):`<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts)">查無課程</div>`;
+  const adminMode=isLoggedIn();
+  const fil=COURSES.filter(c=>{
+    const st=c.status||'published';
+    if(st==='hidden') return false;
+    if(!adminMode && st==='pending') return false;
+    if(!adminMode && isExpired(c.date)) return false;
+    if(fCtype!=='all' && c.type!==fCtype) return false;
+    return true;
+  }).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  g.innerHTML=fil.length?fil.map(courseCardHTML).join(''):`<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">目前沒有課程資訊</div>`;
 }
 
-// ── VENUES ──
+function openCourseDetail(id){
+  const c=COURSES.find(x=>x.id===id); if(!c)return;
+  const m=COURSE_META[c.type]||COURSE_META.other;
+  const imgHtml=c.image?`<div style="width:100%;max-height:280px;overflow:hidden;border-radius:var(--r-md);background:${m.bg};margin-bottom:18px;display:flex;align-items:center;justify-content:center"><img src="${c.image}" alt="${c.title}" style="width:100%;max-height:280px;object-fit:contain;display:block;background:var(--cr)" onerror="this.style.display='none'"></div>`:'';
+  document.getElementById('course-detail-body').innerHTML=`
+    ${imgHtml}
+    <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;color:var(--or);margin-bottom:6px;font-family:var(--f-bo)">${m.label}</div>
+    <div style="font-size:1.3rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:14px;line-height:1.3">${c.title}</div>
+    <table style="width:100%;font-size:.85rem;font-family:var(--f-zh);border-collapse:collapse">
+      ${c.date?`<tr><td style="padding:6px 0;color:var(--ts);width:70px">日期</td><td>${c.date}${c.time?` · ${c.time}`:''}</td></tr>`:''}
+      ${c.location?`<tr><td style="padding:6px 0;color:var(--ts)">地點</td><td>${c.location}</td></tr>`:''}
+      ${c.address?`<tr><td style="padding:6px 0;color:var(--ts)">地址</td><td>${c.address}</td></tr>`:''}
+      ${c.organizer?`<tr><td style="padding:6px 0;color:var(--ts)">主辦</td><td>${c.organizer}</td></tr>`:''}
+      ${c.fee?`<tr><td style="padding:6px 0;color:var(--ts)">費用</td><td style="font-weight:700;color:var(--or)">${c.fee}</td></tr>`:''}
+    </table>
+    ${c.description?`<p style="margin:14px 0;font-size:.88rem;line-height:1.75;color:var(--tm);font-family:var(--f-zh)">${c.description}</p>`:''}
+    ${c.imgSrc?`<div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-bottom:12px">${c.imgSrc}</div>`:''}
+    ${(c.url&&c.url!=='#')?`<a href="${c.url}" target="_blank" rel="noopener" class="btn-or" style="display:inline-block;text-decoration:none;margin-top:6px">立即報名 ↗</a>`:''}
+  `;
+  document.getElementById('modal-course-detail').classList.add('open');
+}
 function venueCardHTML(v) {
   const logo = v.logoUrl ? `<img src="${v.logoUrl}" alt="${v.nameZh}" style="width:100%;height:100%;object-fit:contain" onerror="this.outerHTML='<span>📍</span>'">` : '<span>📍</span>';
   return `<div class="venue-card" data-id="${v.id}" onclick="showVenueDetail('${v.id}')">
@@ -1871,22 +1934,62 @@ function openCourseModal(id){
   eCourseId=id||null;
   const c=id?COURSES.find(x=>x.id===id):null;
   document.getElementById('modal-course-title').textContent=c?'編輯課程':'新增課程';
-  ['c-url','c-title','c-date','c-time','c-organizer','c-location','c-fee','c-signupurl','c-image','c-image-id','c-imgsrc','c-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
-  document.getElementById('c-img-prev').style.display='none';
-  document.getElementById('c-ps').style.display='none';
-  document.getElementById('c-pp').classList.remove('show');
-  if(c){document.getElementById('c-title').value=c.title;document.getElementById('c-date').value=c.date||'';document.getElementById('c-time').value=c.time||'';document.getElementById('c-type').value=c.type||'standup';document.getElementById('c-organizer').value=c.organizer||'';document.getElementById('c-location').value=c.location||'';document.getElementById('c-fee').value=c.fee||'';document.getElementById('c-platform').value=c.platform||'kktix';document.getElementById('c-signupurl').value=c.url||'';document.getElementById('c-image').value=c.image||'';
+  ['c-title','c-date','c-time-start','c-time-end','c-organizer','c-location','c-address','c-fee','c-signupurl','c-image','c-image-id','c-imgsrc','c-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  const imgPrev=document.getElementById('c-img-prev');if(imgPrev)imgPrev.style.display='none';
+  const imgHint=document.getElementById('c-img-hint');if(imgHint){imgHint.textContent='';imgHint.className='img-url-hint';}
+  if(c){
+    document.getElementById('c-title').value=c.title||'';
+    document.getElementById('c-date').value=c.date||'';
+    // 解析時間
+    const timeStr=c.time||'';
+    const timeParts=timeStr.split('–');
+    if(timeParts[0]){
+      const s=timeParts[0].trim();
+      const isAM=s.startsWith('上午');
+      document.getElementById('c-time-start-ampm').value=isAM?'上午':'下午';
+      document.getElementById('c-time-start').value=s.replace(/^(上午|下午)/,'').trim();
+    }
+    if(timeParts[1]){
+      const e=timeParts[1].trim();
+      const isAM=e.startsWith('上午');
+      document.getElementById('c-time-end-ampm').value=isAM?'上午':'下午';
+      document.getElementById('c-time-end').value=e.replace(/^(上午|下午)/,'').trim();
+    }
+    document.getElementById('c-type').value=c.type||'standup';
+    document.getElementById('c-organizer').value=c.organizer||'';
+    document.getElementById('c-location').value=c.location||'';
+    document.getElementById('c-address').value=c.address||'';
+    document.getElementById('c-fee').value=c.fee||'';
+    document.getElementById('c-platform').value=c.platform||'kktix';
+    document.getElementById('c-signupurl').value=c.url||'';
+    document.getElementById('c-image').value=c.image||'';
     const cImgIdEl=document.getElementById('c-image-id');
     if(cImgIdEl){const mId=(c.image||'').match(/\/d\/([a-zA-Z0-9_-]{10,})/);cImgIdEl.value=mId?mId[1]:'';}
-    document.getElementById('c-imgsrc').value=c.imgSrc||'';document.getElementById('c-desc').value=c.description||'';document.getElementById('c-status').value=c.status;
-    if(c.image)livePreview('c-img-prev','c-img-hint',c.image);}
+    const rawSrc=c.imgSrc||'';
+    document.getElementById('c-imgsrc').value=rawSrc.replace(/^圖片來源：/,'');
+    document.getElementById('c-desc').value=c.description||'';
+    document.getElementById('c-status').value=c.status||'published';
+    if(c.image)livePreview('c-img-prev','c-img-hint',c.image);
+  }
   document.getElementById('modal-course').classList.add('open');
 }
 function saveCourse(status){
   const title=document.getElementById('c-title').value.trim();
   if(!title){showToast('請填入課程名稱','err');return;}
   const ctype=document.getElementById('c-type').value;
-  const item={title,date:document.getElementById('c-date').value,time:document.getElementById('c-time').value,type:ctype,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value||document.getElementById('c-url').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:document.getElementById('c-imgsrc').value,description:document.getElementById('c-desc').value,status};
+  // 組合時間字串
+  const startAmpm=document.getElementById('c-time-start-ampm').value;
+  const startTime=document.getElementById('c-time-start').value.trim();
+  const endAmpm=document.getElementById('c-time-end-ampm').value;
+  const endTime=document.getElementById('c-time-end').value.trim();
+  let timeStr='';
+  if(startTime) timeStr=startAmpm+startTime;
+  if(startTime&&endTime) timeStr+=('–'+endAmpm+endTime);
+  const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
+  // 排序用：取第一個日期
+  const dateVal=document.getElementById('c-date').value.trim();
+  const firstDate=(dateVal.split(',')[0]||'').trim();
+  const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,type:ctype,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,status};
   window.FB.save('courses', eCourseId||null, item).then(newId=>{
     if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
     else COURSES.push({id:newId,...item});
