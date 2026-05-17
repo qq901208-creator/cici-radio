@@ -502,8 +502,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="lang-btn on" onclick="setLang('zh')">繁中</button>
       <button class="lang-btn" onclick="setLang('en')">EN</button>
     </div>
-    <!-- Session badge only visible when admin is logged in -->
-    <span class="session-badge" id="sessionBadge"><span class="s-dot"></span> Admin</span>
     <!-- Hamburger for mobile -->
     <button class="hamburger" onclick="toggleNav()" aria-label="選單">
       <span></span><span></span><span></span>
@@ -859,7 +857,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <div class="ft-bottom">
     <p class="ft-copy">© 2025 嘻嘻哪裡唷 · Cici Radio Comedy Guide Taiwan</p>
     <div>
-      <p class="ft-disc"><span class="zh-text">本站為非營利公益性質，以售票演出為主，由人工整理與更新。所有連結均指向原始售票／報名頁面，不從事任何票務交易。若有資訊有誤或遺漏，歡迎透過聯絡我們回報。</span><span class="en-text">Non-profit, hand-curated. All links go to original platforms. No commercial transactions.</span></p>
+      <p class="ft-disc"><span class="zh-text">本站為非營利公益性質，以售票演出為主，由人工整理與更新。若有資訊有誤或遺漏，歡迎透過聯絡我們回報～</span><span class="en-text">Non-profit, hand-curated. Focused on ticketed shows. Found something wrong? Let us know!</span></p>
       <!-- Hidden admin entry — low key, general users won't notice -->
       <div style="text-align:right;margin-top:8px">
         <span class="admin-link" onclick="openAuthModal()" title="管理入口">管理入口</span>
@@ -869,6 +867,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 </footer>
 
 <!-- Edit bar (only visible in edit mode) -->
+<span id="sessionBadge" style="display:none"></span>
 <div class="edit-bar"><span class="eb-dot"></span><span class="zh-text">編輯模式啟用中</span><span class="en-text">Edit Mode Active</span><span id="expired-count-badge" style="font-size:.72rem;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:var(--r-pill);font-family:var(--f-bo)"></span><button class="eb-btn" onclick="saveAll()"><span class="zh-text">儲存</span><span class="en-text">Save</span></button><button class="eb-ghost" onclick="ciciLogout()"><span class="zh-text">登出</span><span class="en-text">Logout</span></button></div>
 
 <!-- ═══ MODALS ═══ -->
@@ -1287,16 +1286,16 @@ const TEAM_PHOTOS = [
 window.DEFAULT_SHOWS = [];
 window.DEFAULT_MICS = [];
 window.DEFAULT_VENUES = [
-  {id:'v1',nameZh:'卡米地＋',nameEn:'Comedy Plus',city:'taipei',address:'台北市中山區復興北路480號',fb:'https://www.facebook.com/ComedyPlusTaipei/',ig:'https://www.instagram.com/comedyclubtaipei',logoUrl:'',description:'台灣最知名的喜劇俱樂部之一，每週固定 Open Mic、Stand-up 演出。'},
-  {id:'v2',nameZh:'23喜劇俱樂部',nameEn:'Two Three Comedy Club',city:'taipei',address:'台北市中山區林森北路286號B1',fb:'https://www.facebook.com/TwoThreeComedy/',ig:'https://www.instagram.com/twothreecomedy/',logoUrl:'',description:'以多元喜劇節目聞名，是台北市中心的喜劇重鎮。'},
-  {id:'v3',nameZh:'飛客劇樂部',nameEn:'Fakers Comedy Club',city:'taipei',address:'台北市中山區南京東路三段109巷16號B1',fb:'https://www.facebook.com/fakers.tw/',ig:'https://www.instagram.com/fakerscomedyclub',logoUrl:'',description:'即興喜劇與 Stand-up 的重要基地。'},
-  {id:'v4',nameZh:'北投喜劇',nameEn:'Beitou Comedy',city:'taipei',address:'台北市北投區中央南路一段102巷34號',fb:'https://www.facebook.com/people/北投喜劇/61581707900549/',ig:'',logoUrl:'',description:'北投地區新興喜劇場地。'},
-  {id:'v5',nameZh:'樂君亭',nameEn:'Gingting Comedy',city:'taoyuan',address:'桃園市中壢區興平路56號',fb:'https://www.facebook.com/ginting.comedy/',ig:'https://www.instagram.com/ginting.comedy/',logoUrl:'',description:'桃園地區活躍的喜劇場地。'},
-  {id:'v6',nameZh:'站立風城',nameEn:'Wind City Stand-Up',city:'hsinchu',address:'新竹市東區食品路41號',fb:'https://www.facebook.com/p/站立風城-100095524380525/',ig:'https://www.instagram.com/thewind_city/',logoUrl:'',description:'新竹地區的喜劇表演場地。'},
-  {id:'v7',nameZh:'思MIC歐 S.M.O',nameEn:'S.M.O',city:'hsinchu',address:'新竹市東區南大路149號',fb:'https://www.facebook.com/p/思MIC歐-SMO-61577612721799/',ig:'https://www.instagram.com/s.mic.o',logoUrl:'',description:'新竹的 Open Mic 場地。'},
-  {id:'v8',nameZh:'來福好事',nameEn:'Laugh House',city:'taichung',address:'台中市西屯區西安街277巷2號',fb:'https://www.facebook.com/laughhouse.tc/',ig:'https://www.instagram.com/laughhouse.tc/',logoUrl:'',description:'台中喜劇文化的推廣基地。'},
-  {id:'v9',nameZh:'府城喜劇',nameEn:'Tainan Comedy',city:'tainan',address:'台南市東區東寧路西段5號',fb:'https://www.facebook.com/TainanComedy/',ig:'https://www.instagram.com/tainan.comedy',logoUrl:'',description:'台南喜劇文化推廣場地。'},
-  {id:'v10',nameZh:'喜劇開港',nameEn:'Takao Comedy Bay',city:'kaohsiung',address:'高雄市苓雅區青年一路16-1號2F',fb:'https://www.facebook.com/takaocb2020/',ig:'https://www.instagram.com/takaocb2020/',logoUrl:'',description:'高雄最大的喜劇俱樂部，定期舉辦演出。'},
+  {id:'v1', nameZh:'卡米地＋',nameEn:'Comedy Plus',city:'taipei',address:'台北市中山區復興北路480號',fb:'https://www.facebook.com/ComedyPlusTaipei/',ig:'https://www.instagram.com/comedyclubtaipei',logoUrl:'',partner:'',description:'台灣最知名的喜劇俱樂部之一，每週固定 Open Mic、Stand-up 演出。'},
+  {id:'v2', nameZh:'23喜劇俱樂部',nameEn:'Two Three Comedy Club',city:'taipei',address:'台北市中山區林森北路286號B1',fb:'https://www.facebook.com/TwoThreeComedy/',ig:'https://www.instagram.com/twothreecomedy/',logoUrl:'',partner:'',description:'以多元喜劇節目聞名，是台北市中心的喜劇重鎮。'},
+  {id:'v3', nameZh:'飛客劇樂部',nameEn:'Fakers Comedy Club',city:'taipei',address:'台北市中山區南京東路三段109巷16號B1',fb:'https://www.facebook.com/fakers.tw/',ig:'https://www.instagram.com/fakerscomedyclub',logoUrl:'',partner:'',description:'即興喜劇與 Stand-up 的重要基地。'},
+  {id:'v4', nameZh:'北投喜劇',nameEn:'Beitou Comedy',city:'taipei',address:'台北市北投區中央南路一段102巷34號',fb:'https://www.facebook.com/people/北投喜劇/61581707900549/',ig:'',logoUrl:'',partner:'山蛇二手書店',description:'北投地區新興喜劇場地。'},
+  {id:'v5', nameZh:'樂君亭',nameEn:'Gingting Comedy',city:'taoyuan',address:'桃園市中壢區興平路56號',fb:'https://www.facebook.com/ginting.comedy/',ig:'https://www.instagram.com/ginting.comedy/',logoUrl:'',partner:'',description:'桃園地區活躍的喜劇場地。'},
+  {id:'v6', nameZh:'站立風城',nameEn:'Wind City Stand-Up',city:'hsinchu',address:'新竹市東區食品路41號',fb:'https://www.facebook.com/p/站立風城-100095524380525/',ig:'https://www.instagram.com/thewind_city/',logoUrl:'',partner:'',description:'新竹地區的喜劇表演場地。'},
+  {id:'v7', nameZh:'思MIC歐 S.M.O',nameEn:'S.M.O',city:'hsinchu',address:'新竹市東區南大路149號',fb:'https://www.facebook.com/p/思MIC歐-SMO-61577612721799/',ig:'https://www.instagram.com/s.mic.o',logoUrl:'',partner:'不染酒吧',description:'新竹的 Open Mic 場地。'},
+  {id:'v8', nameZh:'來福好事',nameEn:'Laugh House',city:'taichung',address:'台中市西屯區西安街277巷2號',fb:'https://www.facebook.com/laughhouse.tc/',ig:'https://www.instagram.com/laughhouse.tc/',logoUrl:'',partner:'',description:'台中喜劇文化的推廣基地。'},
+  {id:'v9', nameZh:'府城喜劇',nameEn:'Tainan Comedy',city:'tainan',address:'台南市東區東寧路西段5號',fb:'https://www.facebook.com/TainanComedy/',ig:'https://www.instagram.com/tainan.comedy',logoUrl:'',partner:'SASADRA cafe',description:'台南喜劇文化推廣場地。'},
+  {id:'v10',nameZh:'喜劇開港',nameEn:'Takao Comedy Bay',city:'kaohsiung',address:'高雄市苓雅區青年一路16-1號2F',fb:'https://www.facebook.com/takaocb2020/',ig:'https://www.instagram.com/takaocb2020/',logoUrl:'',partner:'鸚鵡螺餐酒館',description:'高雄最大的喜劇俱樂部，定期舉辦演出。'},
 ];
 window.DEFAULT_COURSES = [];
 window.DEFAULT_COMMENTS = [];
@@ -1427,6 +1426,7 @@ function renderShows() {
   const q = getSearchQuery();
   const fil = SHOWS.filter(s => {
     if (s.status==='hidden') return false;
+    if (!adminMode && s.status==='pending') return false;
     if (!adminMode && isExpired(s.date)) return false;
     const types = s.types||(s.type?[s.type]:[]);
     if (fType!=='all' && !types.includes(fType)) return false;
