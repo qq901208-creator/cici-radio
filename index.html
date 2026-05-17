@@ -95,7 +95,7 @@ body{font-family:var(--f-bo);background:var(--cr);color:var(--tm);line-height:1.
 .show-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-lg);overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;color:var(--tm);display:flex;flex-direction:column;position:relative;cursor:pointer}
 .show-card:hover{transform:translateY(-4px);box-shadow:var(--sh);border-color:var(--or)}
 .sc-img{width:100%;height:160px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--py),var(--y))}
-.sc-img img.sc-poster{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:1;display:block}
+.sc-img img.sc-poster{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;z-index:1;display:block;background:var(--ww)}
 .sc-img img.sc-poster[src=""]{display:none}
 .sc-img .sc-emoji{font-size:2.6rem;position:relative;z-index:0}
 .sc-types{position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-wrap:wrap;z-index:2;max-width:calc(100% - 16px)}
@@ -171,7 +171,7 @@ body{font-family:var(--f-bo);background:var(--cr);color:var(--tm);line-height:1.
 .course-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-lg);overflow:hidden;transition:transform .2s,box-shadow .2s;position:relative}
 .course-card:hover{transform:translateY(-4px);box-shadow:var(--sh)}
 .cc-img{width:100%;height:140px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;position:relative}
-.cc-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.cc-img img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;background:var(--ww)}
 .cc-cat{position:absolute;top:9px;left:9px;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);z-index:1}
 .cc-body{padding:14px 16px 0;display:flex;flex-direction:column;gap:5px}
 .cc-title{font-size:.94rem;font-weight:700;font-family:var(--f-zh);line-height:1.35}
@@ -667,6 +667,7 @@ body.edit .edit-bar{display:flex!important}
       <button class="chip" data-f="city" data-v="taichung"><span class="zh-text">台中</span><span class="en-text">Taichung</span></button>
       <button class="chip" data-f="city" data-v="tainan"><span class="zh-text">台南</span><span class="en-text">Tainan</span></button>
       <button class="chip" data-f="city" data-v="kaohsiung"><span class="zh-text">高雄</span><span class="en-text">Kaohsiung</span></button>
+      <button class="chip" data-f="city" data-v="chiayi"><span class="zh-text">嘉義</span><span class="en-text">Chiayi</span></button>
     </div>
     <div class="venue-grid" id="venues-grid"></div>
     <button class="edit-add-btn" onclick="openVenueModal(null)">＋ <span class="zh-text">新增場地</span><span class="en-text">Add Venue</span></button>
@@ -910,7 +911,7 @@ body.edit .edit-bar{display:flex!important}
     <div class="fg-g"><label class="fl">場地名稱（中文）<span class="req">*</span></label><input class="fi" type="text" id="v-namezh"></div>
     <div class="fg-g"><label class="fl">Name (EN)</label><input class="fi" type="text" id="v-nameen"></div>
     <div class="fg-g"><label class="fl">城市 <span class="req">*</span></label>
-      <select class="fs" id="v-city"><option value="taipei">台北市 Taipei</option><option value="newtaipei">新北市 New Taipei</option><option value="taoyuan">桃園市 Taoyuan</option><option value="hsinchu">新竹市 Hsinchu</option><option value="taichung">台中市 Taichung</option><option value="tainan">台南市 Tainan</option><option value="kaohsiung">高雄市 Kaohsiung</option><option value="other">其他 Others</option></select>
+      <select class="fs" id="v-city"><option value="taipei">台北市 Taipei</option><option value="newtaipei">新北市 New Taipei</option><option value="taoyuan">桃園市 Taoyuan</option><option value="hsinchu">新竹市 Hsinchu</option><option value="taichung">台中市 Taichung</option><option value="chiayi">嘉義市 Chiayi</option><option value="tainan">台南市 Tainan</option><option value="kaohsiung">高雄市 Kaohsiung</option><option value="other">其他 Others</option></select>
     </div>
     <div class="fg-g"><label class="fl">地址</label><input class="fi" type="text" id="v-address"></div>
     <div class="fg-g"><label class="fl">Facebook URL</label><input class="fi" type="url" id="v-fb" placeholder="https://www.facebook.com/..."></div>
@@ -1160,7 +1161,7 @@ const COURSE_META = {
   mancai:  {bg:'linear-gradient(135deg,#dce4ff,#a0b4ff)',tag:'#dde4ff',tagC:'#2a3ba0',label:'漫才',labelEn:'Mancai'},
   other:   {bg:'linear-gradient(135deg,#ebebeb,#ccc)',   tag:'#e0e0e0',tagC:'#444',   label:'其他',labelEn:'Others'},
 };
-const CITY_LBL = {taipei:'台北市',newtaipei:'新北市',taoyuan:'桃園市',hsinchu:'新竹市',taichung:'台中市',tainan:'台南市',kaohsiung:'高雄市',other:'其他'};
+const CITY_LBL = {taipei:'台北市',newtaipei:'新北市',taoyuan:'桃園市',hsinchu:'新竹市',taichung:'台中市',chiayi:'嘉義市',tainan:'台南市',kaohsiung:'高雄市',other:'其他'};
 const PAGE_LBL = {home:{zh:'首頁',c:'#f5d558',tc:'#5e4200'},shows:{zh:'演出',c:'#fde3cc',tc:'#7a2e00'},opmic:{zh:'Open Mic',c:'#d0f0de',tc:'#1a5c38'},venues:{zh:'場地',c:'#dce4ff',tc:'#2a3ba0'},courses:{zh:'課程',c:'#fff3a0',tc:'#5e4200'},general:{zh:'一般',c:'#e0e0e0',tc:'#444'}};
 
 // ── ABOUT PAGE DATA (easy to update) ──
