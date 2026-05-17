@@ -452,26 +452,28 @@ body.edit .edit-bar{display:flex!important}
 
 /* RESPONSIVE */
 @media(max-width:900px){.ft-grid{grid-template-columns:1fr 1fr;gap:30px}}
-@media(max-width:700px){
+@media(max-width:768px){
   .ft-grid{grid-template-columns:1fr}
   .fg{grid-template-columns:1fr}
   .modal{padding:22px 18px}
   .hero-h1{font-size:2.1rem}
   .nav-links{display:none}
   .nav-links.open{
-    display:flex;flex-direction:column;position:fixed;top:60px;left:0;right:0;
-    background:var(--sd);z-index:999;padding:12px 0 20px;
-    box-shadow:0 8px 32px rgba(0,0,0,.3);gap:0
+    display:flex!important;flex-direction:column;position:fixed;top:60px;left:0;right:0;
+    background:var(--sd);z-index:9999;padding:12px 0 24px;
+    box-shadow:0 8px 32px rgba(0,0,0,.4);gap:0;
+    border-top:1.5px solid rgba(245,213,88,.2)
   }
   .nav-links.open li{border-bottom:1px solid rgba(255,255,255,.07)}
-  .nav-links.open li a{display:block;padding:13px 24px;color:#fff;font-size:.95rem;font-family:var(--f-zh);font-weight:600}
-  .nav-links.open li a.active{color:var(--y)}
-  .hamburger{display:flex}
+  .nav-links.open li a{display:block;padding:14px 28px;color:rgba(255,255,255,.85);font-size:1rem;font-family:var(--f-zh);font-weight:600;cursor:pointer}
+  .nav-links.open li a:hover,.nav-links.open li a.active{color:var(--y)}
+  .hamburger{display:flex!important}
+  .lang-pill{display:flex}
 }
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;border:none;background:transparent;margin-left:8px}
-.hamburger span{display:block;width:22px;height:2px;background:var(--tm);border-radius:2px;transition:all .2s}
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:8px 6px;border:none;background:transparent;margin-left:6px;flex-shrink:0}
+.hamburger span{display:block;width:22px;height:2.5px;background:#fff;border-radius:2px;transition:all .22s}
 body.nav-open .hamburger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-body.nav-open .hamburger span:nth-child(2){opacity:0}
+body.nav-open .hamburger span:nth-child(2){opacity:0;transform:scaleX(0)}
 body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
@@ -1179,6 +1181,7 @@ async function loadAllData() {
       getDocs(query(collection(db,'courses'), orderBy('date','asc'))),
       getDocs(query(collection(db,'comments'), orderBy('time','desc'))),
     ]);
+    // ★ 直接賦值給 window，讓普通 script 也能讀到最新資料
     window.SHOWS    = showsSnap.docs.map(d=>({id:d.id,...d.data()}));
     window.MICS     = micsSnap.docs.map(d=>({id:d.id,...d.data()}));
     // ★ VENUES 合併邏輯：以 DEFAULT_VENUES 為底，Firebase 同 id 的資料覆蓋，Firebase 獨有的資料附加
@@ -1199,7 +1202,7 @@ async function loadAllData() {
     if(!window.MICS.length)     window.MICS     = window.DEFAULT_MICS;
     if(!window.COURSES.length)  window.COURSES  = window.DEFAULT_COURSES;
     if(!window.COMMENTS.length) window.COMMENTS = window.DEFAULT_COMMENTS;
-    // ★ 同步 window 變數到全域變數，確保所有裝置都讀 Firestore
+    // ★★★ 關鍵：同步回全域 let 變數，renderShows 等函數讀的是這些
     SHOWS    = window.SHOWS;
     MICS     = window.MICS;
     VENUES   = window.VENUES;
@@ -1209,9 +1212,14 @@ async function loadAllData() {
     console.warn('Firestore load failed, using defaults:', e);
     window.SHOWS    = window.DEFAULT_SHOWS;
     window.MICS     = window.DEFAULT_MICS;
-    window.VENUES   = window.DEFAULT_VENUES;
+    window.VENUES   = window.DEFAULT_VENUES.slice();
     window.COURSES  = window.DEFAULT_COURSES;
     window.COMMENTS = window.DEFAULT_COMMENTS;
+    SHOWS    = window.SHOWS;
+    MICS     = window.MICS;
+    VENUES   = window.VENUES;
+    COURSES  = window.COURSES;
+    COMMENTS = window.COMMENTS;
   }
   // Re-render after data loaded
   if(typeof renderHomeShows==='function') renderHomeShows();
@@ -1309,12 +1317,23 @@ window.DEFAULT_VENUES = [
 window.DEFAULT_COURSES = [];
 window.DEFAULT_COMMENTS = [];
 
-// ── Global data arrays (populated from Firestore) ──
-let SHOWS    = [];
-let MICS     = [];
-let VENUES   = window.DEFAULT_VENUES.slice();
-let COURSES  = [];
-let COMMENTS = [];
+// ── Global data arrays (populated from Firestore via window.*) ──
+// 必須用 window. 讓 type="module" script 和普通 script 共用
+window.SHOWS    = window.SHOWS    || [];
+window.MICS     = window.MICS     || [];
+window.VENUES   = window.VENUES   || window.DEFAULT_VENUES.slice();
+window.COURSES  = window.COURSES  || [];
+window.COMMENTS = window.COMMENTS || [];
+
+// 讓全站 JS 直接用 SHOWS / MICS / VENUES 等存取 window 屬性
+Object.defineProperty(window,'SHOWS',   {get(){return window._SHOWS||[]},   set(v){window._SHOWS=v}});
+Object.defineProperty(window,'MICS',    {get(){return window._MICS||[]},    set(v){window._MICS=v}});
+Object.defineProperty(window,'VENUES',  {get(){return window._VENUES||window.DEFAULT_VENUES.slice()}, set(v){window._VENUES=v}});
+Object.defineProperty(window,'COURSES', {get(){return window._COURSES||[]}, set(v){window._COURSES=v}});
+Object.defineProperty(window,'COMMENTS',{get(){return window._COMMENTS||[]},set(v){window._COMMENTS=v}});
+
+// 初始化預設值
+window.VENUES = window.DEFAULT_VENUES.slice();
 
 let editMode = false;
 let eShowId=null, eMicId=null, eVenueId=null, eCourseId=null;
@@ -1432,10 +1451,11 @@ function openShowDetail(id) {
 function renderShows() {
   const grid = document.getElementById('shows-grid'); if (!grid) return;
   const adminMode = isLoggedIn();
-  const q = getSearchQuery();
+  const q = (document.getElementById('shows-search')?.value||'').trim().toLowerCase();
   const fil = SHOWS.filter(s => {
-    if (s.status==='hidden') return false;
-    if (!adminMode && s.status==='pending') return false;
+    const st = s.status || 'published';
+    if (st === 'hidden') return false;
+    if (!adminMode && st === 'pending') return false;
     if (!adminMode && isExpired(s.date)) return false;
     const types = s.types||(s.type?[s.type]:[]);
     if (fType!=='all' && !types.includes(fType)) return false;
@@ -1459,7 +1479,7 @@ function renderShows() {
 
 function renderHomeShows() {
   const g = document.getElementById('home-shows-grid'); if (!g) return;
-  const fil = SHOWS.filter(s=>s.status==='published' && !isExpired(s.date)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0,6);
+  const fil = SHOWS.filter(s=>(s.status||'published')==='published' && !isExpired(s.date)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0,6);
   g.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--ts);font-family:var(--f-zh)"><span class="zh-text">目前以售票演出為主，近期資訊整理中，敬請期待！</span><span class="en-text">Focused on ticketed shows — listings coming soon!</span></div>`;
 }
 
@@ -1656,7 +1676,7 @@ function renderCalendar(){
     const dd=String(d).padStart(2,'0');
     const ds=`${calYear}-${mm}-${dd}`;
     // Match shows by comparing the stored date string directly (avoids timezone issues)
-    const dayShows=SHOWS.filter(s=>s.status==='published'&&s.date===ds);
+    const dayShows=SHOWS.filter(s=>['published',undefined,'',null].includes(s.status||null)&&s.date===ds);
     const hasEv=dayShows.length>0;
     const isToday=now.getFullYear()===calYear&&now.getMonth()===calMonth&&now.getDate()===d;
     const isSel=calSel===ds;
@@ -1676,7 +1696,7 @@ function changeMonth(dir){
 function selectCalDay(ds){
   calSel=ds;
   renderCalendar();
-  const dayShows=SHOWS.filter(s=>s.status==='published'&&s.date===ds).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
+  const dayShows=SHOWS.filter(s=>['published',undefined,'',null].includes(s.status||null)&&s.date===ds).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
   const banner=document.getElementById('cal-banner');
   const result=document.getElementById('cal-result');
   banner.classList.add('show');
@@ -1714,6 +1734,8 @@ document.addEventListener('click', e=>{
     document.body.classList.remove('nav-open');
   }
 });
+
+function updateExpiredBadge() {
   const cnt = SHOWS.filter(s => isExpired(s.date) && s.status !== 'hidden').length;
   const el = document.getElementById('expired-count-badge');
   if (el) el.textContent = cnt > 0 ? `⏰ ${cnt} 場已過期` : '';
@@ -1792,10 +1814,11 @@ function saveShow(status){
   window.FB.save('shows', eShowId||null, item).then(newId=>{
     if(eShowId){const i=SHOWS.findIndex(x=>x.id===eShowId);if(i>=0)SHOWS[i]={id:eShowId,...item};}
     else SHOWS.push({id:newId,...item});
+    window.SHOWS = SHOWS;
     closeModal('show');renderShows();renderHomeShows();
     if(document.getElementById('view-cal').style.display!=='none')renderCalendar();
     showToast(status==='published'?'✅ 演出已發布':'📝 草稿已儲存','ok');
-  }).catch(()=>showToast('❌ 儲存失敗，請再試一次','err'));
+  }).catch(e=>{console.error(e);showToast('❌ 儲存失敗，請再試一次','err');});
 }
 function delShow(id){if(!confirm('確定刪除這場演出？'))return;window.FB.del('shows',id).then(()=>{SHOWS=SHOWS.filter(x=>x.id!==id);renderShows();renderHomeShows();if(document.getElementById('view-cal').style.display!=='none')renderCalendar();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
@@ -2130,14 +2153,16 @@ function _handleGoogleCredential(response) {
 }
 
 function unlockAdmin() {
-  document.getElementById('sessionBadge').classList.add('visible');
+  const badge = document.getElementById('sessionBadge');
+  if (badge) badge.classList.add('visible');
   if (!editMode) toggleEdit();
 }
 
 window.ciciLogout = function() {
   sessionStorage.removeItem(SESSION_KEY);
   if (editMode) toggleEdit();
-  document.getElementById('sessionBadge').classList.remove('visible');
+  const badge = document.getElementById('sessionBadge');
+  if (badge) badge.classList.remove('visible');
   // Reset Google button so next open re-renders cleanly
   const area = document.getElementById('g_signin_area');
   if (area) { area.dataset.ready = ''; area.innerHTML = ''; }
@@ -2148,7 +2173,8 @@ window.ciciLogout = function() {
 };
 
 window.addEventListener('DOMContentLoaded', () => {
-  if (isLoggedIn()) { document.getElementById('sessionBadge').classList.add('visible'); }
+  const badge = document.getElementById('sessionBadge');
+  if (isLoggedIn() && badge) badge.classList.add('visible');
 });
 </script>
 
