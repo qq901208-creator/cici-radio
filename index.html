@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>嘻嘻哪裡唷 | 台灣喜劇演出資訊・Open Mic 報名・場地一覽</title>
 <meta name="description" content="嘻嘻哪裡唷是台灣最完整的現場喜劇資訊平台，整合全台演出資訊、Open Mic 報名、喜劇課程與場地資訊。">
+<link rel="icon" type="image/jpeg" href="../assets/ciciradio.jpg">
+<link rel="apple-touch-icon" href="../assets/ciciradio.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -413,7 +415,24 @@ body.edit .edit-bar{display:flex!important}
 .file-upload-lbl{font-size:.82rem;color:var(--ts);font-family:var(--f-bo)}
 .file-upload-lbl strong{color:var(--or)}
 
-/* TOAST */
+/* SEARCH BAR */
+.shows-search-wrap{position:relative;margin-bottom:18px}
+.shows-search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--ts);pointer-events:none}
+.shows-search{width:100%;padding:10px 13px 10px 38px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.16);background:#fff;font-size:.88rem;font-family:var(--f-zh);color:var(--tm);outline:none;transition:border-color .14s,box-shadow .14s}
+.shows-search:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(239,111,32,.1)}
+/* VENUE/AREA MANAGER */
+.vm-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:240px;overflow-y:auto}
+.vm-item{display:flex;align-items:center;gap:8px;padding:7px 11px;background:var(--cr);border-radius:var(--r-md);font-size:.84rem;font-family:var(--f-zh)}
+.vm-item span{flex:1}
+.vm-del{width:24px;height:24px;border-radius:6px;border:none;background:rgba(231,76,60,.1);color:#e74c3c;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vm-del:hover{background:#e74c3c;color:#fff}
+.vm-add-row{display:flex;gap:7px}
+.vm-add-row .fi{flex:1}
+.vm-add-btn{padding:9px 16px;background:var(--or);color:#fff;border:none;border-radius:var(--r-md);font-size:.82rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;white-space:nowrap}
+.vm-add-btn:hover{background:#d45c10}
+.vm-tabs{display:flex;gap:6px;margin-bottom:14px}
+.vm-tab{padding:6px 16px;border-radius:var(--r-pill);font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
+.vm-tab.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
 .toast{position:fixed;bottom:80px;right:22px;z-index:600;background:var(--sd);color:#fff;border-radius:var(--r-md);padding:11px 16px;font-size:.8rem;font-family:var(--f-bo);font-weight:600;box-shadow:0 6px 22px rgba(0,0,0,.2);transform:translateY(18px);opacity:0;transition:all .23s;border-left:4px solid var(--or);pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.ok{border-left-color:#2ecc71}
@@ -520,6 +539,12 @@ body.edit .edit-bar{display:flex!important}
         <button class="view-btn on" id="vcards" onclick="setShowsView('cards')"><span class="zh-text">卡片</span><span class="en-text">Cards</span></button>
         <button class="view-btn" id="vcal" onclick="setShowsView('cal')">📅 <span class="zh-text">月曆</span><span class="en-text">Calendar</span></button>
       </div>
+      <button class="edit-add-btn" style="width:auto;padding:6px 14px;margin-top:0;font-size:.78rem" onclick="openVenueManagerModal()">⚙️ <span class="zh-text">管理場地／地區</span><span class="en-text">Manage Venues/Areas</span></button>
+    </div>
+    <!-- 搜尋欄 -->
+    <div class="shows-search-wrap">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+      <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="renderShows()">
     </div>
     <div class="filter-section">
       <!-- TYPE filter: zh shows Chinese only, en shows English only -->
@@ -690,6 +715,33 @@ body.edit .edit-bar{display:flex!important}
   </div></section>
 </div>
 
+<!-- Venue/Area Manager Modal (admin only) -->
+<div class="modal-ov" id="modal-venue-manager"><div class="modal" style="max-width:480px">
+  <button class="modal-close" onclick="closeModal('venue-manager')">✕</button>
+  <div class="modal-title">⚙️ 管理場地與地區</div>
+  <div class="vm-tabs">
+    <button class="vm-tab on" onclick="switchVmTab('venue',this)">場地</button>
+    <button class="vm-tab" onclick="switchVmTab('area',this)">地區</button>
+  </div>
+  <div id="vm-venue-panel">
+    <div class="vm-list" id="vm-venue-list"></div>
+    <div class="vm-add-row">
+      <input class="fi" type="text" id="vm-venue-input" placeholder="場地名稱，e.g. 卡米地+ Comedy Plus" onkeydown="if(event.key==='Enter')addVmItem('venue')">
+      <button class="vm-add-btn" onclick="addVmItem('venue')">新增</button>
+    </div>
+  </div>
+  <div id="vm-area-panel" style="display:none">
+    <div class="vm-list" id="vm-area-list"></div>
+    <div class="vm-add-row">
+      <input class="fi" type="text" id="vm-area-input" placeholder="地區名稱，e.g. 雙北" onkeydown="if(event.key==='Enter')addVmItem('area')">
+      <button class="vm-add-btn" onclick="addVmItem('area')">新增</button>
+    </div>
+  </div>
+  <div class="fa" style="margin-top:14px">
+    <button class="fa-cancel" onclick="closeModal('venue-manager')">關閉</button>
+  </div>
+</div></div>
+
 <!-- FOOTER -->
 <footer>
   <div class="ft-grid">
@@ -748,42 +800,15 @@ body.edit .edit-bar{display:flex!important}
 <div class="modal-ov" id="modal-show"><div class="modal">
   <button class="modal-close" onclick="closeModal('show')">✕</button>
   <div class="modal-title" id="modal-show-title">新增演出</div>
-  <div class="fg single" style="margin-bottom:12px"><div class="fg-g">
-    <label class="fl">URL 自動解析</label>
-    <div class="parse-row"><input class="fi" type="url" id="s-url" placeholder="https://kktix.com/...  或 Accupass / OPENTIX"><button class="parse-btn" id="s-parse-btn" onclick="parseShowUrl()">⟳ <span class="zh-text">解析</span></button></div>
-    <div class="ps" id="s-ps"></div>
-    <div class="pp" id="s-pp"><div style="font-size:.77rem;font-weight:700;color:var(--ts);margin-bottom:6px">✓ 已自動填入，請確認</div><img id="s-pp-img" src="" alt="" style="display:none;width:100%;height:88px;object-fit:cover;border-radius:7px;margin-bottom:6px"><div class="pp-name" id="s-pp-name"></div><div class="pp-meta" id="s-pp-meta"></div></div>
-  </div></div>
-  <hr class="fdiv">
   <div class="fg">
     <div class="fg-g full"><label class="fl">演出名稱 <span class="req">*</span></label><input class="fi" type="text" id="s-title"></div>
     <div class="fg-g"><label class="fl">日期 <span class="req">*</span></label><input class="fi" type="date" id="s-date"></div>
     <div class="fg-g"><label class="fl">時間</label><input class="fi" type="time" id="s-time"></div>
     <div class="fg-g"><label class="fl">場地 <span class="req">*</span></label>
-      <select class="fs" id="s-venue">
-        <option value="comedy-plus">卡米地+ Comedy Plus（台北）</option>
-        <option value="two-three">23喜劇 two three comedy（台北）</option>
-        <option value="fakers">飛客劇樂部 Fakers Club（台北）</option>
-        <option value="beitou">北投喜劇（台北）</option>
-        <option value="ginting">樂君亭 Gingting Comedy（桃園）</option>
-        <option value="windcity">站立風城（新竹）</option>
-        <option value="smo">思MIC歐 S.M.O（新竹）</option>
-        <option value="laughhouse">來福好事 Laugh House（台中）</option>
-        <option value="tainan">府城喜劇（台南）</option>
-        <option value="takao">喜劇開港 Takaocomedybay（高雄）</option>
-        <option value="other">其他 Others</option>
-      </select>
+      <select class="fs" id="s-venue"></select>
     </div>
     <div class="fg-g"><label class="fl">地區</label>
-      <select class="fs" id="s-area">
-        <option value="taipei">雙北 Taipei &amp; New Taipei</option>
-        <option value="taoyuan">桃園 Taoyuan</option>
-        <option value="hsinchu">新竹 Hsinchu</option>
-        <option value="taichung">台中 Taichung</option>
-        <option value="tainan">台南 Tainan</option>
-        <option value="kaohsiung">高雄 Kaohsiung</option>
-        <option value="other">其他 Others</option>
-      </select>
+      <select class="fs" id="s-area"></select>
     </div>
     <div class="fg-g full">
       <label class="fl">表演類型（可複選）<span class="req">*</span></label>
@@ -803,7 +828,7 @@ body.edit .edit-bar{display:flex!important}
     <div class="fg-g"><label class="fl">票價</label><input class="fi" type="text" id="s-price" placeholder="e.g. NT$300 / 免費"></div>
     <div class="fg-g"><label class="fl">售票平台</label><select class="fs" id="s-platform"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="opentix">OPENTIX</option><option value="google-form">Google 表單</option><option value="other">其他</option></select></div>
     <div class="fg-g"><label class="fl">售票連結</label><input class="fi" type="url" id="s-ticketurl" placeholder="https://..."></div>
-        <div class="fg-g full">
+    <div class="fg-g full">
       <label class="fl">活動圖片網址</label>
       <input class="fi" type="url" id="s-image" placeholder="https://...（貼上圖片直連網址）"
         oninput="livePreview('s-img-prev','s-img-hint',this.value)"
@@ -814,7 +839,13 @@ body.edit .edit-bar{display:flex!important}
         💡 貼上可直接開啟的圖片網址。圖片若無法顯示將自動以預設圖示取代。
       </div>
     </div>
-    <div class="fg-g full"><label class="fl">圖片來源備註</label><input class="fi" type="text" id="s-imgsrc" placeholder="e.g. 圖片來源：官方 Facebook"></div>
+    <div class="fg-g full">
+      <label class="fl">圖片來源備註</label>
+      <div style="display:flex;align-items:center;gap:0;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-md);overflow:hidden;background:#fff">
+        <span style="padding:9px 11px;background:var(--cr);font-size:.86rem;font-family:var(--f-zh);color:var(--ts);white-space:nowrap;border-right:1.5px solid rgba(45,43,31,.1)">圖片來源：</span>
+        <input class="fi" type="text" id="s-imgsrc" placeholder="官方 Facebook" style="border:none;border-radius:0;flex:1;background:#fff">
+      </div>
+    </div>
     <div class="fg-g full"><label class="fl">演出簡介</label><textarea class="fta" id="s-desc"></textarea></div>
     <div class="fg-g"><label class="fl">狀態</label><select class="fs" id="s-status"><option value="published">已發布</option><option value="pending">待確認</option><option value="hidden">隱藏</option></select></div>
     <div class="fg-g"><label class="fl">是否售完</label><select class="fs" id="s-soldout"><option value="0">尚有票券</option><option value="1">已售完</option></select></div>
@@ -1061,7 +1092,7 @@ async function loadAllData() {
 }
 window._loadAllData = loadAllData;
 
-// ── Firebase CRUD helpers ──
+// ── Firebase CRUD helpers — exposed immediately ──
 window.FB = {
   async save(colName, id, data) {
     try {
@@ -1249,9 +1280,9 @@ function openShowDetail(id) {
 function renderShows() {
   const grid = document.getElementById('shows-grid'); if (!grid) return;
   const adminMode = isLoggedIn();
+  const q = getSearchQuery();
   const fil = SHOWS.filter(s => {
     if (s.status==='hidden') return false;
-    // Front-end: hide expired shows unless admin is viewing
     if (!adminMode && isExpired(s.date)) return false;
     const types = s.types||(s.type?[s.type]:[]);
     if (fType!=='all' && !types.includes(fType)) return false;
@@ -1263,9 +1294,14 @@ function renderShows() {
     if (fArea!=='all' && s.area!==fArea) return false;
     const dow = new Date(s.date+'T00:00').getDay();
     if (fDay!=='all' && String(dow)!==fDay) return false;
+    // 搜尋篩選
+    if (q) {
+      const hay = [s.title,s.performer,s.venueLabel,s.venue,s.description].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
     return true;
   }).sort((a,b)=>a.date.localeCompare(b.date));
-  grid.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">查無符合條件的演出</div>`;
+  grid.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">${q?'查無符合搜尋的演出':'查無符合條件的演出'}</div>`;
 }
 
 function renderHomeShows() {
@@ -1484,28 +1520,29 @@ function openShowModal(id){
   eShowId=id||null;
   const s=id?SHOWS.find(x=>x.id===id):null;
   document.getElementById('modal-show-title').textContent=s?'編輯演出':'新增演出';
-  ['s-url','s-title','s-date','s-time','s-performer','s-price','s-ticketurl','s-image','s-imgsrc','s-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
-  document.getElementById('s-img-prev').style.display='none';
-  document.getElementById('s-ps').style.display='none';
-  document.getElementById('s-pp').classList.remove('show');
+  ['s-title','s-date','s-time','s-performer','s-price','s-ticketurl','s-image','s-imgsrc','s-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  const imgPrev=document.getElementById('s-img-prev');
+  const imgHint=document.getElementById('s-img-hint');
+  if(imgPrev)imgPrev.style.display='none';
+  if(imgHint){imgHint.textContent='';imgHint.className='img-url-hint';}
   document.querySelectorAll('#s-types input').forEach(cb=>{cb.checked=false;cb.closest('.type-cb-lbl').classList.remove('checked');});
+  // 填入動態場地/地區選單
+  populateShowSelects(s?.venue||'', s?.area||'');
   if(s){
     document.getElementById('s-title').value=s.title;
     document.getElementById('s-date').value=s.date;
     document.getElementById('s-time').value=s.time||'';
-    document.getElementById('s-venue').value=s.venue;
-    document.getElementById('s-area').value=s.area||'taipei';
     document.getElementById('s-performer').value=s.performer||'';
     document.getElementById('s-price').value=s.price||'';
     document.getElementById('s-platform').value=s.platform||'kktix';
     document.getElementById('s-ticketurl').value=s.ticketUrl||'';
     document.getElementById('s-image').value=s.image||'';
-    document.getElementById('s-imgsrc').value=s.imgSrc||'';
+    // imgSrc 去掉前綴「圖片來源：」後填入
+    const rawSrc=s.imgSrc||'';
+    document.getElementById('s-imgsrc').value=rawSrc.replace(/^圖片來源：/,'');
     document.getElementById('s-desc').value=s.description||'';
     document.getElementById('s-status').value=s.status;
     document.getElementById('s-soldout').value=s.soldOut?'1':'0';
-    const sImgEl=document.getElementById('s-image');
-    if(sImgEl)sImgEl.value=s.image||'';
     if(s.image)livePreview('s-img-prev','s-img-hint',s.image);
     const types=s.types||(s.type?[s.type]:[]);
     document.querySelectorAll('#s-types input').forEach(cb=>{if(types.includes(cb.value)){cb.checked=true;cb.closest('.type-cb-lbl').classList.add('checked');}});
@@ -1520,6 +1557,7 @@ function saveShow(status){
   const dateStr=document.getElementById('s-date').value;
   const d=dateStr?new Date(dateStr+'T00:00'):null;
   const venueEl=document.getElementById('s-venue');
+  const imgSrcVal=(document.getElementById('s-imgsrc').value||'').trim();
   const item={
     title,date:dateStr,
     time:document.getElementById('s-time').value,
@@ -1528,11 +1566,11 @@ function saveShow(status){
     area:document.getElementById('s-area').value,
     weekday:d?d.getDay():null,
     types,platform:document.getElementById('s-platform').value,
-    ticketUrl:document.getElementById('s-ticketurl').value||document.getElementById('s-url').value,
+    ticketUrl:document.getElementById('s-ticketurl').value||'',
     performer:document.getElementById('s-performer').value,
     price:document.getElementById('s-price').value,
     image:document.getElementById('s-image')?.value?.trim()||'',
-    imgSrc:document.getElementById('s-imgsrc').value,
+    imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',
     description:document.getElementById('s-desc').value,
     status,soldOut:document.getElementById('s-soldout').value==='1',
   };
@@ -1619,8 +1657,117 @@ function delCourse(id){if(!confirm('確定刪除？'))return;window.FB.del('cour
 
 function saveAll(){showToast('✅ 所有變更已儲存','ok');}
 
-function syncCB(cb){cb.closest('.type-cb-lbl').classList.toggle('checked',cb.checked);}
-function prevImg(pid,url){const img=document.getElementById(pid);if(!img)return;if(url){img.src=url;img.style.display='block';img.onerror=()=>img.style.display='none';}else img.style.display='none';}
+// ── VENUE / AREA MANAGER ──
+// Default lists stored in localStorage for quick access
+const LS_VENUES_KEY = 'cici_show_venues';
+const LS_AREAS_KEY  = 'cici_show_areas';
+
+const DEFAULT_SHOW_VENUES = [
+  {id:'comedy-plus', label:'卡米地+ Comedy Plus'},
+  {id:'two-three',   label:'23喜劇 two three comedy'},
+  {id:'fakers',      label:'飛客劇樂部 Fakers Club'},
+  {id:'beitou',      label:'北投喜劇'},
+  {id:'ginting',     label:'樂君亭 Gingting Comedy'},
+  {id:'windcity',    label:'站立風城'},
+  {id:'smo',         label:'思MIC歐 S.M.O'},
+  {id:'laughhouse',  label:'來福好事 Laugh House'},
+  {id:'tainan',      label:'府城喜劇'},
+  {id:'takao',       label:'喜劇開港 Takaocomedybay'},
+  {id:'other',       label:'其他 Others'},
+];
+const DEFAULT_SHOW_AREAS = [
+  {id:'taipei',    label:'雙北'},
+  {id:'taoyuan',   label:'桃園'},
+  {id:'hsinchu',   label:'新竹'},
+  {id:'taichung',  label:'台中'},
+  {id:'tainan',    label:'台南'},
+  {id:'kaohsiung', label:'高雄'},
+  {id:'other',     label:'其他'},
+];
+
+function getShowVenues(){try{return JSON.parse(localStorage.getItem(LS_VENUES_KEY))||DEFAULT_SHOW_VENUES;}catch{return DEFAULT_SHOW_VENUES;}}
+function getShowAreas(){try{return JSON.parse(localStorage.getItem(LS_AREAS_KEY))||DEFAULT_SHOW_AREAS;}catch{return DEFAULT_SHOW_AREAS;}}
+function saveShowVenues(v){try{localStorage.setItem(LS_VENUES_KEY,JSON.stringify(v));}catch{}}
+function saveShowAreas(a){try{localStorage.setItem(LS_AREAS_KEY,JSON.stringify(a));}catch{}}
+
+function populateShowSelects(venueVal, areaVal){
+  const vs = document.getElementById('s-venue');
+  const as = document.getElementById('s-area');
+  if(!vs||!as) return;
+  const venues = getShowVenues();
+  const areas  = getShowAreas();
+  vs.innerHTML = venues.map(v=>`<option value="${v.id}" ${v.id===venueVal?'selected':''}>${v.label}</option>`).join('');
+  as.innerHTML = areas.map(a=>`<option value="${a.id}" ${a.id===areaVal?'selected':''}>${a.label}</option>`).join('');
+}
+
+let vmTab = 'venue';
+function openVenueManagerModal(){
+  vmTab='venue';
+  document.querySelectorAll('.vm-tab').forEach((t,i)=>t.classList.toggle('on',i===0));
+  document.getElementById('vm-venue-panel').style.display='';
+  document.getElementById('vm-area-panel').style.display='none';
+  renderVmList();
+  document.getElementById('modal-venue-manager').classList.add('open');
+}
+function switchVmTab(tab, el){
+  vmTab=tab;
+  document.querySelectorAll('.vm-tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('vm-venue-panel').style.display=tab==='venue'?'':'none';
+  document.getElementById('vm-area-panel').style.display=tab==='area'?'':'none';
+  renderVmList();
+}
+function renderVmList(){
+  if(vmTab==='venue'){
+    const items=getShowVenues();
+    document.getElementById('vm-venue-list').innerHTML=items.map((v,i)=>`
+      <div class="vm-item"><span>${v.label}</span>
+      ${v.id!=='other'?`<button class="vm-del" onclick="delVmItem('venue',${i})" title="刪除">✕</button>`:''}
+      </div>`).join('');
+  } else {
+    const items=getShowAreas();
+    document.getElementById('vm-area-list').innerHTML=items.map((a,i)=>`
+      <div class="vm-item"><span>${a.label}</span>
+      ${a.id!=='other'?`<button class="vm-del" onclick="delVmItem('area',${i})" title="刪除">✕</button>`:''}
+      </div>`).join('');
+  }
+}
+function addVmItem(type){
+  const inp=document.getElementById(`vm-${type}-input`);
+  const label=(inp.value||'').trim();
+  if(!label){showToast('請輸入名稱','err');return;}
+  const id='custom_'+Date.now();
+  if(type==='venue'){
+    const items=getShowVenues();
+    // Insert before 'other'
+    const otherIdx=items.findIndex(v=>v.id==='other');
+    if(otherIdx>=0) items.splice(otherIdx,0,{id,label});
+    else items.push({id,label});
+    saveShowVenues(items);
+  } else {
+    const items=getShowAreas();
+    const otherIdx=items.findIndex(a=>a.id==='other');
+    if(otherIdx>=0) items.splice(otherIdx,0,{id,label});
+    else items.push({id,label});
+    saveShowAreas(items);
+  }
+  inp.value='';
+  renderVmList();
+  showToast('✅ 已新增','ok');
+}
+function delVmItem(type,idx){
+  if(!confirm('確定刪除？')) return;
+  if(type==='venue'){const items=getShowVenues();items.splice(idx,1);saveShowVenues(items);}
+  else {const items=getShowAreas();items.splice(idx,1);saveShowAreas(items);}
+  renderVmList();
+  showToast('已刪除','ok');
+}
+
+// ── SEARCH ──
+let fSearch = '';
+function getSearchQuery(){ return (document.getElementById('shows-search')?.value||'').trim().toLowerCase(); }
+
+function syncCB(cb){cb.closest('.type-cb-lbl').classList.toggle('checked',cb.checked);}const img=document.getElementById(pid);if(!img)return;if(url){img.src=url;img.style.display='block';img.onerror=()=>img.style.display='none';}else img.style.display='none';}
 function prevVenueLogo(url){const lp=document.getElementById('v-logo-prev');if(!lp)return;if(url){lp.src=url;lp.style.display='block';lp.onerror=()=>lp.style.display='none';}else lp.style.display='none';}
 function handleVenueUpload(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById('v-logourl').value=e.target.result;prevVenueLogo(e.target.result);};r.readAsDataURL(f);}
 </script>
@@ -1733,6 +1880,23 @@ function extractMeta(html){const gm=prop=>{for(const re of[new RegExp(`<meta[^>]
 function detectPlat(url){if(url.includes('kktix'))return'kktix';if(url.includes('accupass'))return'accupass';if(url.includes('opentix'))return'opentix';return'other';}
 function setParseLoad(t,l){const btn=document.getElementById(t+'-parse-btn');if(!btn)return;btn.disabled=l;btn.style.opacity=l?'.65':'1';btn.innerHTML=l?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin .7s linear infinite"><path d="M21 12a9 9 0 11-18 0"/></svg> 解析中...':'⟳ 解析';}
 function setPS(t,k,msg){const el=document.getElementById(t+'-ps');if(!el)return;el.textContent=msg;el.style.display=msg?'block':'none';if(k)el.className='ps '+k;}
+
+// ── Image live preview (exposed globally for use in oninput handlers) ──
+window.livePreview = function(imgId, hintId, url) {
+  const img = document.getElementById(imgId);
+  const hint = document.getElementById(hintId);
+  if (!img) return;
+  if (!url || !url.trim()) {
+    img.style.display = 'none';
+    if (hint) { hint.textContent = ''; hint.className = 'img-url-hint'; }
+    return;
+  }
+  if (hint) { hint.textContent = '載入中…'; hint.className = 'img-url-hint loading'; }
+  img.style.display = 'block';
+  img.src = url.trim();
+  img.onload = () => { if (hint) { hint.textContent = '✓ 圖片載入成功'; hint.className = 'img-url-hint ok'; } };
+  img.onerror = () => { img.style.display = 'none'; if (hint) { hint.textContent = '✗ 無法載入圖片，請確認網址'; hint.className = 'img-url-hint err'; } };
+};
 
 
 </script>
