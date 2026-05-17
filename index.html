@@ -1767,7 +1767,8 @@ function delVmItem(type,idx){
 let fSearch = '';
 function getSearchQuery(){ return (document.getElementById('shows-search')?.value||'').trim().toLowerCase(); }
 
-function syncCB(cb){cb.closest('.type-cb-lbl').classList.toggle('checked',cb.checked);}const img=document.getElementById(pid);if(!img)return;if(url){img.src=url;img.style.display='block';img.onerror=()=>img.style.display='none';}else img.style.display='none';}
+function syncCB(cb){cb.closest('.type-cb-lbl').classList.toggle('checked',cb.checked);}
+function prevImg(pid,url){const img=document.getElementById(pid);if(!img)return;if(url){img.src=url;img.style.display='block';img.onerror=()=>img.style.display='none';}else img.style.display='none';}
 function prevVenueLogo(url){const lp=document.getElementById('v-logo-prev');if(!lp)return;if(url){lp.src=url;lp.style.display='block';lp.onerror=()=>lp.style.display='none';}else lp.style.display='none';}
 function handleVenueUpload(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{document.getElementById('v-logourl').value=e.target.result;prevVenueLogo(e.target.result);};r.readAsDataURL(f);}
 </script>
