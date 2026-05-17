@@ -1213,6 +1213,12 @@ let editMode = false;
 let eShowId=null, eMicId=null, eVenueId=null, eCourseId=null;
 let fType='all', fVenue='all', fArea='all', fDay='all', fCtype='all', fCity='all';
 let micDay = 1;
+
+function isExpired(dateStr){
+  if(!dateStr) return false;
+  const today = new Date(); today.setHours(0,0,0,0);
+  return new Date(dateStr+'T00:00') < today;
+}
 const _today = new Date();
 let calYear = _today.getFullYear(), calMonth = _today.getMonth(), calSel = null;
 </script>
