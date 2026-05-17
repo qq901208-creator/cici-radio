@@ -985,6 +985,105 @@ body.edit .edit-bar{display:flex!important}
 </div>
 
 <!-- ═══════════════════════════════════════
+     FIREBASE SDK
+═══════════════════════════════════════ -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import {
+  getFirestore, collection, doc,
+  getDocs, addDoc, setDoc, deleteDoc, updateDoc,
+  query, orderBy, onSnapshot
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDXW1OHmAAc8v2nbrhHYNPqmoCsUsc3RHw",
+  authDomain: "cici-radio-e7902.firebaseapp.com",
+  projectId: "cici-radio-e7902",
+  storageBucket: "cici-radio-e7902.firebasestorage.app",
+  messagingSenderId: "442080457853",
+  appId: "1:442080457853:web:b5e306bcc7cb4f6ddd2d14",
+  measurementId: "G-N8SY933TK6"
+};
+
+const _app = initializeApp(firebaseConfig);
+const db = getFirestore(_app);
+
+// ── Expose DB helpers globally ──
+window._db = db;
+window._col = collection;
+window._doc = doc;
+window._getDocs = getDocs;
+window._addDoc = addDoc;
+window._setDoc = setDoc;
+window._deleteDoc = deleteDoc;
+window._updateDoc = updateDoc;
+window._query = query;
+window._orderBy = orderBy;
+window._onSnapshot = onSnapshot;
+
+// ── Load all data from Firestore on startup ──
+async function loadAllData() {
+  try {
+    const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap] = await Promise.all([
+      getDocs(query(collection(db,'shows'), orderBy('date','asc'))),
+      getDocs(collection(db,'mics')),
+      getDocs(collection(db,'venues')),
+      getDocs(query(collection(db,'courses'), orderBy('date','asc'))),
+      getDocs(query(collection(db,'comments'), orderBy('time','desc'))),
+    ]);
+    window.SHOWS    = showsSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window.MICS     = micsSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window.VENUES   = venuesSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window.COURSES  = coursesSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window.COMMENTS = commentsSnap.docs.map(d=>({id:d.id,...d.data()}));
+    // Fallback to defaults if Firestore is empty
+    if(!window.SHOWS.length)    window.SHOWS    = window.DEFAULT_SHOWS;
+    if(!window.MICS.length)     window.MICS     = window.DEFAULT_MICS;
+    if(!window.VENUES.length)   window.VENUES   = window.DEFAULT_VENUES;
+    if(!window.COURSES.length)  window.COURSES  = window.DEFAULT_COURSES;
+    if(!window.COMMENTS.length) window.COMMENTS = window.DEFAULT_COMMENTS;
+  } catch(e) {
+    console.warn('Firestore load failed, using defaults:', e);
+    window.SHOWS    = window.DEFAULT_SHOWS;
+    window.MICS     = window.DEFAULT_MICS;
+    window.VENUES   = window.DEFAULT_VENUES;
+    window.COURSES  = window.DEFAULT_COURSES;
+    window.COMMENTS = window.DEFAULT_COMMENTS;
+  }
+  // Re-render after data loaded
+  if(typeof renderHomeShows==='function') renderHomeShows();
+  if(typeof renderShows==='function') renderShows();
+  if(typeof renderVenues==='function') renderVenues();
+  if(typeof renderCourses==='function') renderCourses();
+  if(typeof renderMicTable==='function') renderMicTable();
+  if(typeof renderHomeComments==='function') renderHomeComments();
+  if(typeof updFbBadge==='function') updFbBadge();
+}
+window._loadAllData = loadAllData;
+
+// ── Firebase CRUD helpers ──
+window.FB = {
+  async save(colName, id, data) {
+    try {
+      if(id) {
+        await setDoc(doc(db, colName, id), data);
+        return id;
+      } else {
+        const ref = await addDoc(collection(db, colName), data);
+        return ref.id;
+      }
+    } catch(e) { console.error('FB.save error:', e); throw e; }
+  },
+  async del(colName, id) {
+    try { await deleteDoc(doc(db, colName, id)); }
+    catch(e) { console.error('FB.del error:', e); throw e; }
+  },
+};
+
+document.addEventListener('DOMContentLoaded', ()=>{ loadAllData(); });
+</script>
+
+<!-- ═══════════════════════════════════════
      DATA
 ═══════════════════════════════════════ -->
 <script>
@@ -1029,36 +1128,14 @@ const TEAM_PHOTOS = [
   {src:'', alt:'團隊照片 3'},
 ];
 
-// ── STORAGE ──
-const LS = {
-  get(k){try{return JSON.parse(localStorage.getItem('cici6_'+k))||null}catch{return null}},
-  set(k,v){try{localStorage.setItem('cici6_'+k,JSON.stringify(v))}catch{}}
-};
-
-const DEFAULT_SHOWS = [
-  {id:'s1',title:'卡米地週四 Open Mic',date:'2025-05-08',time:'20:00',venue:'comedy-plus',venueLabel:'卡米地+ Comedy Plus',area:'taipei',weekday:4,types:['opmic'],platform:'kktix',ticketUrl:'https://kktix.com',performer:'各路喜劇演員',price:'NT$350',image:'',imgSrc:'圖片來源：卡米地+ Facebook',description:'每週四固定場，歡迎新手上台！',status:'published',soldOut:false},
-  {id:'s2',title:'23喜劇週末拼盤秀',date:'2025-05-10',time:'19:30',venue:'two-three',venueLabel:'23喜劇 two three comedy',area:'taipei',weekday:6,types:['mixed','standup'],platform:'accupass',ticketUrl:'https://accupass.com',performer:'多位喜劇演員',price:'NT$500',image:'',imgSrc:'圖片來源：23喜劇 Instagram',description:'多位演員輪番上陣，笑聲不斷。',status:'published',soldOut:false},
-  {id:'s3',title:'飛客即興秀 Sunday Improv',date:'2025-05-11',time:'15:00',venue:'fakers',venueLabel:'飛客劇樂部 Fakers Club',area:'taipei',weekday:0,types:['improv'],platform:'kktix',ticketUrl:'https://kktix.com',performer:'飛客即興團',price:'NT$400',image:'',imgSrc:'圖片來源：飛客劇樂部 FB',description:'即興表演永遠充滿驚喜！',status:'published',soldOut:false},
-  {id:'s4',title:'English Comedy Night',date:'2025-05-15',time:'21:00',venue:'two-three',venueLabel:'23喜劇 two three comedy',area:'taipei',weekday:4,types:['english','standup'],platform:'kktix',ticketUrl:'https://kktix.com',performer:'International Comedians',price:'NT$450',image:'',imgSrc:'',description:'All-English comedy show.',status:'published',soldOut:false},
-  {id:'s5',title:'喜劇開港週五 Open Mic',date:'2025-05-16',time:'20:00',venue:'takao',venueLabel:'喜劇開港 Takaocomedybay',area:'kaohsiung',weekday:5,types:['opmic'],platform:'other',ticketUrl:'#',performer:'公開報名',price:'免費入場',image:'',imgSrc:'圖片來源：喜劇開港 FB',description:'高雄最熱血的 Open Mic！',status:'published',soldOut:false},
-  {id:'s6',title:'喜劇專場：今天不笑不行',date:'2025-05-24',time:'20:30',venue:'comedy-plus',venueLabel:'卡米地+ Comedy Plus',area:'taipei',weekday:6,types:['special'],platform:'kktix',ticketUrl:'https://kktix.com',performer:'陳大笑',price:'NT$600',image:'',imgSrc:'',description:'資深喜劇演員個人專場。',status:'published',soldOut:false},
-];
-const DEFAULT_MICS = [
-  {id:'m1',day:1,venue:'飛客劇樂部 Fakers Club',showTime:'週一 20:00',signupDeadline:'週一 18:00 前',method:'FB 私訊',link:'https://www.facebook.com/fakers.tw/',notes:'限 5 分鐘段子'},
-  {id:'m2',day:2,venue:'23喜劇 two three comedy',showTime:'週二 20:30',signupDeadline:'週二 18:00 前',method:'線上報名',link:'#',notes:'週二固定場'},
-  {id:'m3',day:2,venue:'卡米地+ Comedy Plus',showTime:'週二 20:30',signupDeadline:'週二 20:00 前',method:'現場報名',link:'#',notes:'提前 30 分鐘到場'},
-  {id:'m4',day:3,venue:'思MIC歐 S.M.O',showTime:'週三 20:00',signupDeadline:'週三 20:00 前',method:'IG DM',link:'https://www.instagram.com/s.mic.o',notes:'新人優先'},
-  {id:'m5',day:4,venue:'卡米地+ Comedy Plus',showTime:'週四 20:00',signupDeadline:'週四 19:00 前',method:'現場報名',link:'#',notes:'週四固定場'},
-  {id:'m6',day:4,venue:'23喜劇 two three comedy',showTime:'週四 21:00',signupDeadline:'週四 18:00 前',method:'線上報名',link:'#',notes:''},
-  {id:'m7',day:5,venue:'喜劇開港 Takaocomedybay',showTime:'週五 20:00',signupDeadline:'週五 18:00 前',method:'FB 私訊',link:'https://www.facebook.com/takaocb2020/',notes:'高雄'},
-  {id:'m8',day:6,venue:'樂君亭 Gingting Comedy',showTime:'週六 19:30',signupDeadline:'週四 23:59 前',method:'Google 表單',link:'#',notes:'桃園'},
-  {id:'m9',day:0,venue:'來福好事 Laugh House',showTime:'週日 15:00',signupDeadline:'週五 23:59 前',method:'Accupass',link:'https://accupass.com',notes:'台中'},
-];
-const DEFAULT_VENUES = [
+// ── DEFAULT DATA (fallback when Firestore is empty) ──
+window.DEFAULT_SHOWS = [];
+window.DEFAULT_MICS = [];
+window.DEFAULT_VENUES = [
   {id:'v1',nameZh:'卡米地喜劇俱樂部',nameEn:'Comedy Plus',city:'taipei',address:'台北市中山區復興北路480號',fb:'https://www.facebook.com/ComedyPlusTaipei/',ig:'https://www.instagram.com/comedyclubtaipei',logoUrl:'',description:'台灣最知名的喜劇俱樂部之一，每週固定 Open Mic、Stand-up 演出。'},
   {id:'v2',nameZh:'23喜劇俱樂部',nameEn:'Two Three Comedy Club',city:'taipei',address:'台北市中山區林森北路286號B1',fb:'https://www.facebook.com/TwoThreeComedy/',ig:'https://www.instagram.com/twothreecomedy/',logoUrl:'',description:'以多元喜劇節目聞名，是台北市中心的喜劇重鎮。'},
-  {id:'v3',nameZh:'飛客劇樂部',nameEn:"Fakers Comedy Club",city:'taipei',address:'台北市中山區南京東路三段109巷16號B1',fb:'https://www.facebook.com/fakers.tw/',ig:'https://www.instagram.com/fakerscomedyclub',logoUrl:'',description:'即興喜劇與 Stand-up 的重要基地。'},
-  {id:'v4',nameZh:'北投喜劇',nameEn:'Beitou Comedy',city:'taipei',address:'台北市北投區中央南路一段102巷34號',fb:'https://www.facebook.com/people/北投喜劇/61581707900549/',ig:null,logoUrl:'',description:'北投地區新興喜劇場地。'},
+  {id:'v3',nameZh:'飛客劇樂部',nameEn:'Fakers Comedy Club',city:'taipei',address:'台北市中山區南京東路三段109巷16號B1',fb:'https://www.facebook.com/fakers.tw/',ig:'https://www.instagram.com/fakerscomedyclub',logoUrl:'',description:'即興喜劇與 Stand-up 的重要基地。'},
+  {id:'v4',nameZh:'北投喜劇',nameEn:'Beitou Comedy',city:'taipei',address:'台北市北投區中央南路一段102巷34號',fb:'https://www.facebook.com/people/北投喜劇/61581707900549/',ig:'',logoUrl:'',description:'北投地區新興喜劇場地。'},
   {id:'v5',nameZh:'樂君亭',nameEn:'Gingting Comedy',city:'taoyuan',address:'桃園市中壢區興平路56號',fb:'https://www.facebook.com/ginting.comedy/',ig:'https://www.instagram.com/ginting.comedy/',logoUrl:'',description:'桃園地區活躍的喜劇場地。'},
   {id:'v6',nameZh:'站立風城',nameEn:'Wind City Stand-Up',city:'hsinchu',address:'新竹市東區食品路41號',fb:'https://www.facebook.com/p/站立風城-100095524380525/',ig:'https://www.instagram.com/thewind_city/',logoUrl:'',description:'新竹地區的喜劇表演場地。'},
   {id:'v7',nameZh:'思MIC歐 S.M.O',nameEn:'S.M.O',city:'hsinchu',address:'新竹市東區南大路149號',fb:'https://www.facebook.com/p/思MIC歐-SMO-61577612721799/',ig:'https://www.instagram.com/s.mic.o',logoUrl:'',description:'新竹的 Open Mic 場地。'},
@@ -1066,22 +1143,15 @@ const DEFAULT_VENUES = [
   {id:'v9',nameZh:'府城喜劇',nameEn:'Tainan Comedy',city:'tainan',address:'台南市東區東寧路西段5號',fb:'https://www.facebook.com/TainanComedy/',ig:'https://www.instagram.com/tainan.comedy',logoUrl:'',description:'台南喜劇文化推廣場地。'},
   {id:'v10',nameZh:'喜劇開港',nameEn:'Takao Comedy Bay',city:'kaohsiung',address:'高雄市苓雅區青年一路16-1號2F',fb:'https://www.facebook.com/takaocb2020/',ig:'https://www.instagram.com/takaocb2020/',logoUrl:'',description:'高雄最大的喜劇俱樂部，定期舉辦演出。'},
 ];
-const DEFAULT_COURSES = [
-  {id:'c1',title:'Stand-up 喜劇入門工作坊',date:'2025-05-20',time:'13:00–17:00',type:'standup',organizer:'卡米地+',location:'台北市',fee:'NT$2,800',platform:'kktix',url:'https://kktix.com',image:'',imgSrc:'',description:'適合零基礎學員！從喜劇聲音到段子結構，一次掌握 Stand-up 核心。',status:'published'},
-  {id:'c2',title:'即興喜劇基礎課：Yes, And!',date:'2025-05-27',time:'14:00–18:00',type:'improv',organizer:'飛客劇樂部',location:'台北市',fee:'NT$3,200',platform:'accupass',url:'https://accupass.com',image:'',imgSrc:'',description:'透過「Yes, And」法則學習即興反應與場景建構。',status:'published'},
-  {id:'c3',title:'漫才入門：如何說出 2人的笑話',date:'2025-06-10',time:'13:00–18:00',type:'mancai',organizer:'23喜劇俱樂部',location:'台北市',fee:'NT$4,000',platform:'accupass',url:'https://accupass.com',image:'',imgSrc:'',description:'從日本漫才到台式二人組，帶你學習雙人默契與笑點設計。',status:'published'},
-];
-const DEFAULT_COMMENTS = [
-  {id:'fb1',name:'Yuki',avatar:'Y',text:'超棒的網站！以前要找 Open Mic 資訊要翻很多地方，現在一目瞭然 👍',time:Date.now()-3600000*5,page:'shows',rating:5,reactions:{like:3,fire:1,haha:0},myReactions:[],pinned:true,hidden:false},
-  {id:'fb2',name:'小明',avatar:'小',text:'希望可以加入更多地方的場地資訊！高雄也有很多精彩演出 🎭',time:Date.now()-3600000*28,page:'venues',rating:4,reactions:{like:2,fire:0,haha:1},myReactions:[],pinned:false,hidden:false},
-  {id:'fb3',name:'ComedyFan',avatar:'C',text:'資訊很清楚！每週都會來看 Open Mic 時間表',time:Date.now()-86400000*2,page:'opmic',rating:5,reactions:{like:5,fire:2,haha:0},myReactions:[],pinned:false,hidden:false},
-];
+window.DEFAULT_COURSES = [];
+window.DEFAULT_COMMENTS = [];
 
-let SHOWS    = LS.get('shows')    || DEFAULT_SHOWS;
-let MICS     = LS.get('mics')     || DEFAULT_MICS;
-let VENUES   = LS.get('venues')   || DEFAULT_VENUES;
-let COURSES  = LS.get('courses')  || DEFAULT_COURSES;
-let COMMENTS = LS.get('comments') || DEFAULT_COMMENTS;
+// ── Global data arrays (populated from Firestore) ──
+let SHOWS    = [];
+let MICS     = [];
+let VENUES   = window.DEFAULT_VENUES.slice();
+let COURSES  = [];
+let COMMENTS = [];
 
 let editMode = false;
 let eShowId=null, eMicId=null, eVenueId=null, eCourseId=null;
@@ -1451,7 +1521,7 @@ function saveShow(status){
   const d=dateStr?new Date(dateStr+'T00:00'):null;
   const venueEl=document.getElementById('s-venue');
   const item={
-    id:eShowId||('s'+Date.now()),title,date:dateStr,
+    title,date:dateStr,
     time:document.getElementById('s-time').value,
     venue:venueEl.value,
     venueLabel:(venueEl.selectedOptions[0]?.text||'').split('（')[0].trim(),
@@ -1466,13 +1536,15 @@ function saveShow(status){
     description:document.getElementById('s-desc').value,
     status,soldOut:document.getElementById('s-soldout').value==='1',
   };
-  if(eShowId){const i=SHOWS.findIndex(x=>x.id===eShowId);if(i>=0)SHOWS[i]=item;}else SHOWS.push(item);
-  LS.set('shows',SHOWS);closeModal('show');renderShows();renderHomeShows();
-  // Refresh calendar if visible
-  if(document.getElementById('view-cal').style.display!=='none')renderCalendar();
-  showToast(status==='published'?'✅ 演出已發布':'📝 草稿已儲存','ok');
+  window.FB.save('shows', eShowId||null, item).then(newId=>{
+    if(eShowId){const i=SHOWS.findIndex(x=>x.id===eShowId);if(i>=0)SHOWS[i]={id:eShowId,...item};}
+    else SHOWS.push({id:newId,...item});
+    closeModal('show');renderShows();renderHomeShows();
+    if(document.getElementById('view-cal').style.display!=='none')renderCalendar();
+    showToast(status==='published'?'✅ 演出已發布':'📝 草稿已儲存','ok');
+  }).catch(()=>showToast('❌ 儲存失敗，請再試一次','err'));
 }
-function delShow(id){if(!confirm('確定刪除這場演出？'))return;SHOWS=SHOWS.filter(x=>x.id!==id);LS.set('shows',SHOWS);renderShows();renderHomeShows();if(document.getElementById('view-cal').style.display!=='none')renderCalendar();showToast('已刪除','ok');}
+function delShow(id){if(!confirm('確定刪除這場演出？'))return;window.FB.del('shows',id).then(()=>{SHOWS=SHOWS.filter(x=>x.id!==id);renderShows();renderHomeShows();if(document.getElementById('view-cal').style.display!=='none')renderCalendar();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
 // ── MIC MODAL ──
 function openMicModal(id){
@@ -1486,11 +1558,14 @@ function openMicModal(id){
 function saveMic(){
   const venue=document.getElementById('m-venue').value.trim();
   if(!venue){showToast('請填入場地名稱','err');return;}
-  const item={id:eMicId||('m'+Date.now()),day:parseInt(document.getElementById('m-day').value),venue,showTime:document.getElementById('m-showtime').value,signupDeadline:document.getElementById('m-deadline').value,method:document.getElementById('m-method').value,link:document.getElementById('m-link').value||'#',notes:document.getElementById('m-notes').value};
-  if(eMicId){const i=MICS.findIndex(x=>x.id===eMicId);if(i>=0)MICS[i]=item;}else MICS.push(item);
-  LS.set('mics',MICS);closeModal('mic');renderMicTable();showToast('✅ Open Mic 已儲存','ok');
+  const item={day:parseInt(document.getElementById('m-day').value),venue,showTime:document.getElementById('m-showtime').value,signupDeadline:document.getElementById('m-deadline').value,method:document.getElementById('m-method').value,link:document.getElementById('m-link').value||'#',notes:document.getElementById('m-notes').value};
+  window.FB.save('mics', eMicId||null, item).then(newId=>{
+    if(eMicId){const i=MICS.findIndex(x=>x.id===eMicId);if(i>=0)MICS[i]={id:eMicId,...item};}
+    else MICS.push({id:newId,...item});
+    closeModal('mic');renderMicTable();showToast('✅ Open Mic 已儲存','ok');
+  }).catch(()=>showToast('❌ 儲存失敗','err'));
 }
-function delMic(id){if(!confirm('確定刪除？'))return;MICS=MICS.filter(x=>x.id!==id);LS.set('mics',MICS);renderMicTable();showToast('已刪除','ok');}
+function delMic(id){if(!confirm('確定刪除？'))return;window.FB.del('mics',id).then(()=>{MICS=MICS.filter(x=>x.id!==id);renderMicTable();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
 // ── VENUE MODAL ──
 function openVenueModal(id){
@@ -1506,11 +1581,14 @@ function saveVenue(){
   const nameZh=document.getElementById('v-namezh').value.trim();
   if(!nameZh){showToast('請填入場地名稱','err');return;}
   const city=document.getElementById('v-city').value;
-  const item={id:eVenueId||('v'+Date.now()),nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,description:document.getElementById('v-desc').value};
-  if(eVenueId){const i=VENUES.findIndex(x=>x.id===eVenueId);if(i>=0)VENUES[i]=item;}else VENUES.push(item);
-  LS.set('venues',VENUES);closeModal('venue');renderVenues();showToast('✅ 場地已儲存','ok');
+  const item={nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,description:document.getElementById('v-desc').value};
+  window.FB.save('venues', eVenueId||null, item).then(newId=>{
+    if(eVenueId){const i=VENUES.findIndex(x=>x.id===eVenueId);if(i>=0)VENUES[i]={id:eVenueId,...item};}
+    else VENUES.push({id:newId,...item});
+    closeModal('venue');renderVenues();showToast('✅ 場地已儲存','ok');
+  }).catch(()=>showToast('❌ 儲存失敗','err'));
 }
-function delVenue(id){if(!confirm('確定刪除這個場地？'))return;VENUES=VENUES.filter(x=>x.id!==id);LS.set('venues',VENUES);renderVenues();showToast('已刪除','ok');}
+function delVenue(id){if(!confirm('確定刪除這個場地？'))return;window.FB.del('venues',id).then(()=>{VENUES=VENUES.filter(x=>x.id!==id);renderVenues();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
 // ── COURSE MODAL ──
 function openCourseModal(id){
@@ -1530,13 +1608,16 @@ function saveCourse(status){
   const title=document.getElementById('c-title').value.trim();
   if(!title){showToast('請填入課程名稱','err');return;}
   const ctype=document.getElementById('c-type').value;
-  const item={id:eCourseId||('c'+Date.now()),title,date:document.getElementById('c-date').value,time:document.getElementById('c-time').value,type:ctype,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value||document.getElementById('c-url').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:document.getElementById('c-imgsrc').value,description:document.getElementById('c-desc').value,status};
-  if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]=item;}else COURSES.push(item);
-  LS.set('courses',COURSES);closeModal('course');renderCourses();showToast(status==='published'?'✅ 課程已發布':'📝 草稿已儲存','ok');
+  const item={title,date:document.getElementById('c-date').value,time:document.getElementById('c-time').value,type:ctype,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value||document.getElementById('c-url').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:document.getElementById('c-imgsrc').value,description:document.getElementById('c-desc').value,status};
+  window.FB.save('courses', eCourseId||null, item).then(newId=>{
+    if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
+    else COURSES.push({id:newId,...item});
+    closeModal('course');renderCourses();showToast(status==='published'?'✅ 課程已發布':'📝 草稿已儲存','ok');
+  }).catch(()=>showToast('❌ 儲存失敗','err'));
 }
-function delCourse(id){if(!confirm('確定刪除？'))return;COURSES=COURSES.filter(x=>x.id!==id);LS.set('courses',COURSES);renderCourses();showToast('已刪除','ok');}
+function delCourse(id){if(!confirm('確定刪除？'))return;window.FB.del('courses',id).then(()=>{COURSES=COURSES.filter(x=>x.id!==id);renderCourses();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
-function saveAll(){LS.set('shows',SHOWS);LS.set('mics',MICS);LS.set('venues',VENUES);LS.set('courses',COURSES);showToast('✅ 所有變更已儲存','ok');}
+function saveAll(){showToast('✅ 所有變更已儲存','ok');}
 
 function syncCB(cb){cb.closest('.type-cb-lbl').classList.toggle('checked',cb.checked);}
 function prevImg(pid,url){const img=document.getElementById(pid);if(!img)return;if(url){img.src=url;img.style.display='block';img.onerror=()=>img.style.display='none';}else img.style.display='none';}
@@ -1692,12 +1773,12 @@ function renderFpList(){
     <div class="fp-ra"><input class="fp-ri" id="ri-${c.id}" placeholder="管理員回覆…" onkeydown="if(event.key==='Enter')sendReply('${c.id}')"><button class="fp-rs" onclick="sendReply('${c.id}')">回覆</button></div>`:''}
   </div>`;}).join('');
 }
-function submitComment(){const name=document.getElementById('fpNI').value.trim()||'匿名';const text=document.getElementById('fpTA').value.trim();if(!text){showToast('請輸入留言','err');return;}const page=document.querySelector('.page.active')?.id?.replace('page-','')||'general';const c={id:'fb'+Date.now(),name,avatar:name[0].toUpperCase(),text,time:Date.now(),page:fpTab==='all'?page:fpTab,rating:selRating,reactions:{like:0,fire:0,haha:0},myReactions:[],pinned:false,hidden:false};COMMENTS.unshift(c);LS.set('comments',COMMENTS);document.getElementById('fpTA').value='';document.getElementById('fpNI').value='';selRating=0;renderStars(0);updAv();updCC();renderFpList();renderRatBar();renderHomeComments();showToast('✅ 留言已送出','ok');updFbBadge();}
-function react(id,t){const c=COMMENTS.find(x=>x.id===id);if(!c)return;if(!c.myReactions)c.myReactions=[];const i=c.myReactions.indexOf(t);if(i>=0){c.myReactions.splice(i,1);c.reactions[t]--;}else{c.myReactions.push(t);c.reactions[t]++;}LS.set('comments',COMMENTS);renderFpList();}
-function pinC(id){const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.pinned=!c.pinned;LS.set('comments',COMMENTS);renderFpList();renderHomeComments();showToast(c.pinned?'📌 已設為精選':'已取消精選','ok');}
-function delC(id){if(!confirm('確定刪除？'))return;COMMENTS=COMMENTS.filter(x=>x.id!==id);LS.set('comments',COMMENTS);renderFpList();renderHomeComments();showToast('已刪除','ok');}
-function hideC(id){const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.hidden=!c.hidden;LS.set('comments',COMMENTS);renderFpList();showToast(c.hidden?'已隱藏':'已顯示','ok');}
-function sendReply(id){const inp=document.getElementById('ri-'+id);if(!inp||!inp.value.trim())return;const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.reply=inp.value.trim();LS.set('comments',COMMENTS);renderFpList();showToast('✅ 回覆已儲存','ok');}
+function submitComment(){const name=document.getElementById('fpNI').value.trim()||'匿名';const text=document.getElementById('fpTA').value.trim();if(!text){showToast('請輸入留言','err');return;}const page=document.querySelector('.page.active')?.id?.replace('page-','')||'general';const c={name,avatar:name[0].toUpperCase(),text,time:Date.now(),page:fpTab==='all'?page:fpTab,rating:selRating,reactions:{like:0,fire:0,haha:0},myReactions:[],pinned:false,hidden:false};window.FB.save('comments',null,c).then(newId=>{COMMENTS.unshift({id:newId,...c});document.getElementById('fpTA').value='';document.getElementById('fpNI').value='';selRating=0;renderStars(0);updAv();updCC();renderFpList();renderRatBar();renderHomeComments();showToast('✅ 留言已送出','ok');updFbBadge();}).catch(()=>showToast('❌ 送出失敗','err'));}
+function react(id,t){const c=COMMENTS.find(x=>x.id===id);if(!c)return;if(!c.myReactions)c.myReactions=[];const i=c.myReactions.indexOf(t);if(i>=0){c.myReactions.splice(i,1);c.reactions[t]--;}else{c.myReactions.push(t);c.reactions[t]++;}window.FB.save('comments',id,c).then(()=>renderFpList());}
+function pinC(id){const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.pinned=!c.pinned;window.FB.save('comments',id,c).then(()=>{renderFpList();renderHomeComments();showToast(c.pinned?'📌 已設為精選':'已取消精選','ok');});}
+function delC(id){if(!confirm('確定刪除？'))return;window.FB.del('comments',id).then(()=>{COMMENTS=COMMENTS.filter(x=>x.id!==id);renderFpList();renderHomeComments();showToast('已刪除','ok');});}
+function hideC(id){const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.hidden=!c.hidden;window.FB.save('comments',id,c).then(()=>{renderFpList();showToast(c.hidden?'已隱藏':'已顯示','ok');});}
+function sendReply(id){const inp=document.getElementById('ri-'+id);if(!inp||!inp.value.trim())return;const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.reply=inp.value.trim();window.FB.save('comments',id,c).then(()=>{renderFpList();showToast('✅ 回覆已儲存','ok');});}
 function renderRatBar(){const fil=COMMENTS.filter(c=>!c.hidden&&c.rating>0&&(fpTab==='all'||c.page===fpTab));const el=document.getElementById('fpRating');if(!fil.length){el.innerHTML='';return;}const avg=(fil.reduce((a,c)=>a+c.rating,0)/fil.length).toFixed(1);el.innerHTML=`<div class="fp-avg">${avg}</div><div><div style="color:#f5d558;font-size:.95rem">${'⭐'.repeat(Math.round(parseFloat(avg)))}</div><div class="fp-avg-sub">${fil.length} 則評分</div></div>`;}
 function renderHomeComments(){const g=document.getElementById('home-comments-grid');if(!g)return;const pins=COMMENTS.filter(c=>c.pinned&&!c.hidden).slice(0,3);if(!pins.length){g.innerHTML='';return;}g.innerHTML=pins.map(c=>`<div style="background:var(--ww);border-radius:var(--r-lg);padding:20px;border:1.5px solid rgba(45,43,31,.08);box-shadow:var(--sc)"><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><div style="width:34px;height:34px;border-radius:50%;background:hsl(${c.avatar.charCodeAt(0)*13%360},55%,82%);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;font-family:var(--f-bo)">${c.avatar}</div><div><div style="font-weight:700;font-size:.85rem;font-family:var(--f-zh)">${c.name}</div><div style="font-size:.68rem;color:var(--ts)">${'⭐'.repeat(c.rating||0)} ${relTime(c.time)}</div></div><span style="margin-left:auto;background:var(--y);color:var(--sd);font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:var(--r-pill)">📌</span></div><div style="font-size:.85rem;color:var(--tm);font-family:var(--f-zh);line-height:1.62">${c.text}</div></div>`).join('');}
 function updFbBadge(){const cnt=COMMENTS.filter(c=>!c.hidden).length;const b=document.getElementById('fbBadge');b.textContent=cnt;b.classList.toggle('show',cnt>0);}
