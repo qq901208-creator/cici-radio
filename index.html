@@ -589,6 +589,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="view-btn" id="vcal" onclick="setShowsView('cal')">📅 <span class="zh-text">月曆</span><span class="en-text">Calendar</span></button>
       </div>
       <button class="edit-add-btn" style="width:auto;padding:6px 14px;margin-top:0;font-size:.78rem" onclick="openVenueManagerModal()">⚙️ <span class="zh-text">管理場地／地區</span><span class="en-text">Manage Venues/Areas</span></button>
+      <button class="edit-add-btn" id="btn-hide-expired-shows" style="width:auto;padding:6px 14px;margin-top:0;font-size:.78rem" onclick="toggleHideExpiredShows()">👁 <span class="zh-text">顯示過期</span><span class="en-text">Show Expired</span></button>
     </div>
     <!-- 搜尋欄 -->
     <div class="shows-search-wrap">
@@ -719,13 +720,16 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="sec-label"><span class="zh-text">課程講座</span><span class="en-text">Courses & Talks</span></div>
     <h2 class="sec-title"><span class="zh-text">喜劇課程與講座</span><span class="en-text">Comedy Courses & Workshops</span></h2>
     <p class="sec-desc" style="margin-bottom:14px"><span class="zh-text">報名連結均連至原始報名平台，本站不收取任何費用。</span><span class="en-text">Links go directly to original platforms. No fees collected here.</span></p>
-    <div class="filter-row" style="margin-bottom:28px">
+    <div class="filter-row" style="margin-bottom:14px">
       <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
       <button class="chip on" data-f="ctype" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
       <button class="chip" data-f="ctype" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
       <button class="chip" data-f="ctype" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
       <button class="chip" data-f="ctype" data-v="mancai"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></button>
       <button class="chip" data-f="ctype" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
+    </div>
+    <div style="margin-bottom:28px">
+      <button class="edit-add-btn" id="btn-hide-expired-courses" style="width:auto;padding:6px 14px;margin-top:0;font-size:.78rem" onclick="toggleHideExpiredCourses()">👁 <span class="zh-text">顯示過期</span><span class="en-text">Show Expired</span></button>
     </div>
     <div class="course-grid" id="courses-grid"></div>
     <button class="edit-add-btn" onclick="openCourseModal(null)">＋ <span class="zh-text">新增課程</span><span class="en-text">Add Course</span></button>
@@ -1488,6 +1492,7 @@ function renderShows() {
     if (st === 'hidden') return false;
     if (!adminMode && st === 'pending') return false;
     if (!adminMode && isExpired(s.date)) return false;
+    if (adminMode && hideExpiredShows && isExpired(s.date)) return false;
     const types = s.types||(s.type?[s.type]:[]);
     if (fType!=='all' && !types.includes(fType)) return false;
     const knownV = ['comedy-plus','two-three','fakers','ginting','laughhouse','takao'];
@@ -1548,6 +1553,7 @@ function renderCourses() {
     if(st==='hidden') return false;
     if(!adminMode && st==='pending') return false;
     if(!adminMode && isExpired(c.date)) return false;
+    if(adminMode && hideExpiredCourses && isExpired(c.date)) return false;
     if(fCtype!=='all' && c.type!==fCtype) return false;
     return true;
   }).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
@@ -1855,6 +1861,11 @@ function saveShow(status){
   const types=Array.from(document.querySelectorAll('#s-types input:checked')).map(cb=>cb.value);
   if(!types.length){showToast('請至少選擇一個類型','err');return;}
   const dateStr=document.getElementById('s-date').value;
+  const timeVal=document.getElementById('s-time').value;
+  if(isDuplicateShow(title, dateStr, timeVal, eShowId||undefined)){
+    showToast('⚠️ 已有同名稱、同日期、同時間的演出，請確認是否重複','err');
+    return;
+  }
   const d=dateStr?new Date(dateStr+'T00:00'):null;
   const venueEl=document.getElementById('s-venue');
   const imgSrcVal=(document.getElementById('s-imgsrc').value||'').trim();
@@ -1985,10 +1996,13 @@ function saveCourse(status){
   let timeStr='';
   if(startTime) timeStr=startAmpm+startTime;
   if(startTime&&endTime) timeStr+=('–'+endAmpm+endTime);
-  const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
-  // 排序用：取第一個日期
   const dateVal=document.getElementById('c-date').value.trim();
   const firstDate=(dateVal.split(',')[0]||'').trim();
+  if(isDuplicateCourse(title, firstDate, eCourseId||undefined)){
+    showToast('⚠️ 已有同名稱、同日期的課程，請確認是否重複','err');
+    return;
+  }
+  const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
   const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,type:ctype,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,status};
   window.FB.save('courses', eCourseId||null, item).then(newId=>{
     if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
@@ -1999,6 +2013,45 @@ function saveCourse(status){
 function delCourse(id){if(!confirm('確定刪除？'))return;window.FB.del('courses',id).then(()=>{COURSES=COURSES.filter(x=>x.id!==id);renderCourses();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
 function saveAll(){showToast('✅ 所有變更已儲存','ok');}
+
+// ── 隱藏過期切換 ──
+let hideExpiredShows = true;
+let hideExpiredCourses = true;
+
+function toggleHideExpiredShows(){
+  hideExpiredShows = !hideExpiredShows;
+  const btn = document.getElementById('btn-hide-expired-shows');
+  if(btn) btn.innerHTML = hideExpiredShows
+    ? '👁 <span class="zh-text">顯示過期</span><span class="en-text">Show Expired</span>'
+    : '🙈 <span class="zh-text">隱藏過期</span><span class="en-text">Hide Expired</span>';
+  renderShows();
+}
+
+function toggleHideExpiredCourses(){
+  hideExpiredCourses = !hideExpiredCourses;
+  const btn = document.getElementById('btn-hide-expired-courses');
+  if(btn) btn.innerHTML = hideExpiredCourses
+    ? '👁 <span class="zh-text">顯示過期</span><span class="en-text">Show Expired</span>'
+    : '🙈 <span class="zh-text">隱藏過期</span><span class="en-text">Hide Expired</span>';
+  renderCourses();
+}
+
+// ── 重複資料偵測 ──
+function isDuplicateShow(title, date, time, excludeId){
+  return SHOWS.some(s =>
+    s.id !== excludeId &&
+    s.title.trim() === title.trim() &&
+    s.date === date &&
+    (s.time||'') === (time||'')
+  );
+}
+function isDuplicateCourse(title, date, excludeId){
+  return COURSES.some(c =>
+    c.id !== excludeId &&
+    c.title.trim() === title.trim() &&
+    (c.date||'') === (date||'')
+  );
+}
 
 // ── 管理模式關閉提醒 ──
 window.addEventListener('beforeunload', e => {
