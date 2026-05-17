@@ -475,6 +475,7 @@ body.edit .edit-bar{display:flex!important}
     <li><a data-page="venues" onclick="showPage('venues')"><span class="zh-text">全台喜劇據點</span><span class="en-text">Venues</span></a></li>
     <li><a data-page="courses" onclick="showPage('courses')"><span class="zh-text">課程講座</span><span class="en-text">Courses</span></a></li>
     <li><a data-page="about" onclick="showPage('about')"><span class="zh-text">關於我們</span><span class="en-text">About</span></a></li>
+    <li><a data-page="board" onclick="showPage('board')"><span class="zh-text">留言板</span><span class="en-text">Board</span></a></li>
   </ul>
   <div class="nav-right">
     <div class="lang-pill">
@@ -753,6 +754,57 @@ body.edit .edit-bar{display:flex!important}
     <button class="fa-cancel" onclick="closeModal('venue-manager')">關閉</button>
   </div>
 </div></div>
+
+<!-- BOARD PAGE -->
+<div class="page" id="page-board">
+  <section class="sec" style="background:var(--cr)">
+    <div class="sec-label"><span class="zh-text">留言板</span><span class="en-text">Community Board</span></div>
+    <h2 class="sec-title"><span class="zh-text">留言與回饋</span><span class="en-text">Comments & Feedback</span></h2>
+    <p class="sec-desc"><span class="zh-text">歡迎留下你的想法、回饋或對演出的心得，我們都會認真看！</span><span class="en-text">Share your thoughts, feedback, or reviews — we read everything!</span></p>
+
+    <!-- 評分統計 -->
+    <div class="fp-rating-bar" id="fpRating" style="border-radius:var(--r-md);margin-bottom:18px;border:1.5px solid rgba(45,43,31,.08)"></div>
+
+    <!-- 分頁標籤 -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
+      <button class="fp-tab on" onclick="switchFpTab('all',this)"><span class="zh-text">全部</span><span class="en-text">All</span></button>
+      <button class="fp-tab" onclick="switchFpTab('shows',this)"><span class="zh-text">演出</span><span class="en-text">Shows</span></button>
+      <button class="fp-tab" onclick="switchFpTab('opmic',this)">Open Mic</button>
+      <button class="fp-tab" onclick="switchFpTab('venues',this)"><span class="zh-text">場地</span><span class="en-text">Venues</span></button>
+      <button class="fp-tab" onclick="switchFpTab('general',this)"><span class="zh-text">一般</span><span class="en-text">General</span></button>
+    </div>
+
+    <!-- 留言輸入區 -->
+    <div style="background:var(--ww);border-radius:var(--r-lg);padding:20px 22px;border:1.5px solid rgba(45,43,31,.08);margin-bottom:22px;box-shadow:var(--sc)">
+      <div class="fp-compose-row">
+        <div class="fp-av" id="fpAv"><span id="fpAvI">?</span></div>
+        <div class="fp-inner" style="flex:1">
+          <div class="fp-nr">
+            <input type="text" class="fp-ni" id="fpNI" placeholder="暱稱 / Nickname" oninput="updAv()" maxlength="20">
+            <div class="fp-sr"><span style="font-size:.73rem;color:var(--ts);font-family:var(--f-bo)"><span class="zh-text">評：</span><span class="en-text">Rate:</span></span><span id="starBtns"></span></div>
+          </div>
+          <textarea class="fp-ta" id="fpTA" placeholder="留言… / Comment…" oninput="updCC()" maxlength="300" rows="4"></textarea>
+          <div class="fp-cf">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="fp-emoji-row"><button class="fp-eb" onclick="insE('😂')">😂</button><button class="fp-eb" onclick="insE('👍')">👍</button><button class="fp-eb" onclick="insE('🎭')">🎭</button><button class="fp-eb" onclick="insE('🔥')">🔥</button></div>
+              <span class="fp-cc" id="fpCC">0/300</span>
+            </div>
+            <button class="fp-sb" onclick="submitComment()"><span class="zh-text">送出留言</span><span class="en-text">Post</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 留言列表 -->
+    <div style="background:var(--ww);border-radius:var(--r-lg);border:1.5px solid rgba(45,43,31,.08);box-shadow:var(--sc)">
+      <div style="padding:14px 22px;border-bottom:1px solid rgba(45,43,31,.07);display:flex;align-items:center;gap:8px">
+        <span style="font-size:.9rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)"><span class="zh-text">所有留言</span><span class="en-text">All Comments</span></span>
+        <span class="fp-cnt" id="fpCnt">0</span>
+      </div>
+      <div class="fp-list" id="fpList"></div>
+    </div>
+  </section>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -1060,40 +1112,7 @@ body.edit .edit-bar{display:flex!important}
   </div>
 </div>
 
-<!-- Feedback -->
-<button class="fb-fab" onclick="toggleFeedback()">💬<span class="fb-badge" id="fbBadge"></span></button>
-<div class="fb-bd" id="fbBd" onclick="closeFeedback()"></div>
-<div class="fb-panel" id="fbPanel">
-  <div class="fp-hd"><div class="fp-ttl">💬 <span class="zh-text">留言與回饋</span><span class="en-text">Comments</span><span class="fp-cnt" id="fpCnt">0</span></div><button class="fp-cls" onclick="closeFeedback()">✕</button></div>
-  <div class="fp-tabs">
-    <button class="fp-tab on" onclick="switchFpTab('all',this)"><span class="zh-text">全部</span><span class="en-text">All</span></button>
-    <button class="fp-tab" onclick="switchFpTab('shows',this)"><span class="zh-text">演出</span><span class="en-text">Shows</span></button>
-    <button class="fp-tab" onclick="switchFpTab('opmic',this)">Open Mic</button>
-    <button class="fp-tab" onclick="switchFpTab('venues',this)"><span class="zh-text">場地</span><span class="en-text">Venues</span></button>
-    <button class="fp-tab" onclick="switchFpTab('general',this)"><span class="zh-text">一般</span><span class="en-text">General</span></button>
-  </div>
-  <div class="fp-rating-bar" id="fpRating"></div>
-  <div class="fp-compose">
-    <div class="fp-compose-row">
-      <div class="fp-av" id="fpAv"><span id="fpAvI">?</span></div>
-      <div class="fp-inner">
-        <div class="fp-nr">
-          <input type="text" class="fp-ni" id="fpNI" placeholder="暱稱 / Nickname" oninput="updAv()" maxlength="20">
-          <div class="fp-sr"><span style="font-size:.73rem;color:var(--ts);font-family:var(--f-bo)"><span class="zh-text">評：</span><span class="en-text">Rate:</span></span><span id="starBtns"></span></div>
-        </div>
-        <textarea class="fp-ta" id="fpTA" placeholder="留言… / Comment…" oninput="updCC()" maxlength="300" rows="3"></textarea>
-        <div class="fp-cf">
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="fp-emoji-row"><button class="fp-eb" onclick="insE('😂')">😂</button><button class="fp-eb" onclick="insE('👍')">👍</button><button class="fp-eb" onclick="insE('🎭')">🎭</button><button class="fp-eb" onclick="insE('🔥')">🔥</button></div>
-            <span class="fp-cc" id="fpCC">0/300</span>
-          </div>
-          <button class="fp-sb" onclick="submitComment()"><span class="zh-text">送出</span><span class="en-text">Post</span></button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="fp-body"><div class="fp-list" id="fpList"></div></div>
-</div>
+<!-- Feedback panel moved to 留言板 page -->
 
 <!-- ═══════════════════════════════════════
      FIREBASE SDK
@@ -2110,9 +2129,9 @@ window.livePreview = function(imgId, hintId, url) {
 ═══════════════════════════════════════ -->
 <script>
 let fpTab='all',selRating=0,fbOpen=false;
-function toggleFeedback(){fbOpen?closeFeedback():openFeedback();}
-function openFeedback(){fbOpen=true;document.getElementById('fbPanel').classList.add('open');document.getElementById('fbBd').classList.add('open');renderFpList();renderRatBar();renderStars(selRating);}
-function closeFeedback(){fbOpen=false;document.getElementById('fbPanel').classList.remove('open');document.getElementById('fbBd').classList.remove('open');}
+function toggleFeedback(){showPage('board');}
+function openFeedback(){showPage('board');}
+function closeFeedback(){}
 function switchFpTab(t,el){fpTab=t;document.querySelectorAll('.fp-tab').forEach(x=>x.classList.remove('on'));el.classList.add('on');renderFpList();renderRatBar();}
 function renderStars(v){document.getElementById('starBtns').innerHTML=[1,2,3,4,5].map(i=>`<button class="star-btn ${i<=v?'lit':'dim'}" onclick="setStar(${i})">${i<=v?'⭐':'☆'}</button>`).join('');}
 function setStar(n){selRating=n;renderStars(n);}
@@ -2169,6 +2188,7 @@ function showPage(page){
   if(page==='venues')renderVenues();
   if(page==='courses')renderCourses();
   if(page==='about')renderAbout();
+  if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
 }
 
 function setLang(l){
