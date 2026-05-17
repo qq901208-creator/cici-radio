@@ -421,8 +421,12 @@ body.edit .edit-bar{display:flex!important}
 .shows-search{width:100%;padding:10px 13px 10px 38px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.16);background:#fff;font-size:.88rem;font-family:var(--f-zh);color:var(--tm);outline:none;transition:border-color .14s,box-shadow .14s}
 .shows-search:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(239,111,32,.1)}
 /* VENUE/AREA MANAGER */
-.vm-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:240px;overflow-y:auto}
-.vm-item{display:flex;align-items:center;gap:8px;padding:7px 11px;background:var(--cr);border-radius:var(--r-md);font-size:.84rem;font-family:var(--f-zh)}
+.vm-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:260px;overflow-y:auto}
+.vm-item{display:flex;align-items:center;gap:8px;padding:7px 11px;background:var(--cr);border-radius:var(--r-md);font-size:.84rem;font-family:var(--f-zh);cursor:grab;user-select:none;transition:box-shadow .15s,opacity .15s}
+.vm-item:active{cursor:grabbing}
+.vm-item.dragging{opacity:.4;box-shadow:none}
+.vm-item.drag-over{box-shadow:0 0 0 2px var(--or);background:var(--py)}
+.vm-drag-handle{color:var(--ts);opacity:.4;font-size:.9rem;flex-shrink:0;cursor:grab}
 .vm-item span{flex:1}
 .vm-del{width:24px;height:24px;border-radius:6px;border:none;background:rgba(231,76,60,.1);color:#e74c3c;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .vm-del:hover{background:#e74c3c;color:#fff}
@@ -805,10 +809,30 @@ body.edit .edit-bar{display:flex!important}
     <div class="fg-g"><label class="fl">日期 <span class="req">*</span></label><input class="fi" type="date" id="s-date"></div>
     <div class="fg-g"><label class="fl">時間</label><input class="fi" type="time" id="s-time"></div>
     <div class="fg-g"><label class="fl">場地 <span class="req">*</span></label>
-      <select class="fs" id="s-venue"></select>
+      <select class="fs" id="s-venue">
+        <option value="comedy-plus">卡米地+ Comedy Plus</option>
+        <option value="two-three">23喜劇 two three comedy</option>
+        <option value="fakers">飛客劇樂部 Fakers Club</option>
+        <option value="beitou">北投喜劇</option>
+        <option value="ginting">樂君亭 Gingting Comedy</option>
+        <option value="windcity">站立風城</option>
+        <option value="smo">思MIC歐 S.M.O</option>
+        <option value="laughhouse">來福好事 Laugh House</option>
+        <option value="tainan">府城喜劇</option>
+        <option value="takao">喜劇開港 Takaocomedybay</option>
+        <option value="other">其他 Others</option>
+      </select>
     </div>
     <div class="fg-g"><label class="fl">地區</label>
-      <select class="fs" id="s-area"></select>
+      <select class="fs" id="s-area">
+        <option value="taipei">雙北</option>
+        <option value="taoyuan">桃園</option>
+        <option value="hsinchu">新竹</option>
+        <option value="taichung">台中</option>
+        <option value="tainan">台南</option>
+        <option value="kaohsiung">高雄</option>
+        <option value="other">其他</option>
+      </select>
     </div>
     <div class="fg-g full">
       <label class="fl">表演類型（可複選）<span class="req">*</span></label>
@@ -1694,10 +1718,26 @@ function populateShowSelects(venueVal, areaVal){
   const vs = document.getElementById('s-venue');
   const as = document.getElementById('s-area');
   if(!vs||!as) return;
-  const venues = getShowVenues();
-  const areas  = getShowAreas();
-  vs.innerHTML = venues.map(v=>`<option value="${v.id}" ${v.id===venueVal?'selected':''}>${v.label}</option>`).join('');
-  as.innerHTML = areas.map(a=>`<option value="${a.id}" ${a.id===areaVal?'selected':''}>${a.label}</option>`).join('');
+  // 加入自訂場地（localStorage 新增的）到 select，避免重複
+  const customVenues = getShowVenues().filter(v=>v.id.startsWith('custom_'));
+  customVenues.forEach(v=>{
+    if(!vs.querySelector(`option[value="${v.id}"]`)){
+      const opt=document.createElement('option');
+      opt.value=v.id; opt.textContent=v.label;
+      vs.insertBefore(opt, vs.querySelector('option[value="other"]'));
+    }
+  });
+  // 加入自訂地區
+  const customAreas = getShowAreas().filter(a=>a.id.startsWith('custom_'));
+  customAreas.forEach(a=>{
+    if(!as.querySelector(`option[value="${a.id}"]`)){
+      const opt=document.createElement('option');
+      opt.value=a.id; opt.textContent=a.label;
+      as.insertBefore(opt, as.querySelector('option[value="other"]'));
+    }
+  });
+  if(venueVal && vs.querySelector(`option[value="${venueVal}"]`)) vs.value=venueVal;
+  if(areaVal && as.querySelector(`option[value="${areaVal}"]`)) as.value=areaVal;
 }
 
 let vmTab = 'venue';
@@ -1718,19 +1758,49 @@ function switchVmTab(tab, el){
   renderVmList();
 }
 function renderVmList(){
-  if(vmTab==='venue'){
-    const items=getShowVenues();
-    document.getElementById('vm-venue-list').innerHTML=items.map((v,i)=>`
-      <div class="vm-item"><span>${v.label}</span>
-      ${v.id!=='other'?`<button class="vm-del" onclick="delVmItem('venue',${i})" title="刪除">✕</button>`:''}
-      </div>`).join('');
-  } else {
-    const items=getShowAreas();
-    document.getElementById('vm-area-list').innerHTML=items.map((a,i)=>`
-      <div class="vm-item"><span>${a.label}</span>
-      ${a.id!=='other'?`<button class="vm-del" onclick="delVmItem('area',${i})" title="刪除">✕</button>`:''}
-      </div>`).join('');
-  }
+  const type = vmTab;
+  const listEl = document.getElementById(`vm-${type}-list`);
+  if(!listEl) return;
+  const items = type==='venue' ? getShowVenues() : getShowAreas();
+
+  listEl.innerHTML = items.map((item, i) => `
+    <div class="vm-item" draggable="true" data-idx="${i}">
+      <span class="vm-drag-handle">⠿</span>
+      <span>${item.label}</span>
+      ${item.id!=='other' ? `<button class="vm-del" onclick="delVmItem('${type}',${i})" title="刪除">✕</button>` : ''}
+    </div>`).join('');
+
+  // 拖曳排序邏輯
+  let dragIdx = null;
+  listEl.querySelectorAll('.vm-item').forEach(el => {
+    el.addEventListener('dragstart', e => {
+      dragIdx = parseInt(el.dataset.idx);
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      listEl.querySelectorAll('.vm-item').forEach(x => x.classList.remove('drag-over'));
+    });
+    el.addEventListener('dragover', e => {
+      e.preventDefault();
+      listEl.querySelectorAll('.vm-item').forEach(x => x.classList.remove('drag-over'));
+      el.classList.add('drag-over');
+    });
+    el.addEventListener('drop', e => {
+      e.preventDefault();
+      const dropIdx = parseInt(el.dataset.idx);
+      if(dragIdx === null || dragIdx === dropIdx) return;
+      const arr = type==='venue' ? getShowVenues() : getShowAreas();
+      const moved = arr.splice(dragIdx, 1)[0];
+      arr.splice(dropIdx, 0, moved);
+      if(type==='venue') saveShowVenues(arr);
+      else saveShowAreas(arr);
+      dragIdx = null;
+      renderVmList();
+      showToast('✅ 排序已更新','ok');
+    });
+  });
 }
 function addVmItem(type){
   const inp=document.getElementById(`vm-${type}-input`);
