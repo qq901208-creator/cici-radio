@@ -886,7 +886,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
 <!-- Edit bar (only visible in edit mode) -->
 <span id="sessionBadge" style="display:none"></span>
-<div class="edit-bar"><span class="eb-dot"></span><span class="zh-text">編輯模式啟用中</span><span class="en-text">Edit Mode Active</span><span id="expired-count-badge" style="font-size:.72rem;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:var(--r-pill);font-family:var(--f-bo)"></span><button class="eb-btn" onclick="saveAll()"><span class="zh-text">儲存</span><span class="en-text">Save</span></button><button class="eb-ghost" onclick="ciciLogout()"><span class="zh-text">登出</span><span class="en-text">Logout</span></button></div>
+<div class="edit-bar"><span class="eb-dot"></span><span class="zh-text">編輯模式啟用中</span><span class="en-text">Edit Mode Active</span><span id="expired-count-badge" style="font-size:.72rem;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:var(--r-pill);font-family:var(--f-bo)"></span><button class="eb-btn" onclick="archiveAllExpired()" style="background:#6b6440"><span class="zh-text">📦 封存過期</span><span class="en-text">Archive Expired</span></button><button class="eb-btn" onclick="saveAll()"><span class="zh-text">儲存</span><span class="en-text">Save</span></button><button class="eb-ghost" onclick="ciciLogout()"><span class="zh-text">登出</span><span class="en-text">Logout</span></button></div>
 
 <!-- ═══ MODALS ═══ -->
 
@@ -2023,6 +2023,44 @@ function saveCourse(status){
 function delCourse(id){if(!confirm('確定刪除？'))return;window.FB.del('courses',id).then(()=>{COURSES=COURSES.filter(x=>x.id!==id);renderCourses();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
 function saveAll(){showToast('✅ 所有變更已儲存','ok');}
+
+// ── 一鍵封存過期演出與課程 ──
+async function archiveAllExpired(){
+  const expiredShows = SHOWS.filter(s => isExpired(s.date, s.time) && s.status !== 'hidden');
+  const expiredCourses = COURSES.filter(c => isExpired(c.date, c.time) && c.status !== 'hidden');
+  const total = expiredShows.length + expiredCourses.length;
+  if(total === 0){ showToast('目前沒有需要封存的過期資料','ok'); return; }
+  if(!confirm(`確定要封存 ${expiredShows.length} 筆過期演出 + ${expiredCourses.length} 筆過期課程？\n封存後將從前台隱藏，管理模式仍可查看。`)) return;
+  showToast('封存中，請稍候…');
+  let done = 0;
+  const errors = [];
+  // 封存演出
+  for(const s of expiredShows){
+    try{
+      await window.FB.save('shows', s.id, {...s, status:'hidden'});
+      const i = SHOWS.findIndex(x=>x.id===s.id);
+      if(i>=0) SHOWS[i].status = 'hidden';
+      done++;
+    } catch(e){ errors.push(s.title); }
+  }
+  // 封存課程
+  for(const c of expiredCourses){
+    try{
+      await window.FB.save('courses', c.id, {...c, status:'hidden'});
+      const i = COURSES.findIndex(x=>x.id===c.id);
+      if(i>=0) COURSES[i].status = 'hidden';
+      done++;
+    } catch(e){ errors.push(c.title); }
+  }
+  renderShows();
+  renderCourses();
+  updateExpiredBadge();
+  if(errors.length){
+    showToast(`⚠️ 封存完成，但 ${errors.length} 筆失敗，請再試一次`, 'err');
+  } else {
+    showToast(`📦 已封存 ${done} 筆過期資料`, 'ok');
+  }
+}
 
 // ── 隱藏過期切換 ──
 let hideExpiredShows = true;
