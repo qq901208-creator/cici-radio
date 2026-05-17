@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>嘻嘻哪哩唷｜台灣喜劇演出資訊站</title>
 <meta name="description" content="台灣現場喜劇演出資訊整合平台，整理 Open Mic、喜劇專場、即興、漫才與全台喜劇據點">
+<meta name="google-site-verification" content="LbYfjuGxGYZXoOxodtVgERdeGINZwNjqZQVAsH0cGy0" />
 <link rel="icon" type="image/jpeg" href="../assets/ciciradio.jpg">
 <link rel="apple-touch-icon" href="../assets/ciciradio.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -112,7 +113,16 @@ body{font-family:var(--f-bo);background:var(--cr);color:var(--tm);line-height:1.
 .view-btn{padding:6px 16px;border-radius:var(--r-pill);font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
 .view-btn.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
 
-/* CALENDAR */
+/* FILTER */
+.filter-section{margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);min-width:50px;flex-shrink:0}
+/* 手機版橫向滑動 */
+@media(max-width:768px){
+  .filter-row{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
+  .filter-row::-webkit-scrollbar{display:none}
+  .filter-row .chip{flex-shrink:0}
+}
 .cal-wrap{background:var(--ww);border-radius:var(--r-lg);padding:22px;box-shadow:var(--sc);margin-bottom:18px;border:1.5px solid rgba(45,43,31,.09)}
 .cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .cal-month-lbl{font-family:var(--f-zh);font-weight:900;font-size:1.05rem;color:var(--tm)}
@@ -450,7 +460,27 @@ body.edit .edit-bar{display:flex!important}
 .toast.ok{border-left-color:#2ecc71}
 .toast.err{border-left-color:#e74c3c}
 
-/* RESPONSIVE */
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* 頁面切換淡入 */
+.page.active{animation:fadeIn .3s ease both}
+
+/* Hero 各元素依序進場 */
+.hero-tag{animation:fadeUp .5s .05s ease both}
+.hero-h1{animation:fadeUp .5s .15s ease both}
+.hero-sub{animation:fadeUp .5s .22s ease both}
+.hero-desc{animation:fadeUp .5s .3s ease both}
+.hero-btns{animation:fadeUp .5s .38s ease both}
+
+/* Scroll reveal — 預設隱藏，JS 加 .revealed 後顯示 */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .45s ease,transform .45s ease}
+.reveal.revealed{opacity:1;transform:translateY(0)}
+
+/* 卡片 hover 提升感 */
+.show-card,.course-card,.venue-card{transition:transform .18s ease,box-shadow .18s ease}
+.show-card:hover,.course-card:hover,.venue-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.13)}
 @media(max-width:900px){.ft-grid{grid-template-columns:1fr 1fr;gap:30px}}
 @media(max-width:768px){
   .ft-grid{grid-template-columns:1fr}
@@ -496,9 +526,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <!-- NAV — no edit button for general users -->
 <nav id="nav">
   <div class="nav-logo" onclick="showPage('home')">
-    <div class="nav-logo-icon"><img src="../assets/ciciradio.jpg" alt="嘻嘻哪裡唷 Logo"></div>
+    <div class="nav-logo-icon"><img src="../assets/ciciradio.jpg" alt="嘻嘻哪哩唷 Logo"></div>
     <div class="nav-logo-txt">
-      <span class="zh">嘻嘻哪裡唷</span>
+      <span class="zh">嘻嘻哪哩唷</span>
       <span class="en">CICI._.RADIO</span>
     </div>
   </div>
@@ -526,7 +556,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <!-- HOME -->
 <div class="page active" id="page-home">
   <section class="hero">
-    <div class="hero-logo"><img src="../assets/ciciradio.jpg" alt="嘻嘻哪裡唷"></div>
+    <div class="hero-logo"><img src="../assets/ciciradio.jpg" alt="嘻嘻哪哩唷"></div>
     <div class="hero-tag">
       <span class="zh-text">台灣售票喜劇演出資訊整理</span>
       <span class="en-text">Taiwan Comedy Show Guide</span>
@@ -609,6 +639,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="type" data-v="special"><span class="zh-text">喜劇專場</span><span class="en-text">Comedy Special</span></button>
         <button class="chip" data-f="type" data-v="english"><span class="zh-text">英文喜劇</span><span class="en-text">English Comedy</span></button>
         <button class="chip" data-f="type" data-v="podcast">Live Podcast</button>
+        <button class="chip" data-f="type" data-v="crosstalk"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></button>
+        <button class="chip" data-f="type" data-v="rakugo"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></button>
         <button class="chip" data-f="type" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
       </div>
       <div class="filter-row">
@@ -670,15 +702,20 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:var(--py)">
     <div class="sec-label">Open Mic</div>
     <h2 class="sec-title"><span class="zh-text">演員 Open Mic 報名資訊</span><span class="en-text">Open Mic Sign-Up Info</span></h2>
-    <p class="sec-desc editable" contenteditable="false"><span class="zh-text">以下為 Open Mic 報名開放時間與星期資訊，並非實際演出日期與時間。<br>另外，本站不參與報名流程喔！</span><span class="en-text">The info below shows sign-up windows and weekday availability — not actual show dates or times.<br>Also, we don't participate in the sign-up process!</span></p>
+    <p class="sec-desc editable" contenteditable="false"><span class="zh-text">以下為 Open Mic 報名開放時間與星期資訊，並非實際演出日期與時間。</span><span class="en-text">The info below shows sign-up windows and weekday availability — not actual show dates or times.</span></p>
+    <div style="display:block;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:10px 16px;margin-bottom:22px;font-size:.84rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">
+      <span style="font-size:1rem">⚠️</span>
+      <span class="zh-text"> 點擊報名連結將跳轉至外部頁面，本站不參與任何報名流程喔！</span>
+      <span class="en-text"> Clicking sign-up links will take you to an external page. We are not involved in any sign-up process.</span>
+    </div>
     <div class="day-tabs">
-      <button class="day-tab on" data-day="1" onclick="selectMicDay(1,this)"><span class="zh-text">週一 Mon.</span><span class="en-text">Mon.</span></button>
-      <button class="day-tab" data-day="2" onclick="selectMicDay(2,this)"><span class="zh-text">週二 Tue.</span><span class="en-text">Tue.</span></button>
-      <button class="day-tab" data-day="3" onclick="selectMicDay(3,this)"><span class="zh-text">週三 Wed.</span><span class="en-text">Wed.</span></button>
-      <button class="day-tab" data-day="4" onclick="selectMicDay(4,this)"><span class="zh-text">週四 Thu.</span><span class="en-text">Thu.</span></button>
-      <button class="day-tab" data-day="5" onclick="selectMicDay(5,this)"><span class="zh-text">週五 Fri.</span><span class="en-text">Fri.</span></button>
-      <button class="day-tab" data-day="6" onclick="selectMicDay(6,this)"><span class="zh-text">週六 Sat.</span><span class="en-text">Sat.</span></button>
-      <button class="day-tab" data-day="0" onclick="selectMicDay(0,this)"><span class="zh-text">週日 Sun.</span><span class="en-text">Sun.</span></button>
+      <button class="day-tab on" data-day="1" onclick="selectMicDay(1,this)"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
+      <button class="day-tab" data-day="2" onclick="selectMicDay(2,this)"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
+      <button class="day-tab" data-day="3" onclick="selectMicDay(3,this)"><span class="zh-text">週三</span><span class="en-text">Wed.</span></button>
+      <button class="day-tab" data-day="4" onclick="selectMicDay(4,this)"><span class="zh-text">週四</span><span class="en-text">Thu.</span></button>
+      <button class="day-tab" data-day="5" onclick="selectMicDay(5,this)"><span class="zh-text">週五</span><span class="en-text">Fri.</span></button>
+      <button class="day-tab" data-day="6" onclick="selectMicDay(6,this)"><span class="zh-text">週六</span><span class="en-text">Sat.</span></button>
+      <button class="day-tab" data-day="0" onclick="selectMicDay(0,this)"><span class="zh-text">週日</span><span class="en-text">Sun.</span></button>
     </div>
     <div class="mic-table-wrap">
       <table class="mic-table"><thead><tr>
@@ -726,6 +763,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="chip" data-f="ctype" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
       <button class="chip" data-f="ctype" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
       <button class="chip" data-f="ctype" data-v="mancai"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></button>
+      <button class="chip" data-f="ctype" data-v="crosstalk"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></button>
+      <button class="chip" data-f="ctype" data-v="rakugo"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></button>
       <button class="chip" data-f="ctype" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
     </div>
     <div style="margin-bottom:28px">
@@ -739,14 +778,23 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <!-- ABOUT PAGE -->
 <div class="page" id="page-about">
   <div class="about-hero">
-    <div class="about-logo"><img src="../assets/ciciradio.jpg" alt="嘻嘻哪裡唷 Logo"></div>
-    <h1 class="about-h1"><span class="zh-text">關於嘻嘻哪裡唷</span><span class="en-text">About Cici Radio</span></h1>
+    <div class="about-logo"><img src="../assets/ciciradio.jpg" alt="嘻嘻哪哩唷 Logo"></div>
+    <h1 class="about-h1"><span class="zh-text">關於嘻嘻哪哩唷</span><span class="en-text">About Cici Radio</span></h1>
     <p class="about-sub">CICI._.RADIO · Comedy Guide Taiwan</p>
   </div>
   <section class="sec" style="background:var(--cr)"><div style="max-width:780px;margin:0 auto">
     <div class="about-card"><h3>📖 <span class="zh-text">成立背景</span><span class="en-text">Our Origin</span></h3><p class="editable" contenteditable="false"><span class="zh-text">2022 年，六位就讀世新大學廣播電視電影學系的大學生，因爲對台灣現場喜劇有著滿腔的熱情！<br>共同催生了「嘻嘻哪哩唷」這個頻道/品牌。</span><span class="en-text">In 2022, six students from the Department of Radio, Television and Film at Shih Hsin University, driven by an overflowing passion for live comedy in Taiwan,<br>came together to create the channel and brand known as "Cici Radio."</span></p></div>
     <div class="about-card"><h3>🎯 <span class="zh-text">我們的目標</span><span class="en-text">Our Mission</span></h3><p class="editable" contenteditable="false"><span class="zh-text">希望能讓大家用更輕鬆、簡單的方式找到想看的演出！售票演出一站包辦，你說這是不是很方便！（快說有</span><span class="en-text">We want to make it easier and simpler for everyone to find the shows they want to see! One stop for all ticketed comedy shows — isn't that just super convenient? (Say yes!)</span></p></div>
     <div class="about-card"><h3>📡 <span class="zh-text">關於本站</span><span class="en-text">About This Site</span></h3><p class="editable" contenteditable="false"><span class="zh-text">本站以公益為出發點，不涉及任何商業行為～<br>目前以資訊整理以售票演出為主，由「人工」整理與更新，若有錯誤或遺漏，歡迎透過「聯絡我們」回報！</span><span class="en-text">This site is built on a non-profit, public-interest spirit — no commercial involvement whatsoever~<br>We focus on curating ticketed comedy show info, all hand-updated. If you spot any errors or missing info, feel free to reach out via "Contact Us"!</span></p></div>
+    <!-- 版權聲明區塊 -->
+    <div class="about-card" style="border:1.5px solid rgba(45,43,31,.2);background:rgba(45,43,31,.04)">
+      <h3 style="font-size:.9rem;letter-spacing:.03em">📋 <span class="zh-text">內容使用與版權聲明</span><span class="en-text">Content & Copyright Notice</span></h3>
+      <div style="font-size:.8rem;line-height:1.85;color:var(--ts);font-family:var(--f-zh)">
+        <p style="margin-bottom:12px"><span class="zh-text">本站（嘻嘻哪哩唷）為非營利之台灣現場喜劇文化推廣平台。站內所使用之演出海報、活動主視覺等圖片，其著作權皆屬原主辦單位或創作者所有。本站上架之目的僅供觀眾查閱與導流購票，並皆於文末標明圖片來源與購票超連結。</span><span class="en-text">This site (Cici Radio) is a non-profit platform dedicated to promoting live comedy culture in Taiwan. All show posters and event visuals used on this site remain the property of their respective organizers or creators. Content is published solely for audience reference and ticket referral purposes, with image credits and links provided.</span></p>
+        <p style="padding:12px 14px;background:rgba(239,111,32,.07);border-left:3px solid var(--or);border-radius:0 var(--r-md) var(--r-md) 0"><span class="zh-text">若原著作者、主辦單位不願在本站進行非營利宣傳，或認為本站使用圖片有侵權疑慮，請來信至 <a href="mailto:ciciradio3@gmail.com" style="color:var(--or);font-weight:700">ciciradio3@gmail.com</a>，我們將於收到通知後第一時間進行下架處理。</span><span class="en-text">If any original rights holder or organizer does not wish to be featured on this site, or believes there is a copyright concern, please contact us at <a href="mailto:ciciradio3@gmail.com" style="color:var(--or);font-weight:700">ciciradio3@gmail.com</a> and we will remove the content promptly.</span></p>
+      </div>
+    </div>
+
     <div class="about-card"><h3>👥 <span class="zh-text">成員</span><span class="en-text">Team</span></h3>
       <div style="font-size:.76rem;font-weight:700;color:var(--ts);letter-spacing:.05em;margin-bottom:12px"><span class="zh-text">現有成員</span><span class="en-text">CURRENT MEMBERS</span></div>
       <!-- Member data is driven by MEMBERS array in JS — easy to update -->
@@ -819,7 +867,15 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
             <div class="fp-sr"><span style="font-size:.73rem;color:var(--ts);font-family:var(--f-bo)"><span class="zh-text">評：</span><span class="en-text">Rate:</span></span><span id="starBtns"></span></div>
           </div>
           <textarea class="fp-ta" id="fpTA" placeholder="留言… / Comment…" oninput="updCC()" maxlength="300" rows="4"></textarea>
-          <div class="fp-cf">
+          <!-- 防灌水問答 -->
+          <div style="margin-top:10px;padding:10px 14px;background:var(--py);border-radius:var(--r-md);border:1.5px solid rgba(239,111,32,.2)">
+            <label style="font-size:.78rem;font-weight:700;color:var(--tm);font-family:var(--f-zh);display:block;margin-bottom:6px">🎭 <span class="zh-text">快速驗證：本站的品牌名稱叫做？（中文或英文擇一回答）</span><span class="en-text">Quick check: What is the name of this platform? (Chinese or English both accepted)</span></label>
+            <input type="text" id="fpCaptcha" placeholder="請輸入答案… / Enter answer…" maxlength="20"
+              style="width:100%;padding:7px 11px;border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.15);font-size:.84rem;font-family:var(--f-zh);background:#fff;outline:none"
+              onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='rgba(45,43,31,.15)'">
+            <div id="fpCaptchaErr" style="font-size:.72rem;color:#c0392b;font-family:var(--f-bo);margin-top:4px;display:none">答案不正確，再試試看！ / Incorrect, please try again!</div>
+          </div>
+          <div class="fp-cf" style="margin-top:10px">
             <div style="display:flex;align-items:center;gap:8px">
               <div class="fp-emoji-row"><button class="fp-eb" onclick="insE('😂')">😂</button><button class="fp-eb" onclick="insE('👍')">👍</button><button class="fp-eb" onclick="insE('🎭')">🎭</button><button class="fp-eb" onclick="insE('🔥')">🔥</button></div>
               <span class="fp-cc" id="fpCC">0/300</span>
@@ -845,7 +901,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <footer>
   <div class="ft-grid">
     <div class="ft-brand">
-      <div class="ft-name">嘻嘻哪裡唷</div>
+      <div class="ft-name">嘻嘻哪哩唷</div>
       <div class="ft-en">Cici Radio · Comedy Guide Taiwan</div>
       <p><span class="zh-text">台灣售票喜劇演出資訊整理，由人工更新維護。</span><span class="en-text">Hand-curated comedy show guide in Taiwan.</span></p>
       <div class="socials">
@@ -873,7 +929,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </ul></div>
   </div>
   <div class="ft-bottom">
-    <p class="ft-copy">© 2026 嘻嘻哪裡唷 · Cici Radio Comedy Guide Taiwan</p>
+    <p class="ft-copy">© 2026 嘻嘻哪哩唷 · Cici Radio Comedy Guide Taiwan &nbsp;·&nbsp; <button onclick="document.getElementById('modal-copyright').classList.add('open')" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:.7rem;font-family:var(--f-bo);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px">版權與免責聲明</button></p>
     <div>
       <p class="ft-disc"><span class="zh-text">本站為非營利公益性質，以售票演出為主，由人工整理與更新<br>若有資訊有誤或遺漏，歡迎透過聯絡我們回報</span><span class="en-text">Non-profit, hand-curated. Focused on ticketed shows.<br>Found something wrong? Let us know!</span></p>
       <!-- Hidden admin entry — low key, general users won't notice -->
@@ -934,14 +990,16 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <label class="fl">表演類型（可複選）<span class="req">*</span></label>
       <div class="type-cbs" id="s-types">
         <label class="type-cb-lbl"><input type="checkbox" value="opmic" onchange="syncCB(this)">Open Mic</label>
-        <label class="type-cb-lbl"><input type="checkbox" value="standup" onchange="syncCB(this)">站立喜劇</label>
-        <label class="type-cb-lbl"><input type="checkbox" value="improv" onchange="syncCB(this)">即興</label>
-        <label class="type-cb-lbl"><input type="checkbox" value="mancai" onchange="syncCB(this)">漫才</label>
-        <label class="type-cb-lbl"><input type="checkbox" value="mixed" onchange="syncCB(this)">拼盤秀</label>
-        <label class="type-cb-lbl"><input type="checkbox" value="special" onchange="syncCB(this)">喜劇專場</label>
-        <label class="type-cb-lbl"><input type="checkbox" value="english" onchange="syncCB(this)">英文喜劇</label>
+        <label class="type-cb-lbl"><input type="checkbox" value="standup" onchange="syncCB(this)"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="improv" onchange="syncCB(this)"><span class="zh-text">即興</span><span class="en-text">Improv</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="mancai" onchange="syncCB(this)"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="mixed" onchange="syncCB(this)"><span class="zh-text">拼盤秀</span><span class="en-text">Mixed-bill</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="special" onchange="syncCB(this)"><span class="zh-text">喜劇專場</span><span class="en-text">Comedy Special</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="english" onchange="syncCB(this)"><span class="zh-text">英文喜劇</span><span class="en-text">English Comedy</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="podcast" onchange="syncCB(this)">Live Podcast</label>
-        <label class="type-cb-lbl"><input type="checkbox" value="other" onchange="syncCB(this)">其他</label>
+        <label class="type-cb-lbl"><input type="checkbox" value="crosstalk" onchange="syncCB(this)"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="rakugo" onchange="syncCB(this)"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="other" onchange="syncCB(this)"><span class="zh-text">其他</span><span class="en-text">Others</span></label>
       </div>
     </div>
     <div class="fg-g"><label class="fl">演員 / 表演者</label><input class="fi" type="text" id="s-performer"></div>
@@ -1062,9 +1120,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div class="fg-g"><label class="fl">類型</label>
       <select class="fs" id="c-type">
-        <option value="standup">站立喜劇 Stand-up</option>
-        <option value="improv">即興 Improv</option>
-        <option value="mancai">漫才 Mancai</option>
+        <option value="standup"><span class="zh-text">站立喜劇</span> Stand-up</option>
+        <option value="improv"><span class="zh-text">即興</span> Improv</option>
+        <option value="mancai"><span class="zh-text">漫才</span> Mancai</option>
+        <option value="crosstalk">相聲 Crosstalk</option>
+        <option value="rakugo">落語 Rakugo</option>
         <option value="other">其他 Others</option>
       </select>
     </div>
@@ -1154,7 +1214,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="report-ch-icon">f</div>
       <div class="report-ch-info">
         <strong>Facebook 私訊</strong>
-        <span>嘻嘻哪裡唷</span>
+        <span>嘻嘻哪哩唷</span>
       </div>
     </a>
     <a class="report-channel" href="mailto:ciciradio3@gmail.com">
@@ -1164,6 +1224,19 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <span>ciciradio3@gmail.com</span>
       </div>
     </a>
+    <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);line-height:1.7;margin-top:14px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)">＊若有資訊錯誤或圖片侵權疑慮，歡迎來信告知，我們將第一時間為您處理。</p>
+  </div>
+</div>
+
+<!-- Copyright & Disclaimer Modal -->
+<div class="modal-ov" id="modal-copyright">
+  <div class="modal" style="max-width:560px">
+    <button class="modal-close" onclick="document.getElementById('modal-copyright').classList.remove('open')">✕</button>
+    <div class="modal-title" style="font-size:1rem">📋 內容使用與版權聲明</div>
+    <div style="font-size:.85rem;line-height:1.85;color:var(--tm);font-family:var(--f-zh)">
+      <p style="margin-bottom:14px">本站（嘻嘻哪哩唷）為非營利之台灣現場喜劇文化推廣平台。站內所使用之演出海報、活動主視覺等圖片，其著作權皆屬原主辦單位或創作者所有。本站上架之目的僅供觀眾查閱與導流購票，並皆於文末標明圖片來源與購票超連結。</p>
+      <p style="padding:14px 16px;background:rgba(239,111,32,.07);border-left:3px solid var(--or);border-radius:0 var(--r-md) var(--r-md) 0;color:var(--tm)">若原著作者、主辦單位不願在本站進行非營利宣傳，或認為本站使用圖片有侵權疑慮，請來信至 <a href="mailto:ciciradio3@gmail.com" style="color:var(--or);font-weight:700">ciciradio3@gmail.com</a>，我們將於收到通知後第一時間進行下架處理。</p>
+    </div>
   </div>
 </div>
 
@@ -1306,10 +1379,12 @@ const TYPE_META = {
   other:   {bg:'#ebebeb',color:'#444',   label:'其他',labelEn:'Others'},
 };
 const COURSE_META = {
-  standup: {bg:'linear-gradient(135deg,#fde3cc,#ffb87a)',tag:'#fde3cc',tagC:'#7a2e00',label:'站立喜劇',labelEn:'Stand-up'},
-  improv:  {bg:'linear-gradient(135deg,#c8f0de,#7dd9a8)',tag:'#bff0d8',tagC:'#0e5c36',label:'即興',labelEn:'Improv'},
-  mancai:  {bg:'linear-gradient(135deg,#dce4ff,#a0b4ff)',tag:'#dde4ff',tagC:'#2a3ba0',label:'漫才',labelEn:'Mancai'},
-  other:   {bg:'linear-gradient(135deg,#ebebeb,#ccc)',   tag:'#e0e0e0',tagC:'#444',   label:'其他',labelEn:'Others'},
+  standup:   {bg:'linear-gradient(135deg,#fde3cc,#ffb87a)',tag:'#fde3cc',tagC:'#7a2e00',label:'站立喜劇',labelEn:'Stand-up'},
+  improv:    {bg:'linear-gradient(135deg,#c8f0de,#7dd9a8)',tag:'#bff0d8',tagC:'#0e5c36',label:'即興',labelEn:'Improv'},
+  mancai:    {bg:'linear-gradient(135deg,#dce4ff,#a0b4ff)',tag:'#dde4ff',tagC:'#2a3ba0',label:'漫才',labelEn:'Mancai'},
+  crosstalk: {bg:'linear-gradient(135deg,#ffecd2,#fcb69f)',tag:'#ffd5b8',tagC:'#7a2e00',label:'相聲',labelEn:'Crosstalk'},
+  rakugo:    {bg:'linear-gradient(135deg,#e8d5f5,#c9a8e8)',tag:'#e8d5f5',tagC:'#4a1a6e',label:'落語',labelEn:'Rakugo'},
+  other:     {bg:'linear-gradient(135deg,#ebebeb,#ccc)',   tag:'#e0e0e0',tagC:'#444',   label:'其他',labelEn:'Others'},
 };
 const CITY_LBL = {taipei:'台北市',newtaipei:'新北市',taoyuan:'桃園市',hsinchu:'新竹市',taichung:'台中市',chiayi:'嘉義市',tainan:'台南市',kaohsiung:'高雄市',other:'其他'};
 const PAGE_LBL = {home:{zh:'首頁',c:'#f5d558',tc:'#5e4200'},shows:{zh:'演出',c:'#fde3cc',tc:'#7a2e00'},opmic:{zh:'Open Mic',c:'#d0f0de',tc:'#1a5c38'},venues:{zh:'場地',c:'#dce4ff',tc:'#2a3ba0'},courses:{zh:'課程',c:'#fff3a0',tc:'#5e4200'},general:{zh:'一般',c:'#e0e0e0',tc:'#444'}};
@@ -1688,7 +1763,7 @@ function renderMicTable() {
       <td><strong style="color:var(--or)">${m.signupDeadline||'—'}</strong></td>
       <td><span class="badge ${bCls}">${m.method||'—'}</span>${m.notes?`<div style="font-size:.7rem;color:var(--ts);margin-top:3px">${m.notes}</div>`:''}</td>
       <td>
-        ${m.link&&m.link!=='#'?`<a href="${m.link}" target="_blank" style="color:var(--or);font-size:.8rem;font-weight:700;text-decoration:none">連結 ↗</a>`:'—'}
+        ${m.link&&m.link!=='#'?`<a href="${m.link}" target="_blank" onclick="return confirm('即將前往外部報名頁面，本站不參與報名流程。\n\n確定要前往嗎？')" style="color:var(--or);font-size:.8rem;font-weight:700;text-decoration:none">前往報名 ↗</a>`:'—'}
         ${isAdmin?`<button class="ca-btn ca-edit" style="margin-left:7px;width:24px;height:24px;font-size:.62rem;display:inline-flex" onclick="openMicModal('${m.id}')">✏️</button><button class="ca-btn ca-del" style="width:24px;height:24px;font-size:.62rem;display:inline-flex" onclick="delMic('${m.id}')">🗑</button>`:''}
       </td>
     </tr>`;
@@ -2385,7 +2460,18 @@ window.ciciLogout = function() {
   showToast('👋 已登出');
 };
 
-window.addEventListener('DOMContentLoaded', () => {
+// ── SCROLL REVEAL ──
+function initReveal(){
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('revealed'); });
+  },{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
+  document.querySelectorAll('.sec-label,.sec-title,.sec-desc,.feat-card,.about-card').forEach(el=>{
+    el.classList.add('reveal');
+    obs.observe(el);
+  });
+}
+window.addEventListener('DOMContentLoaded', ()=>{
+  initReveal();
   const badge = document.getElementById('sessionBadge');
   if (isLoggedIn() && badge) badge.classList.add('visible');
 });
@@ -2458,7 +2544,18 @@ function renderFpList(){
     <div class="fp-ra"><input class="fp-ri" id="ri-${c.id}" placeholder="管理員回覆…" onkeydown="if(event.key==='Enter')sendReply('${c.id}')"><button class="fp-rs" onclick="sendReply('${c.id}')">回覆</button></div>`:''}
   </div>`;}).join('');
 }
-function submitComment(){const name=document.getElementById('fpNI').value.trim()||'匿名';const text=document.getElementById('fpTA').value.trim();if(!text){showToast('請輸入留言','err');return;}const page=document.querySelector('.page.active')?.id?.replace('page-','')||'general';const c={name,avatar:name[0].toUpperCase(),text,time:Date.now(),page:fpTab==='all'?page:fpTab,rating:selRating,reactions:{like:0,fire:0,haha:0},myReactions:[],pinned:false,hidden:false};window.FB.save('comments',null,c).then(newId=>{COMMENTS.unshift({id:newId,...c});document.getElementById('fpTA').value='';document.getElementById('fpNI').value='';selRating=0;renderStars(0);updAv();updCC();renderFpList();renderRatBar();renderHomeComments();showToast('✅ 留言已送出','ok');updFbBadge();}).catch(()=>showToast('❌ 送出失敗','err'));}
+const CAPTCHA_ANSWERS = ['嘻嘻哪哩唷','嘻嘻哪裡唷','嘻嘻哪裡喲','嘻嘻哪哩喲','嘻嘻哪哩呦','嘻嘻哪裡呦','Cici Radio','cici radio','ciciradio','CICIRADIO','CICI RADIO'];
+function checkCaptcha(){
+  const val = (document.getElementById('fpCaptcha')?.value||'').trim();
+  const ok = CAPTCHA_ANSWERS.some(a=>val.toLowerCase()===a.toLowerCase());
+  const errEl = document.getElementById('fpCaptchaErr');
+  if(errEl) errEl.style.display = ok?'none':'block';
+  return ok;
+}
+function submitComment(){
+  if(!checkCaptcha()){ showToast('請先回答驗證問題','err'); return; }
+  const name=document.getElementById('fpNI').value.trim()||'匿名';const text=document.getElementById('fpTA').value.trim();if(!text){showToast('請輸入留言','err');return;}const page=document.querySelector('.page.active')?.id?.replace('page-','')||'general';const c={name,avatar:name[0].toUpperCase(),text,time:Date.now(),page:fpTab==='all'?page:fpTab,rating:selRating,reactions:{like:0,fire:0,haha:0},myReactions:[],pinned:false,hidden:false};window.FB.save('comments',null,c).then(newId=>{COMMENTS.unshift({id:newId,...c});document.getElementById('fpTA').value='';document.getElementById('fpNI').value='';if(document.getElementById('fpCaptcha'))document.getElementById('fpCaptcha').value='';selRating=0;renderStars(0);updAv();updCC();renderFpList();renderRatBar();renderHomeComments();showToast('✅ 留言已送出','ok');updFbBadge();}).catch(()=>showToast('❌ 送出失敗','err'));
+}
 function react(id,t){const c=COMMENTS.find(x=>x.id===id);if(!c)return;if(!c.myReactions)c.myReactions=[];const i=c.myReactions.indexOf(t);if(i>=0){c.myReactions.splice(i,1);c.reactions[t]--;}else{c.myReactions.push(t);c.reactions[t]++;}window.FB.save('comments',id,c).then(()=>renderFpList());}
 function pinC(id){const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.pinned=!c.pinned;window.FB.save('comments',id,c).then(()=>{renderFpList();renderHomeComments();showToast(c.pinned?'📌 已設為精選':'已取消精選','ok');});}
 function delC(id){if(!confirm('確定刪除？'))return;window.FB.del('comments',id).then(()=>{COMMENTS=COMMENTS.filter(x=>x.id!==id);renderFpList();renderHomeComments();showToast('已刪除','ok');});}
@@ -2501,7 +2598,6 @@ function setLang(l){
 
 function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
 document.querySelectorAll('.modal-ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
-document.getElementById('modal-report').addEventListener('click',e=>{if(e.target===document.getElementById('modal-report'))document.getElementById('modal-report').classList.remove('open');});
 
 let toastTimer;
 function showToast(msg,type=''){
