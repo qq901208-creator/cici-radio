@@ -437,6 +437,14 @@ body.edit .edit-bar{display:flex!important}
 .vm-tabs{display:flex;gap:6px;margin-bottom:14px}
 .vm-tab{padding:6px 16px;border-radius:var(--r-pill);font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
 .vm-tab.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
+/* REPORT BUTTON */
+.report-fab{position:fixed;bottom:26px;right:26px;z-index:250;background:var(--sd);color:var(--y);border:2px solid rgba(245,213,88,.3);border-radius:var(--r-pill);padding:9px 18px;font-size:.78rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 18px rgba(0,0,0,.18);transition:all .18s}
+.report-fab:hover{background:#3d3b2d;transform:translateY(-2px)}
+.report-channel{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--cr);border-radius:var(--r-md);text-decoration:none;color:var(--tm);transition:all .15s;border:1.5px solid transparent;margin-bottom:10px}
+.report-channel:hover{border-color:var(--or);background:var(--py);transform:translateX(3px)}
+.report-ch-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;background:var(--py)}
+.report-ch-info strong{display:block;font-size:.88rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)}
+.report-ch-info span{font-size:.75rem;color:var(--ts);font-family:var(--f-bo)}
 .toast{position:fixed;bottom:80px;right:22px;z-index:600;background:var(--sd);color:#fff;border-radius:var(--r-md);padding:11px 16px;font-size:.8rem;font-family:var(--f-bo);font-weight:600;box-shadow:0 6px 22px rgba(0,0,0,.2);transform:translateY(18px);opacity:0;transition:all .23s;border-left:4px solid var(--or);pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.ok{border-left-color:#2ecc71}
@@ -464,7 +472,7 @@ body.edit .edit-bar{display:flex!important}
     <li><a data-page="home" onclick="showPage('home')"><span class="zh-text">首頁</span><span class="en-text">Home</span></a></li>
     <li><a data-page="shows" onclick="showPage('shows')"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></a></li>
     <li><a data-page="opmic" onclick="showPage('opmic')"><span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic</span></a></li>
-    <li><a data-page="venues" onclick="showPage('venues')"><span class="zh-text">場地一覽</span><span class="en-text">Venues</span></a></li>
+    <li><a data-page="venues" onclick="showPage('venues')"><span class="zh-text">全台喜劇據點</span><span class="en-text">Venues</span></a></li>
     <li><a data-page="courses" onclick="showPage('courses')"><span class="zh-text">課程講座</span><span class="en-text">Courses</span></a></li>
     <li><a data-page="about" onclick="showPage('about')"><span class="zh-text">關於我們</span><span class="en-text">About</span></a></li>
   </ul>
@@ -512,7 +520,7 @@ body.edit .edit-bar{display:flex!important}
     <div class="feat-grid">
       <div class="feat-card" style="--accent:#f5d558;--icon-bg:#fff9d6" onclick="showPage('shows')"><div class="feat-icon">🎭</div><div class="feat-title"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span><small>Shows</small></div><div class="feat-desc"><span class="zh-text">整合 KKTIX、Accupass 等平台，依日期、場地、類型篩選全台喜劇演出。</span><span class="en-text">Filter shows by date, venue, or type from KKTIX, Accupass, and more.</span></div><div class="feat-arrow"><span class="zh-text">瀏覽演出 →</span><span class="en-text">Browse Shows →</span></div></div>
       <div class="feat-card" style="--accent:#ef6f20;--icon-bg:#fde3cc" onclick="showPage('opmic')"><div class="feat-icon">🎤</div><div class="feat-title"><span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic</span><small>Signup Info</small></div><div class="feat-desc"><span class="zh-text">每週更新！依星期查詢各場地 Open Mic 報名方式與時間。</span><span class="en-text">Weekly updates on open mic sign-ups by day.</span></div><div class="feat-arrow"><span class="zh-text">找報名資訊 →</span><span class="en-text">Find Sign-Ups →</span></div></div>
-      <div class="feat-card" style="--accent:#2ecc71;--icon-bg:#d0f0de" onclick="showPage('venues')"><div class="feat-icon">📍</div><div class="feat-title"><span class="zh-text">場地一覽</span><span class="en-text">Venues</span><small>Venues</small></div><div class="feat-desc"><span class="zh-text">呈現全台喜劇俱樂部，包含地址、簡介與官方連結。</span><span class="en-text">Comedy clubs across Taiwan with addresses and links.</span></div><div class="feat-arrow"><span class="zh-text">看場地 →</span><span class="en-text">View Venues →</span></div></div>
+      <div class="feat-card" style="--accent:#2ecc71;--icon-bg:#d0f0de" onclick="showPage('venues')"><div class="feat-icon">📍</div><div class="feat-title"><span class="zh-text">全台喜劇據點一覽</span><span class="en-text">Venues</span><small>Venues</small></div><div class="feat-desc"><span class="zh-text">呈現全台喜劇據點，包含地址、簡介與官方連結。</span><span class="en-text">Comedy clubs across Taiwan with addresses and links.</span></div><div class="feat-arrow"><span class="zh-text">看場地 →</span><span class="en-text">View Venues →</span></div></div>
       <div class="feat-card" style="--accent:#f5d558;--icon-bg:#fffbda" onclick="showPage('courses')"><div class="feat-icon">📚</div><div class="feat-title"><span class="zh-text">課程與講座</span><span class="en-text">Courses & Talks</span><small>Courses</small></div><div class="feat-desc"><span class="zh-text">Stand-up 課、即興課、漫才工作坊，想學喜劇從這裡開始。</span><span class="en-text">Stand-up, improv, and mancai workshops — start your comedy journey here.</span></div><div class="feat-arrow"><span class="zh-text">找課程 →</span><span class="en-text">Find Courses →</span></div></div>
     </div>
   </section>
@@ -655,9 +663,9 @@ body.edit .edit-bar{display:flex!important}
 <!-- VENUES PAGE -->
 <div class="page" id="page-venues">
   <section class="sec" style="background:var(--cr)">
-    <div class="sec-label"><span class="zh-text">場地一覽</span><span class="en-text">Venues</span></div>
-    <h2 class="sec-title"><span class="zh-text">台灣喜劇場地一覽</span><span class="en-text">Comedy Venues in Taiwan</span></h2>
-    <p class="sec-desc"><span class="zh-text">由北至南排列。點選場地卡片查看詳細資訊。</span><span class="en-text">Listed north to south. Click a card for details.</span></p>
+    <div class="sec-label"><span class="zh-text">全台喜劇據點</span><span class="en-text">Venues</span></div>
+    <h2 class="sec-title"><span class="zh-text">台灣喜劇據點一覽</span><span class="en-text">Comedy Venues in Taiwan</span></h2>
+    <p class="sec-desc"><span class="zh-text">全台喜劇據點，點選卡片查看詳細資訊。</span><span class="en-text">Listed north to south. Click a card for details.</span></p>
     <div class="filter-row" style="margin-bottom:22px">
       <button class="chip on" data-f="city" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
       <button class="chip" data-f="city" data-v="taipei"><span class="zh-text">台北</span><span class="en-text">Taipei</span></button>
@@ -763,12 +771,12 @@ body.edit .edit-bar{display:flex!important}
     <div class="ft-col"><h4><span class="zh-text">快速導覽</span><span class="en-text">Navigate</span></h4><ul>
       <li><a onclick="showPage('shows')"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></a></li>
       <li><a onclick="showPage('opmic')"><span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic</span></a></li>
-      <li><a onclick="showPage('venues')"><span class="zh-text">場地一覽</span><span class="en-text">Venues</span></a></li>
+      <li><a onclick="showPage('venues')"><span class="zh-text">全台喜劇據點</span><span class="en-text">Venues</span></a></li>
       <li><a onclick="showPage('courses')"><span class="zh-text">課程講座</span><span class="en-text">Courses</span></a></li>
     </ul></div>
     <div class="ft-col"><h4><span class="zh-text">關於</span><span class="en-text">About</span></h4><ul>
       <li><a onclick="showPage('about')"><span class="zh-text">關於我們</span><span class="en-text">About Us</span></a></li>
-      <li><a href="mailto:ciciradio3@gmail.com"><span class="zh-text">聯絡我們</span><span class="en-text">Contact</span></a></li>
+      <li><a onclick="document.getElementById('modal-report').classList.add('open')" style="cursor:pointer"><span class="zh-text">聯絡我們</span><span class="en-text">Contact</span></a></li>
     </ul></div>
     <div class="ft-col"><h4><span class="zh-text">社群</span><span class="en-text">Social</span></h4><ul>
       <li><a href="https://www.facebook.com/profile.php?id=100083411285720" target="_blank">Facebook</a></li>
@@ -931,6 +939,7 @@ body.edit .edit-bar{display:flex!important}
       </div>
     </div>
     <div class="fg-g full"><label class="fl">場地簡介</label><textarea class="fta" id="v-desc"></textarea></div>
+    <div class="fg-g full"><label class="fl">合作場地名稱</label><input class="fi" type="text" id="v-partner" placeholder="e.g. 鸚鵡螺餐酒館（留空則不顯示）"></div>
   </div>
   <div class="fa">
     <button class="fa-cancel" onclick="closeModal('venue')">取消</button>
@@ -1015,6 +1024,41 @@ body.edit .edit-bar{display:flex!important}
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- 資訊回報浮動按鈕 -->
+<button class="report-fab" onclick="document.getElementById('modal-report').classList.add('open')">
+  ✏️ <span class="zh-text">資訊回報</span><span class="en-text">Report</span>
+</button>
+
+<!-- 資訊回報 Modal -->
+<div class="modal-ov" id="modal-report">
+  <div class="modal" style="max-width:420px">
+    <button class="modal-close" onclick="document.getElementById('modal-report').classList.remove('open')">✕</button>
+    <div class="modal-title">✏️ <span class="zh-text">資訊回報</span><span class="en-text">Report an Issue</span></div>
+    <p style="font-size:.88rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:20px;line-height:1.7"><span class="zh-text">發現資訊有誤或想補充內容？歡迎透過以下管道告訴我們，我們會盡快更新！</span><span class="en-text">Found something wrong? Let us know via any of the channels below.</span></p>
+    <a class="report-channel" href="https://www.instagram.com/cici._.radio/" target="_blank" rel="noopener">
+      <div class="report-ch-icon">📷</div>
+      <div class="report-ch-info">
+        <strong>Instagram DM</strong>
+        <span>@cici._.radio</span>
+      </div>
+    </a>
+    <a class="report-channel" href="https://www.facebook.com/profile.php?id=100083411285720&locale=zh_TW" target="_blank" rel="noopener">
+      <div class="report-ch-icon">f</div>
+      <div class="report-ch-info">
+        <strong>Facebook 私訊</strong>
+        <span>嘻嘻哪裡唷</span>
+      </div>
+    </a>
+    <a class="report-channel" href="mailto:ciciradio3@gmail.com">
+      <div class="report-ch-icon">✉️</div>
+      <div class="report-ch-info">
+        <strong>Email</strong>
+        <span>ciciradio3@gmail.com</span>
+      </div>
+    </a>
+  </div>
+</div>
 
 <!-- Feedback -->
 <button class="fb-fab" onclick="toggleFeedback()">💬<span class="fb-badge" id="fbBadge"></span></button>
@@ -1394,6 +1438,7 @@ function venueCardHTML(v) {
     <div class="venue-logo">${logo}</div>
     <div class="venue-name">${v.nameZh}<small>${v.nameEn}</small></div>
     <div class="venue-city-lbl">📍 ${CITY_LBL[v.city]||v.city}</div>
+    ${v.partner?`<div style="margin-top:2px"><span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;background:rgba(239,111,32,.1);color:var(--or);border:1px solid rgba(239,111,32,.25);border-radius:var(--r-pill);padding:2px 8px;font-family:var(--f-zh)">🤝 ${v.partner}</span></div>`:''}
     <div class="venue-links" onclick="event.stopPropagation()">
       ${v.fb?`<a class="vlb vlb-fb" href="${v.fb}" target="_blank">f FB</a>`:''}
       ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank">ig IG</a>`:''}
@@ -1459,6 +1504,7 @@ function showVenueDetail(id) {
     <table style="width:100%;border-collapse:collapse;font-size:.86rem;font-family:var(--f-zh);margin-bottom:18px">
       <tr><td style="padding:7px 0;color:var(--ts);width:65px;font-size:.78rem">城市</td><td>${CITY_LBL[v.city]||v.city}</td></tr>
       <tr><td style="padding:7px 0;color:var(--ts)">地址</td><td>${v.address||'—'}</td></tr>
+      ${v.partner?`<tr><td style="padding:7px 0;color:var(--ts)">合作場地</td><td><span style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:700;background:rgba(239,111,32,.1);color:var(--or);border:1px solid rgba(239,111,32,.25);border-radius:var(--r-pill);padding:3px 10px">🤝 ${v.partner}</span></td></tr>`:''}
       <tr><td style="padding:7px 0;color:var(--ts)">簡介</td><td>${v.description||'—'}</td></tr>
     </table>
     <div style="display:flex;gap:9px;flex-wrap:wrap">
@@ -1701,16 +1747,16 @@ function openVenueModal(id){
   eVenueId=id||null;
   const v=id?VENUES.find(x=>x.id===id):null;
   document.getElementById('modal-venue-title').textContent=v?'編輯場地':'新增場地';
-  ['v-namezh','v-nameen','v-address','v-fb','v-ig','v-logourl','v-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  ['v-namezh','v-nameen','v-address','v-fb','v-ig','v-logourl','v-desc','v-partner'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
   const lp=document.getElementById('v-logo-prev');if(lp){lp.src='';lp.style.display='none';}
-  if(v){document.getElementById('v-namezh').value=v.nameZh||'';document.getElementById('v-nameen').value=v.nameEn||'';document.getElementById('v-city').value=v.city||'taipei';document.getElementById('v-address').value=v.address||'';document.getElementById('v-fb').value=v.fb||'';document.getElementById('v-ig').value=v.ig||'';document.getElementById('v-logourl').value=v.logoUrl||'';document.getElementById('v-desc').value=v.description||'';if(v.logoUrl)prevVenueLogo(v.logoUrl);}
+  if(v){document.getElementById('v-namezh').value=v.nameZh||'';document.getElementById('v-nameen').value=v.nameEn||'';document.getElementById('v-city').value=v.city||'taipei';document.getElementById('v-address').value=v.address||'';document.getElementById('v-fb').value=v.fb||'';document.getElementById('v-ig').value=v.ig||'';document.getElementById('v-logourl').value=v.logoUrl||'';document.getElementById('v-desc').value=v.description||'';document.getElementById('v-partner').value=v.partner||'';if(v.logoUrl)prevVenueLogo(v.logoUrl);}
   document.getElementById('modal-venue').classList.add('open');
 }
 function saveVenue(){
   const nameZh=document.getElementById('v-namezh').value.trim();
   if(!nameZh){showToast('請填入場地名稱','err');return;}
   const city=document.getElementById('v-city').value;
-  const item={nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,description:document.getElementById('v-desc').value};
+  const item={nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,description:document.getElementById('v-desc').value,partner:document.getElementById('v-partner').value.trim()};
   window.FB.save('venues', eVenueId||null, item).then(newId=>{
     if(eVenueId){const i=VENUES.findIndex(x=>x.id===eVenueId);if(i>=0)VENUES[i]={id:eVenueId,...item};}
     else VENUES.push({id:newId,...item});
@@ -2137,6 +2183,7 @@ function setLang(l){
 
 function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
 document.querySelectorAll('.modal-ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+document.getElementById('modal-report').addEventListener('click',e=>{if(e.target===document.getElementById('modal-report'))document.getElementById('modal-report').classList.remove('open');});
 
 let toastTimer;
 function showToast(msg,type=''){
