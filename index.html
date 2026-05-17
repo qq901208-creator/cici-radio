@@ -1459,17 +1459,21 @@ function showSortKey(s){
 function isExpired(dateStr, timeStr){
   if(!dateStr) return false;
   const now = new Date();
-  // 有時間的話比較到分鐘，沒有的話以當天結束（23:59）為準
-  let showEnd;
-  if(timeStr){
-    // 取時間範圍的最後一個時間，e.g. "19:30" 或 "19:30–21:30" 取 21:30
+  // 多日期（逗號分隔）取第一個；去除中文年月日；斜線改橫線
+  const raw = String(dateStr).split(',')[0].trim()
+    .replace(/年/,'-').replace(/月/,'-').replace(/日/,'')
+    .replace(/\//g,'-').replace(/\./g,'-').trim();
+  // 驗證格式
+  if(!/^\d{4}-\d{1,2}-\d{1,2}$/.test(raw)) return false;
+  if(timeStr && timeStr.trim()){
     const times = timeStr.split('–');
     const endTime = (times[times.length-1]||'').trim().replace(/[^0-9:]/g,'');
-    showEnd = new Date(dateStr + 'T' + (endTime||'23:59') + ':00');
-  } else {
-    showEnd = new Date(dateStr + 'T23:59:00');
+    const t = endTime || '23:59';
+    const showEnd = new Date(raw + 'T' + t + ':00');
+    if(!isNaN(showEnd)) return showEnd < now;
   }
-  return showEnd < now;
+  const endOfDay = new Date(raw + 'T23:59:59');
+  return !isNaN(endOfDay) && endOfDay < now;
 }
 const _today = new Date();
 let calYear = _today.getFullYear(), calMonth = _today.getMonth(), calSel = null;
