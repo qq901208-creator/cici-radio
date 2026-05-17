@@ -661,13 +661,12 @@ body.edit .edit-bar{display:flex!important}
     <div class="filter-row" style="margin-bottom:22px">
       <button class="chip on" data-f="city" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
       <button class="chip" data-f="city" data-v="taipei"><span class="zh-text">台北</span><span class="en-text">Taipei</span></button>
-      <button class="chip" data-f="city" data-v="newtaipei"><span class="zh-text">新北</span><span class="en-text">New Taipei</span></button>
       <button class="chip" data-f="city" data-v="taoyuan"><span class="zh-text">桃園</span><span class="en-text">Taoyuan</span></button>
       <button class="chip" data-f="city" data-v="hsinchu"><span class="zh-text">新竹</span><span class="en-text">Hsinchu</span></button>
       <button class="chip" data-f="city" data-v="taichung"><span class="zh-text">台中</span><span class="en-text">Taichung</span></button>
       <button class="chip" data-f="city" data-v="tainan"><span class="zh-text">台南</span><span class="en-text">Tainan</span></button>
       <button class="chip" data-f="city" data-v="kaohsiung"><span class="zh-text">高雄</span><span class="en-text">Kaohsiung</span></button>
-      <button class="chip" data-f="city" data-v="chiayi"><span class="zh-text">嘉義</span><span class="en-text">Chiayi</span></button>
+      <button class="chip" data-f="city" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
     </div>
     <div class="venue-grid" id="venues-grid"></div>
     <button class="edit-add-btn" onclick="openVenueModal(null)">＋ <span class="zh-text">新增場地</span><span class="en-text">Add Venue</span></button>
@@ -855,13 +854,19 @@ body.edit .edit-bar{display:flex!important}
     <div class="fg-g"><label class="fl">售票連結</label><input class="fi" type="url" id="s-ticketurl" placeholder="https://..."></div>
     <div class="fg-g full">
       <label class="fl">活動圖片網址</label>
-      <input class="fi" type="url" id="s-image" placeholder="https://...（貼上圖片直連網址）"
-        oninput="livePreview('s-img-prev','s-img-hint',this.value)"
-        onpaste="setTimeout(()=>livePreview('s-img-prev','s-img-hint',this.value),80)">
+      <div style="display:flex;align-items:center;gap:0;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-md);overflow:hidden;background:#fff;margin-bottom:6px">
+        <span style="padding:9px 11px;background:var(--cr);font-size:.78rem;font-family:var(--f-bo);color:var(--ts);white-space:nowrap;border-right:1.5px solid rgba(45,43,31,.1);flex-shrink:0">https://lh3.googleusercontent.com/d/</span>
+        <input class="fi" type="text" id="s-image-id" placeholder="貼上 Google Drive 檔案 ID"
+          style="border:none;border-radius:0;flex:1;background:#fff"
+          oninput="syncGdriveInput('s-image','s-image-id','s-img-prev','s-img-hint')"
+          onpaste="setTimeout(()=>syncGdriveInput('s-image','s-image-id','s-img-prev','s-img-hint'),80)">
+      </div>
+      <input type="hidden" id="s-image">
       <div id="s-img-hint" class="img-url-hint"></div>
       <img id="s-img-prev" class="img-prev-inline" src="" alt="">
       <div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:4px;line-height:1.6">
-        💡 貼上可直接開啟的圖片網址。圖片若無法顯示將自動以預設圖示取代。
+        💡 從 Google Drive 分享連結取出 ID，例如：<br>
+        <span style="color:var(--or);word-break:break-all">https://drive.google.com/file/d/<strong>這段就是ID</strong>/view</span>
       </div>
     </div>
     <div class="fg-g full">
@@ -961,15 +966,21 @@ body.edit .edit-bar{display:flex!important}
     <div class="fg-g"><label class="fl">費用</label><input class="fi" type="text" id="c-fee" placeholder="e.g. NT$2,800"></div>
     <div class="fg-g"><label class="fl">平台</label><select class="fs" id="c-platform"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="google-form">Google 表單</option><option value="other">其他</option></select></div>
     <div class="fg-g full"><label class="fl">報名連結</label><input class="fi" type="url" id="c-signupurl" placeholder="https://..."></div>
-        <div class="fg-g full">
+    <div class="fg-g full">
       <label class="fl">課程圖片網址</label>
-      <input class="fi" type="url" id="c-image" placeholder="https://...（貼上圖片直連網址）"
-        oninput="livePreview('c-img-prev','c-img-hint',this.value)"
-        onpaste="setTimeout(()=>livePreview('c-img-prev','c-img-hint',this.value),80)">
+      <div style="display:flex;align-items:center;gap:0;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-md);overflow:hidden;background:#fff;margin-bottom:6px">
+        <span style="padding:9px 11px;background:var(--cr);font-size:.78rem;font-family:var(--f-bo);color:var(--ts);white-space:nowrap;border-right:1.5px solid rgba(45,43,31,.1);flex-shrink:0">https://lh3.googleusercontent.com/d/</span>
+        <input class="fi" type="text" id="c-image-id" placeholder="貼上 Google Drive 檔案 ID"
+          style="border:none;border-radius:0;flex:1;background:#fff"
+          oninput="syncGdriveInput('c-image','c-image-id','c-img-prev','c-img-hint')"
+          onpaste="setTimeout(()=>syncGdriveInput('c-image','c-image-id','c-img-prev','c-img-hint'),80)">
+      </div>
+      <input type="hidden" id="c-image">
       <div id="c-img-hint" class="img-url-hint"></div>
       <img id="c-img-prev" class="img-prev-inline" src="" alt="">
       <div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:4px;line-height:1.6">
-        💡 貼上可直接開啟的圖片網址。圖片若無法顯示將自動以預設圖示取代。
+        💡 從 Google Drive 分享連結取出 ID，例如：<br>
+        <span style="color:var(--or);word-break:break-all">https://drive.google.com/file/d/<strong>這段就是ID</strong>/view</span>
       </div>
     </div>
     <div class="fg-g full"><label class="fl">圖片來源</label><input class="fi" type="text" id="c-imgsrc"></div>
@@ -1089,7 +1100,7 @@ async function loadAllData() {
     ]);
     window.SHOWS    = showsSnap.docs.map(d=>({id:d.id,...d.data()}));
     window.MICS     = micsSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window.VENUES   = venuesSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window.VENUES   = venuesSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a._order??999)-(b._order??999));
     window.COURSES  = coursesSnap.docs.map(d=>({id:d.id,...d.data()}));
     window.COMMENTS = commentsSnap.docs.map(d=>({id:d.id,...d.data()}));
     // Fallback to defaults if Firestore is empty
@@ -1188,7 +1199,7 @@ const TEAM_PHOTOS = [
 window.DEFAULT_SHOWS = [];
 window.DEFAULT_MICS = [];
 window.DEFAULT_VENUES = [
-  {id:'v1',nameZh:'卡米地喜劇俱樂部',nameEn:'Comedy Plus',city:'taipei',address:'台北市中山區復興北路480號',fb:'https://www.facebook.com/ComedyPlusTaipei/',ig:'https://www.instagram.com/comedyclubtaipei',logoUrl:'',description:'台灣最知名的喜劇俱樂部之一，每週固定 Open Mic、Stand-up 演出。'},
+  {id:'v1',nameZh:'卡米地＋',nameEn:'Comedy Plus',city:'taipei',address:'台北市中山區復興北路480號',fb:'https://www.facebook.com/ComedyPlusTaipei/',ig:'https://www.instagram.com/comedyclubtaipei',logoUrl:'',description:'台灣最知名的喜劇俱樂部之一，每週固定 Open Mic、Stand-up 演出。'},
   {id:'v2',nameZh:'23喜劇俱樂部',nameEn:'Two Three Comedy Club',city:'taipei',address:'台北市中山區林森北路286號B1',fb:'https://www.facebook.com/TwoThreeComedy/',ig:'https://www.instagram.com/twothreecomedy/',logoUrl:'',description:'以多元喜劇節目聞名，是台北市中心的喜劇重鎮。'},
   {id:'v3',nameZh:'飛客劇樂部',nameEn:'Fakers Comedy Club',city:'taipei',address:'台北市中山區南京東路三段109巷16號B1',fb:'https://www.facebook.com/fakers.tw/',ig:'https://www.instagram.com/fakerscomedyclub',logoUrl:'',description:'即興喜劇與 Stand-up 的重要基地。'},
   {id:'v4',nameZh:'北投喜劇',nameEn:'Beitou Comedy',city:'taipei',address:'台北市北投區中央南路一段102巷34號',fb:'https://www.facebook.com/people/北投喜劇/61581707900549/',ig:'',logoUrl:'',description:'北投地區新興喜劇場地。'},
@@ -1266,7 +1277,15 @@ function showCardHTML(s) {
       <div class="sc-meta">📍 ${s.venueLabel||s.venue}</div>
       ${s.performer?`<div class="sc-meta">🎙 ${s.performer}</div>`:''}
       ${s.price?`<div class="sc-price">💰 ${s.price}</div>`:''}
-      <span class="sc-ticket" onclick="event.stopPropagation()" style="cursor:default;pointer-events:none"><span class="zh-text">點擊卡片查看詳情</span><span class="en-text">Click for details</span></span>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px">
+        ${(s.ticketUrl&&s.ticketUrl!=='#'&&!s.soldOut)
+          ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">🎟 馬上購票</span><span class="en-text">🎟 Buy Tickets</span></a>`
+          : s.soldOut
+            ? `<span style="font-size:.74rem;color:#8b1a1a;font-family:var(--f-zh)">已售完</span>`
+            : `<span></span>`
+        }
+        <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);display:flex;align-items:center;gap:3px;opacity:.7"><span class="zh-text">詳情</span><span class="en-text">Details</span> ↗</span>
+      </div>
     </div>
     ${s.imgSrc?`<div class="sc-imgsrc">📷 ${s.imgSrc}</div>`:''}
     <div class="card-eo">
@@ -1390,6 +1409,44 @@ function renderVenues() {
   const g=document.getElementById('venues-grid'); if(!g)return;
   const fil=VENUES.filter(v=>fCity==='all'||v.city===fCity);
   g.innerHTML=fil.map(venueCardHTML).join('')+`<div class="venue-card" style="border-style:dashed;align-items:center;justify-content:center;text-align:center;cursor:default;min-height:100px"><div style="color:var(--ts);font-size:.8rem;font-family:var(--f-zh)"><span class="zh-text">更多場地陸續加入</span><span class="en-text">More venues coming</span></div></div>`;
+
+  // 拖曳排序（僅管理員模式）
+  if(!isLoggedIn()) return;
+  let dragId=null;
+  g.querySelectorAll('.venue-card[data-id]').forEach(el=>{
+    el.setAttribute('draggable','true');
+    el.style.cursor='grab';
+    el.addEventListener('dragstart',e=>{
+      dragId=el.dataset.id;
+      el.style.opacity='.4';
+      e.dataTransfer.effectAllowed='move';
+    });
+    el.addEventListener('dragend',()=>{
+      el.style.opacity='';
+      g.querySelectorAll('.venue-card').forEach(x=>x.style.outline='');
+    });
+    el.addEventListener('dragover',e=>{
+      e.preventDefault();
+      g.querySelectorAll('.venue-card').forEach(x=>x.style.outline='');
+      el.style.outline='2px solid var(--or)';
+    });
+    el.addEventListener('drop',e=>{
+      e.preventDefault();
+      el.style.outline='';
+      if(!dragId||dragId===el.dataset.id) return;
+      const fromIdx=VENUES.findIndex(v=>v.id===dragId);
+      const toId=el.dataset.id;
+      const toIdx=VENUES.findIndex(v=>v.id===toId);
+      if(fromIdx<0||toIdx<0) return;
+      const moved=VENUES.splice(fromIdx,1)[0];
+      VENUES.splice(toIdx,0,moved);
+      // 儲存新順序到 Firebase
+      VENUES.forEach((v,i)=>{ window.FB.save('venues',v.id,{...v,_order:i}); });
+      dragId=null;
+      renderVenues();
+      showToast('✅ 排序已更新','ok');
+    });
+  });
 }
 function showVenueDetail(id) {
   const v=VENUES.find(x=>x.id===id); if(!v)return;
@@ -1551,7 +1608,7 @@ function openShowModal(id){
   eShowId=id||null;
   const s=id?SHOWS.find(x=>x.id===id):null;
   document.getElementById('modal-show-title').textContent=s?'編輯演出':'新增演出';
-  ['s-title','s-date','s-time','s-performer','s-price','s-ticketurl','s-image','s-imgsrc','s-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  ['s-title','s-date','s-time','s-performer','s-price','s-ticketurl','s-image','s-image-id','s-imgsrc','s-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
   const imgPrev=document.getElementById('s-img-prev');
   const imgHint=document.getElementById('s-img-hint');
   if(imgPrev)imgPrev.style.display='none';
@@ -1568,6 +1625,9 @@ function openShowModal(id){
     document.getElementById('s-platform').value=s.platform||'kktix';
     document.getElementById('s-ticketurl').value=s.ticketUrl||'';
     document.getElementById('s-image').value=s.image||'';
+    // 從完整 URL 擷取 ID 填入輸入框
+    const sImgIdEl=document.getElementById('s-image-id');
+    if(sImgIdEl){const mId=(s.image||'').match(/\/d\/([a-zA-Z0-9_-]{10,})/);sImgIdEl.value=mId?mId[1]:'';}
     // imgSrc 去掉前綴「圖片來源：」後填入
     const rawSrc=s.imgSrc||'';
     document.getElementById('s-imgsrc').value=rawSrc.replace(/^圖片來源：/,'');
@@ -1664,12 +1724,14 @@ function openCourseModal(id){
   eCourseId=id||null;
   const c=id?COURSES.find(x=>x.id===id):null;
   document.getElementById('modal-course-title').textContent=c?'編輯課程':'新增課程';
-  ['c-url','c-title','c-date','c-time','c-organizer','c-location','c-fee','c-signupurl','c-image','c-imgsrc','c-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  ['c-url','c-title','c-date','c-time','c-organizer','c-location','c-fee','c-signupurl','c-image','c-image-id','c-imgsrc','c-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
   document.getElementById('c-img-prev').style.display='none';
   document.getElementById('c-ps').style.display='none';
   document.getElementById('c-pp').classList.remove('show');
-  if(c){document.getElementById('c-title').value=c.title;document.getElementById('c-date').value=c.date||'';document.getElementById('c-time').value=c.time||'';document.getElementById('c-type').value=c.type||'standup';document.getElementById('c-organizer').value=c.organizer||'';document.getElementById('c-location').value=c.location||'';document.getElementById('c-fee').value=c.fee||'';document.getElementById('c-platform').value=c.platform||'kktix';document.getElementById('c-signupurl').value=c.url||'';document.getElementById('c-image').value=c.image||'';document.getElementById('c-imgsrc').value=c.imgSrc||'';document.getElementById('c-desc').value=c.description||'';document.getElementById('c-status').value=c.status;const cImgEl=document.getElementById('c-image');
-    if(cImgEl)cImgEl.value=c.image||'';
+  if(c){document.getElementById('c-title').value=c.title;document.getElementById('c-date').value=c.date||'';document.getElementById('c-time').value=c.time||'';document.getElementById('c-type').value=c.type||'standup';document.getElementById('c-organizer').value=c.organizer||'';document.getElementById('c-location').value=c.location||'';document.getElementById('c-fee').value=c.fee||'';document.getElementById('c-platform').value=c.platform||'kktix';document.getElementById('c-signupurl').value=c.url||'';document.getElementById('c-image').value=c.image||'';
+    const cImgIdEl=document.getElementById('c-image-id');
+    if(cImgIdEl){const mId=(c.image||'').match(/\/d\/([a-zA-Z0-9_-]{10,})/);cImgIdEl.value=mId?mId[1]:'';}
+    document.getElementById('c-imgsrc').value=c.imgSrc||'';document.getElementById('c-desc').value=c.description||'';document.getElementById('c-status').value=c.status;
     if(c.image)livePreview('c-img-prev','c-img-hint',c.image);}
   document.getElementById('modal-course').classList.add('open');
 }
@@ -1840,7 +1902,25 @@ function delVmItem(type,idx){
   showToast('已刪除','ok');
 }
 
-// ── SEARCH ──
+// ── Google Drive image ID helper ──
+window.syncGdriveInput = function(hiddenId, inputId, prevId, hintId) {
+  const inp = document.getElementById(inputId);
+  if(!inp) return;
+  let val = inp.value.trim();
+  // 如果貼入的是完整 URL，自動擷取 ID
+  const m = val.match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+  if(m) { val = m[1]; inp.value = val; }
+  const fullUrl = val ? 'https://lh3.googleusercontent.com/d/' + val : '';
+  const hidden = document.getElementById(hiddenId);
+  if(hidden) hidden.value = fullUrl;
+  if(fullUrl) livePreview(prevId, hintId, fullUrl);
+  else {
+    const img = document.getElementById(prevId);
+    const hint = document.getElementById(hintId);
+    if(img) img.style.display='none';
+    if(hint) { hint.textContent=''; hint.className='img-url-hint'; }
+  }
+};
 let fSearch = '';
 function getSearchQuery(){ return (document.getElementById('shows-search')?.value||'').trim().toLowerCase(); }
 
