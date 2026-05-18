@@ -93,6 +93,14 @@ body.ready{visibility:visible}
 .feat-desc{font-size:.84rem;color:var(--ts);line-height:1.65;font-family:var(--f-zh)}
 .feat-arrow{margin-top:auto;font-size:.77rem;font-weight:600;color:var(--or);font-family:var(--f-bo)}
 
+/* PAGINATION */
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin:32px 0 8px;flex-wrap:wrap}
+.pg-btn{min-width:36px;height:36px;padding:0 10px;border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.15);background:#fff;color:var(--tm);font-size:.82rem;font-weight:600;font-family:var(--f-bo);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.pg-btn:hover{border-color:var(--or);color:var(--or)}
+.pg-btn.active{background:var(--sd);color:var(--y);border-color:var(--sd)}
+.pg-btn:disabled{opacity:.35;cursor:not-allowed}
+.pg-info{font-size:.78rem;color:var(--ts);font-family:var(--f-bo);padding:0 6px}
+
 /* SHOWS */
 .filter-section{margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
@@ -653,7 +661,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <!-- 搜尋欄 -->
     <div class="shows-search-wrap">
       <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
-      <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="renderShows();syncFiltersToURL()">
+      <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="showsPage=1;renderShows();syncFiltersToURL()">
     </div>
     <div class="filter-section">
       <!-- TYPE filter: zh shows Chinese only, en shows English only -->
@@ -712,6 +720,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div id="view-cards">
       <div class="shows-grid" id="shows-grid"></div>
+      <div id="shows-pagination" class="pagination"></div>
       <button class="edit-add-btn" onclick="openShowModal(null)">＋ <span class="zh-text">新增演出</span><span class="en-text">Add Show</span></button>
     </div>
     <div id="view-cal" style="display:none">
@@ -807,6 +816,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="edit-add-btn" id="btn-hide-expired-courses" style="width:auto;padding:6px 14px;margin-top:0;font-size:.78rem" onclick="toggleHideExpiredCourses()">👁 <span class="zh-text">顯示過期</span><span class="en-text">Show Expired</span></button>
     </div>
     <div class="course-grid" id="courses-grid"></div>
+    <div id="courses-pagination" class="pagination"></div>
     <button class="edit-add-btn" onclick="openCourseModal(null)">＋ <span class="zh-text">新增課程</span><span class="en-text">Add Course</span></button>
   </section>
 </div>
@@ -1680,6 +1690,43 @@ function openShowDetail(id) {
   document.getElementById('modal-show-detail').classList.add('open');
 }
 
+// ── PAGINATION ──
+let showsPage = 1;
+let coursesPage = 1;
+const SHOWS_PER_PAGE = 24;
+const COURSES_PER_PAGE = 12;
+
+function renderPagination(containerId, currentPage, totalPages, onPageChange){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  if(totalPages <= 1){ el.innerHTML=''; return; }
+  let html = `<button class="pg-btn" ${currentPage===1?'disabled':''} onclick="${onPageChange}(${currentPage-1})">‹ 上一頁</button>`;
+  // 頁碼邏輯：顯示首尾和當前頁附近
+  const pages = [];
+  for(let i=1;i<=totalPages;i++){
+    if(i===1||i===totalPages||Math.abs(i-currentPage)<=2) pages.push(i);
+    else if(pages[pages.length-1]!=='...') pages.push('...');
+  }
+  pages.forEach(p=>{
+    if(p==='...') html+=`<span class="pg-info">…</span>`;
+    else html+=`<button class="pg-btn${p===currentPage?' active':''}" onclick="${onPageChange}(${p})">${p}</button>`;
+  });
+  html+=`<button class="pg-btn" ${currentPage===totalPages?'disabled':''} onclick="${onPageChange}(${currentPage+1})">下一頁 ›</button>`;
+  el.innerHTML = html;
+}
+
+function goShowsPage(p){
+  showsPage = p;
+  renderShows();
+  document.getElementById('page-shows')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function goCoursesPage(p){
+  coursesPage = p;
+  renderCourses();
+  document.getElementById('page-courses')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
 function renderShows() {
   const grid = document.getElementById('shows-grid'); if (!grid) return;
   const adminMode = isLoggedIn();
@@ -1708,8 +1755,18 @@ function renderShows() {
     }
     return true;
   }).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
-  grid.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">${q?'查無符合搜尋的演出':'查無符合條件的演出'}</div>`;
-  
+
+  // 篩選條件改變時重置到第一頁
+  const totalPages = Math.ceil(fil.length / SHOWS_PER_PAGE);
+  if(showsPage > totalPages) showsPage = 1;
+  const start = (showsPage-1) * SHOWS_PER_PAGE;
+  const paged = fil.slice(start, start + SHOWS_PER_PAGE);
+
+  grid.innerHTML = fil.length
+    ? paged.map(showCardHTML).join('')
+    : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">${q?'查無符合搜尋的演出':'查無符合條件的演出'}</div>`;
+
+  renderPagination('shows-pagination', showsPage, totalPages, 'goShowsPage');
 }
 
 // ── 數字跳動動畫 ──
@@ -1837,8 +1894,17 @@ function renderCourses() {
     if(fCtype!=='all' && c.type!==fCtype) return false;
     return true;
   }).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-  g.innerHTML=fil.length?fil.map(courseCardHTML).join(''):`<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">目前沒有課程資訊</div>`;
-  
+
+  const totalPages = Math.ceil(fil.length / COURSES_PER_PAGE);
+  if(coursesPage > totalPages) coursesPage = 1;
+  const start = (coursesPage-1) * COURSES_PER_PAGE;
+  const paged = fil.slice(start, start + COURSES_PER_PAGE);
+
+  g.innerHTML=fil.length
+    ? paged.map(courseCardHTML).join('')
+    : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">目前沒有課程資訊</div>`;
+
+  renderPagination('courses-pagination', coursesPage, totalPages, 'goCoursesPage');
 }
 
 function openCourseDetail(id){
@@ -1995,11 +2061,11 @@ document.querySelectorAll('.chip').forEach(btn=>{
     const f=this.dataset.f, v=this.dataset.v;
     document.querySelectorAll(`.chip[data-f="${f}"]`).forEach(c=>c.classList.remove('on'));
     this.classList.add('on');
-    if(f==='type') {fType=v;renderShows();syncFiltersToURL();}
-    if(f==='venue'){fVenue=v;renderShows();syncFiltersToURL();}
-    if(f==='area') {fArea=v;renderShows();syncFiltersToURL();}
-    if(f==='day')  {fDay=v;renderShows();syncFiltersToURL();}
-    if(f==='ctype'){fCtype=v;renderCourses();syncFiltersToURL();}
+    if(f==='type') {fType=v;showsPage=1;renderShows();syncFiltersToURL();}
+    if(f==='venue'){fVenue=v;showsPage=1;renderShows();syncFiltersToURL();}
+    if(f==='area') {fArea=v;showsPage=1;renderShows();syncFiltersToURL();}
+    if(f==='day')  {fDay=v;showsPage=1;renderShows();syncFiltersToURL();}
+    if(f==='ctype'){fCtype=v;coursesPage=1;renderCourses();syncFiltersToURL();}
     if(f==='city') {fCity=v;renderVenues();syncFiltersToURL();}
   });
 });
