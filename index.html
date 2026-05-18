@@ -1318,43 +1318,32 @@ async function loadAllData() {
       getDocs(collection(db,'courses')),
       getDocs(collection(db,'comments')),
     ]);
-    window.SHOWS    = showsSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window.MICS     = micsSnap.docs.map(d=>({id:d.id,...d.data()}));
-    const fbVenues = venuesSnap.docs.map(d=>({id:d.id,...d.data()}));
-    const mergedVenues = window.DEFAULT_VENUES.map(def => {
-      const fb = fbVenues.find(v=>v.id===def.id);
-      return fb ? {...def,...fb} : def;
+    window._SHOWS    = showsSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._MICS     = micsSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const fbVenues   = venuesSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const merged     = window.DEFAULT_VENUES.map(def=>{
+      const fb=fbVenues.find(v=>v.id===def.id);
+      return fb?{...def,...fb}:def;
     });
-    fbVenues.forEach(fb => {
-      if(!mergedVenues.find(v=>v.id===fb.id)) mergedVenues.push(fb);
-    });
-    window.VENUES   = mergedVenues.sort((a,b)=>(a._order??999)-(b._order??999));
-    window.COURSES  = coursesSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window.COMMENTS = commentsSnap.docs.map(d=>({id:d.id,...d.data()}))
+    fbVenues.forEach(fb=>{if(!merged.find(v=>v.id===fb.id))merged.push(fb);});
+    window._VENUES   = merged.sort((a,b)=>(a._order??999)-(b._order??999));
+    window._COURSES  = coursesSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._COMMENTS = commentsSnap.docs.map(d=>({id:d.id,...d.data()}))
       .sort((a,b)=>(b.time||0)-(a.time||0));
-    if(!window.SHOWS.length)    window.SHOWS    = window.DEFAULT_SHOWS;
-    if(!window.MICS.length)     window.MICS     = window.DEFAULT_MICS;
-    if(!window.COURSES.length)  window.COURSES  = window.DEFAULT_COURSES;
-    if(!window.COMMENTS.length) window.COMMENTS = window.DEFAULT_COMMENTS;
-    SHOWS    = window.SHOWS;
-    MICS     = window.MICS;
-    VENUES   = window.VENUES;
-    COURSES  = window.COURSES;
-    COMMENTS = window.COMMENTS;
+    if(!window._SHOWS.length)    window._SHOWS    = window.DEFAULT_SHOWS;
+    if(!window._MICS.length)     window._MICS     = window.DEFAULT_MICS;
+    if(!window._COURSES.length)  window._COURSES  = window.DEFAULT_COURSES;
+    if(!window._COMMENTS.length) window._COMMENTS = window.DEFAULT_COMMENTS;
   } catch(e) {
-    console.warn('Firestore load failed, using defaults:', e);
-    window.SHOWS    = window.DEFAULT_SHOWS;
-    window.MICS     = window.DEFAULT_MICS;
-    window.VENUES   = window.DEFAULT_VENUES.slice();
-    window.COURSES  = window.DEFAULT_COURSES;
-    window.COMMENTS = window.DEFAULT_COMMENTS;
-    SHOWS    = window.SHOWS;
-    MICS     = window.MICS;
-    VENUES   = window.VENUES;
-    COURSES  = window.COURSES;
-    COMMENTS = window.COMMENTS;
+    console.warn('Firestore load failed:', e);
+    window._SHOWS    = window.DEFAULT_SHOWS;
+    window._MICS     = window.DEFAULT_MICS;
+    window._VENUES   = window.DEFAULT_VENUES.slice();
+    window._COURSES  = window.DEFAULT_COURSES;
+    window._COMMENTS = window.DEFAULT_COMMENTS;
   }
   setTimeout(()=>{
+    if(typeof window._syncData==='function') window._syncData();
     if(typeof renderHomeShows==='function') renderHomeShows();
     if(typeof renderHeroStats==='function') renderHeroStats();
     if(typeof renderShows==='function') renderShows();
@@ -1362,6 +1351,7 @@ async function loadAllData() {
     if(typeof renderCourses==='function') renderCourses();
     if(typeof renderMicTable==='function') renderMicTable();
     if(typeof renderHomeComments==='function') renderHomeComments();
+    if(typeof renderAbout==='function') renderAbout();
     if(typeof updFbBadge==='function') updFbBadge();
   }, 50);
 }
@@ -1454,23 +1444,29 @@ window.DEFAULT_VENUES = [
 window.DEFAULT_COURSES = [];
 window.DEFAULT_COMMENTS = [];
 
-// ── Global data arrays (populated from Firestore via window.*) ──
-// 必須用 window. 讓 type="module" script 和普通 script 共用
-window.SHOWS    = window.SHOWS    || [];
-window.MICS     = window.MICS     || [];
-window.VENUES   = window.VENUES   || window.DEFAULT_VENUES.slice();
-window.COURSES  = window.COURSES  || [];
-window.COMMENTS = window.COMMENTS || [];
+// ── Global data arrays ──
+// 全部掛在 window 上，module script 和普通 script 都能存取
+window._SHOWS    = [];
+window._MICS     = [];
+window._VENUES   = window.DEFAULT_VENUES.slice();
+window._COURSES  = [];
+window._COMMENTS = [];
 
-// 讓全站 JS 直接用 SHOWS / MICS / VENUES 等存取 window 屬性
-Object.defineProperty(window,'SHOWS',   {get(){return window._SHOWS||[]},   set(v){window._SHOWS=v}});
-Object.defineProperty(window,'MICS',    {get(){return window._MICS||[]},    set(v){window._MICS=v}});
-Object.defineProperty(window,'VENUES',  {get(){return window._VENUES||window.DEFAULT_VENUES.slice()}, set(v){window._VENUES=v}});
-Object.defineProperty(window,'COURSES', {get(){return window._COURSES||[]}, set(v){window._COURSES=v}});
-Object.defineProperty(window,'COMMENTS',{get(){return window._COMMENTS||[]},set(v){window._COMMENTS=v}});
+// 讓全站 JS 直接用 SHOWS / VENUES 等變數名稱
+var SHOWS    = window._SHOWS;
+var MICS     = window._MICS;
+var VENUES   = window._VENUES;
+var COURSES  = window._COURSES;
+var COMMENTS = window._COMMENTS;
 
-// 初始化預設值
-window.VENUES = window.DEFAULT_VENUES.slice();
+// loadAllData 完成後同步函數
+window._syncData = function(){
+  SHOWS    = window._SHOWS;
+  MICS     = window._MICS;
+  VENUES   = window._VENUES;
+  COURSES  = window._COURSES;
+  COMMENTS = window._COMMENTS;
+};
 
 let editMode = false;
 let eShowId=null, eMicId=null, eVenueId=null, eCourseId=null;
@@ -2066,8 +2062,8 @@ function saveShow(status){
   window.FB.save('shows', eShowId||null, item).then(newId=>{
     if(eShowId){const i=SHOWS.findIndex(x=>x.id===eShowId);if(i>=0)SHOWS[i]={id:eShowId,...item};}
     else SHOWS.push({id:newId,...item});
-    window.SHOWS = SHOWS;
-    closeModal('show');renderShows();renderHomeShows();
+    window._SHOWS = SHOWS;
+    closeModal('show');renderShows();renderHomeShows();renderHeroStats();
     if(document.getElementById('view-cal').style.display!=='none')renderCalendar();
     showToast(status==='published'?'✅ 演出已發布':'📝 草稿已儲存','ok');
   }).catch(e=>{console.error(e);showToast('❌ 儲存失敗，請再試一次','err');});
