@@ -104,10 +104,9 @@ body.ready{visibility:visible}
 /* SHOWS */
 .filter-section{margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);min-width:50px;width:50px;flex-shrink:0;align-self:flex-start;padding-top:6px}
-/* 場地列：label 固定左側，chips 區域自動換行並對齊 */
-.filter-row-indent{display:flex;gap:0;align-items:flex-start}
-.filter-row-indent .filter-lbl{padding-top:6px}
+.filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);width:2.6em;min-width:2.6em;flex-shrink:0;white-space:nowrap}
+.filter-row-indent{display:flex;align-items:flex-start;gap:0}
+.filter-row-indent .filter-lbl{padding-top:5px;margin-right:6px}
 .filter-chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
 .chip{padding:5px 12px;font-size:.76rem;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);cursor:pointer;font-family:var(--f-zh);transition:all .14s;white-space:nowrap}
 .chip:hover,.chip.on{background:var(--sd);color:var(--y);border-color:var(--sd);font-weight:700}
@@ -720,9 +719,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="showsPage=1;renderShows();syncFiltersToURL()">
     </div>
     <div class="filter-section">
-      <!-- TYPE filter -->
-      <div class="filter-row">
+      <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
+        <div class="filter-chips">
         <button class="chip on" data-f="type" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
         <button class="chip" data-f="type" data-v="opmic">Open Mic</button>
         <button class="chip" data-f="type" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
@@ -739,6 +738,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="type" data-v="english"><span class="zh-text">英文喜劇</span><span class="en-text">English Comedy</span></button>
         <button class="chip" data-f="type" data-v="podcast">Live Podcast</button>
         <button class="chip" data-f="type" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
+        </div>
       </div>
       <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">場地</span><span class="en-text">Venue</span></span>
@@ -757,8 +757,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="venue" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
         </div>
       </div>
-      <div class="filter-row">
+      <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">地區</span><span class="en-text">Area</span></span>
+        <div class="filter-chips">
         <button class="chip on" data-f="area" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
         <button class="chip" data-f="area" data-v="taipei"><span class="zh-text">雙北</span><span class="en-text">Taipei and New Taipei City</span></button>
         <button class="chip" data-f="area" data-v="taoyuan"><span class="zh-text">桃園</span><span class="en-text">Taoyuan</span></button>
@@ -767,9 +768,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="area" data-v="tainan"><span class="zh-text">台南</span><span class="en-text">Tainan</span></button>
         <button class="chip" data-f="area" data-v="kaohsiung"><span class="zh-text">高雄</span><span class="en-text">Kaohsiung</span></button>
         <button class="chip" data-f="area" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
+        </div>
       </div>
-      <div class="filter-row">
+      <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">星期</span><span class="en-text">Day</span></span>
+        <div class="filter-chips">
         <button class="chip on" data-f="day" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
         <button class="chip" data-f="day" data-v="1"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
         <button class="chip" data-f="day" data-v="2"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
@@ -778,6 +781,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="day" data-v="5"><span class="zh-text">週五</span><span class="en-text">Fri.</span></button>
         <button class="chip" data-f="day" data-v="6"><span class="zh-text">週六</span><span class="en-text">Sat.</span></button>
         <button class="chip" data-f="day" data-v="0"><span class="zh-text">週日</span><span class="en-text">Sun.</span></button>
+        </div>
       </div>
     </div>
     <div id="view-cards">
