@@ -477,6 +477,7 @@ body.edit .edit-bar{display:flex!important}
 /* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 /* 頁面切換淡入 */
 .page.active{animation:fadeIn .3s ease both}
@@ -488,13 +489,17 @@ body.edit .edit-bar{display:flex!important}
 .hero-desc{animation:fadeUp .5s .3s ease both}
 .hero-btns{animation:fadeUp .5s .38s ease both}
 
-/* Scroll reveal — 預設隱藏，JS 加 .revealed 後顯示 */
+/* Scroll reveal */
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .45s ease,transform .45s ease}
 .reveal.revealed{opacity:1;transform:translateY(0)}
 
+/* 卡片進場動畫 */
+.card-appear{opacity:0;transform:translateY(24px) scale(.97);transition:opacity .4s ease,transform .4s ease}
+.card-appear.in{opacity:1;transform:translateY(0) scale(1)}
+
 /* 卡片 hover 提升感 */
-.show-card,.course-card,.venue-card{transition:transform .18s ease,box-shadow .18s ease}
-.show-card:hover,.course-card:hover,.venue-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.13)}
+.show-card,.course-card,.venue-card{transition:transform .2s ease,box-shadow .2s ease,opacity .4s ease}
+.show-card:hover,.course-card:hover,.venue-card:hover{transform:translateY(-4px);box-shadow:0 10px 32px rgba(0,0,0,.14)}
 @media(max-width:900px){.ft-grid{grid-template-columns:1fr 1fr;gap:30px}}
 @media(max-width:768px){
   .ft-grid{grid-template-columns:1fr}
@@ -587,6 +592,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="hero-ctas">
       <a href="#" class="btn-or" onclick="showPage('shows');return false">📅 <span class="zh-text">看演出資訊</span><span class="en-text">Browse Shows</span></a>
       <a href="#" class="btn-ww" onclick="showPage('opmic');return false">🎤 <span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic Info</span></a>
+      <a href="#" class="btn-ww" onclick="showPage('venues');return false">📍 <span class="zh-text">全台喜劇據點</span><span class="en-text">Comedy Venues</span></a>
     </div>
     <!-- 數字統計列 -->
     <div class="hero-stats" id="hero-stats">
@@ -1352,15 +1358,17 @@ async function loadAllData() {
     COURSES  = window.COURSES;
     COMMENTS = window.COMMENTS;
   }
-  // Re-render after data loaded
-  if(typeof renderHomeShows==='function') renderHomeShows();
-  if(typeof renderHeroStats==='function') renderHeroStats();
-  if(typeof renderShows==='function') renderShows();
-  if(typeof renderVenues==='function') renderVenues();
-  if(typeof renderCourses==='function') renderCourses();
-  if(typeof renderMicTable==='function') renderMicTable();
-  if(typeof renderHomeComments==='function') renderHomeComments();
-  if(typeof updFbBadge==='function') updFbBadge();
+  // Re-render after data loaded — setTimeout 確保所有 script 都已載入
+  setTimeout(()=>{
+    if(typeof renderHomeShows==='function') renderHomeShows();
+    if(typeof renderHeroStats==='function') renderHeroStats();
+    if(typeof renderShows==='function') renderShows();
+    if(typeof renderVenues==='function') renderVenues();
+    if(typeof renderCourses==='function') renderCourses();
+    if(typeof renderMicTable==='function') renderMicTable();
+    if(typeof renderHomeComments==='function') renderHomeComments();
+    if(typeof updFbBadge==='function') updFbBadge();
+  }, 0);
 }
 window._loadAllData = loadAllData;
 
@@ -1625,6 +1633,32 @@ function renderShows() {
     return true;
   }).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
   grid.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">${q?'查無符合搜尋的演出':'查無符合條件的演出'}</div>`;
+  if(fil.length) setTimeout(()=>animateCards('#shows-grid'),10);
+}
+
+// ── 卡片進場動畫 ──
+function animateCards(containerSelector){
+  const cards = document.querySelectorAll(containerSelector+' .show-card, '+containerSelector+' .course-card, '+containerSelector+' .venue-card');
+  cards.forEach((card, i)=>{
+    card.classList.add('card-appear');
+    setTimeout(()=>card.classList.add('in'), i * 60);
+  });
+}
+
+// ── 數字跳動動畫 ──
+function animateNumber(el, target, duration=800){
+  if(!el || isNaN(target)) return;
+  const start = 0;
+  const startTime = performance.now();
+  function update(now){
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // easeOut
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(start + (target - start) * eased);
+    if(progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
 }
 
 function renderHeroStats(){
@@ -1640,7 +1674,9 @@ function renderHeroStats(){
 
   const setNum = (id, num) => {
     const el = document.getElementById(id);
-    if(el) el.textContent = num > 0 ? num : '—';
+    if(!el) return;
+    if(num > 0) animateNumber(el, num, 900);
+    else el.textContent = '—';
   };
   setNum('stat-shows', upcomingShows);
   setNum('stat-venues', venueCount);
@@ -1703,6 +1739,7 @@ function renderCourses() {
     return true;
   }).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   g.innerHTML=fil.length?fil.map(courseCardHTML).join(''):`<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">目前沒有課程資訊</div>`;
+  if(fil.length) setTimeout(()=>animateCards('#courses-grid'),10);
 }
 
 function openCourseDetail(id){
@@ -1748,6 +1785,7 @@ function renderVenues() {
   const g=document.getElementById('venues-grid'); if(!g)return;
   const fil=VENUES.filter(v=>fCity==='all'||v.city===fCity);
   g.innerHTML=fil.map(venueCardHTML).join('')+`<div class="venue-card" style="border-style:dashed;align-items:center;justify-content:center;text-align:center;cursor:default;min-height:100px"><div style="color:var(--ts);font-size:.8rem;font-family:var(--f-zh)"><span class="zh-text">更多場地陸續加入</span><span class="en-text">More venues coming</span></div></div>`;
+  setTimeout(()=>animateCards('#venues-grid'),10);
 
   // 拖曳排序（僅管理員模式）
   if(!isLoggedIn()) return;
