@@ -231,7 +231,8 @@ body{font-family:var(--f-bo);background:var(--cr);color:var(--tm);line-height:1.
 .photo-slot span{opacity:.5}
 
 /* FOOTER */
-footer{background:var(--sd);padding:60px 5vw 28px}
+footer{background:var(--sd);padding:60px 5vw 28px;visibility:hidden}
+footer.ready{visibility:visible}
 .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;margin-bottom:44px}
 .ft-name{font-family:var(--f-zh);font-size:1.05rem;font-weight:900;color:var(--y);margin-bottom:5px}
 .ft-en{font-family:var(--f-di);font-size:.7rem;color:var(--or);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
@@ -2700,6 +2701,7 @@ function restorePageFromHash(){
 window.addEventListener('load', ()=>{
   initReveal();
   restorePageFromHash();
+  document.querySelector('footer')?.classList.add('ready');
   const badge = document.getElementById('sessionBadge');
   if (isLoggedIn() && badge) badge.classList.add('visible');
 });
