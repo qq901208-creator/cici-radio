@@ -2599,8 +2599,18 @@ function initReveal(){
     obs.observe(el);
   });
 }
+
+// ── 從 hash 還原頁面 ──
+function restorePageFromHash(){
+  const validPages = ['home','shows','opmic','venues','courses','about','board'];
+  const hash = location.hash.replace('#','');
+  const page = validPages.includes(hash) ? hash : 'home';
+  showPage(page);
+}
+
 window.addEventListener('DOMContentLoaded', ()=>{
   initReveal();
+  restorePageFromHash();
   const badge = document.getElementById('sessionBadge');
   if (isLoggedIn() && badge) badge.classList.add('visible');
 });
@@ -2706,6 +2716,8 @@ function showPage(page){
   document.getElementById('page-'+page).classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
   window.scrollTo(0,0);
+  // 記錄 hash，重新整理時可還原
+  history.replaceState(null,'','#'+page);
   if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
   if(page==='shows')renderShows();
   if(page==='opmic')selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));
