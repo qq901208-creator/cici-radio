@@ -755,7 +755,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:#f6efcf">
     <div class="sec-label"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></div>
     <h2 class="sec-title"><span class="zh-text">售票喜劇演出資訊</span><span class="en-text">Comedy Shows in Taiwan</span></h2>
-    <p class="sec-desc editable" contenteditable="false" style="margin-bottom:14px"><span class="zh-text">以售票演出為主，由人工整理與更新。<br>售票連結均連至原始售票平台，本站不涉及任何商業行為。若有遺漏歡迎回報！</span><span class="en-text">Focused on ticketed shows, hand-curated and regularly updated.<br>All ticket links go directly to the original platforms — we have no commercial involvement. Found something missing? Let us know!</span></p>
+    <p class="sec-desc editable" contenteditable="false" style="margin-bottom:14px"><span class="zh-text">以售票演出為主，由人工整理與更新。<br>售票連結均連至原始售票平台，本站不涉及任何商業行為。<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px">發現資訊有誤或想補充場次？歡迎回報 →</a></span><span class="en-text">Focused on ticketed shows, hand-curated and regularly updated.<br>All ticket links go directly to the original platforms — we have no commercial involvement.<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px">Found something missing or incorrect? Let us know →</a></span></p>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
       <div class="view-toggle">
         <button class="view-btn on" id="vcards" onclick="setShowsView('cards')"><span class="zh-text">演出列表</span><span class="en-text">List</span></button>
@@ -771,10 +771,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="shows-search-wrap">
       <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
       <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="showsPage=1;renderShows();syncFiltersToURL()">
-    </div>
-    <div class="info-banner" onclick="document.getElementById('modal-report').classList.add('open')">
-      <span>💡 <span class="zh-text">發現資訊有誤或想補充場次？歡迎回報給我們</span><span class="en-text">Found incorrect info or want to recommend a show? Let us know!</span></span>
-      <span class="ib-link"><span class="zh-text">回報 →</span><span class="en-text">Report →</span></span>
     </div>
     <div class="filter-section">
       <div class="filter-row-indent">
@@ -868,16 +864,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:var(--py)">
     <div class="sec-label">Open Mic</div>
     <h2 class="sec-title"><span class="zh-text">演員 Open Mic 報名資訊</span><span class="en-text">Open Mic Sign-Up Info</span></h2>
-    <p class="sec-desc editable" contenteditable="false"><span class="zh-text">以下為 Open Mic 報名開放時間與星期資訊，並非實際演出日期與時間。<br><span style="font-size:.82rem;color:var(--or);font-weight:700">📱 手機觀看建議轉成橫向喔～</span></span><span class="en-text">The info below shows sign-up windows and weekday availability — not actual show dates or times.<br><span style="font-size:.82rem;color:var(--or);font-weight:700">📱 Tip: rotate your phone to landscape for a better view!</span></span></p>
+    <p class="sec-desc editable" contenteditable="false"><span class="zh-text">以下為 Open Mic 報名開放時間與星期資訊，並非實際演出日期與時間。<br><span style="font-size:.82rem;color:var(--or);font-weight:700">📱 手機觀看建議轉成橫向喔～</span><br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充場次？歡迎回報 →</a></span><span class="en-text">The info below shows sign-up windows and weekday availability — not actual show dates or times.<br><span style="font-size:.82rem;color:var(--or);font-weight:700">📱 Tip: rotate your phone to landscape for a better view!</span><br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
     <div style="display:block;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:10px 16px;margin-bottom:22px;font-size:.84rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">
-      <span style="font-size:1rem">⚠️</span>
-      <span class="zh-text"> 點擊報名連結將跳轉至外部頁面，本站不參與任何報名流程！</span>
-      <span class="en-text"> Clicking sign-up links will take you to an external page. We are not involved in any sign-up process.</span>
-    </div>
-    <div class="info-banner" onclick="document.getElementById('modal-report').classList.add('open')">
-      <span>💡 <span class="zh-text">發現資訊有誤或想補充場次？歡迎回報給我們</span><span class="en-text">Found incorrect info or want to recommend a show? Let us know!</span></span>
-      <span class="ib-link"><span class="zh-text">回報 →</span><span class="en-text">Report →</span></span>
-    </div>
     <div class="day-tabs" id="day-tabs-row">
       <button class="day-tab on" data-day="1" onclick="selectMicDay(1,this)"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
       <button class="day-tab" data-day="2" onclick="selectMicDay(2,this)"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
@@ -931,11 +919,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:var(--cr)">
     <div class="sec-label"><span class="zh-text">課程講座</span><span class="en-text">Courses & Talks</span></div>
     <h2 class="sec-title"><span class="zh-text">喜劇課程與講座</span><span class="en-text">Comedy Courses & Workshops</span></h2>
-    <p class="sec-desc" style="margin-bottom:14px"><span class="zh-text">想學習不知道怎麼入手嗎？去找吧！所有課程都在這，一起加入喜劇的大家庭～</span><span class="en-text">Not sure where to start? Come find out! All the courses you need are right here — join the comedy family!</span></p>
-    <div class="info-banner" onclick="document.getElementById('modal-report').classList.add('open')">
-      <span>💡 <span class="zh-text">發現資訊有誤或想補充場次？歡迎回報給我們</span><span class="en-text">Found incorrect info or want to recommend a show? Let us know!</span></span>
-      <span class="ib-link"><span class="zh-text">回報 →</span><span class="en-text">Report →</span></span>
-    </div>
+    <p class="sec-desc" style="margin-bottom:14px"><span class="zh-text">想學習不知道怎麼入手嗎？去找吧！所有課程都在這，一起加入喜劇的大家庭～<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充課程？歡迎回報 →</a></span><span class="en-text">Not sure where to start? Come find out! All the courses you need are right here — join the comedy family!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
     <div class="filter-row" style="margin-bottom:14px">
       <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
       <button class="chip on" data-f="ctype" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
@@ -1485,7 +1469,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="modal-title">💬 <span class="zh-text">聯絡我們</span><span class="en-text">Contact Us</span></div>
     <p style="font-size:.88rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:20px;line-height:1.7"><span class="zh-text">無論是想回報資訊有誤、補充內容、合作洽談，或是單純想打聲招呼，都歡迎透過以下管道找到我們！</span><span class="en-text">Whether you'd like to report an error, suggest content, collaborate, or just say hi — we'd love to hear from you.</span></p>
     <a class="report-channel" href="https://www.instagram.com/cici._.radio/" target="_blank" rel="noopener">
-      <div class="report-ch-icon">📷</div>
+      <div class="report-ch-icon" style="background:radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);color:#fff;font-size:.7rem;display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </div>
       <div class="report-ch-info">
         <strong>Instagram 私訊</strong>
         <span>@cici._.radio</span>
