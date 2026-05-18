@@ -1525,7 +1525,7 @@ async function loadAllData() {
   }
   setTimeout(()=>{
     if(typeof window._syncData==='function') window._syncData();
-    // 只 render 當前顯示中的頁面，不切換頁面
+    // 只 render 當前顯示中的頁面
     const activePage = document.querySelector('.page.active')?.id?.replace('page-','') || 'home';
     if(activePage==='home'){
       if(typeof renderHomeShows==='function') renderHomeShows();
@@ -2281,6 +2281,21 @@ function sanitizeMicMethod(raw) {
             });
 }
 
+// 場地名稱中英文對照（用於舊資料沒有 venueEn 欄位時的 fallback）
+const MIC_VENUE_EN_MAP = {
+  '卡米地+': 'Comedy Plus',
+  '卡米地＋': 'Comedy Plus',
+  '23喜劇': 'Two Three Comedy',
+  '飛客劇樂部': 'Fakers Club',
+  '北投喜劇': 'Beitou Comedy',
+  '樂君亭': 'Gingting Comedy',
+  '站立風城': 'Windy City Stand-up',
+  '思MIC歐': 'S.M.O',
+  '來福好事': 'Laugh House',
+  '府城喜劇': 'Tainan Comedy',
+  '喜劇開港': 'Takao Comedy Bay',
+};
+
 // 清理舊資料中「上午 當天現場」/「下午 當天現場」等格式
 function cleanMicTime(str) {
   if(!str) return '';
@@ -2302,7 +2317,9 @@ function renderMicTable() {
   tbody.innerHTML=rows.map(m=>{
     const cityLblZh = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'}[m.city||'other']||'';
     const cityLblEn = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'}[m.city||'other']||'';
-    const venueDisplay = lang==='en' ? (m.venueEn||m.venue||'') : (m.venue||'');
+    const venueZh = m.venue||'';
+    const venueEn = m.venueEn || MIC_VENUE_EN_MAP[venueZh] || venueZh;
+    const venueDisplay = lang==='en' ? venueEn : venueZh;
     const cityLbl = lang==='en' ? cityLblEn : cityLblZh;
     const methodHtml = sanitizeMicMethod(m.method||'');
     const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'');
@@ -3323,14 +3340,14 @@ function restorePageFromHash(){
   history.replaceState({page},'','#'+page+(location.hash.includes('?')?'?'+location.hash.split('?')[1]:''));
   // 還原篩選條件（chips 已存在）
   restoreFiltersFromURL();
-  // render 一次
+  // render 一次（opmic 等 Firebase 載完才 render，避免空資料閃爍）
   if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
   if(page==='shows') renderShows();
-  if(page==='opmic') selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));
   if(page==='venues') renderVenues();
   if(page==='courses') renderCourses();
   if(page==='about') renderAbout();
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
+  // opmic: 只設 tab active，資料等 Firebase callback 後再 render
 }
 
 window.addEventListener('load', ()=>{
