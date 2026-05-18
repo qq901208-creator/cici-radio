@@ -112,15 +112,15 @@ body.ready{visibility:visible}
 .day-tab.today-tab{border-color:var(--y) !important;box-shadow:0 0 0 2.5px rgba(245,213,88,.5)}
 .today-badge{display:inline-flex;align-items:center;background:var(--y);color:var(--sd);font-size:.58rem;font-weight:900;font-family:var(--f-bo);border-radius:var(--r-pill);padding:1px 6px;margin-left:5px;letter-spacing:.04em;vertical-align:middle}
 /* ── PODCAST SECTION ── */
-.podcast-card{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;background:var(--sd);border-radius:var(--r-lg);padding:36px 40px;box-shadow:0 6px 32px rgba(45,43,31,.13)}
-.podcast-card-left{display:flex;flex-direction:column;gap:14px}
-.podcast-title{font-size:1.12rem;font-weight:900;font-family:var(--f-zh);color:var(--y);line-height:1.35}
-.podcast-desc{font-size:.85rem;line-height:1.75;color:rgba(255,255,255,.72);font-family:var(--f-zh)}
-.podcast-btns{display:flex;gap:9px;flex-wrap:wrap}
-.podcast-btn{padding:8px 18px;border-radius:var(--r-pill);font-size:.8rem;font-weight:700;font-family:var(--f-bo);text-decoration:none;border:2px solid var(--y);color:var(--y);background:transparent;transition:all .15s;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-.podcast-btn:hover{background:var(--y);color:var(--sd)}
-.podcast-iframe-wrap{border-radius:var(--r-md);overflow:hidden;background:rgba(255,255,255,.07);min-height:180px;display:flex;align-items:center;justify-content:center;width:100%}
-@media(max-width:768px){.podcast-card{grid-template-columns:1fr;padding:22px 16px;gap:18px}.podcast-title{font-size:1rem}}
+.podcast-card{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;background:var(--ww);border-radius:var(--r-lg);padding:32px 36px;border:1.5px solid rgba(239,111,32,.18);box-shadow:0 4px 24px rgba(45,43,31,.07)}
+.podcast-card-left{display:flex;flex-direction:column;gap:12px}
+.podcast-title{font-size:1.12rem;font-weight:900;font-family:var(--f-zh);color:var(--sd);line-height:1.35}
+.podcast-desc{font-size:.85rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh)}
+.podcast-btns{display:flex;gap:8px;flex-wrap:wrap}
+.podcast-btn{padding:7px 16px;border-radius:var(--r-pill);font-size:.78rem;font-weight:700;font-family:var(--f-bo);text-decoration:none;border:1.5px solid var(--or);color:var(--or);background:transparent;transition:all .15s;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.podcast-btn:hover{background:var(--or);color:#fff}
+.podcast-iframe-wrap{border-radius:var(--r-md);overflow:hidden;background:rgba(45,43,31,.04);min-height:180px;display:flex;align-items:center;justify-content:center;width:100%;border:1px solid rgba(45,43,31,.08)}
+@media(max-width:768px){.podcast-card{grid-template-columns:1fr;padding:20px 16px;gap:18px}.podcast-title{font-size:1rem}}
 /* ── EMPTY STATE ── */
 .empty-state{grid-column:1/-1;text-align:center;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px}
 .empty-state-icon{font-size:2.8rem;line-height:1}
@@ -718,26 +718,27 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div style="text-align:center"><button class="btn-or" onclick="showPage('shows')"><span class="zh-text">查看全部演出 →</span><span class="en-text">All Shows →</span></button></div>
   </section>
 
-  <section class="sec" style="background:var(--sd)">
-    <div class="sec-label" style="color:var(--y);opacity:.7"><span class="zh-text">Podcast</span><span class="en-text">Podcast</span></div>
+  <section class="sec" style="background:var(--py)">
+    <div class="sec-label"><span class="zh-text">Podcast</span><span class="en-text">Podcast</span></div>
+    <h2 class="sec-title"><span class="zh-text">看喜劇，也聽聽喜劇與我們的故事</span><span class="en-text">Comedy shows — and the stories behind them</span></h2>
     <div class="podcast-card">
       <div class="podcast-card-left">
         <div class="podcast-title">
-          <span class="zh-text">看喜劇，也聽聽喜劇與我們的故事｜嘻嘻哪哩唷 Podcast</span>
-          <span class="en-text">Comedy shows — and the stories behind us and comedy｜Cici Radio Podcast</span>
+          <span class="zh-text">嘻嘻哪哩唷 Podcast</span>
+          <span class="en-text">Cici Radio Podcast</span>
         </div>
         <p class="podcast-desc">
           <span class="zh-text">從廣電系的熱情出發！<br>這裡有最犀利的現場喜劇觀察，陪伴你的通勤與垃圾時間。</span>
-          <span class="en-text">Started by a group of broadcasting students passionate about live comedy in Taiwan.<br>Sharp observations, behind-the-scenes stories, and conversations to accompany your commute and late-night doomscrolling.</span>
+          <span class="en-text">Started by broadcasting students passionate about live comedy in Taiwan.<br>Sharp observations and stories to accompany your commute and late-night doomscrolling.</span>
         </p>
         <div class="podcast-btns">
-          <a class="podcast-btn" href="https://open.spotify.com/show/4meBDi6l5oJAeJdHJoiKbR" target="_blank" rel="noopener">🎵 Spotify</a>
-          <a class="podcast-btn" href="https://podcasts.apple.com/tw/podcast/%E5%97%BB%E5%97%BB%E5%93%AA%E8%A3%A1%E5%96%B2/id1579007302" target="_blank" rel="noopener">🎙 Apple Podcasts</a>
-          <a class="podcast-btn" href="https://open.firstory.me/user/ciciradio" target="_blank" rel="noopener">🎧 Firstory</a>
+          <a class="podcast-btn" href="https://open.spotify.com/show/1NVkhQJcHj91hIdBJ5QAIC?si=3984ca5ae248418a" target="_blank" rel="noopener">🎵 Spotify</a>
+          <a class="podcast-btn" href="https://podcasts.apple.com/tw/podcast/%E5%98%BB%E5%98%BB%E5%93%AA%E5%93%A9%E5%94%B7/id1625193833" target="_blank" rel="noopener">🎙 Apple Podcasts</a>
+          <a class="podcast-btn" href="https://player.soundon.fm/p/62d755ad-810c-4d6e-9ed5-56bb24140d13" target="_blank" rel="noopener">🎧 SoundOn</a>
         </div>
       </div>
       <div class="podcast-iframe-wrap">
-        <iframe style="border-radius:12px;width:100%;min-height:180px;border:none" src="https://open.spotify.com/embed/show/4meBDi6l5oJAeJdHJoiKbR?utm_source=generator&theme=0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <iframe style="border-radius:12px;width:100%;min-height:180px;border:none" src="https://open.spotify.com/embed/show/1NVkhQJcHj91hIdBJ5QAIC?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
       </div>
     </div>
   </section>
