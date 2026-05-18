@@ -1971,11 +1971,11 @@ function venueCardHTML(v) {
       ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank">ig IG</a>`:''}
       ${v.address?`<a class="vlb vlb-map" href="https://maps.google.com/?q=${encodeURIComponent(v.address)}" target="_blank">📍 Map</a>`:''}
     </div>
-    ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55"><span style="font-weight:700;color:var(--or)">💬 嘻嘻小建議</span><br>${v.tip}</div>`:''}
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openVenueModal('${v.id}')">✏️</button>
       <button class="ca-btn ca-del" onclick="event.stopPropagation();delVenue('${v.id}')">🗑</button>
     </div>
+    ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55"><span style="font-weight:700;color:var(--or)">💬 嘻嘻小建議</span><br>${v.tip}</div>`:''}
   </div>`;
 }
 function renderVenues() {
