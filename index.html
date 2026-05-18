@@ -119,7 +119,15 @@ body{font-family:var(--f-bo);background:var(--cr);color:var(--tm);line-height:1.
 .view-btn{padding:6px 16px;border-radius:var(--r-pill);font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
 .view-btn.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
 
-/* FILTER */
+/* HERO STATS */
+.hero-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0 8px}
+.hero-stat{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);border-radius:var(--r-md);padding:10px 18px;min-width:80px;backdrop-filter:blur(4px)}
+.hero-stat-num{font-size:1.6rem;font-weight:900;font-family:var(--f-bo);color:var(--sd);line-height:1}
+.hero-stat-lbl{font-size:.68rem;font-weight:700;color:var(--ts);font-family:var(--f-zh);margin-top:3px;white-space:nowrap}
+.hero-next{font-size:.8rem;font-family:var(--f-zh);color:var(--ts);text-align:center;margin-bottom:6px;cursor:pointer;opacity:.85}
+.hero-next:hover{opacity:1;color:var(--or)}
+.hero-next strong{color:var(--or);font-weight:700}
+@media(max-width:768px){.hero-stat{padding:8px 12px;min-width:68px}.hero-stat-num{font-size:1.3rem}}
 .filter-section{margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);min-width:50px;flex-shrink:0}
@@ -573,13 +581,22 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </h1>
     <p class="hero-sub">CICI._.RADIO</p>
     <p class="hero-desc editable" contenteditable="false">
-      <span class="zh-text">歡迎來到現場喜劇的大平台！<br>本站整理全台喜劇售票演出、Open Mic 報名資訊等多種內容<br>今天你想看些什麼呢？快來找找吧！</span>
-      <span class="en-text">Welcome to Taiwan's live comedy hub!<br>This site curates ticketed comedy shows, Open Mic registration info, and more from across Taiwan.<br>What would you like to explore today? Come take a look around!</span>
+      <span class="zh-text">今晚想來點喜劇嗎？<br>嘻嘻哪哩唷整理了全台喜劇演出售票資訊，<br>讓你不再找不到今晚該去哪～</span>
+      <span class="en-text">Feeling like some comedy tonight?<br>Cici Radio curates ticketed comedy show listings from across Taiwan,<br>so you'll always know where to go!</span>
     </p>
     <div class="hero-ctas">
       <a href="#" class="btn-or" onclick="showPage('shows');return false">📅 <span class="zh-text">看演出資訊</span><span class="en-text">Browse Shows</span></a>
       <a href="#" class="btn-ww" onclick="showPage('opmic');return false">🎤 <span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic Info</span></a>
     </div>
+    <!-- 數字統計列 -->
+    <div class="hero-stats" id="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-num" id="stat-shows">—</span><span class="hero-stat-lbl"><span class="zh-text">近期演出</span><span class="en-text">Upcoming Shows</span></span></div>
+      <div class="hero-stat"><span class="hero-stat-num" id="stat-venues">—</span><span class="hero-stat-lbl"><span class="zh-text">喜劇據點</span><span class="en-text">Venues</span></span></div>
+      <div class="hero-stat"><span class="hero-stat-num" id="stat-mics">—</span><span class="hero-stat-lbl"><span class="zh-text">Open Mic 場次</span><span class="en-text">Open Mic Slots</span></span></div>
+      <div class="hero-stat"><span class="hero-stat-num" id="stat-courses">—</span><span class="hero-stat-lbl"><span class="zh-text">近期課程</span><span class="en-text">Upcoming Courses</span></span></div>
+    </div>
+    <!-- 最近一場演出預告 -->
+    <div id="hero-next-show" class="hero-next" style="display:none" onclick="showPage('shows')"></div>
     <div class="scroll-hint">
       <span class="zh-text">往下滾動</span><span class="en-text">Scroll</span>
       <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
@@ -708,7 +725,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:var(--py)">
     <div class="sec-label">Open Mic</div>
     <h2 class="sec-title"><span class="zh-text">演員 Open Mic 報名資訊</span><span class="en-text">Open Mic Sign-Up Info</span></h2>
-    <p class="sec-desc editable" contenteditable="false"><span class="zh-text">以下為 Open Mic 報名開放時間與星期資訊，並非實際演出日期與時間。</span><span class="en-text">The info below shows sign-up windows and weekday availability — not actual show dates or times.</span></p>
+    <p class="sec-desc editable" contenteditable="false"><span class="zh-text">以下為 Open Mic 報名開放時間與星期資訊，並非實際演出日期與時間。<br><span style="font-size:.82rem;color:var(--or);font-weight:700">📱 手機觀看建議轉成橫向喔～</span></span><span class="en-text">The info below shows sign-up windows and weekday availability — not actual show dates or times.<br><span style="font-size:.82rem;color:var(--or);font-weight:700">📱 Tip: rotate your phone to landscape for a better view!</span></span></p>
     <div style="display:block;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:10px 16px;margin-bottom:22px;font-size:.84rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">
       <span style="font-size:1rem">⚠️</span>
       <span class="zh-text"> 點擊報名連結將跳轉至外部頁面，本站不參與任何報名流程喔！</span>
@@ -1337,6 +1354,7 @@ async function loadAllData() {
   }
   // Re-render after data loaded
   if(typeof renderHomeShows==='function') renderHomeShows();
+  if(typeof renderHeroStats==='function') renderHeroStats();
   if(typeof renderShows==='function') renderShows();
   if(typeof renderVenues==='function') renderVenues();
   if(typeof renderCourses==='function') renderCourses();
@@ -1609,7 +1627,38 @@ function renderShows() {
   grid.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">${q?'查無符合搜尋的演出':'查無符合條件的演出'}</div>`;
 }
 
-function renderHomeShows() {
+function renderHeroStats(){
+  const now = new Date();
+  // 近期演出（未過期且已發布）
+  const upcomingShows = SHOWS.filter(s=>(s.status||'published')==='published' && !isExpired(s.date,s.time)).length;
+  // 喜劇據點
+  const venueCount = VENUES.length;
+  // Open Mic 場次
+  const micCount = MICS.length;
+  // 近期課程
+  const upcomingCourses = COURSES.filter(c=>(c.status||'published')==='published' && !isExpired(c.date,c.time)).length;
+
+  const setNum = (id, num) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = num > 0 ? num : '—';
+  };
+  setNum('stat-shows', upcomingShows);
+  setNum('stat-venues', venueCount);
+  setNum('stat-mics', micCount);
+  setNum('stat-courses', upcomingCourses);
+
+  // 最近一場演出預告
+  const next = SHOWS.filter(s=>(s.status||'published')==='published' && !isExpired(s.date,s.time))
+    .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)))[0];
+  const nextEl = document.getElementById('hero-next-show');
+  if(next && nextEl){
+    const lang = getLang();
+    const label = lang==='en' ? `Next up: <strong>${next.date} · ${next.venueLabel||next.venue} · ${next.title}</strong> →`
+      : `最近一場：<strong>${next.date} · ${next.venueLabel||next.venue} · ${next.title}</strong> →`;
+    nextEl.innerHTML = label;
+    nextEl.style.display = 'block';
+  }
+}
   const g = document.getElementById('home-shows-grid'); if (!g) return;
   const fil = SHOWS.filter(s=>(s.status||'published')==='published' && !isExpired(s.date, s.time)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0,6);
   g.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--ts);font-family:var(--f-zh)"><span class="zh-text">目前以售票演出為主，近期資訊整理中，敬請期待！</span><span class="en-text">Focused on ticketed shows — listings coming soon!</span></div>`;
@@ -2590,7 +2639,7 @@ function showPage(page){
   document.getElementById('page-'+page).classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
   window.scrollTo(0,0);
-  if(page==='home'){renderHomeShows();renderHomeComments();}
+  if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
   if(page==='shows')renderShows();
   if(page==='opmic')selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));
   if(page==='venues')renderVenues();
