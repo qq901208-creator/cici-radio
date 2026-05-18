@@ -1600,7 +1600,8 @@ function renderShows() {
   const grid = document.getElementById('shows-grid'); if (!grid) return;
   const adminMode = isLoggedIn();
   const q = (document.getElementById('shows-search')?.value||'').trim().toLowerCase();
-  const fil = SHOWS.filter(s => {
+  const shows = window._SHOWS || SHOWS || [];
+  const fil = shows.filter(s => {
     const st = s.status || 'published';
     if (st === 'hidden') return false;
     if (!adminMode && st === 'pending') return false;
@@ -1653,15 +1654,14 @@ function animateNumber(el, target, duration=800){
 }
 
 function renderHeroStats(){
-  const now = new Date();
-  // 近期演出（未過期且已發布）
-  const upcomingShows = SHOWS.filter(s=>(s.status||'published')==='published' && !isExpired(s.date,s.time)).length;
-  // 喜劇據點
-  const venueCount = VENUES.length;
-  // Open Mic 場次
-  const micCount = MICS.length;
-  // 近期課程
-  const upcomingCourses = COURSES.filter(c=>(c.status||'published')==='published' && !isExpired(c.date,c.time)).length;
+  const shows   = window._SHOWS   || SHOWS   || [];
+  const venues  = window._VENUES  || VENUES  || [];
+  const mics    = window._MICS    || MICS    || [];
+  const courses = window._COURSES || COURSES || [];
+  const upcomingShows   = shows.filter(s=>(s.status||'published')==='published' && !isExpired(s.date,s.time)).length;
+  const venueCount      = venues.length;
+  const micCount        = mics.length;
+  const upcomingCourses = courses.filter(c=>(c.status||'published')==='published' && !isExpired(c.date,c.time)).length;
 
   const setNum = (id, num) => {
     const el = document.getElementById(id);
@@ -1686,8 +1686,11 @@ function renderHeroStats(){
     nextEl.style.display = 'block';
   }
 }
+
+function renderHomeShows() {
   const g = document.getElementById('home-shows-grid'); if (!g) return;
-  const fil = SHOWS.filter(s=>(s.status||'published')==='published' && !isExpired(s.date, s.time)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0,6);
+  const shows = window._SHOWS || SHOWS || [];
+  const fil = shows.filter(s=>(s.status||'published')==='published' && !isExpired(s.date, s.time)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0,6);
   g.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--ts);font-family:var(--f-zh)"><span class="zh-text">目前以售票演出為主，近期資訊整理中，敬請期待！</span><span class="en-text">Focused on ticketed shows — listings coming soon!</span></div>`;
 }
 
@@ -1720,7 +1723,8 @@ function courseCardHTML(c) {
 function renderCourses() {
   const g=document.getElementById('courses-grid'); if(!g)return;
   const adminMode=isLoggedIn();
-  const fil=COURSES.filter(c=>{
+  const courses = window._COURSES || COURSES || [];
+  const fil=courses.filter(c=>{
     const st=c.status||'published';
     if(st==='hidden') return false;
     if(!adminMode && st==='pending') return false;
@@ -1774,7 +1778,8 @@ function venueCardHTML(v) {
 }
 function renderVenues() {
   const g=document.getElementById('venues-grid'); if(!g)return;
-  const fil=VENUES.filter(v=>fCity==='all'||v.city===fCity);
+  const venues = window._VENUES || VENUES || [];
+  const fil=venues.filter(v=>fCity==='all'||v.city===fCity);
   g.innerHTML=fil.map(venueCardHTML).join('')+`<div class="venue-card" style="border-style:dashed;align-items:center;justify-content:center;text-align:center;cursor:default;min-height:100px"><div style="color:var(--ts);font-size:.8rem;font-family:var(--f-zh)"><span class="zh-text">更多場地陸續加入</span><span class="en-text">More venues coming</span></div></div>`;
   setTimeout(()=>animateCards('#venues-grid'),10);
 
