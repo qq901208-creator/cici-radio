@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW" data-lang="zh">
+<html lang="zh-TW" data-lang="zh" style="background:#ebecd7">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,18 +15,6 @@
 <link rel="icon" type="image/jpeg" href="/assets/ciciradio.jpg">
 <link rel="apple-touch-icon" href="/assets/ciciradio.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<script>
-// 在 CSS/JS 載入前立刻顯示正確頁面，避免閃爍
-(function(){
-  var valid = ['home','shows','opmic','venues','courses','about','board'];
-  var hash = location.hash.split('?')[0].replace('#','');
-  var page = valid.indexOf(hash)>=0 ? hash : 'home';
-  document.addEventListener('DOMContentLoaded', function(){
-    var el = document.getElementById('page-'+page);
-    if(el) el.classList.add('active');
-  });
-})();
-</script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
