@@ -1525,6 +1525,7 @@ async function loadAllData() {
   }
   setTimeout(()=>{
     if(typeof window._syncData==='function') window._syncData();
+    window._dataReady = true;
     // 只 render 當前顯示中的頁面
     const activePage = document.querySelector('.page.active')?.id?.replace('page-','') || 'home';
     if(activePage==='home'){
@@ -1644,6 +1645,7 @@ window.DEFAULT_COMMENTS = [];
 
 // ── Global data arrays ──
 // 全部掛在 window 上，module script 和普通 script 都能存取
+window._dataReady = false;
 window._SHOWS    = [];
 window._MICS     = [];
 window._VENUES   = window.DEFAULT_VENUES.slice();
@@ -2283,18 +2285,31 @@ function sanitizeMicMethod(raw) {
 
 // 場地名稱中英文對照（用於舊資料沒有 venueEn 欄位時的 fallback）
 const MIC_VENUE_EN_MAP = {
-  '卡米地+': 'Comedy Plus',
-  '卡米地＋': 'Comedy Plus',
+  '卡米地': 'Comedy Plus',
   '23喜劇': 'Two Three Comedy',
-  '飛客劇樂部': 'Fakers Club',
+  'two three': 'Two Three Comedy',
+  '飛客': 'Fakers Club',
+  'fakers': 'Fakers Club',
   '北投喜劇': 'Beitou Comedy',
   '樂君亭': 'Gingting Comedy',
+  'gingting': 'Gingting Comedy',
   '站立風城': 'Windy City Stand-up',
-  '思MIC歐': 'S.M.O',
+  '思mic歐': 'S.M.O',
+  's.m.o': 'S.M.O',
   '來福好事': 'Laugh House',
   '府城喜劇': 'Tainan Comedy',
   '喜劇開港': 'Takao Comedy Bay',
+  'takao': 'Takao Comedy Bay',
 };
+
+function getMicVenueEn(m) {
+  if(m.venueEn) return m.venueEn;
+  const zh = (m.venue||'').toLowerCase();
+  for(const [key, val] of Object.entries(MIC_VENUE_EN_MAP)){
+    if(zh.includes(key.toLowerCase())) return val;
+  }
+  return m.venue||''; // fallback to zh if no match
+}
 
 // 清理舊資料中「上午 當天現場」/「下午 當天現場」等格式
 function cleanMicTime(str) {
@@ -2305,6 +2320,11 @@ function cleanMicTime(str) {
 
 function renderMicTable() {
   const tbody=document.getElementById('mic-tbody'); if(!tbody)return;
+  // 資料尚未從 Firebase 載入完成 → 顯示 loading，避免空資料閃爍
+  if(!window._dataReady){
+    tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">載入中…</td></tr>`;
+    return;
+  }
   const isAdmin=isLoggedIn();
   const lang=getLang();
   const rows=MICS.filter(m=>m.day===micDay).sort((a,b)=>{
@@ -2318,8 +2338,7 @@ function renderMicTable() {
     const cityLblZh = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'}[m.city||'other']||'';
     const cityLblEn = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'}[m.city||'other']||'';
     const venueZh = m.venue||'';
-    const venueEn = m.venueEn || MIC_VENUE_EN_MAP[venueZh] || venueZh;
-    const venueDisplay = lang==='en' ? venueEn : venueZh;
+    const venueDisplay = lang==='en' ? getMicVenueEn(m) : venueZh;
     const cityLbl = lang==='en' ? cityLblEn : cityLblZh;
     const methodHtml = sanitizeMicMethod(m.method||'');
     const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'');
@@ -3347,7 +3366,11 @@ function restorePageFromHash(){
   if(page==='courses') renderCourses();
   if(page==='about') renderAbout();
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
-  // opmic: 只設 tab active，資料等 Firebase callback 後再 render
+  // opmic: 顯示 loading 佔位，Firebase callback 後才真正 render
+  if(page==='opmic'){
+    const tbody=document.getElementById('mic-tbody');
+    if(tbody) tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">載入中…</td></tr>`;
+  }
 }
 
 window.addEventListener('load', ()=>{
