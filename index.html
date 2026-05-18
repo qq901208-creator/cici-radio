@@ -482,8 +482,8 @@ body.edit .edit-bar{display:flex!important}
 .shows-search{width:100%;padding:10px 13px 10px 38px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.16);background:#fff;font-size:.88rem;font-family:var(--f-zh);color:var(--tm);outline:none;transition:border-color .14s,box-shadow .14s}
 .shows-search:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(239,111,32,.1)}
 /* VENUE/AREA MANAGER */
-.vm-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:260px;overflow-y:auto}
-.vm-item{display:flex;align-items:center;gap:8px;padding:7px 11px;background:var(--cr);border-radius:var(--r-md);font-size:.84rem;font-family:var(--f-zh);cursor:grab;user-select:none;transition:box-shadow .15s,opacity .15s}
+.vm-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:320px;overflow-y:auto}
+.vm-item{padding:5px 8px;background:var(--cr);border-radius:var(--r-md);font-size:.84rem;font-family:var(--f-zh);user-select:none;transition:box-shadow .15s,opacity .15s}
 .vm-item:active{cursor:grabbing}
 .vm-item.dragging{opacity:.4;box-shadow:none}
 .vm-item.drag-over{box-shadow:0 0 0 2px var(--or);background:var(--py)}
@@ -495,6 +495,10 @@ body.edit .edit-bar{display:flex!important}
 .vm-add-row .fi{flex:1}
 .vm-add-btn{padding:9px 16px;background:var(--or);color:#fff;border:none;border-radius:var(--r-md);font-size:.82rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;white-space:nowrap}
 .vm-add-btn:hover{background:#d45c10}
+@media(max-width:540px){
+  .vm-item{grid-template-columns:18px 1fr auto!important}
+  .vm-item .vm-label-en{display:none}
+}
 .vm-tabs{display:flex;gap:6px;margin-bottom:14px}
 .vm-tab{padding:6px 16px;border-radius:var(--r-pill);font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
 .vm-tab.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
@@ -885,25 +889,38 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 </div>
 
 <!-- Venue/Area Manager Modal (admin only) -->
-<div class="modal-ov" id="modal-venue-manager"><div class="modal" style="max-width:480px">
+<div class="modal-ov" id="modal-venue-manager"><div class="modal" style="max-width:640px">
   <button class="modal-close" onclick="closeModal('venue-manager')">✕</button>
   <div class="modal-title">⚙️ 管理場地與地區</div>
+  <p style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo);margin:-8px 0 14px">拖曳可排序。排序結果同步至篩選器及新增／編輯演出下拉選單。修改名稱後點「儲存」以同步所有顯示。</p>
   <div class="vm-tabs">
     <button class="vm-tab on" onclick="switchVmTab('venue',this)">場地</button>
     <button class="vm-tab" onclick="switchVmTab('area',this)">地區</button>
   </div>
   <div id="vm-venue-panel">
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:4px;padding:5px 0 7px;font-size:.7rem;font-weight:700;color:var(--ts);font-family:var(--f-bo)"><span>中文名稱</span><span>英文名稱 (EN)</span><span></span></div>
     <div class="vm-list" id="vm-venue-list"></div>
-    <div class="vm-add-row">
-      <input class="fi" type="text" id="vm-venue-input" placeholder="場地名稱，e.g. 卡米地+ Comedy Plus" onkeydown="if(event.key==='Enter')addVmItem('venue')">
-      <button class="vm-add-btn" onclick="addVmItem('venue')">新增</button>
+    <div style="margin-top:12px;padding:12px 14px;background:var(--cr);border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.1)">
+      <div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">新增場地</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
+        <input class="fi" type="text" id="vm-venue-input-zh" placeholder="場地名稱（中文）*" onkeydown="if(event.key==='Enter'){event.preventDefault();}">
+        <input class="fi" type="text" id="vm-venue-input-en" placeholder="Name (EN)" onkeydown="if(event.key==='Enter'){event.preventDefault();}">
+      </div>
+      <input type="hidden" id="vm-venue-input">
+      <button class="vm-add-btn" onclick="addVmItem('venue')" style="width:100%">＋ 新增場地</button>
     </div>
   </div>
   <div id="vm-area-panel" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:4px;padding:5px 0 7px;font-size:.7rem;font-weight:700;color:var(--ts);font-family:var(--f-bo)"><span>中文名稱</span><span>英文名稱 (EN)</span><span></span></div>
     <div class="vm-list" id="vm-area-list"></div>
-    <div class="vm-add-row">
-      <input class="fi" type="text" id="vm-area-input" placeholder="地區名稱，e.g. 雙北" onkeydown="if(event.key==='Enter')addVmItem('area')">
-      <button class="vm-add-btn" onclick="addVmItem('area')">新增</button>
+    <div style="margin-top:12px;padding:12px 14px;background:var(--cr);border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.1)">
+      <div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">新增地區</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
+        <input class="fi" type="text" id="vm-area-input-zh" placeholder="地區名稱（中文）*" onkeydown="if(event.key==='Enter'){event.preventDefault();}">
+        <input class="fi" type="text" id="vm-area-input-en" placeholder="Area Name (EN)" onkeydown="if(event.key==='Enter'){event.preventDefault();}">
+      </div>
+      <input type="hidden" id="vm-area-input">
+      <button class="vm-add-btn" onclick="addVmItem('area')" style="width:100%">＋ 新增地區</button>
     </div>
   </div>
   <div class="fa" style="margin-top:14px">
@@ -1630,6 +1647,30 @@ function typeLabel(t) {
   return getLang()==='en' ? m.labelEn : m.label;
 }
 
+// ── VENUE / AREA LABEL HELPERS ──
+function getShowVenueLabelById(id) {
+  if(!id) return '';
+  const venues = getShowVenues();
+  const v = venues.find(x=>x.id===id);
+  if(!v) return '';
+  const lang = getLang();
+  return lang==='en' ? (v.labelEn||v.labelZh||v.label||id) : (v.labelZh||v.label||v.labelEn||id);
+}
+function getShowAreaLabelById(id) {
+  if(!id) return '';
+  const areas = getShowAreas();
+  const a = areas.find(x=>x.id===id);
+  if(!a) {
+    // fallback to hardcoded
+    const MAP = {taipei:'雙北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'};
+    const MAP_EN = {taipei:'Taipei Area',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Others'};
+    const lang = getLang();
+    return lang==='en' ? (MAP_EN[id]||id) : (MAP[id]||id);
+  }
+  const lang = getLang();
+  return lang==='en' ? (a.labelEn||a.labelZh||a.label||id) : (a.labelZh||a.label||a.labelEn||id);
+}
+
 // ── GRADIENT ──
 function gradientForTypes(types) {
   const BG = {opmic:'#fff3a0',standup:'#ffd6b3',improv:'#b8f0d0',sketch:'#ffe0b3',mancai:'#c8d8ff',crosstalk:'#ffd6e8',rakugo:'#e8d5f5',ogiri:'#d0f0f8',musicom:'#f5d0f0',gameshow:'#fff0b3',mixed:'#dce8ff',special:'#d4f5d4',english:'#d4eeff',podcast:'#e0f0e0',other:'#e8e8e8'};
@@ -1665,7 +1706,7 @@ function showCardHTML(s) {
     <div class="sc-body">
       <div class="sc-date">📅 ${s.date} (週${dow}) ${s.time||''}${soldTag}${expiredTag}</div>
       <div class="sc-title">${s.title}</div>
-      <div class="sc-meta">📍 ${s.venueLabel||s.venue}</div>
+      <div class="sc-meta">📍 ${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</div>
       ${s.performer?`<div class="sc-meta">🎙 ${s.performer}</div>`:''}
       ${s.price?`<div class="sc-price">💰 ${s.price}</div>`:''}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px">
@@ -1705,15 +1746,15 @@ function openShowDetail(id) {
     ${s.soldOut?`<span style="display:inline-block;font-size:.72rem;font-weight:700;padding:3px 10px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-bottom:10px">售完 Sold Out</span>`:''}
     <table class="sd-table">
       <tr><td>日期</td><td>${s.date} (週${dow}) ${s.time||''}</td></tr>
-      <tr><td>場地</td><td>${s.venueLabel||s.venue}</td></tr>
-      <tr><td>地區</td><td>${({taipei:'雙北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'})[s.area]||s.area||'—'}</td></tr>
+      <tr><td>場地</td><td>${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</td></tr>
+      <tr><td>地區</td><td>${getShowAreaLabelById(s.area)||s.area||'—'}</td></tr>
       ${s.performer?`<tr><td>表演者</td><td>${s.performer}</td></tr>`:''}
       ${s.price?`<tr><td>票價</td><td>${s.price}</td></tr>`:''}
       <tr><td>平台</td><td>${(s.platform||'').toUpperCase()}</td></tr>
     </table>
     ${s.description?`<p class="sd-desc">${s.description}</p>`:''}
-    ${s.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em"><span class="zh-text">製作團隊</span><span class="en-text">Production Team</span></div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${s.production}</p></div>`:''}
-    ${s.ticketUrl&&s.ticketUrl!=='#'?`<a href="${s.ticketUrl}" target="_blank" rel="noopener" class="sd-ticket-btn" style="margin-top:20px;display:inline-block">前往售票頁面 ↗</a>`:''}
+    ${s.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em">${getLang()==='en'?'Production Team':'製作團隊 Production Team'}</div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${s.production}</p></div>`:''}
+    ${s.ticketUrl&&s.ticketUrl!=='#'?`<a href="${s.ticketUrl}" target="_blank" rel="noopener" class="sd-ticket-btn" style="margin-top:20px;display:inline-block">${getLang()==='en'?'Buy Tickets ↗':'前往售票頁面 ↗'}</a>`:''}
     ${s.imgSrc?`<p class="sd-imgsrc">📷 ${s.imgSrc}</p>`:''}
   `;
   document.getElementById('modal-show-detail').classList.add('open');
@@ -1891,15 +1932,15 @@ function courseCardHTML(c) {
   const imgEl = c.image ? `<img src="${c.image}" alt="" onerror="this.style.display='none'">` : '';
   const lbl = getLang()==='en' ? m.labelEn : m.label;
   const expiredOverlay = isExpired(c.date, c.time) ? `style="opacity:.55"` : '';
-  return `<div class="course-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')" ${expiredOverlay}>
+  return `<div class="course-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')" ${expiredOverlay} style="display:flex;flex-direction:column">
     <div class="cc-img" style="background:${m.bg}">${imgEl}<span style="font-size:2.4rem;position:relative;z-index:1">${emj[c.type]||'📚'}</span><span class="cc-cat" style="background:${m.tag};color:${m.tagC}">${lbl}</span></div>
-    <div class="cc-body">
+    <div class="cc-body" style="flex:1;display:flex;flex-direction:column;gap:5px">
       <div class="cc-title">${c.title}</div>
       <div class="cc-meta"><span>📅 ${c.dateDisplay||c.date}</span>${c.time?`<span>${c.time}</span>`:''}<span>📍 ${c.location||''}</span>${c.organizer?`<span>${c.organizer}</span>`:''}</div>
       ${c.fee?`<div style="font-size:.79rem;font-weight:700;color:var(--or)">${c.fee}</div>`:''}
-      <p class="cc-desc">${c.description||''}</p>
+      <p class="cc-desc" style="flex:1">${c.description||''}</p>
+      ${c.imgSrc?`<div class="cc-imgsrc" style="padding:4px 0 0;font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo)">${c.imgSrc}</div>`:''}
     </div>
-    ${c.imgSrc?`<div class="cc-imgsrc">${c.imgSrc}</div>`:''}
     <div class="cc-foot">
       ${(c.url&&c.url!=='#')?`<a href="${c.url}" class="cc-link" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">立即報名 ↗</span><span class="en-text">Sign Up ↗</span></a>`:'<span></span>'}
       <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.7">詳情 ↗</span>
@@ -1938,44 +1979,50 @@ function renderCourses() {
 
 function openCourseDetail(id){
   const c=COURSES.find(x=>x.id===id); if(!c)return;
+  const lang = getLang();
   const m=COURSE_META[c.type]||COURSE_META.other;
   const imgHtml=c.image?`<div style="width:100%;max-height:280px;overflow:hidden;border-radius:var(--r-md);background:${m.bg};margin-bottom:18px;display:flex;align-items:center;justify-content:center"><img src="${c.image}" alt="${c.title}" style="width:100%;max-height:280px;object-fit:contain;display:block;background:var(--cr)" onerror="this.style.display='none'"></div>`:'';
+  const catLbl = lang==='en' ? m.labelEn : m.label;
+  const prodLbl = lang==='en' ? 'Organizers & Co-organizers' : '主辦與協辦單位';
   document.getElementById('course-detail-body').innerHTML=`
     ${imgHtml}
-    <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;color:var(--or);margin-bottom:6px;font-family:var(--f-bo)">${m.label}</div>
+    <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;color:var(--or);margin-bottom:6px;font-family:var(--f-bo)">${catLbl}</div>
     <div style="font-size:1.3rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:14px;line-height:1.3">${c.title}</div>
     <table style="width:100%;font-size:.85rem;font-family:var(--f-zh);border-collapse:collapse">
-      ${c.date?`<tr><td style="padding:6px 0;color:var(--ts);width:70px">日期</td><td>${c.date}${c.time?` · ${c.time}`:''}</td></tr>`:''}
-      ${c.location?`<tr><td style="padding:6px 0;color:var(--ts)">地點</td><td>${c.location}</td></tr>`:''}
-      ${c.address?`<tr><td style="padding:6px 0;color:var(--ts)">地址</td><td>${c.address}</td></tr>`:''}
-      ${c.organizer?`<tr><td style="padding:6px 0;color:var(--ts)">主辦</td><td>${c.organizer}</td></tr>`:''}
-      ${c.fee?`<tr><td style="padding:6px 0;color:var(--ts)">費用</td><td style="font-weight:700;color:var(--or)">${c.fee}</td></tr>`:''}
+      ${c.date?`<tr><td style="padding:6px 0;color:var(--ts);width:70px">${lang==='en'?'Date':'日期'}</td><td>${c.date}${c.time?` · ${c.time}`:''}</td></tr>`:''}
+      ${c.location?`<tr><td style="padding:6px 0;color:var(--ts)">${lang==='en'?'Location':'地點'}</td><td>${c.location}</td></tr>`:''}
+      ${c.address?`<tr><td style="padding:6px 0;color:var(--ts)">${lang==='en'?'Address':'地址'}</td><td>${c.address}</td></tr>`:''}
+      ${c.organizer?`<tr><td style="padding:6px 0;color:var(--ts)">${lang==='en'?'Organizer':'主辦'}</td><td>${c.organizer}</td></tr>`:''}
+      ${c.fee?`<tr><td style="padding:6px 0;color:var(--ts)">${lang==='en'?'Fee':'費用'}</td><td style="font-weight:700;color:var(--or)">${c.fee}</td></tr>`:''}
     </table>
     ${c.description?`<p style="margin:14px 0;font-size:.88rem;line-height:1.75;color:var(--tm);font-family:var(--f-zh);white-space:pre-line">${c.description}</p>`:''}
-    ${c.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em"><span class="zh-text">主辦與協辦單位</span><span class="en-text">Organizers & Co-organizers</span></div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${c.production}</p></div>`:''}
+    ${c.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em">${prodLbl}</div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${c.production}</p></div>`:''}
     ${c.imgSrc?`<div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:14px;margin-bottom:12px">${c.imgSrc}</div>`:''}
-    ${(c.url&&c.url!=='#')?`<a href="${c.url}" target="_blank" rel="noopener" class="btn-or" style="display:inline-block;text-decoration:none;margin-top:6px">立即報名 ↗</a>`:''}
+    ${(c.url&&c.url!=='#')?`<a href="${c.url}" target="_blank" rel="noopener" class="btn-or" style="display:inline-block;text-decoration:none;margin-top:6px">${lang==='en'?'Sign Up ↗':'立即報名 ↗'}</a>`:''}
   `;
   document.getElementById('modal-course-detail').classList.add('open');
 }
 function venueCardHTML(v) {
-  const logo = v.logoUrl ? `<img src="${v.logoUrl}" alt="${v.nameZh}" style="width:100%;height:100%;object-fit:contain" onerror="this.outerHTML='<span>📍</span>'">` : '<span>📍</span>';
-  return `<div class="venue-card" data-id="${v.id}" onclick="showVenueDetail('${v.id}')">
+  const lang = getLang();
+  const nameDisplay = lang==='en' ? (v.nameEn||v.nameZh) : (v.nameZh||v.nameEn);
+  const nameAlt = lang==='en' ? (v.nameZh||'') : (v.nameEn||'');
+  const logo = v.logoUrl ? `<img src="${v.logoUrl}" alt="${nameDisplay}" style="width:100%;height:100%;object-fit:contain" onerror="this.outerHTML='<span>📍</span>'">` : '<span>📍</span>';
+  return `<div class="venue-card" data-id="${v.id}" onclick="showVenueDetail('${v.id}')" style="display:flex;flex-direction:column">
     <div class="venue-logo">${logo}</div>
-    <div class="venue-name">${v.nameZh}<small>${v.nameEn}</small></div>
+    <div class="venue-name">${nameDisplay}<small>${nameAlt}</small></div>
     <div class="venue-city-lbl">📍 ${CITY_LBL[v.city]||v.city}</div>
     ${v.partner?`<div style="margin-top:2px"><span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;background:rgba(239,111,32,.1);color:var(--or);border:1px solid rgba(239,111,32,.25);border-radius:var(--r-pill);padding:2px 8px;font-family:var(--f-zh)">🤝 ${v.partner}</span></div>`:''}
     ${(v.tags&&v.tags.length)?`<div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div>`:''}
-    <div class="venue-links" onclick="event.stopPropagation()">
+    <div class="venue-links" onclick="event.stopPropagation()" style="margin-top:auto">
       ${v.fb?`<a class="vlb vlb-fb" href="${v.fb}" target="_blank">f FB</a>`:''}
       ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank">ig IG</a>`:''}
       ${v.address?`<a class="vlb vlb-map" href="https://maps.google.com/?q=${encodeURIComponent(v.address)}" target="_blank">📍 Map</a>`:''}
     </div>
+    ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55"><span style="font-weight:700;color:var(--or)">💬 嘻嘻小建議</span><br>${v.tip}</div>`:''}
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openVenueModal('${v.id}')">✏️</button>
       <button class="ca-btn ca-del" onclick="event.stopPropagation();delVenue('${v.id}')">🗑</button>
     </div>
-    ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55"><span style="font-weight:700;color:var(--or)">💬 嘻嘻小建議</span><br>${v.tip}</div>`:''}
   </div>`;
 }
 function renderVenues() {
@@ -2025,21 +2072,23 @@ function renderVenues() {
 }
 function showVenueDetail(id) {
   const v=VENUES.find(x=>x.id===id); if(!v)return;
+  const lang = getLang();
+  const nameMain = lang==='en' ? (v.nameEn||v.nameZh) : (v.nameZh||v.nameEn);
+  const nameAlt  = lang==='en' ? (v.nameZh||'') : (v.nameEn||'');
   const logo=v.logoUrl?`<img src="${v.logoUrl}" alt="" style="width:52px;height:52px;object-fit:contain;border-radius:9px" onerror="this.outerHTML='<span style=font-size:1.6rem>📍</span>'">`:'<span style="font-size:1.6rem">📍</span>';
   document.getElementById('venue-detail-body').innerHTML=`
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
       <div class="venue-logo" style="width:54px;height:54px;border-radius:11px">${logo}</div>
-      <div><div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh)">${v.nameZh}</div><div style="font-size:.82rem;color:var(--ts);font-family:var(--f-bo)">${v.nameEn}</div></div>
+      <div><div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh)">${nameMain}</div><div style="font-size:.82rem;color:var(--ts);font-family:var(--f-bo)">${nameAlt}</div></div>
     </div>
     <table style="width:100%;border-collapse:collapse;font-size:.86rem;font-family:var(--f-zh);margin-bottom:18px">
-      <tr><td style="padding:7px 0;color:var(--ts);width:65px;font-size:.78rem">城市</td><td>${CITY_LBL[v.city]||v.city}</td></tr>
-      <tr><td style="padding:7px 0;color:var(--ts)">地址</td><td>${v.address||'—'}</td></tr>
-      ${v.partner?`<tr><td style="padding:7px 0;color:var(--ts)">合作場地</td><td><span style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:700;background:rgba(239,111,32,.1);color:var(--or);border:1px solid rgba(239,111,32,.25);border-radius:var(--r-pill);padding:3px 10px">🤝 ${v.partner}</span></td></tr>`:''}
-      ${(v.tags&&v.tags.length)?`<tr><td style="padding:7px 0;color:var(--ts);vertical-align:top">標籤</td><td><div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div></td></tr>`:''}
-      <tr><td style="padding:7px 0;color:var(--ts)">簡介</td><td>${v.description||'—'}</td></tr>
+      <tr><td style="padding:7px 0;color:var(--ts);width:65px;font-size:.78rem">${lang==='en'?'City':'城市'}</td><td>${CITY_LBL[v.city]||v.city}</td></tr>
+      <tr><td style="padding:7px 0;color:var(--ts)">${lang==='en'?'Address':'地址'}</td><td>${v.address||'—'}</td></tr>
+      ${v.partner?`<tr><td style="padding:7px 0;color:var(--ts)">${lang==='en'?'Partner':'合作場地'}</td><td><span style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:700;background:rgba(239,111,32,.1);color:var(--or);border:1px solid rgba(239,111,32,.25);border-radius:var(--r-pill);padding:3px 10px">🤝 ${v.partner}</span></td></tr>`:''}
+      ${(v.tags&&v.tags.length)?`<tr><td style="padding:7px 0;color:var(--ts);vertical-align:top">${lang==='en'?'Tags':'標籤'}</td><td><div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div></td></tr>`:''}
+      <tr><td style="padding:7px 0;color:var(--ts)">${lang==='en'?'About':'簡介'}</td><td>${v.description||'—'}</td></tr>
     </table>
-    ${v.tip?`<div style="padding:10px 14px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;margin-bottom:14px"><div style="font-size:.78rem;font-weight:700;color:var(--or);margin-bottom:4px">💬 嘻嘻小建議</div><div style="font-size:.85rem;font-family:var(--f-zh);color:var(--tm);line-height:1.65">${v.tip}</div></div>`:''}
-    </table>
+    ${v.tip?`<div style="padding:10px 14px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;margin-bottom:14px"><div style="font-size:.78rem;font-weight:700;color:var(--or);margin-bottom:4px">💬 嘻嘻小建議</div><div style="font-size:.85rem;font-family:var(--f-zh);color:var(--tm);line-height:1.65;white-space:pre-line">${v.tip}</div></div>`:''}
     <div style="display:flex;gap:9px;flex-wrap:wrap">
       ${v.fb?`<a href="${v.fb}" target="_blank" class="btn-or" style="padding:8px 18px;font-size:.8rem">Facebook ↗</a>`:''}
       ${v.ig?`<a href="${v.ig}" target="_blank" class="btn-ww" style="padding:8px 18px;font-size:.8rem">Instagram ↗</a>`:''}
@@ -2255,11 +2304,13 @@ function saveShow(status){
   const d=dateStr?new Date(dateStr+'T00:00'):null;
   const venueEl=document.getElementById('s-venue');
   const imgSrcVal=(document.getElementById('s-imgsrc').value||'').trim();
+  const venueId = venueEl.value;
+  const venueZh = getShowVenueLabelById(venueId) || (venueEl.selectedOptions[0]?.text||'').split('（')[0].trim();
   const item={
     title,date:dateStr,
     time:document.getElementById('s-time').value,
-    venue:venueEl.value,
-    venueLabel:(venueEl.selectedOptions[0]?.text||'').split('（')[0].trim(),
+    venue:venueId,
+    venueLabel: venueZh,
     area:document.getElementById('s-area').value,
     weekday:d?d.getDay():null,
     types,platform:document.getElementById('s-platform').value,
@@ -2539,57 +2590,87 @@ const LS_VENUES_KEY = 'cici_show_venues';
 const LS_AREAS_KEY  = 'cici_show_areas';
 
 const DEFAULT_SHOW_VENUES = [
-  {id:'comedy-plus', label:'卡米地+ Comedy Plus'},
-  {id:'two-three',   label:'23喜劇 two three comedy'},
-  {id:'fakers',      label:'飛客劇樂部 Fakers Club'},
-  {id:'beitou',      label:'北投喜劇'},
-  {id:'ginting',     label:'樂君亭 Gingting Comedy'},
-  {id:'windcity',    label:'站立風城'},
-  {id:'smo',         label:'思MIC歐 S.M.O'},
-  {id:'laughhouse',  label:'來福好事 Laugh House'},
-  {id:'tainan',      label:'府城喜劇'},
-  {id:'takao',       label:'喜劇開港 Takaocomedybay'},
-  {id:'other',       label:'其他 Others'},
+  {id:'comedy-plus', labelZh:'卡米地+',          labelEn:'Comedy Plus'},
+  {id:'two-three',   labelZh:'23喜劇',            labelEn:'two three comedy'},
+  {id:'fakers',      labelZh:'飛客劇樂部',         labelEn:'Fakers Club'},
+  {id:'beitou',      labelZh:'北投喜劇',           labelEn:'Beitou Comedy'},
+  {id:'ginting',     labelZh:'樂君亭',             labelEn:'Gingting Comedy'},
+  {id:'windcity',    labelZh:'站立風城',           labelEn:'Wind City Stand-Up'},
+  {id:'smo',         labelZh:'思MIC歐 S.M.O',     labelEn:'S.M.O'},
+  {id:'laughhouse',  labelZh:'來福好事',           labelEn:'Laugh House'},
+  {id:'tainan',      labelZh:'府城喜劇',           labelEn:'Tainan Comedy'},
+  {id:'takao',       labelZh:'喜劇開港',           labelEn:'Takaocomedybay'},
+  {id:'other',       labelZh:'其他',               labelEn:'Others'},
 ];
 const DEFAULT_SHOW_AREAS = [
-  {id:'taipei',    label:'雙北'},
-  {id:'taoyuan',   label:'桃園'},
-  {id:'hsinchu',   label:'新竹'},
-  {id:'taichung',  label:'台中'},
-  {id:'tainan',    label:'台南'},
-  {id:'kaohsiung', label:'高雄'},
-  {id:'other',     label:'其他'},
+  {id:'taipei',    labelZh:'雙北',  labelEn:'Taipei Area'},
+  {id:'taoyuan',   labelZh:'桃園',  labelEn:'Taoyuan'},
+  {id:'hsinchu',   labelZh:'新竹',  labelEn:'Hsinchu'},
+  {id:'taichung',  labelZh:'台中',  labelEn:'Taichung'},
+  {id:'tainan',    labelZh:'台南',  labelEn:'Tainan'},
+  {id:'kaohsiung', labelZh:'高雄',  labelEn:'Kaohsiung'},
+  {id:'other',     labelZh:'其他',  labelEn:'Others'},
 ];
 
-function getShowVenues(){try{return JSON.parse(localStorage.getItem(LS_VENUES_KEY))||DEFAULT_SHOW_VENUES;}catch{return DEFAULT_SHOW_VENUES;}}
-function getShowAreas(){try{return JSON.parse(localStorage.getItem(LS_AREAS_KEY))||DEFAULT_SHOW_AREAS;}catch{return DEFAULT_SHOW_AREAS;}}
+function getShowVenues(){
+  try{
+    const stored = JSON.parse(localStorage.getItem(LS_VENUES_KEY));
+    if(stored && stored.length) {
+      // Migrate old format (label only) to zh/en
+      return stored.map(v => ({
+        id: v.id,
+        labelZh: v.labelZh || v.label || '',
+        labelEn: v.labelEn || v.label || '',
+      }));
+    }
+  } catch{}
+  return DEFAULT_SHOW_VENUES.map(v=>({...v}));
+}
+function getShowAreas(){
+  try{
+    const stored = JSON.parse(localStorage.getItem(LS_AREAS_KEY));
+    if(stored && stored.length) {
+      return stored.map(a => ({
+        id: a.id,
+        labelZh: a.labelZh || a.label || '',
+        labelEn: a.labelEn || a.label || '',
+      }));
+    }
+  } catch{}
+  return DEFAULT_SHOW_AREAS.map(a=>({...a}));
+}
 function saveShowVenues(v){try{localStorage.setItem(LS_VENUES_KEY,JSON.stringify(v));}catch{}}
 function saveShowAreas(a){try{localStorage.setItem(LS_AREAS_KEY,JSON.stringify(a));}catch{}}
+
+// Returns display label for current language, fallback to zh
+function getVmLabel(item) {
+  const lang = getLang();
+  if(lang === 'en') return item.labelEn || item.labelZh || item.label || item.id;
+  return item.labelZh || item.label || item.labelEn || item.id;
+}
 
 function populateShowSelects(venueVal, areaVal){
   const vs = document.getElementById('s-venue');
   const as = document.getElementById('s-area');
   if(!vs||!as) return;
-  // 加入自訂場地（localStorage 新增的）到 select，避免重複
-  const customVenues = getShowVenues().filter(v=>v.id.startsWith('custom_'));
-  customVenues.forEach(v=>{
-    if(!vs.querySelector(`option[value="${v.id}"]`)){
-      const opt=document.createElement('option');
-      opt.value=v.id; opt.textContent=v.label;
-      vs.insertBefore(opt, vs.querySelector('option[value="other"]'));
-    }
-  });
-  // 加入自訂地區
-  const customAreas = getShowAreas().filter(a=>a.id.startsWith('custom_'));
-  customAreas.forEach(a=>{
-    if(!as.querySelector(`option[value="${a.id}"]`)){
-      const opt=document.createElement('option');
-      opt.value=a.id; opt.textContent=a.label;
-      as.insertBefore(opt, as.querySelector('option[value="other"]'));
-    }
-  });
-  if(venueVal && vs.querySelector(`option[value="${venueVal}"]`)) vs.value=venueVal;
-  if(areaVal && as.querySelector(`option[value="${areaVal}"]`)) as.value=areaVal;
+  const lang = getLang();
+  // Rebuild venue select from current list
+  const allVenues = getShowVenues();
+  const prevVenueVal = venueVal || vs.value;
+  vs.innerHTML = allVenues.map(v => {
+    const lbl = lang==='en' ? (v.labelEn||v.labelZh||v.label||v.id) : (v.labelZh||v.label||v.labelEn||v.id);
+    return `<option value="${v.id}">${lbl}</option>`;
+  }).join('');
+  if(prevVenueVal && vs.querySelector(`option[value="${prevVenueVal}"]`)) vs.value = prevVenueVal;
+
+  // Rebuild area select from current list
+  const allAreas = getShowAreas();
+  const prevAreaVal = areaVal || as.value;
+  as.innerHTML = allAreas.map(a => {
+    const lbl = lang==='en' ? (a.labelEn||a.labelZh||a.label||a.id) : (a.labelZh||a.label||a.labelEn||a.id);
+    return `<option value="${a.id}">${lbl}</option>`;
+  }).join('');
+  if(prevAreaVal && as.querySelector(`option[value="${prevAreaVal}"]`)) as.value = prevAreaVal;
 }
 
 let vmTab = 'venue';
@@ -2616,16 +2697,20 @@ function renderVmList(){
   const items = type==='venue' ? getShowVenues() : getShowAreas();
 
   listEl.innerHTML = items.map((item, i) => `
-    <div class="vm-item" draggable="true" data-idx="${i}">
-      <span class="vm-drag-handle">⠿</span>
-      <span>${item.label}</span>
-      ${item.id!=='other' ? `<button class="vm-del" onclick="delVmItem('${type}',${i})" title="刪除">✕</button>` : ''}
+    <div class="vm-item" draggable="true" data-idx="${i}" style="align-items:center;gap:7px;display:grid;grid-template-columns:22px 1fr 1fr auto ${item.id!=='other'?'auto':''}">
+      <span class="vm-drag-handle" style="cursor:grab;color:var(--ts);opacity:.4;font-size:.9rem">⠿</span>
+      <input class="fi vm-label-zh" value="${(item.labelZh||item.label||'').replace(/"/g,'&quot;')}" data-idx="${i}" data-type="${type}" data-field="zh" style="padding:5px 9px;font-size:.8rem"
+        onblur="saveVmInlineEdit(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}">
+      <input class="fi vm-label-en" value="${(item.labelEn||item.label||'').replace(/"/g,'&quot;')}" data-idx="${i}" data-type="${type}" data-field="en" style="padding:5px 9px;font-size:.8rem;color:var(--ts)"
+        onblur="saveVmInlineEdit(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur();}">
+      ${item.id!=='other' ? `<button class="vm-del" onclick="delVmItem('${type}',${i})" title="刪除">✕</button>` : '<span></span>'}
     </div>`).join('');
 
   // 拖曳排序邏輯
   let dragIdx = null;
   listEl.querySelectorAll('.vm-item').forEach(el => {
     el.addEventListener('dragstart', e => {
+      if(e.target.tagName === 'INPUT') { e.preventDefault(); return; }
       dragIdx = parseInt(el.dataset.idx);
       el.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
@@ -2650,31 +2735,107 @@ function renderVmList(){
       else saveShowAreas(arr);
       dragIdx = null;
       renderVmList();
+      // Sync filter chips and dropdowns
+      rebuildShowFilterChips();
+      populateShowSelects('','');
       showToast('✅ 排序已更新','ok');
     });
   });
 }
+
+function saveVmInlineEdit(input) {
+  const idx = parseInt(input.dataset.idx);
+  const type = input.dataset.type;
+  const field = input.dataset.field;
+  const arr = type==='venue' ? getShowVenues() : getShowAreas();
+  if(!arr[idx]) return;
+  if(field==='zh') arr[idx].labelZh = input.value.trim();
+  else arr[idx].labelEn = input.value.trim();
+  if(type==='venue') saveShowVenues(arr);
+  else saveShowAreas(arr);
+  // Sync dropdowns and filter chips
+  rebuildShowFilterChips();
+  populateShowSelects('','');
+  showToast('✅ 已儲存','ok');
+}
+
+// Rebuild the filter chips in shows page based on current venue/area lists
+function rebuildShowFilterChips() {
+  const lang = getLang();
+  const venues = getShowVenues();
+  const areas = getShowAreas();
+
+  // Venue filter row
+  const vRow = document.querySelector('.filter-row [data-f="venue"][data-v="all"]')?.parentElement;
+  if(vRow) {
+    // Keep "All" chip, replace rest
+    const allChip = vRow.querySelector('[data-v="all"]');
+    vRow.innerHTML = '';
+    if(allChip) vRow.appendChild(allChip);
+    venues.forEach(v => {
+      const lbl = lang==='en' ? (v.labelEn||v.labelZh||v.id) : (v.labelZh||v.id);
+      const chip = document.createElement('button');
+      chip.className = 'chip' + (fVenue===v.id?' on':'');
+      chip.dataset.f = 'venue';
+      chip.dataset.v = v.id;
+      chip.textContent = lbl;
+      chip.addEventListener('click', function(){
+        document.querySelectorAll(`.chip[data-f="venue"]`).forEach(c=>c.classList.remove('on'));
+        this.classList.add('on');
+        fVenue = v.id; showsPage=1; renderShows(); syncFiltersToURL();
+      });
+      vRow.appendChild(chip);
+    });
+  }
+
+  // Area filter row
+  const aRow = document.querySelector('.filter-row [data-f="area"][data-v="all"]')?.parentElement;
+  if(aRow) {
+    const allChip = aRow.querySelector('[data-v="all"]');
+    aRow.innerHTML = '';
+    if(allChip) aRow.appendChild(allChip);
+    areas.forEach(a => {
+      const lbl = lang==='en' ? (a.labelEn||a.labelZh||a.id) : (a.labelZh||a.id);
+      const chip = document.createElement('button');
+      chip.className = 'chip' + (fArea===a.id?' on':'');
+      chip.dataset.f = 'area';
+      chip.dataset.v = a.id;
+      chip.textContent = lbl;
+      chip.addEventListener('click', function(){
+        document.querySelectorAll(`.chip[data-f="area"]`).forEach(c=>c.classList.remove('on'));
+        this.classList.add('on');
+        fArea = a.id; showsPage=1; renderShows(); syncFiltersToURL();
+      });
+      aRow.appendChild(chip);
+    });
+  }
+}
 function addVmItem(type){
-  const inp=document.getElementById(`vm-${type}-input`);
-  const label=(inp.value||'').trim();
-  if(!label){showToast('請輸入名稱','err');return;}
+  const zhInput = document.getElementById(`vm-${type}-input-zh`);
+  const enInput = document.getElementById(`vm-${type}-input-en`);
+  const labelZh = (zhInput?.value||'').trim();
+  const labelEn = (enInput?.value||'').trim();
+  if(!labelZh){showToast('請輸入中文名稱','err');if(zhInput)zhInput.focus();return;}
   const id='custom_'+Date.now();
+  const newItem = {id, labelZh, labelEn: labelEn||labelZh};
   if(type==='venue'){
     const items=getShowVenues();
-    // Insert before 'other'
     const otherIdx=items.findIndex(v=>v.id==='other');
-    if(otherIdx>=0) items.splice(otherIdx,0,{id,label});
-    else items.push({id,label});
+    if(otherIdx>=0) items.splice(otherIdx,0,newItem);
+    else items.push(newItem);
     saveShowVenues(items);
   } else {
     const items=getShowAreas();
     const otherIdx=items.findIndex(a=>a.id==='other');
-    if(otherIdx>=0) items.splice(otherIdx,0,{id,label});
-    else items.push({id,label});
+    if(otherIdx>=0) items.splice(otherIdx,0,newItem);
+    else items.push(newItem);
     saveShowAreas(items);
   }
-  inp.value='';
+  if(zhInput) zhInput.value='';
+  if(enInput) enInput.value='';
   renderVmList();
+  rebuildShowFilterChips();
+  populateShowSelects('','');
   showToast('✅ 已新增','ok');
 }
 function delVmItem(type,idx){
@@ -2682,6 +2843,8 @@ function delVmItem(type,idx){
   if(type==='venue'){const items=getShowVenues();items.splice(idx,1);saveShowVenues(items);}
   else {const items=getShowAreas();items.splice(idx,1);saveShowAreas(items);}
   renderVmList();
+  rebuildShowFilterChips();
+  populateShowSelects('','');
   showToast('已刪除','ok');
 }
 
@@ -2844,6 +3007,7 @@ function restorePageFromHash(){
 
 window.addEventListener('load', ()=>{
   initReveal();
+  if(typeof rebuildShowFilterChips==='function') rebuildShowFilterChips();
   restorePageFromHash();
   document.body.classList.add('ready');
   const badge = document.getElementById('sessionBadge');
@@ -2980,6 +3144,8 @@ function setLang(l){
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('on',b.textContent.trim()===(l==='zh'?'繁中':'EN')));
   // Re-render to update language-dependent labels
   const cur=document.querySelector('.page.active')?.id?.replace('page-','');
+  if(typeof rebuildShowFilterChips==='function') rebuildShowFilterChips();
+  if(typeof populateShowSelects==='function') populateShowSelects('','');
   if(cur==='shows')renderShows();
   if(cur==='courses')renderCourses();
 }
