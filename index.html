@@ -572,7 +572,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 </nav>
 
 <!-- HOME -->
-<div class="page active" id="page-home">
+<div class="page" id="page-home">
   <section class="hero">
     <div class="hero-logo"><img src="/assets/ciciradio.jpg" alt="嘻嘻哪哩唷"></div>
     <div class="hero-tag">
@@ -2643,7 +2643,7 @@ function restorePageFromHash(){
   showPage(page, true); // skipHistory=true，用 replaceState 不是 pushState
 }
 
-window.addEventListener('DOMContentLoaded', ()=>{
+window.addEventListener('load', ()=>{
   initReveal();
   restorePageFromHash();
   const badge = document.getElementById('sessionBadge');
