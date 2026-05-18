@@ -2463,26 +2463,6 @@ function initTodayTab() {
   micDay = todayDay;
   document.querySelectorAll('.day-tab').forEach(t=>t.classList.toggle('on', parseInt(t.dataset.day)===todayDay));
 }
-  const todayDay = new Date().getDay(); // 0=Sun … 6=Sat
-  document.querySelectorAll('.day-tab').forEach(btn => {
-    const d = parseInt(btn.dataset.day);
-    // Remove previous today styling
-    btn.classList.remove('today-tab');
-    // Remove old badge
-    const old = btn.querySelector('.today-badge');
-    if(old) old.remove();
-    if(d === todayDay) {
-      btn.classList.add('today-tab');
-      const badge = document.createElement('span');
-      badge.className = 'today-badge';
-      badge.innerHTML = `<span class="zh-text">今天</span><span class="en-text">Today</span>`;
-      btn.appendChild(badge);
-    }
-  });
-  // Auto-select today's tab
-  micDay = todayDay;
-  document.querySelectorAll('.day-tab').forEach(t => t.classList.toggle('on', parseInt(t.dataset.day) === todayDay));
-}
 
 // ── ABOUT / MEMBERS ──
 function renderAbout() {
