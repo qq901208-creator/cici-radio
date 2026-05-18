@@ -593,10 +593,10 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <!-- 數字統計列 -->
     <div class="hero-stats" id="hero-stats">
-      <div class="hero-stat"><span class="hero-stat-num" id="stat-shows">—</span><span class="hero-stat-lbl"><span class="zh-text">近期演出</span><span class="en-text">Upcoming Shows</span></span></div>
+      <div class="hero-stat"><span class="hero-stat-num" id="stat-shows">—</span><span class="hero-stat-lbl"><span class="zh-text">近一個月演出</span><span class="en-text">Shows (30 days)</span></span></div>
       <div class="hero-stat"><span class="hero-stat-num" id="stat-venues">—</span><span class="hero-stat-lbl"><span class="zh-text">喜劇據點</span><span class="en-text">Venues</span></span></div>
-      <div class="hero-stat"><span class="hero-stat-num" id="stat-mics">—</span><span class="hero-stat-lbl"><span class="zh-text">Open Mic 場次</span><span class="en-text">Open Mic Slots</span></span></div>
-      <div class="hero-stat"><span class="hero-stat-num" id="stat-courses">—</span><span class="hero-stat-lbl"><span class="zh-text">近期課程</span><span class="en-text">Upcoming Courses</span></span></div>
+      <div class="hero-stat"><span class="hero-stat-num" id="stat-mics">—</span><span class="hero-stat-lbl"><span class="zh-text">每月 Open Mic</span><span class="en-text">Monthly Open Mics</span></span></div>
+      <div class="hero-stat"><span class="hero-stat-num" id="stat-courses">—</span><span class="hero-stat-lbl"><span class="zh-text">本年度課程</span><span class="en-text">Courses This Year</span></span></div>
     </div>
     <!-- 最近一場演出預告 -->
     <div id="hero-next-show" class="hero-next" style="display:none" onclick="showPage('shows')"></div>
@@ -1646,10 +1646,54 @@ function renderHeroStats(){
   const venues  = window._VENUES  || VENUES  || [];
   const mics    = window._MICS    || MICS    || [];
   const courses = window._COURSES || COURSES || [];
-  const upcomingShows   = shows.filter(s=>(s.status||'published')==='published' && !isExpired(s.date,s.time)).length;
-  const venueCount      = venues.length;
-  const micCount        = mics.length;
-  const upcomingCourses = courses.filter(c=>(c.status||'published')==='published' && !isExpired(c.date,c.time)).length;
+  const now = new Date();
+
+  // 近一個月演出（未來30天內，已發布）
+  const in30 = new Date(now.getTime() + 30*24*60*60*1000);
+  const upcomingShows = shows.filter(s=>{
+    if((s.status||'published')!=='published') return false;
+    const d = new Date((s.date||'')+'T00:00');
+    return !isNaN(d) && d >= now && d <= in30;
+  }).length;
+
+  // 喜劇據點
+  const venueCount = venues.length;
+
+  // 每月 Open Mic 場次（所有 MICS 筆數，代表每週固定場地數）
+  const micCount = mics.length;
+
+  // 本年度課程（今年所有課程，已過期也計入）
+  const thisYear = now.getFullYear().toString();
+  const yearCourses = courses.filter(c=>{
+    if((c.status||'published')==='hidden') return false;
+    const d = (c.date||'').split(',')[0].trim();
+    return d.startsWith(thisYear);
+  }).length;
+
+  const setNum = (id, num) => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(num > 0) animateNumber(el, num, 900);
+    else el.textContent = '0';
+  };
+  setNum('stat-shows', upcomingShows);
+  setNum('stat-venues', venueCount);
+  setNum('stat-mics', micCount);
+  setNum('stat-courses', yearCourses);
+
+  // 最近一場演出預告
+  const next = shows.filter(s=>(s.status||'published')==='published' && !isExpired(s.date,s.time))
+    .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)))[0];
+  const nextEl = document.getElementById('hero-next-show');
+  if(next && nextEl){
+    const lang = getLang();
+    const label = lang==='en'
+      ? `Next up: <strong>${next.date} · ${next.venueLabel||next.venue} · ${next.title}</strong> →`
+      : `最近一場：<strong>${next.date} · ${next.venueLabel||next.venue} · ${next.title}</strong> →`;
+    nextEl.innerHTML = label;
+    nextEl.style.display = 'block';
+  }
+}
 
   const setNum = (id, num) => {
     const el = document.getElementById(id);
