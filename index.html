@@ -217,6 +217,10 @@ body.ready{visibility:visible}
 .day-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
 .day-tab{padding:6px 15px;border-radius:var(--r-pill);font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
 .day-tab.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
+#mic-table-wrap{display:none}
+#mic-table-wrap.ready{display:block}
+#mic-loading{display:block}
+#mic-loading.hidden{display:none}
 .mic-table-wrap{background:var(--ww);border-radius:var(--r-lg);overflow-x:auto;border:1.5px solid rgba(45,43,31,.09)}
 .mic-table{width:100%;min-width:820px;border-collapse:collapse}
 .mic-table thead th{padding:11px 14px;background:var(--sd);color:var(--y);font-size:.73rem;font-weight:700;text-align:left;font-family:var(--f-zh)}
@@ -825,7 +829,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="day-tab" data-day="6" onclick="selectMicDay(6,this)"><span class="zh-text">週六</span><span class="en-text">Sat.</span></button>
       <button class="day-tab" data-day="0" onclick="selectMicDay(0,this)"><span class="zh-text">週日</span><span class="en-text">Sun.</span></button>
     </div>
-    <div class="mic-table-wrap">
+    <div class="mic-table-wrap" id="mic-table-wrap">
       <table class="mic-table"><thead><tr>
         <th><span class="zh-text">場地</span><span class="en-text">Venue</span></th>
         <th><span class="zh-text">Open Mic 名稱</span><span class="en-text">Show Name</span></th>
@@ -834,8 +838,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <th><span class="zh-text">報到時間</span><span class="en-text">Check-in</span></th>
         <th><span class="zh-text">報名方式</span><span class="en-text">How to Sign Up</span></th>
         <th><span class="zh-text">備註</span><span class="en-text">Notes</span></th>
-      </tr></thead><tbody id="mic-tbody"><tr><td colspan="7" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">載入中…</td></tr></tbody></table>
+      </tr></thead><tbody id="mic-tbody"></tbody></table>
     </div>
+    <div id="mic-loading" style="text-align:center;padding:40px 0;color:var(--ts);font-family:var(--f-zh);font-size:.9rem">載入中…</div>
     <button class="edit-add-btn" onclick="openMicModal(null)">＋ <span class="zh-text">新增 Open Mic 場次</span><span class="en-text">Add Open Mic</span></button>
   </section>
 </div>
@@ -2283,32 +2288,43 @@ function sanitizeMicMethod(raw) {
             });
 }
 
-// 場地名稱中英文對照（用於舊資料沒有 venueEn 欄位時的 fallback）
-const MIC_VENUE_EN_MAP = {
-  '卡米地': 'Comedy Plus',
-  '23喜劇': 'Two Three Comedy',
-  'two three': 'Two Three Comedy',
-  '飛客': 'Fakers Club',
-  'fakers': 'Fakers Club',
-  '北投喜劇': 'Beitou Comedy',
-  '樂君亭': 'Gingting Comedy',
-  'gingting': 'Gingting Comedy',
-  '站立風城': 'Windy City Stand-up',
-  '思mic歐': 'S.M.O',
-  's.m.o': 'S.M.O',
-  '來福好事': 'Laugh House',
-  '府城喜劇': 'Tainan Comedy',
-  '喜劇開港': 'Takao Comedy Bay',
-  'takao': 'Takao Comedy Bay',
-};
+// 場地名稱中英文對照表（key 為比對用小寫關鍵字）
+const MIC_VENUE_EN_MAP = [
+  ['卡米地',   'Comedy Plus'],
+  ['23喜劇',   'Two Three Comedy'],
+  ['two three','Two Three Comedy'],
+  ['飛客',     'Fakers Club'],
+  ['fakers',   'Fakers Club'],
+  ['北投喜劇', 'Beitou Comedy'],
+  ['樂君亭',   'Gingting Comedy'],
+  ['站立風城', 'Windy City Stand-up'],
+  ['思mic歐',  'S.M.O'],
+  ['s.m.o',    'S.M.O'],
+  ['來福好事', 'Laugh House'],
+  ['府城喜劇', 'Tainan Comedy'],
+  ['喜劇開港', 'Takao Comedy Bay'],
+];
 
+// 只取中文部分（去掉尾部的英文）
+function extractZh(str) {
+  if(!str) return '';
+  // 去除末尾連續英文+空格（保留純中文部分）
+  return str.replace(/[\s]*[A-Za-z][A-Za-z\s\.\+\-]*$/, '').trim() || str.trim();
+}
+
+// 取英文名稱：優先用 venueEn 欄位，再查對照表，最後 fallback 原字串
 function getMicVenueEn(m) {
   if(m.venueEn) return m.venueEn;
-  const zh = (m.venue||'').toLowerCase();
-  for(const [key, val] of Object.entries(MIC_VENUE_EN_MAP)){
-    if(zh.includes(key.toLowerCase())) return val;
+  const lower = (m.venue||'').toLowerCase();
+  for(const [key, val] of MIC_VENUE_EN_MAP){
+    if(lower.includes(key.toLowerCase())) return val;
   }
-  return m.venue||''; // fallback to zh if no match
+  return m.venue||'';
+}
+
+// 取中文名稱：優先用 venue 欄位（去掉英文後綴）
+function getMicVenueZh(m) {
+  return extractZh(m.venue||'') || m.venue||'';
 }
 
 // 清理舊資料中「上午 當天現場」/「下午 當天現場」等格式
@@ -2320,8 +2336,13 @@ function cleanMicTime(str) {
 
 function renderMicTable() {
   const tbody=document.getElementById('mic-tbody'); if(!tbody)return;
-  // 嚴格等待 Firebase 資料就緒，避免空資料閃爍
-  if(!window._dataReady) return;
+  if(!window._dataReady) return; // 等 Firebase 就緒，保持 loading 狀態
+
+  // 顯示表格、隱藏 loading
+  const wrap = document.getElementById('mic-table-wrap');
+  const loading = document.getElementById('mic-loading');
+  if(wrap) wrap.classList.add('ready');
+  if(loading) loading.classList.add('hidden');
   const isAdmin=isLoggedIn();
   const lang=getLang();
   const rows=MICS.filter(m=>m.day===micDay).sort((a,b)=>{
@@ -2334,8 +2355,7 @@ function renderMicTable() {
   tbody.innerHTML=rows.map(m=>{
     const cityLblZh = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'}[m.city||'other']||'';
     const cityLblEn = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'}[m.city||'other']||'';
-    const venueZh = m.venue||'';
-    const venueDisplay = lang==='en' ? getMicVenueEn(m) : venueZh;
+    const venueDisplay = lang==='en' ? getMicVenueEn(m) : getMicVenueZh(m);
     const cityLbl = lang==='en' ? cityLblEn : cityLblZh;
     const methodHtml = sanitizeMicMethod(m.method||'');
     const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'');
