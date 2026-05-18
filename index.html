@@ -1526,7 +1526,8 @@ function syncFiltersToURL(){
 }
 
 function restoreFiltersFromURL(){
-  const qs = location.search || location.hash.split('?')[1] || '';
+  const hashParts = location.hash.split('?');
+  const qs = hashParts[1] || '';
   if(!qs) return;
   const params = new URLSearchParams(qs);
   if(params.get('type'))  { fType  = params.get('type');  setChip('type',  fType); }
@@ -2678,13 +2679,22 @@ function restorePageFromHash(){
   const validPages = ['home','shows','opmic','venues','courses','about','board'];
   const hash = location.hash.split('?')[0].replace('#','');
   const page = validPages.includes(hash) ? hash : 'home';
-  showPage(page, true);
-  // 還原篩選條件（需在 showPage 後執行，確保 chips 已存在）
+  // 先切換頁面（不 render 內容）
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el = document.getElementById('page-'+page);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
+  history.replaceState({page},'','#'+page+(location.hash.includes('?')?'?'+location.hash.split('?')[1]:''));
+  // 還原篩選條件（chips 已存在）
   restoreFiltersFromURL();
-  // 根據還原的篩選重新 render
+  // render 一次
+  if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
   if(page==='shows') renderShows();
-  if(page==='courses') renderCourses();
+  if(page==='opmic') selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));
   if(page==='venues') renderVenues();
+  if(page==='courses') renderCourses();
+  if(page==='about') renderAbout();
+  if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
 }
 
 window.addEventListener('load', ()=>{
