@@ -217,8 +217,8 @@ body.ready{visibility:visible}
 .day-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
 .day-tab{padding:6px 15px;border-radius:var(--r-pill);font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
 .day-tab.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
-.mic-table-wrap{background:var(--ww);border-radius:var(--r-lg);overflow:hidden;border:1.5px solid rgba(45,43,31,.09)}
-.mic-table{width:100%;border-collapse:collapse}
+.mic-table-wrap{background:var(--ww);border-radius:var(--r-lg);overflow-x:auto;border:1.5px solid rgba(45,43,31,.09)}
+.mic-table{width:100%;min-width:820px;border-collapse:collapse}
 .mic-table thead th{padding:11px 14px;background:var(--sd);color:var(--y);font-size:.73rem;font-weight:700;text-align:left;font-family:var(--f-zh)}
 .mic-table tbody tr{border-bottom:1px solid rgba(45,43,31,.06);transition:background .12s}
 .mic-table tbody tr:last-child{border-bottom:none}
@@ -828,6 +828,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="mic-table-wrap">
       <table class="mic-table"><thead><tr>
         <th><span class="zh-text">場地</span><span class="en-text">Venue</span></th>
+        <th><span class="zh-text">Open Mic 名稱</span><span class="en-text">Show Name</span></th>
         <th><span class="zh-text">演出星期／時間</span><span class="en-text">Show Day / Time</span></th>
         <th><span class="zh-text">報名時間</span><span class="en-text">Sign-up Time</span></th>
         <th><span class="zh-text">報到時間</span><span class="en-text">Check-in</span></th>
@@ -1190,6 +1191,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <option value="other">其他 Other</option>
       </select>
     </div>
+    <div class="fg-g full"><label class="fl">Open Mic 名稱</label><input class="fi" type="text" id="m-name" placeholder="e.g. 週四 Open Mic Comedy 純英文場"></div>
     <div class="fg-g full"><label class="fl">場地名稱 <span class="req">*</span></label><input class="fi" type="text" id="m-venue" placeholder="e.g. 卡米地+ Comedy Plus"></div>
     <div class="fg-g full">
       <label class="fl">演出時間</label>
@@ -2296,6 +2298,7 @@ function renderMicTable() {
         <strong style="font-family:var(--f-zh)">${m.venue}</strong>
         ${cityLbl?`<div style="font-size:.7rem;color:var(--ts);margin-top:2px">📍 ${cityLbl}</div>`:''}
       </td>
+      <td style="font-family:var(--f-zh);font-weight:700">${m.name||'—'}</td>
       <td style="font-family:var(--f-zh)">${m.showTime||'—'}</td>
       <td style="font-family:var(--f-zh);color:var(--or);font-weight:600">${m.signupTime||m.signupDeadline||'—'}</td>
       <td style="font-family:var(--f-zh)">${m.checkinTime||'—'}</td>
@@ -2552,7 +2555,7 @@ function openMicModal(id){
   const m=id?MICS.find(x=>x.id===id):null;
   document.getElementById('modal-mic-title').textContent=m?'編輯 Open Mic 場次':'新增 Open Mic 場次';
   // 清空所有欄位
-  ['m-venue','m-showtime-h','m-showtime-end-h','m-signuptime-h','m-checkintime-h','m-method','m-notes'].forEach(k=>{
+  ['m-venue','m-name','m-showtime-h','m-showtime-end-h','m-signuptime-h','m-checkintime-h','m-method','m-notes'].forEach(k=>{
     const el=document.getElementById(k); if(el) el.value='';
   });
   // 重設 ampm 預設值
@@ -2562,6 +2565,7 @@ function openMicModal(id){
   if(m){
     document.getElementById('m-day').value=String(m.day);
     document.getElementById('m-city').value=m.city||'taipei';
+    document.getElementById('m-name').value=m.name||'';
     document.getElementById('m-venue').value=m.venue||'';
     // 解析演出時間（可能含 –）
     const showParts = (m.showTime||'').split('–');
@@ -2595,6 +2599,7 @@ function saveMic(){
   const item={
     day:parseInt(document.getElementById('m-day').value),
     city:document.getElementById('m-city').value,
+    name:document.getElementById('m-name').value.trim(),
     venue,
     showTime,
     signupTime,
