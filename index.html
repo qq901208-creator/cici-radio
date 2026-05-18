@@ -104,7 +104,11 @@ body.ready{visibility:visible}
 /* SHOWS */
 .filter-section{margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);min-width:50px;flex-shrink:0}
+.filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);min-width:50px;width:50px;flex-shrink:0;align-self:flex-start;padding-top:6px}
+/* 場地列：label 固定左側，chips 區域自動換行並對齊 */
+.filter-row-indent{display:flex;gap:0;align-items:flex-start}
+.filter-row-indent .filter-lbl{padding-top:6px}
+.filter-chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
 .chip{padding:5px 12px;font-size:.76rem;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);cursor:pointer;font-family:var(--f-zh);transition:all .14s;white-space:nowrap}
 .chip:hover,.chip.on{background:var(--sd);color:var(--y);border-color:var(--sd);font-weight:700}
 .shows-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(276px,1fr));gap:18px;margin-bottom:28px}
@@ -147,12 +151,13 @@ body.ready{visibility:visible}
 .hero-next:hover{opacity:1;color:var(--or)}
 .hero-next strong{color:var(--or);font-weight:700}
 @media(max-width:768px){.hero-stat{padding:8px 12px;min-width:68px}.hero-stat-num{font-size:1.3rem}}
-.filter-section{margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
-.filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);min-width:50px;flex-shrink:0}
 /* 手機版橫向滑動 */
 @media(max-width:768px){
   .filter-row{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
+  .filter-row-indent{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
+  .filter-row-indent::-webkit-scrollbar{display:none}
+  .filter-chips{flex-wrap:nowrap}
+  .filter-chips .chip{flex-shrink:0}
   .filter-row::-webkit-scrollbar{display:none}
   .filter-row .chip{flex-shrink:0}
 
@@ -735,8 +740,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="type" data-v="podcast">Live Podcast</button>
         <button class="chip" data-f="type" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
       </div>
-      <div class="filter-row">
+      <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">場地</span><span class="en-text">Venue</span></span>
+        <div class="filter-chips">
         <button class="chip on" data-f="venue" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
         <button class="chip" data-f="venue" data-v="comedy-plus"><span class="zh-text">卡米地＋</span><span class="en-text">Comedy Plus</span></button>
         <button class="chip" data-f="venue" data-v="two-three"><span class="zh-text">23喜劇</span><span class="en-text">two three comedy</span></button>
@@ -749,6 +755,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="venue" data-v="tainan"><span class="zh-text">府城喜劇 - SASADRA cafe</span><span class="en-text">Tainan Comedy</span></button>
         <button class="chip" data-f="venue" data-v="takao"><span class="zh-text">喜劇開港</span><span class="en-text">Takao Comedy Bay</span></button>
         <button class="chip" data-f="venue" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
+        </div>
       </div>
       <div class="filter-row">
         <span class="filter-lbl"><span class="zh-text">地區</span><span class="en-text">Area</span></span>
