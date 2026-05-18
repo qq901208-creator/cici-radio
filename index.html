@@ -1350,7 +1350,7 @@ async function loadAllData() {
     if(typeof renderHomeComments==='function') renderHomeComments();
     if(typeof renderAbout==='function') renderAbout();
     if(typeof updFbBadge==='function') updFbBadge();
-  }, 50);
+  }, 200);
 }
 window._loadAllData = loadAllData;
 
@@ -1646,28 +1646,37 @@ function renderHeroStats(){
   const venues  = window._VENUES  || VENUES  || [];
   const mics    = window._MICS    || MICS    || [];
   const courses = window._COURSES || COURSES || [];
-  const now = new Date();
 
-  // 近一個月演出（未來30天內，已發布）
+  // 日期解析 helper（支援 2026-05-18、2026/05/18 等格式）
+  function parseDate(str){
+    if(!str) return null;
+    const s = String(str).split(',')[0].trim().replace(/\//g,'-').replace(/年/,'-').replace(/月/,'-').replace(/日/,'');
+    const d = new Date(s+'T00:00');
+    return isNaN(d) ? null : d;
+  }
+
+  const now = new Date(); now.setHours(0,0,0,0);
   const in30 = new Date(now.getTime() + 30*24*60*60*1000);
+
+  // 近一個月演出（今天到30天後）
   const upcomingShows = shows.filter(s=>{
     if((s.status||'published')!=='published') return false;
-    const d = new Date((s.date||'')+'T00:00');
-    return !isNaN(d) && d >= now && d <= in30;
+    const d = parseDate(s.date);
+    return d && d >= now && d <= in30;
   }).length;
 
   // 喜劇據點
   const venueCount = venues.length;
 
-  // 每月 Open Mic 場次（所有 MICS 筆數，代表每週固定場地數）
+  // 每月 Open Mic 場次
   const micCount = mics.length;
 
-  // 本年度課程（今年所有課程，已過期也計入）
+  // 本年度課程（今年所有，已過期也計入，hidden 除外）
   const thisYear = now.getFullYear().toString();
   const yearCourses = courses.filter(c=>{
     if((c.status||'published')==='hidden') return false;
-    const d = (c.date||'').split(',')[0].trim();
-    return d.startsWith(thisYear);
+    const d = String(c.date||'').split(',')[0].trim();
+    return d.startsWith(thisYear) || d.replace(/\//g,'-').startsWith(thisYear);
   }).length;
 
   const setNum = (id, num) => {
@@ -1689,30 +1698,6 @@ function renderHeroStats(){
     const lang = getLang();
     const label = lang==='en'
       ? `Next up: <strong>${next.date} · ${next.venueLabel||next.venue} · ${next.title}</strong> →`
-      : `最近一場：<strong>${next.date} · ${next.venueLabel||next.venue} · ${next.title}</strong> →`;
-    nextEl.innerHTML = label;
-    nextEl.style.display = 'block';
-  }
-}
-
-  const setNum = (id, num) => {
-    const el = document.getElementById(id);
-    if(!el) return;
-    if(num > 0) animateNumber(el, num, 900);
-    else el.textContent = '—';
-  };
-  setNum('stat-shows', upcomingShows);
-  setNum('stat-venues', venueCount);
-  setNum('stat-mics', micCount);
-  setNum('stat-courses', upcomingCourses);
-
-  // 最近一場演出預告
-  const next = SHOWS.filter(s=>(s.status||'published')==='published' && !isExpired(s.date,s.time))
-    .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)))[0];
-  const nextEl = document.getElementById('hero-next-show');
-  if(next && nextEl){
-    const lang = getLang();
-    const label = lang==='en' ? `Next up: <strong>${next.date} · ${next.venueLabel||next.venue} · ${next.title}</strong> →`
       : `最近一場：<strong>${next.date} · ${next.venueLabel||next.venue} · ${next.title}</strong> →`;
     nextEl.innerHTML = label;
     nextEl.style.display = 'block';
