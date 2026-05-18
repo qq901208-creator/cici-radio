@@ -125,6 +125,12 @@ body.ready{visibility:visible}
 .sc-ticket:hover{background:rgba(239,111,32,.07)}
 .sc-img-col{display:contents} /* 桌機：等同不存在，sc-img 直接參與 flex column */
 .sc-imgsrc{font-size:.62rem;color:rgba(45,43,31,.3);padding:3px 16px 9px;font-family:var(--f-bo)}
+/* 桌機：只顯示 desktop 版（在 sc-body 底部），隱藏 mobile 版（在 sc-img-col） */
+.sc-imgsrc-mobile{display:none}
+.sc-imgsrc-desktop{display:block;padding:0 16px 9px;font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo);margin-top:4px;border-top:1px solid rgba(45,43,31,.05)}
+/* 桌機課程：只顯示 desktop 版（cc-foot 下方），隱藏 mobile 版（cc-body 內） */
+.cc-imgsrc-mobile{display:none}
+.cc-imgsrc-desktop{display:block}
 .view-toggle{display:flex;gap:6px;margin-bottom:18px}
 .view-btn{padding:6px 16px;border-radius:var(--r-pill);font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
 .view-btn.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
@@ -154,6 +160,11 @@ body.ready{visibility:visible}
   .sc-img{width:100%;height:90px;flex-shrink:0;border-radius:var(--r-lg) 0 0 0}
   .sc-img img.sc-poster{width:100%;height:90px;object-fit:contain;display:block;background:var(--ww)}
   .sc-imgsrc{padding:3px 6px 4px;font-size:.55rem;text-align:center;background:rgba(45,43,31,.04);border-radius:0 0 0 var(--r-lg);flex:1;display:flex;align-items:center;justify-content:center;line-height:1.3}
+  /* 手機：顯示 mobile 版，隱藏 desktop 版 */
+  .sc-imgsrc-mobile{display:flex}
+  .sc-imgsrc-desktop{display:none!important}
+  .cc-imgsrc-mobile{display:block!important}
+  .cc-imgsrc-desktop{display:none!important}
   .sc-img .sc-emoji{font-size:2rem}
   .sc-img .sc-types{top:6px;left:6px;gap:3px;max-width:108px}
   .sc-type-tag{font-size:.58rem;padding:2px 6px}
@@ -1701,7 +1712,7 @@ function showCardHTML(s) {
         <span class="sc-emoji">${emoji}</span>
         <div class="sc-types">${typeTags}</div>
       </div>
-      ${s.imgSrc?`<div class="sc-imgsrc">${s.imgSrc}</div>`:''}
+      ${s.imgSrc?`<div class="sc-imgsrc sc-imgsrc-mobile">${s.imgSrc}</div>`:''}
     </div>
     <div class="sc-body">
       <div class="sc-date">📅 ${s.date} (週${dow}) ${s.time||''}${soldTag}${expiredTag}</div>
@@ -1718,6 +1729,7 @@ function showCardHTML(s) {
         }
         <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);display:flex;align-items:center;gap:3px;opacity:.7"><span class="zh-text">詳情</span><span class="en-text">Details</span> ↗</span>
       </div>
+      ${s.imgSrc?`<div class="sc-imgsrc sc-imgsrc-desktop">${s.imgSrc}</div>`:''}
     </div>
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openShowModal('${s.id}')">✏️</button>
@@ -1939,12 +1951,13 @@ function courseCardHTML(c) {
       <div class="cc-meta"><span>📅 ${c.dateDisplay||c.date}</span>${c.time?`<span>${c.time}</span>`:''}<span>📍 ${c.location||''}</span>${c.organizer?`<span>${c.organizer}</span>`:''}</div>
       ${c.fee?`<div style="font-size:.79rem;font-weight:700;color:var(--or)">${c.fee}</div>`:''}
       <p class="cc-desc" style="flex:1">${c.description||''}</p>
-      ${c.imgSrc?`<div class="cc-imgsrc" style="padding:4px 0 0;font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo)">${c.imgSrc}</div>`:''}
+      ${c.imgSrc?`<div class="cc-imgsrc cc-imgsrc-mobile" style="padding:4px 0 0;font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo)">${c.imgSrc}</div>`:''}
     </div>
     <div class="cc-foot">
       ${(c.url&&c.url!=='#')?`<a href="${c.url}" class="cc-link" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">立即報名 ↗</span><span class="en-text">Sign Up ↗</span></a>`:'<span></span>'}
       <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.7">詳情 ↗</span>
     </div>
+    ${c.imgSrc?`<div class="cc-imgsrc cc-imgsrc-desktop" style="font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo);padding:0 16px 10px;text-align:right">${c.imgSrc}</div>`:''}
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openCourseModal('${c.id}')">✏️</button>
       <button class="ca-btn ca-del" onclick="event.stopPropagation();delCourse('${c.id}')">🗑</button>
