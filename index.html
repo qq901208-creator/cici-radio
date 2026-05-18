@@ -1119,6 +1119,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <input class="fi" type="text" id="v-tags" placeholder="e.g. Stand-up, Open Mic, 即興">
       <div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:4px">用逗號分隔多個標籤，例如：Stand-up, Open Mic, 即興</div>
     </div>
+    <div class="fg-g full"><label class="fl">嘻嘻小建議 💬</label><textarea class="fta" id="v-tip" placeholder="e.g. 建議提早到場，停車可到附近的XX停車場"></textarea></div>
   </div>
   <div class="fa">
     <button class="fa-cancel" onclick="closeModal('venue')">取消</button>
@@ -1795,6 +1796,7 @@ function venueCardHTML(v) {
       ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank">ig IG</a>`:''}
       ${v.address?`<a class="vlb vlb-map" href="https://maps.google.com/?q=${encodeURIComponent(v.address)}" target="_blank">📍 Map</a>`:''}
     </div>
+    ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55"><span style="font-weight:700;color:var(--or)">💬 嘻嘻小建議</span><br>${v.tip}</div>`:''}
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openVenueModal('${v.id}')">✏️</button>
       <button class="ca-btn ca-del" onclick="event.stopPropagation();delVenue('${v.id}')">🗑</button>
@@ -1860,6 +1862,8 @@ function showVenueDetail(id) {
       ${v.partner?`<tr><td style="padding:7px 0;color:var(--ts)">合作場地</td><td><span style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:700;background:rgba(239,111,32,.1);color:var(--or);border:1px solid rgba(239,111,32,.25);border-radius:var(--r-pill);padding:3px 10px">🤝 ${v.partner}</span></td></tr>`:''}
       ${(v.tags&&v.tags.length)?`<tr><td style="padding:7px 0;color:var(--ts);vertical-align:top">標籤</td><td><div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div></td></tr>`:''}
       <tr><td style="padding:7px 0;color:var(--ts)">簡介</td><td>${v.description||'—'}</td></tr>
+    </table>
+    ${v.tip?`<div style="padding:10px 14px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;margin-bottom:14px"><div style="font-size:.78rem;font-weight:700;color:var(--or);margin-bottom:4px">💬 嘻嘻小建議</div><div style="font-size:.85rem;font-family:var(--f-zh);color:var(--tm);line-height:1.65">${v.tip}</div></div>`:''}
     </table>
     <div style="display:flex;gap:9px;flex-wrap:wrap">
       ${v.fb?`<a href="${v.fb}" target="_blank" class="btn-or" style="padding:8px 18px;font-size:.8rem">Facebook ↗</a>`:''}
@@ -2127,9 +2131,9 @@ function openVenueModal(id){
   eVenueId=id||null;
   const v=id?VENUES.find(x=>x.id===id):null;
   document.getElementById('modal-venue-title').textContent=v?'編輯場地':'新增場地';
-  ['v-namezh','v-nameen','v-address','v-fb','v-ig','v-logourl','v-desc','v-partner','v-tags'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  ['v-namezh','v-nameen','v-address','v-fb','v-ig','v-logourl','v-desc','v-partner','v-tags','v-tip'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
   const lp=document.getElementById('v-logo-prev');if(lp){lp.src='';lp.style.display='none';}
-  if(v){document.getElementById('v-namezh').value=v.nameZh||'';document.getElementById('v-nameen').value=v.nameEn||'';document.getElementById('v-city').value=v.city||'taipei';document.getElementById('v-address').value=v.address||'';document.getElementById('v-fb').value=v.fb||'';document.getElementById('v-ig').value=v.ig||'';document.getElementById('v-logourl').value=v.logoUrl||'';document.getElementById('v-desc').value=v.description||'';document.getElementById('v-partner').value=v.partner||'';document.getElementById('v-tags').value=(v.tags||[]).join(', ');if(v.logoUrl)prevVenueLogo(v.logoUrl);}
+  if(v){document.getElementById('v-namezh').value=v.nameZh||'';document.getElementById('v-nameen').value=v.nameEn||'';document.getElementById('v-city').value=v.city||'taipei';document.getElementById('v-address').value=v.address||'';document.getElementById('v-fb').value=v.fb||'';document.getElementById('v-ig').value=v.ig||'';document.getElementById('v-logourl').value=v.logoUrl||'';document.getElementById('v-desc').value=v.description||'';document.getElementById('v-partner').value=v.partner||'';document.getElementById('v-tags').value=(v.tags||[]).join(', ');document.getElementById('v-tip').value=v.tip||'';if(v.logoUrl)prevVenueLogo(v.logoUrl);}
   document.getElementById('modal-venue').classList.add('open');
 }
 function saveVenue(){
@@ -2138,7 +2142,8 @@ function saveVenue(){
   const city=document.getElementById('v-city').value;
   const tagsRaw = document.getElementById('v-tags').value.trim();
   const tags = tagsRaw ? tagsRaw.split(',').map(t=>t.trim()).filter(Boolean) : [];
-  const item={nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,description:document.getElementById('v-desc').value,partner:document.getElementById('v-partner').value.trim(),tags};
+  const tip = document.getElementById('v-tip').value.trim();
+  const item={nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,description:document.getElementById('v-desc').value,partner:document.getElementById('v-partner').value.trim(),tags,tip};
   window.FB.save('venues', eVenueId||null, item).then(newId=>{
     if(eVenueId){const i=VENUES.findIndex(x=>x.id===eVenueId);if(i>=0)VENUES[i]={id:eVenueId,...item};}
     else VENUES.push({id:newId,...item});
