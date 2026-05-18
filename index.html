@@ -282,8 +282,8 @@ body.edit .edit-bar{display:flex!important}
 .modal-title{font-size:1.2rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:20px;padding-right:26px}
 
 /* SHOW DETAIL MODAL */
-.sd-hero{width:100%;height:200px;border-radius:var(--r-lg);overflow:hidden;margin-bottom:20px;position:relative;background:linear-gradient(135deg,var(--py),var(--y));display:flex;align-items:center;justify-content:center;font-size:3rem}
-.sd-hero img{width:100%;max-height:320px;object-fit:contain;position:absolute;inset:0;background:var(--cr)}
+.sd-hero{width:100%;border-radius:var(--r-lg);overflow:hidden;margin-bottom:20px;position:relative;background:linear-gradient(135deg,var(--py),var(--y));display:flex;align-items:center;justify-content:center;font-size:3rem}
+.sd-hero img{width:100%;max-height:420px;object-fit:contain;display:block;background:var(--cr)}
 .sd-types{position:absolute;top:10px;left:10px;display:flex;gap:5px;flex-wrap:wrap}
 .sd-table{width:100%;border-collapse:collapse;font-family:var(--f-zh);font-size:.88rem;margin:16px 0}
 .sd-table td{padding:9px 0;border-bottom:1px solid rgba(45,43,31,.07);vertical-align:top}
@@ -662,13 +662,17 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="type" data-v="opmic">Open Mic</button>
         <button class="chip" data-f="type" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
         <button class="chip" data-f="type" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
+        <button class="chip" data-f="type" data-v="sketch"><span class="zh-text">素描短劇</span><span class="en-text">Sketch</span></button>
         <button class="chip" data-f="type" data-v="mancai"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></button>
+        <button class="chip" data-f="type" data-v="crosstalk"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></button>
+        <button class="chip" data-f="type" data-v="rakugo"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></button>
+        <button class="chip" data-f="type" data-v="ogiri"><span class="zh-text">大喜利</span><span class="en-text">Ōgiri</span></button>
+        <button class="chip" data-f="type" data-v="musicom"><span class="zh-text">音樂喜劇</span><span class="en-text">Music Comedy</span></button>
+        <button class="chip" data-f="type" data-v="gameshow">Game Show</button>
         <button class="chip" data-f="type" data-v="mixed"><span class="zh-text">拼盤秀</span><span class="en-text">Mixed-bill Show</span></button>
         <button class="chip" data-f="type" data-v="special"><span class="zh-text">喜劇專場</span><span class="en-text">Comedy Special</span></button>
         <button class="chip" data-f="type" data-v="english"><span class="zh-text">英文喜劇</span><span class="en-text">English Comedy</span></button>
         <button class="chip" data-f="type" data-v="podcast">Live Podcast</button>
-        <button class="chip" data-f="type" data-v="crosstalk"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></button>
-        <button class="chip" data-f="type" data-v="rakugo"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></button>
         <button class="chip" data-f="type" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
       </div>
       <div class="filter-row">
@@ -790,9 +794,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="chip on" data-f="ctype" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
       <button class="chip" data-f="ctype" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
       <button class="chip" data-f="ctype" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
+      <button class="chip" data-f="ctype" data-v="sketch"><span class="zh-text">短劇</span><span class="en-text">Sketch</span></button>
       <button class="chip" data-f="ctype" data-v="mancai"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></button>
       <button class="chip" data-f="ctype" data-v="crosstalk"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></button>
       <button class="chip" data-f="ctype" data-v="rakugo"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></button>
+      <button class="chip" data-f="ctype" data-v="ogiri"><span class="zh-text">大喜利</span><span class="en-text">Ōgiri</span></button>
+      <button class="chip" data-f="ctype" data-v="musicom"><span class="zh-text">音樂喜劇</span><span class="en-text">Music Comedy</span></button>
       <button class="chip" data-f="ctype" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
     </div>
     <div style="margin-bottom:28px">
@@ -1020,13 +1027,17 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <label class="type-cb-lbl"><input type="checkbox" value="opmic" onchange="syncCB(this)">Open Mic</label>
         <label class="type-cb-lbl"><input type="checkbox" value="standup" onchange="syncCB(this)"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="improv" onchange="syncCB(this)"><span class="zh-text">即興</span><span class="en-text">Improv</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="sketch" onchange="syncCB(this)"><span class="zh-text">素描短劇</span><span class="en-text">Sketch</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="mancai" onchange="syncCB(this)"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="crosstalk" onchange="syncCB(this)"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="rakugo" onchange="syncCB(this)"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="ogiri" onchange="syncCB(this)"><span class="zh-text">大喜利</span><span class="en-text">Ōgiri</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="musicom" onchange="syncCB(this)"><span class="zh-text">音樂喜劇</span><span class="en-text">Music Comedy</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="gameshow" onchange="syncCB(this)">Game Show</label>
         <label class="type-cb-lbl"><input type="checkbox" value="mixed" onchange="syncCB(this)"><span class="zh-text">拼盤秀</span><span class="en-text">Mixed-bill</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="special" onchange="syncCB(this)"><span class="zh-text">喜劇專場</span><span class="en-text">Comedy Special</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="english" onchange="syncCB(this)"><span class="zh-text">英文喜劇</span><span class="en-text">English Comedy</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="podcast" onchange="syncCB(this)">Live Podcast</label>
-        <label class="type-cb-lbl"><input type="checkbox" value="crosstalk" onchange="syncCB(this)"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></label>
-        <label class="type-cb-lbl"><input type="checkbox" value="rakugo" onchange="syncCB(this)"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="other" onchange="syncCB(this)"><span class="zh-text">其他</span><span class="en-text">Others</span></label>
       </div>
     </div>
@@ -1154,11 +1165,14 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div class="fg-g"><label class="fl">類型</label>
       <select class="fs" id="c-type">
-        <option value="standup"><span class="zh-text">站立喜劇</span> Stand-up</option>
-        <option value="improv"><span class="zh-text">即興</span> Improv</option>
-        <option value="mancai"><span class="zh-text">漫才</span> Mancai</option>
+        <option value="standup">站立喜劇 Stand-up</option>
+        <option value="improv">即興 Improv</option>
+        <option value="sketch">短劇 Sketch</option>
+        <option value="mancai">漫才 Mancai</option>
         <option value="crosstalk">相聲 Crosstalk</option>
         <option value="rakugo">落語 Rakugo</option>
+        <option value="ogiri">大喜利 Ōgiri</option>
+        <option value="musicom">音樂喜劇 Music Comedy</option>
         <option value="other">其他 Others</option>
       </select>
     </div>
@@ -1390,23 +1404,32 @@ document.addEventListener('DOMContentLoaded', ()=>{ loadAllData(); });
 <script>
 // ── TYPE METADATA ──
 const TYPE_META = {
-  opmic:   {bg:'#fff3a0',color:'#5e4200',label:'Open Mic',labelEn:'Open Mic'},
-  standup: {bg:'#fde3cc',color:'#7a2e00',label:'站立喜劇',labelEn:'Stand-up'},
-  improv:  {bg:'#d0f0de',color:'#1a5c38',label:'即興',labelEn:'Improv'},
-  mancai:  {bg:'#dce4ff',color:'#2a3ba0',label:'漫才',labelEn:'Mancai'},
-  mixed:   {bg:'#e8d5ff',color:'#4a1a8c',label:'拼盤秀',labelEn:'Mixed-bill Show'},
-  special: {bg:'#ffe5cc',color:'#7a3800',label:'喜劇專場',labelEn:'Comedy Special'},
-  english: {bg:'#d4f0ff',color:'#0a5078',label:'英文喜劇',labelEn:'English Comedy'},
-  podcast: {bg:'#e8ffe0',color:'#1a5c1a',label:'Live Podcast',labelEn:'Live Podcast'},
-  other:   {bg:'#ebebeb',color:'#444',   label:'其他',labelEn:'Others'},
+  opmic:    {bg:'#fff3a0',color:'#5e4200',  label:'Open Mic',   labelEn:'Open Mic'},
+  standup:  {bg:'#ffd6b3',color:'#7a2e00',  label:'站立喜劇',   labelEn:'Stand-up'},
+  improv:   {bg:'#b8f0d0',color:'#0d5c30',  label:'即興',       labelEn:'Improv'},
+  sketch:   {bg:'#ffe0b3',color:'#7a4000',  label:'素描短劇',   labelEn:'Sketch'},
+  mancai:   {bg:'#c8d8ff',color:'#1a2e8c',  label:'漫才',       labelEn:'Mancai'},
+  crosstalk:{bg:'#ffd6e8',color:'#8c0038',  label:'相聲',       labelEn:'Crosstalk'},
+  rakugo:   {bg:'#e8d5f5',color:'#4a1a6e',  label:'落語',       labelEn:'Rakugo'},
+  ogiri:    {bg:'#d0f0f8',color:'#0a4a5e',  label:'大喜利',     labelEn:'Ōgiri'},
+  musicom:  {bg:'#f5d0f0',color:'#6e0062',  label:'音樂喜劇',   labelEn:'Music Comedy'},
+  gameshow: {bg:'#fff0b3',color:'#5e4a00',  label:'Game Show',  labelEn:'Game Show'},
+  mixed:    {bg:'#dce8ff',color:'#2a3ba0',  label:'拼盤秀',     labelEn:'Mixed-bill Show'},
+  special:  {bg:'#d4f5d4',color:'#1a5c1a',  label:'喜劇專場',   labelEn:'Comedy Special'},
+  english:  {bg:'#d4eeff',color:'#0a4878',  label:'英文喜劇',   labelEn:'English Comedy'},
+  podcast:  {bg:'#e0f0e0',color:'#1a5c1a',  label:'Live Podcast',labelEn:'Live Podcast'},
+  other:    {bg:'#e8e8e8',color:'#444',     label:'其他',       labelEn:'Others'},
 };
 const COURSE_META = {
-  standup:   {bg:'linear-gradient(135deg,#fde3cc,#ffb87a)',tag:'#fde3cc',tagC:'#7a2e00',label:'站立喜劇',labelEn:'Stand-up'},
-  improv:    {bg:'linear-gradient(135deg,#c8f0de,#7dd9a8)',tag:'#bff0d8',tagC:'#0e5c36',label:'即興',labelEn:'Improv'},
-  mancai:    {bg:'linear-gradient(135deg,#dce4ff,#a0b4ff)',tag:'#dde4ff',tagC:'#2a3ba0',label:'漫才',labelEn:'Mancai'},
-  crosstalk: {bg:'linear-gradient(135deg,#ffecd2,#fcb69f)',tag:'#ffd5b8',tagC:'#7a2e00',label:'相聲',labelEn:'Crosstalk'},
+  standup:   {bg:'linear-gradient(135deg,#ffd6b3,#ffb87a)',tag:'#ffd6b3',tagC:'#7a2e00',label:'站立喜劇',labelEn:'Stand-up'},
+  improv:    {bg:'linear-gradient(135deg,#b8f0d0,#7dd9a8)',tag:'#b8f0d0',tagC:'#0d5c30',label:'即興',labelEn:'Improv'},
+  sketch:    {bg:'linear-gradient(135deg,#ffe0b3,#ffc77a)',tag:'#ffe0b3',tagC:'#7a4000',label:'短劇',labelEn:'Sketch'},
+  mancai:    {bg:'linear-gradient(135deg,#c8d8ff,#a0b4ff)',tag:'#c8d8ff',tagC:'#1a2e8c',label:'漫才',labelEn:'Mancai'},
+  crosstalk: {bg:'linear-gradient(135deg,#ffd6e8,#ffb3d0)',tag:'#ffd6e8',tagC:'#8c0038',label:'相聲',labelEn:'Crosstalk'},
   rakugo:    {bg:'linear-gradient(135deg,#e8d5f5,#c9a8e8)',tag:'#e8d5f5',tagC:'#4a1a6e',label:'落語',labelEn:'Rakugo'},
-  other:     {bg:'linear-gradient(135deg,#ebebeb,#ccc)',   tag:'#e0e0e0',tagC:'#444',   label:'其他',labelEn:'Others'},
+  ogiri:     {bg:'linear-gradient(135deg,#d0f0f8,#9adcec)',tag:'#d0f0f8',tagC:'#0a4a5e',label:'大喜利',labelEn:'Ōgiri'},
+  musicom:   {bg:'linear-gradient(135deg,#f5d0f0,#e8a8e0)',tag:'#f5d0f0',tagC:'#6e0062',label:'音樂喜劇',labelEn:'Music Comedy'},
+  other:     {bg:'linear-gradient(135deg,#e8e8e8,#ccc)',   tag:'#e8e8e8',tagC:'#444',   label:'其他',labelEn:'Others'},
 };
 const CITY_LBL = {taipei:'台北市',newtaipei:'新北市',taoyuan:'桃園市',hsinchu:'新竹市',taichung:'台中市',chiayi:'嘉義市',tainan:'台南市',kaohsiung:'高雄市',other:'其他'};
 const PAGE_LBL = {home:{zh:'首頁',c:'#f5d558',tc:'#5e4200'},shows:{zh:'演出',c:'#fde3cc',tc:'#7a2e00'},opmic:{zh:'Open Mic',c:'#d0f0de',tc:'#1a5c38'},venues:{zh:'場地',c:'#dce4ff',tc:'#2a3ba0'},courses:{zh:'課程',c:'#fff3a0',tc:'#5e4200'},general:{zh:'一般',c:'#e0e0e0',tc:'#444'}};
@@ -1514,11 +1537,15 @@ let calYear = _today.getFullYear(), calMonth = _today.getMonth(), calSel = null;
 <script>
 // ── LANGUAGE HELPER ──
 function getLang() { return document.documentElement.getAttribute('data-lang')||'zh'; }
-function typeLabel(t) { const m=TYPE_META[t]||TYPE_META.other; return getLang()==='en' ? m.labelEn : m.label; }
+function typeLabel(t) {
+  const m = TYPE_META[t];
+  if(!m) return t; // 直接回傳原始值，不 fallback 到「其他」
+  return getLang()==='en' ? m.labelEn : m.label;
+}
 
 // ── GRADIENT ──
 function gradientForTypes(types) {
-  const BG = {opmic:'#fff3a0',standup:'#fde3cc',improv:'#c8f0de',mancai:'#dce4ff',mixed:'#e8d5ff',special:'#ffe5cc',english:'#d4f0ff',podcast:'#e8ffe0',other:'#ebebeb'};
+  const BG = {opmic:'#fff3a0',standup:'#ffd6b3',improv:'#b8f0d0',sketch:'#ffe0b3',mancai:'#c8d8ff',crosstalk:'#ffd6e8',rakugo:'#e8d5f5',ogiri:'#d0f0f8',musicom:'#f5d0f0',gameshow:'#fff0b3',mixed:'#dce8ff',special:'#d4f5d4',english:'#d4eeff',podcast:'#e0f0e0',other:'#e8e8e8'};
   const a = types&&types[0] ? (BG[types[0]]||'#f5d558') : '#f5d558';
   const b = types&&types[1] ? (BG[types[1]]||a) : a;
   return `linear-gradient(135deg,${a},${b})`;
@@ -1529,9 +1556,9 @@ function showCardHTML(s) {
   const d = new Date(s.date + 'T00:00');
   const dow = ['日','一','二','三','四','五','六'][d.getDay()];
   const types = s.types || (s.type ? [s.type] : ['opmic']);
-  const typeTags = types.slice(0,3).map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color}">${typeLabel(t)}</span>`;}).join('');
+  const typeTags = types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color}">${typeLabel(t)}</span>`;}).join('');
   // Image: show poster if URL available, fallback to emoji
-  const emojiMap = {opmic:'🎤',standup:'🎙️',improv:'🎭',mancai:'🥢',mixed:'🎪',special:'⭐',english:'🇬🇧',podcast:'📻',other:'🎬'};
+  const emojiMap = {opmic:'🎤',standup:'🎙️',improv:'🎭',sketch:'🎬',mancai:'🥢',crosstalk:'📯',rakugo:'🎎',ogiri:'🀄',musicom:'🎵',gameshow:'🎮',mixed:'🎪',special:'⭐',english:'🇬🇧',podcast:'📻',other:'🎬'};
   const emoji = emojiMap[types[0]] || '🎭';
   const posterEl = (s.image && s.image.trim())
     ? `<img class="sc-poster" src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
@@ -2716,8 +2743,8 @@ function showPage(page){
   document.getElementById('page-'+page).classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
   window.scrollTo(0,0);
-  // 記錄 hash，重新整理時可還原
-  history.replaceState(null,'','#'+page);
+  // 記錄 hash，支援重新整理還原
+  if(location.hash !== '#'+page) history.pushState({page},'','#'+page);
   if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
   if(page==='shows')renderShows();
   if(page==='opmic')selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));
@@ -2726,6 +2753,12 @@ function showPage(page){
   if(page==='about')renderAbout();
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
 }
+// 瀏覽器上一頁/下一頁
+window.addEventListener('popstate', e=>{
+  const validPages = ['home','shows','opmic','venues','courses','about','board'];
+  const page = e.state?.page || location.hash.replace('#','') || 'home';
+  if(validPages.includes(page)) showPage(page);
+});
 
 function setLang(l){
   document.documentElement.setAttribute('data-lang',l);
