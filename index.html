@@ -706,7 +706,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="showsPage=1;renderShows();syncFiltersToURL()">
     </div>
     <div class="filter-section">
-      <!-- TYPE filter: zh shows Chinese only, en shows English only -->
+      <!-- TYPE filter -->
       <div class="filter-row">
         <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
         <button class="chip on" data-f="type" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
@@ -731,10 +731,14 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip on" data-f="venue" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
         <button class="chip" data-f="venue" data-v="comedy-plus"><span class="zh-text">卡米地＋</span><span class="en-text">Comedy Plus</span></button>
         <button class="chip" data-f="venue" data-v="two-three"><span class="zh-text">23喜劇</span><span class="en-text">two three comedy</span></button>
-        <button class="chip" data-f="venue" data-v="fakers"><span class="zh-text">飛客劇樂部</span><span class="en-text">Fakers Club</span></button>
+        <button class="chip" data-f="venue" data-v="fakers"><span class="zh-text">飛客劇樂部 - basis coffee.</span><span class="en-text">Fakers - basis coffee.</span></button>
+        <button class="chip" data-f="venue" data-v="beitou"><span class="zh-text">北投喜劇 - 山峸二手書店</span><span class="en-text">Beitou Comedy</span></button>
         <button class="chip" data-f="venue" data-v="ginting"><span class="zh-text">樂君亭</span><span class="en-text">Gingting Comedy</span></button>
-        <button class="chip" data-f="venue" data-v="laughhouse"><span class="zh-text">來福好事</span><span class="en-text">Laugh House</span></button>
-        <button class="chip" data-f="venue" data-v="takao"><span class="zh-text">喜劇開港</span><span class="en-text">Takaocomedybay</span></button>
+        <button class="chip" data-f="venue" data-v="windcity"><span class="zh-text">站立風城 - 現場馬拉桑餐酒館</span><span class="en-text">Wind City Stand-Up</span></button>
+        <button class="chip" data-f="venue" data-v="smo"><span class="zh-text">思MIC歐 - 不染酒吧</span><span class="en-text">S.M.O - Buran Bar</span></button>
+        <button class="chip" data-f="venue" data-v="laughhouse"><span class="zh-text">來福好事 - 群島藝術園區</span><span class="en-text">Laugh House - Archipelago Arts</span></button>
+        <button class="chip" data-f="venue" data-v="tainan"><span class="zh-text">府城喜劇 - SASADRA cafe</span><span class="en-text">Tainan Comedy</span></button>
+        <button class="chip" data-f="venue" data-v="takao"><span class="zh-text">喜劇開港</span><span class="en-text">Takao Comedy Bay</span></button>
         <button class="chip" data-f="venue" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
       </div>
       <div class="filter-row">
@@ -758,6 +762,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="day" data-v="5"><span class="zh-text">週五</span><span class="en-text">Fri.</span></button>
         <button class="chip" data-f="day" data-v="6"><span class="zh-text">週六</span><span class="en-text">Sat.</span></button>
         <button class="chip" data-f="day" data-v="0"><span class="zh-text">週日</span><span class="en-text">Sun.</span></button>
+      </div>
+      <!-- 重置按鈕 -->
+      <div style="display:flex;justify-content:flex-end;margin-top:2px">
+        <button onclick="resetAllFilters()" style="padding:5px 14px;font-size:.76rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);background:transparent;border:1.5px solid rgba(45,43,31,.18);border-radius:var(--r-pill);cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.18)';this.style.color='var(--ts)'">
+          ✕ <span class="zh-text">重置所有篩選</span><span class="en-text">Reset Filters</span>
+        </button>
       </div>
     </div>
     <div id="view-cards">
@@ -850,8 +860,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="chip" data-f="ctype" data-v="mancai"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></button>
       <button class="chip" data-f="ctype" data-v="crosstalk"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></button>
       <button class="chip" data-f="ctype" data-v="rakugo"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></button>
-      <button class="chip" data-f="ctype" data-v="ogiri"><span class="zh-text">大喜利</span><span class="en-text">Ōgiri</span></button>
-      <button class="chip" data-f="ctype" data-v="musicom"><span class="zh-text">音樂喜劇</span><span class="en-text">Music Comedy</span></button>
       <button class="chip" data-f="ctype" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
     </div>
     <div style="margin-bottom:28px">
@@ -1211,23 +1219,52 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <div class="modal-title" id="modal-course-title">新增課程</div>
   <div class="fg">
     <div class="fg-g full"><label class="fl">課程名稱 <span class="req">*</span></label><input class="fi" type="text" id="c-title"></div>
-    <div class="fg-g full">
-      <label class="fl">日期（可多選，用逗號分隔）</label>
-      <input class="fi" type="text" id="c-date" placeholder="e.g. 2026-05-20, 2026-05-27, 2026-06-03">
-      <div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:4px">單一日期或多個日期皆可，用逗號分隔</div>
-    </div>
-    <div class="fg-g">
-      <label class="fl">開始時間</label>
-      <div style="display:flex;gap:6px;align-items:center">
-        <select class="fs" id="c-time-start-ampm" style="width:80px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
-        <input class="fi" type="text" id="c-time-start" placeholder="2:00" style="flex:1">
+    <!-- 第一階段 -->
+    <div class="fg-g full" style="background:rgba(245,213,88,.08);border-radius:var(--r-md);padding:12px 14px;border:1px solid rgba(239,111,32,.15)">
+      <div style="font-size:.72rem;font-weight:700;color:var(--or);font-family:var(--f-bo);margin-bottom:8px">📅 第一階段 Phase 1</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
+        <div class="fg-g" style="grid-column:1/-1">
+          <label class="fl">日期（可多選，逗號分隔）</label>
+          <input class="fi" type="text" id="c-date" placeholder="e.g. 2026-05-20, 2026-05-27">
+        </div>
+        <div class="fg-g">
+          <label class="fl">開始時間</label>
+          <div style="display:flex;gap:5px">
+            <select class="fs" id="c-time-start-ampm" style="width:76px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
+            <input class="fi" type="text" id="c-time-start" placeholder="2:00" style="flex:1">
+          </div>
+        </div>
+        <div class="fg-g">
+          <label class="fl">結束時間</label>
+          <div style="display:flex;gap:5px">
+            <select class="fs" id="c-time-end-ampm" style="width:76px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
+            <input class="fi" type="text" id="c-time-end" placeholder="6:00" style="flex:1">
+          </div>
+        </div>
       </div>
     </div>
-    <div class="fg-g">
-      <label class="fl">結束時間</label>
-      <div style="display:flex;gap:6px;align-items:center">
-        <select class="fs" id="c-time-end-ampm" style="width:80px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
-        <input class="fi" type="text" id="c-time-end" placeholder="6:00" style="flex:1">
+    <!-- 第二階段 -->
+    <div class="fg-g full" style="background:rgba(184,240,208,.18);border-radius:var(--r-md);padding:12px 14px;border:1px solid rgba(13,92,48,.12)">
+      <div style="font-size:.72rem;font-weight:700;color:#0d5c30;font-family:var(--f-bo);margin-bottom:8px">📅 第二階段 Phase 2（選填）</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
+        <div class="fg-g" style="grid-column:1/-1">
+          <label class="fl">日期（可多選，逗號分隔）</label>
+          <input class="fi" type="text" id="c-date2" placeholder="e.g. 2026-06-03, 2026-06-10">
+        </div>
+        <div class="fg-g">
+          <label class="fl">開始時間</label>
+          <div style="display:flex;gap:5px">
+            <select class="fs" id="c-time2-start-ampm" style="width:76px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
+            <input class="fi" type="text" id="c-time2-start" placeholder="2:00" style="flex:1">
+          </div>
+        </div>
+        <div class="fg-g">
+          <label class="fl">結束時間</label>
+          <div style="display:flex;gap:5px">
+            <select class="fs" id="c-time2-end-ampm" style="width:76px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
+            <input class="fi" type="text" id="c-time2-end" placeholder="6:00" style="flex:1">
+          </div>
+        </div>
       </div>
     </div>
     <div class="fg-g"><label class="fl">類型</label>
