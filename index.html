@@ -103,6 +103,32 @@ body.ready{visibility:visible}
 
 /* SHOWS */
 .filter-section{margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
+/* ── INFO BANNER ── */
+.info-banner{display:flex;align-items:center;gap:10px;padding:9px 16px;background:rgba(245,213,88,.15);border:1px solid rgba(239,111,32,.22);border-radius:var(--r-md);font-size:.8rem;font-family:var(--f-zh);color:var(--ts);margin-bottom:16px;cursor:pointer;transition:background .15s,border-color .15s;user-select:none}
+.info-banner:hover{background:rgba(245,213,88,.28);border-color:rgba(239,111,32,.45)}
+.info-banner span{flex:1;line-height:1.5}
+.info-banner .ib-link{font-size:.75rem;font-weight:700;color:var(--or);white-space:nowrap;font-family:var(--f-bo);flex-shrink:0}
+/* ── TODAY HIGHLIGHT ── */
+.day-tab.today-tab{border-color:var(--y) !important;box-shadow:0 0 0 2.5px rgba(245,213,88,.5)}
+.today-badge{display:inline-flex;align-items:center;background:var(--y);color:var(--sd);font-size:.58rem;font-weight:900;font-family:var(--f-bo);border-radius:var(--r-pill);padding:1px 6px;margin-left:5px;letter-spacing:.04em;vertical-align:middle}
+/* ── PODCAST SECTION ── */
+.podcast-card{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;background:var(--sd);border-radius:var(--r-lg);padding:36px 40px;box-shadow:0 6px 32px rgba(45,43,31,.13)}
+.podcast-card-left{display:flex;flex-direction:column;gap:14px}
+.podcast-title{font-size:1.12rem;font-weight:900;font-family:var(--f-zh);color:var(--y);line-height:1.35}
+.podcast-desc{font-size:.85rem;line-height:1.75;color:rgba(255,255,255,.72);font-family:var(--f-zh)}
+.podcast-btns{display:flex;gap:9px;flex-wrap:wrap}
+.podcast-btn{padding:8px 18px;border-radius:var(--r-pill);font-size:.8rem;font-weight:700;font-family:var(--f-bo);text-decoration:none;border:2px solid var(--y);color:var(--y);background:transparent;transition:all .15s;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.podcast-btn:hover{background:var(--y);color:var(--sd)}
+.podcast-iframe-wrap{border-radius:var(--r-md);overflow:hidden;background:rgba(255,255,255,.07);min-height:180px;display:flex;align-items:center;justify-content:center;width:100%}
+@media(max-width:768px){.podcast-card{grid-template-columns:1fr;padding:22px 16px;gap:18px}.podcast-title{font-size:1rem}}
+/* ── EMPTY STATE ── */
+.empty-state{grid-column:1/-1;text-align:center;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.empty-state-icon{font-size:2.8rem;line-height:1}
+.empty-state-title{font-size:.96rem;font-weight:700;color:var(--tm);font-family:var(--f-zh)}
+.empty-state-btn{padding:10px 22px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.84rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;transition:background .15s;text-decoration:none;display:inline-block}
+.empty-state-btn:hover{background:#d45c10}
+/* ── DISCLAIMER ── */
+.sd-disclaimer{font-size:.68rem;color:rgba(45,43,31,.38);text-align:center;margin-top:10px;line-height:1.7;font-family:var(--f-bo);max-width:360px;margin-left:auto;margin-right:auto}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);width:2.6em;min-width:2.6em;flex-shrink:0;white-space:nowrap}
 .filter-row-indent{display:flex;align-items:flex-start;gap:0}
@@ -692,8 +718,31 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div style="text-align:center"><button class="btn-or" onclick="showPage('shows')"><span class="zh-text">查看全部演出 →</span><span class="en-text">All Shows →</span></button></div>
   </section>
 
+  <section class="sec" style="background:var(--sd)">
+    <div class="sec-label" style="color:var(--y);opacity:.7"><span class="zh-text">Podcast</span><span class="en-text">Podcast</span></div>
+    <div class="podcast-card">
+      <div class="podcast-card-left">
+        <div class="podcast-title">
+          <span class="zh-text">看喜劇，也聽聽喜劇與我們的故事｜嘻嘻哪哩唷 Podcast</span>
+          <span class="en-text">Comedy shows — and the stories behind us and comedy｜Cici Radio Podcast</span>
+        </div>
+        <p class="podcast-desc">
+          <span class="zh-text">從廣電系的熱情出發！<br>這裡有最犀利的現場喜劇觀察，陪伴你的通勤與垃圾時間。</span>
+          <span class="en-text">Started by a group of broadcasting students passionate about live comedy in Taiwan.<br>Sharp observations, behind-the-scenes stories, and conversations to accompany your commute and late-night doomscrolling.</span>
+        </p>
+        <div class="podcast-btns">
+          <a class="podcast-btn" href="https://open.spotify.com/show/4meBDi6l5oJAeJdHJoiKbR" target="_blank" rel="noopener">🎵 Spotify</a>
+          <a class="podcast-btn" href="https://podcasts.apple.com/tw/podcast/%E5%97%BB%E5%97%BB%E5%93%AA%E8%A3%A1%E5%96%B2/id1579007302" target="_blank" rel="noopener">🎙 Apple Podcasts</a>
+          <a class="podcast-btn" href="https://open.firstory.me/user/ciciradio" target="_blank" rel="noopener">🎧 Firstory</a>
+        </div>
+      </div>
+      <div class="podcast-iframe-wrap">
+        <iframe style="border-radius:12px;width:100%;min-height:180px;border:none" src="https://open.spotify.com/embed/show/4meBDi6l5oJAeJdHJoiKbR?utm_source=generator&theme=0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
   <section class="sec" style="background:var(--cr)">
-    <div class="sec-label"><span class="zh-text">站友回饋</span><span class="en-text">Community</span></div>
     <h2 class="sec-title"><span class="zh-text">大家怎麼說</span><span class="en-text">What People Say</span></h2>
     <div id="home-comments-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:14px;margin-bottom:26px"></div>
     <div style="text-align:center"><button class="btn-ww" onclick="showPage('board')">💬 <span class="zh-text">留下你的回饋</span><span class="en-text">Leave Feedback</span></button></div>
@@ -721,6 +770,10 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="shows-search-wrap">
       <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
       <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="showsPage=1;renderShows();syncFiltersToURL()">
+    </div>
+    <div class="info-banner" onclick="document.getElementById('modal-report').classList.add('open')">
+      <span>💡 <span class="zh-text">發現資訊有誤或想補充場次？歡迎回報給我們</span><span class="en-text">Found incorrect info or want to recommend a show? Let us know!</span></span>
+      <span class="ib-link"><span class="zh-text">回報 →</span><span class="en-text">Report →</span></span>
     </div>
     <div class="filter-section">
       <div class="filter-row-indent">
@@ -820,7 +873,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <span class="zh-text"> 點擊報名連結將跳轉至外部頁面，本站不參與任何報名流程！</span>
       <span class="en-text"> Clicking sign-up links will take you to an external page. We are not involved in any sign-up process.</span>
     </div>
-    <div class="day-tabs">
+    <div class="info-banner" onclick="document.getElementById('modal-report').classList.add('open')">
+      <span>💡 <span class="zh-text">發現資訊有誤或想補充場次？歡迎回報給我們</span><span class="en-text">Found incorrect info or want to recommend a show? Let us know!</span></span>
+      <span class="ib-link"><span class="zh-text">回報 →</span><span class="en-text">Report →</span></span>
+    </div>
+    <div class="day-tabs" id="day-tabs-row">
       <button class="day-tab on" data-day="1" onclick="selectMicDay(1,this)"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
       <button class="day-tab" data-day="2" onclick="selectMicDay(2,this)"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
       <button class="day-tab" data-day="3" onclick="selectMicDay(3,this)"><span class="zh-text">週三</span><span class="en-text">Wed.</span></button>
@@ -837,6 +894,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <th><span class="zh-text">報名時間</span><span class="en-text">Sign-up Time</span></th>
         <th><span class="zh-text">報到時間</span><span class="en-text">Check-in</span></th>
         <th><span class="zh-text">報名方式</span><span class="en-text">How to Sign Up</span></th>
+        <th><span class="zh-text">演出時長限制</span><span class="en-text">Time Limit</span></th>
+        <th><span class="zh-text">報名費用</span><span class="en-text">Sign-up Fee</span></th>
         <th><span class="zh-text">備註</span><span class="en-text">Notes</span></th>
       </tr></thead><tbody id="mic-tbody"></tbody></table>
     </div>
@@ -872,6 +931,10 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="sec-label"><span class="zh-text">課程講座</span><span class="en-text">Courses & Talks</span></div>
     <h2 class="sec-title"><span class="zh-text">喜劇課程與講座</span><span class="en-text">Comedy Courses & Workshops</span></h2>
     <p class="sec-desc" style="margin-bottom:14px"><span class="zh-text">想學習不知道怎麼入手嗎？去找吧！所有課程都在這，一起加入喜劇的大家庭～</span><span class="en-text">Not sure where to start? Come find out! All the courses you need are right here — join the comedy family!</span></p>
+    <div class="info-banner" onclick="document.getElementById('modal-report').classList.add('open')">
+      <span>💡 <span class="zh-text">發現資訊有誤或想補充場次？歡迎回報給我們</span><span class="en-text">Found incorrect info or want to recommend a show? Let us know!</span></span>
+      <span class="ib-link"><span class="zh-text">回報 →</span><span class="en-text">Report →</span></span>
+    </div>
     <div class="filter-row" style="margin-bottom:14px">
       <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
       <button class="chip on" data-f="ctype" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
@@ -1230,6 +1293,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <textarea class="fta" id="m-method" rows="3" placeholder="e.g. FB 粉專私訊報名，或貼文留言。&#10;可加連結：<a href=&quot;https://...&quot; target=&quot;_blank&quot;>連結文字</a>"></textarea>
       <div style="font-size:.7rem;color:var(--ts);font-family:var(--f-bo);margin-top:3px">純文字或含 &lt;a href="..."&gt; 的 HTML，其他 HTML 標籤將被過濾。</div>
     </div>
+    <div class="fg-g"><label class="fl"><span class="zh-text">演出時長限制</span><span class="en-text">Time Limit</span></label><input class="fi" type="text" id="m-timelimit" placeholder="e.g. 5 分鐘 / 3–5 分鐘"></div>
+    <div class="fg-g"><label class="fl"><span class="zh-text">報名費用</span><span class="en-text">Sign-up Fee</span></label><input class="fi" type="text" id="m-signupfee" placeholder="e.g. 免費 / NT$100 / 低消一杯"></div>
     <div class="fg-g full"><label class="fl">備註</label><textarea class="fta" id="m-notes" rows="2" placeholder="e.g. 免費入場、純英文場次、需先報名..."></textarea></div>
   </div>
   <div class="fa">
@@ -1539,7 +1604,7 @@ async function loadAllData() {
       if(typeof renderHeroStats==='function') renderHeroStats();
     }
     if(activePage==='shows' && typeof renderShows==='function') renderShows();
-    if(activePage==='opmic' && typeof selectMicDay==='function') selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));
+    if(activePage==='opmic' && typeof selectMicDay==='function'){initTodayTab();selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));}
     if(activePage==='venues' && typeof renderVenues==='function') renderVenues();
     if(activePage==='courses' && typeof renderCourses==='function') renderCourses();
     if(activePage==='about' && typeof renderAbout==='function') renderAbout();
@@ -1927,7 +1992,7 @@ function openShowDetail(id) {
     </table>
     ${s.description?`<p class="sd-desc">${s.description}</p>`:''}
     ${s.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em">${getLang()==='en'?'Production Team':'製作團隊 Production Team'}</div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${s.production}</p></div>`:''}
-    ${s.ticketUrl&&s.ticketUrl!=='#'?`<a href="${s.ticketUrl}" target="_blank" rel="noopener" class="sd-ticket-btn" style="margin-top:20px;display:inline-block">${getLang()==='en'?'Buy Tickets ↗':'前往售票頁面 ↗'}</a>`:''}
+    ${s.ticketUrl&&s.ticketUrl!=='#'?`<a href="${s.ticketUrl}" target="_blank" rel="noopener" class="sd-ticket-btn" style="margin-top:20px;display:inline-block">${getLang()==='en'?'Buy Tickets ↗':'前往售票頁面 ↗'}</a><p class="sd-disclaimer"><span class="zh-text">本站僅提供資訊整理與導流，實際購票、退票及演出變動請洽原售票平台與主辦單位。</span><span class="en-text">This site only provides information aggregation. For ticketing, refunds, or event changes, please contact the original ticketing platform or organizer.</span></p>`:''}
     ${s.imgSrc?`<p class="sd-imgsrc">📷 ${s.imgSrc}</p>`:''}
   `;
   document.getElementById('modal-show-detail').classList.add('open');
@@ -2091,7 +2156,7 @@ function renderHomeShows() {
   const g = document.getElementById('home-shows-grid'); if (!g) return;
   const shows = window._SHOWS || SHOWS || [];
   const fil = shows.filter(s=>(s.status||'published')==='published' && !isExpired(s.date, s.time)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0,6);
-  g.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--ts);font-family:var(--f-zh)"><span class="zh-text">目前以售票演出為主，近期資訊整理中，敬請期待！</span><span class="en-text">Focused on ticketed shows — listings coming soon!</span></div>`;
+  g.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div class="empty-state"><div class="empty-state-icon">🎭</div><div class="empty-state-title"><span class="zh-text">近期資訊整理中，敬請期待！</span><span class="en-text">More comedy events coming soon!</span></div><button class="empty-state-btn" onclick="showPage('opmic')"><span class="zh-text">查看本週 Open Mic 場次</span><span class="en-text">Browse This Week's Open Mic Shows</span></button></div>`;
 }
 
 // ── COURSES ──
@@ -2351,7 +2416,7 @@ function renderMicTable() {
     if(oa!==ob) return (oa<0?99:oa)-(ob<0?99:ob);
     return (a.venue||'').localeCompare(b.venue||'','zh-TW');
   });
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">本日無場次</td></tr>`;return;}
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">本日無場次</td></tr>`;return;}
   tbody.innerHTML=rows.map(m=>{
     const cityLblZh = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'}[m.city||'other']||'';
     const cityLblEn = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'}[m.city||'other']||'';
@@ -2370,6 +2435,8 @@ function renderMicTable() {
       <td style="font-family:var(--f-zh);color:var(--or);font-weight:600">${signupDisplay||'—'}</td>
       <td style="font-family:var(--f-zh)">${checkinDisplay||'—'}</td>
       <td style="font-family:var(--f-zh);line-height:1.6">${methodHtml}</td>
+      <td style="font-family:var(--f-zh);font-size:.82rem">${m.timeLimit||'—'}</td>
+      <td style="font-family:var(--f-zh);font-size:.82rem">${m.signupFee||'—'}</td>
       <td style="font-family:var(--f-zh);font-size:.8rem;color:var(--ts)">${m.notes||'—'}
         ${isAdmin?`<div style="margin-top:4px;display:flex;gap:4px"><button class="ca-btn ca-edit" style="width:24px;height:24px;font-size:.62rem;display:inline-flex" onclick="openMicModal('${m.id}')">✏️</button><button class="ca-btn ca-del" style="width:24px;height:24px;font-size:.62rem;display:inline-flex" onclick="delMic('${m.id}')">🗑</button></div>`:''}
       </td>
@@ -2377,6 +2444,45 @@ function renderMicTable() {
   }).join('');
 }
 function selectMicDay(d,el){micDay=parseInt(d);document.querySelectorAll('.day-tab').forEach(t=>t.classList.toggle('on',parseInt(t.dataset.day)===micDay));renderMicTable();}
+
+// ── TODAY HIGHLIGHT ──
+function initTodayTab() {
+  const todayDay = new Date().getDay();
+  document.querySelectorAll('.day-tab').forEach(btn => {
+    btn.classList.remove('today-tab');
+    const old = btn.querySelector('.today-badge'); if(old) old.remove();
+    if(parseInt(btn.dataset.day) === todayDay) {
+      btn.classList.add('today-tab');
+      const badge = document.createElement('span');
+      badge.className = 'today-badge';
+      badge.innerHTML = `<span class="zh-text">今天</span><span class="en-text">Today</span>`;
+      btn.appendChild(badge);
+    }
+  });
+  // auto-select today
+  micDay = todayDay;
+  document.querySelectorAll('.day-tab').forEach(t=>t.classList.toggle('on', parseInt(t.dataset.day)===todayDay));
+}
+  const todayDay = new Date().getDay(); // 0=Sun … 6=Sat
+  document.querySelectorAll('.day-tab').forEach(btn => {
+    const d = parseInt(btn.dataset.day);
+    // Remove previous today styling
+    btn.classList.remove('today-tab');
+    // Remove old badge
+    const old = btn.querySelector('.today-badge');
+    if(old) old.remove();
+    if(d === todayDay) {
+      btn.classList.add('today-tab');
+      const badge = document.createElement('span');
+      badge.className = 'today-badge';
+      badge.innerHTML = `<span class="zh-text">今天</span><span class="en-text">Today</span>`;
+      btn.appendChild(badge);
+    }
+  });
+  // Auto-select today's tab
+  micDay = todayDay;
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.toggle('on', parseInt(t.dataset.day) === todayDay));
+}
 
 // ── ABOUT / MEMBERS ──
 function renderAbout() {
@@ -2624,7 +2730,7 @@ function openMicModal(id){
   const m=id?MICS.find(x=>x.id===id):null;
   document.getElementById('modal-mic-title').textContent=m?'編輯 Open Mic 場次':'新增 Open Mic 場次';
   // 清空所有欄位
-  ['m-venue','m-venue-en','m-name','m-showtime-h','m-showtime-end-h','m-signuptime-h','m-checkintime-h','m-method','m-notes'].forEach(k=>{
+  ['m-venue','m-venue-en','m-name','m-showtime-h','m-showtime-end-h','m-signuptime-h','m-checkintime-h','m-method','m-timelimit','m-signupfee','m-notes'].forEach(k=>{
     const el=document.getElementById(k); if(el) el.value='';
   });
   // 重設 ampm 預設值
@@ -2656,6 +2762,8 @@ function openMicModal(id){
     document.getElementById('m-checkintime-ampm').value = ci.ampm;
     document.getElementById('m-checkintime-h').value = ci.h;
     document.getElementById('m-method').value=m.method||'';
+    document.getElementById('m-timelimit').value=m.timeLimit||'';
+    document.getElementById('m-signupfee').value=m.signupFee||'';
     document.getElementById('m-notes').value=m.notes||'';
   }
   document.getElementById('modal-mic').classList.add('open');
@@ -2677,6 +2785,8 @@ function saveMic(){
     signupDeadline: signupTime, // 向下相容
     checkinTime,
     method:document.getElementById('m-method').value,
+    timeLimit:document.getElementById('m-timelimit').value.trim(),
+    signupFee:document.getElementById('m-signupfee').value.trim(),
     link:'#',
     notes:document.getElementById('m-notes').value,
   };
@@ -3386,7 +3496,7 @@ function restorePageFromHash(){
   // opmic: 顯示 loading 佔位，Firebase callback 後才真正 render
   if(page==='opmic'){
     const tbody=document.getElementById('mic-tbody');
-    if(tbody) tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">載入中…</td></tr>`;
+    if(tbody) tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">載入中…</td></tr>`;
   }
 }
 
@@ -3509,7 +3619,7 @@ function showPage(page, skipHistory){
   }
   if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
   if(page==='shows')renderShows();
-  if(page==='opmic')selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));
+  if(page==='opmic'){initTodayTab();selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));}
   if(page==='venues')renderVenues();
   if(page==='courses')renderCourses();
   if(page==='about')renderAbout();
