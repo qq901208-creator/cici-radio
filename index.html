@@ -834,7 +834,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <th><span class="zh-text">報到時間</span><span class="en-text">Check-in</span></th>
         <th><span class="zh-text">報名方式</span><span class="en-text">How to Sign Up</span></th>
         <th><span class="zh-text">備註</span><span class="en-text">Notes</span></th>
-      </tr></thead><tbody id="mic-tbody"></tbody></table>
+      </tr></thead><tbody id="mic-tbody"><tr><td colspan="7" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">載入中…</td></tr></tbody></table>
     </div>
     <button class="edit-add-btn" onclick="openMicModal(null)">＋ <span class="zh-text">新增 Open Mic 場次</span><span class="en-text">Add Open Mic</span></button>
   </section>
@@ -2320,11 +2320,8 @@ function cleanMicTime(str) {
 
 function renderMicTable() {
   const tbody=document.getElementById('mic-tbody'); if(!tbody)return;
-  // 資料尚未從 Firebase 載入完成 → 顯示 loading，避免空資料閃爍
-  if(!window._dataReady){
-    tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">載入中…</td></tr>`;
-    return;
-  }
+  // 嚴格等待 Firebase 資料就緒，避免空資料閃爍
+  if(!window._dataReady) return;
   const isAdmin=isLoggedIn();
   const lang=getLang();
   const rows=MICS.filter(m=>m.day===micDay).sort((a,b)=>{
@@ -3509,11 +3506,11 @@ function setLang(l){
   document.documentElement.setAttribute('data-lang',l);
   document.body.setAttribute('data-lang',l);
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('on',b.textContent.trim()===(l==='zh'?'繁中':'EN')));
-  // Re-render to update language-dependent labels
   const cur=document.querySelector('.page.active')?.id?.replace('page-','');
   if(typeof populateShowSelects==='function') populateShowSelects('','');
   if(cur==='shows')renderShows();
   if(cur==='courses')renderCourses();
+  if(cur==='opmic' && window._dataReady) renderMicTable();
 }
 
 function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
