@@ -276,9 +276,9 @@ body.edit .edit-bar{display:flex!important}
 .modal-ov.open{display:flex}
 .modal{background:var(--ww);border-radius:var(--r-xl);padding:32px 36px;max-width:720px;width:100%;position:relative;max-height:92vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.3);animation:mIn .2s ease}
 @keyframes mIn{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.modal-close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:none;background:rgba(45,43,31,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--tm);font-weight:700;z-index:10;flex-shrink:0}
-.modal-close:hover{background:rgba(45,43,31,.2)}
-@media(max-width:768px){.modal-close{width:42px;height:42px;font-size:1.2rem;top:10px;right:10px;background:rgba(45,43,31,.12)}}
+.modal-close{position:sticky;top:12px;float:right;margin:-8px -8px 0 0;width:40px;height:40px;border-radius:50%;border:2px solid rgba(45,43,31,.2);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--tm);font-weight:900;z-index:100;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.modal-close:hover{background:var(--cr);border-color:var(--or);color:var(--or)}
+@media(max-width:768px){.modal-close{width:44px;height:44px;font-size:1.2rem}}
 .modal-title{font-size:1.2rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:20px;padding-right:26px}
 
 /* SHOW DETAIL MODAL */
