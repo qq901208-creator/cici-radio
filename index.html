@@ -2632,7 +2632,7 @@ function restorePageFromHash(){
   const validPages = ['home','shows','opmic','venues','courses','about','board'];
   const hash = location.hash.replace('#','');
   const page = validPages.includes(hash) ? hash : 'home';
-  showPage(page);
+  showPage(page, true); // skipHistory=true，用 replaceState 不是 pushState
 }
 
 window.addEventListener('DOMContentLoaded', ()=>{
@@ -2738,13 +2738,19 @@ function updFbBadge(){const cnt=COMMENTS.filter(c=>!c.hidden).length;const b=doc
 <script>
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>18));
 
-function showPage(page){
+function showPage(page, skipHistory){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
+  const el = document.getElementById('page-'+page);
+  if(!el) return;
+  el.classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
   window.scrollTo(0,0);
   // 記錄 hash，支援重新整理還原
-  if(location.hash !== '#'+page) history.pushState({page},'','#'+page);
+  if(!skipHistory){
+    if(location.hash !== '#'+page) history.pushState({page},'','#'+page);
+  } else {
+    history.replaceState({page},'','#'+page);
+  }
   if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
   if(page==='shows')renderShows();
   if(page==='opmic')selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));
@@ -2757,7 +2763,7 @@ function showPage(page){
 window.addEventListener('popstate', e=>{
   const validPages = ['home','shows','opmic','venues','courses','about','board'];
   const page = e.state?.page || location.hash.replace('#','') || 'home';
-  if(validPages.includes(page)) showPage(page);
+  if(validPages.includes(page)) showPage(page, true);
 });
 
 function setLang(l){
