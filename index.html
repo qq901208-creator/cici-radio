@@ -290,7 +290,7 @@ body.edit .edit-bar{display:flex!important}
 .sd-table td{padding:9px 0;border-bottom:1px solid rgba(45,43,31,.07);vertical-align:top}
 .sd-table tr:last-child td{border-bottom:none}
 .sd-table td:first-child{color:var(--ts);width:80px;font-size:.8rem;font-weight:600;padding-right:10px;white-space:nowrap}
-.sd-desc{font-size:.9rem;color:var(--ts);line-height:1.78;font-family:var(--f-zh);margin:14px 0}
+.sd-desc{font-size:.9rem;color:var(--ts);line-height:1.78;font-family:var(--f-zh);margin:14px 0;white-space:pre-line}
 .sd-ticket-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.9rem;font-weight:700;font-family:var(--f-zh);text-decoration:none;transition:all .15s;box-shadow:0 4px 16px rgba(239,111,32,.3)}
 .sd-ticket-btn:hover{background:#d45c10;transform:translateY(-1px)}
 .sd-imgsrc{font-size:.7rem;color:rgba(45,43,31,.35);font-family:var(--f-bo);margin-top:6px}
@@ -1071,6 +1071,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </div>
     </div>
     <div class="fg-g full"><label class="fl">演出簡介</label><textarea class="fta" id="s-desc"></textarea></div>
+    <div class="fg-g full"><label class="fl">製作團隊 Production Team</label><textarea class="fta" id="s-production" placeholder="e.g. 卡米地俱樂部&#10;Two Three Comedy&#10;嘻嘻哪哩唷 × 某某單位"></textarea></div>
     <div class="fg-g"><label class="fl">狀態</label><select class="fs" id="s-status"><option value="published">已發布</option><option value="pending">待確認</option><option value="hidden">隱藏</option></select></div>
     <div class="fg-g"><label class="fl">是否售完</label><select class="fs" id="s-soldout"><option value="0">尚有票券</option><option value="1">已售完</option></select></div>
   </div>
@@ -1204,6 +1205,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </div>
     </div>
     <div class="fg-g full"><label class="fl">課程簡介</label><textarea class="fta" id="c-desc"></textarea></div>
+    <div class="fg-g full"><label class="fl">製作團隊 Production Team</label><textarea class="fta" id="c-production" placeholder="e.g. 卡米地俱樂部&#10;Two Three Comedy"></textarea></div>
     <div class="fg-g"><label class="fl">狀態</label><select class="fs" id="c-status"><option value="published">已發布</option><option value="pending">待確認</option><option value="hidden">隱藏</option></select></div>
   </div>
   <div class="fa">
@@ -1639,6 +1641,7 @@ function showCardHTML(s) {
     ${s.imgSrc?`<div class="sc-imgsrc">${s.imgSrc}</div>`:''}
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openShowModal('${s.id}')">✏️</button>
+      <button class="ca-btn" style="background:#6b6440;color:#fff" onclick="event.stopPropagation();copyShow('${s.id}')" title="複製此演出">⧉</button>
       <button class="ca-btn ca-del" onclick="event.stopPropagation();delShow('${s.id}')">🗑</button>
     </div>
   </div>`;
@@ -1670,6 +1673,7 @@ function openShowDetail(id) {
       <tr><td>平台</td><td>${(s.platform||'').toUpperCase()}</td></tr>
     </table>
     ${s.description?`<p class="sd-desc">${s.description}</p>`:''}
+    ${s.production?`<div style="margin:12px 0"><div style="font-size:.78rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:4px">製作團隊 Production Team</div><p style="font-size:.88rem;line-height:1.75;color:var(--tm);font-family:var(--f-zh);white-space:pre-line;margin:0">${s.production}</p></div>`:''}
     ${s.ticketUrl&&s.ticketUrl!=='#'?`<a href="${s.ticketUrl}" target="_blank" rel="noopener" class="sd-ticket-btn">🎟 前往售票頁面 ↗</a>`:''}
     ${s.imgSrc?`<p class="sd-imgsrc">📷 ${s.imgSrc}</p>`:''}
   `;
@@ -1852,7 +1856,8 @@ function openCourseDetail(id){
       ${c.organizer?`<tr><td style="padding:6px 0;color:var(--ts)">主辦</td><td>${c.organizer}</td></tr>`:''}
       ${c.fee?`<tr><td style="padding:6px 0;color:var(--ts)">費用</td><td style="font-weight:700;color:var(--or)">${c.fee}</td></tr>`:''}
     </table>
-    ${c.description?`<p style="margin:14px 0;font-size:.88rem;line-height:1.75;color:var(--tm);font-family:var(--f-zh)">${c.description}</p>`:''}
+    ${c.description?`<p style="margin:14px 0;font-size:.88rem;line-height:1.75;color:var(--tm);font-family:var(--f-zh);white-space:pre-line">${c.description}</p>`:''}
+    ${c.production?`<div style="margin:12px 0"><div style="font-size:.78rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:4px">製作團隊 Production Team</div><p style="font-size:.88rem;line-height:1.75;color:var(--tm);font-family:var(--f-zh);white-space:pre-line;margin:0">${c.production}</p></div>`:''}
     ${c.imgSrc?`<div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-bottom:12px">${c.imgSrc}</div>`:''}
     ${(c.url&&c.url!=='#')?`<a href="${c.url}" target="_blank" rel="noopener" class="btn-or" style="display:inline-block;text-decoration:none;margin-top:6px">立即報名 ↗</a>`:''}
   `;
@@ -2107,7 +2112,7 @@ function openShowModal(id){
   eShowId=id||null;
   const s=id?SHOWS.find(x=>x.id===id):null;
   document.getElementById('modal-show-title').textContent=s?'編輯演出':'新增演出';
-  ['s-title','s-date','s-time','s-performer','s-price','s-ticketurl','s-image','s-image-id','s-imgsrc','s-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  ['s-title','s-date','s-time','s-performer','s-price','s-ticketurl','s-image','s-image-id','s-imgsrc','s-desc','s-production'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
   const imgPrev=document.getElementById('s-img-prev');
   const imgHint=document.getElementById('s-img-hint');
   if(imgPrev)imgPrev.style.display='none';
@@ -2131,6 +2136,8 @@ function openShowModal(id){
     const rawSrc=s.imgSrc||'';
     document.getElementById('s-imgsrc').value=rawSrc.replace(/^圖片來源：/,'');
     document.getElementById('s-desc').value=s.description||'';
+    const prodEl=document.getElementById('s-production');
+    if(prodEl) prodEl.value=s.production||'';
     document.getElementById('s-status').value=s.status;
     document.getElementById('s-soldout').value=s.soldOut?'1':'0';
     if(s.image)livePreview('s-img-prev','s-img-hint',s.image);
@@ -2167,6 +2174,7 @@ function saveShow(status){
     image:document.getElementById('s-image')?.value?.trim()||'',
     imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',
     description:document.getElementById('s-desc').value,
+    production:document.getElementById('s-production')?.value?.trim()||'',
     status,soldOut:document.getElementById('s-soldout').value==='1',
   };
   window.FB.save('shows', eShowId||null, item).then(newId=>{
@@ -2266,6 +2274,8 @@ function openCourseModal(id){
     const rawSrc=c.imgSrc||'';
     document.getElementById('c-imgsrc').value=rawSrc.replace(/^圖片來源：/,'');
     document.getElementById('c-desc').value=c.description||'';
+    const cProdEl=document.getElementById('c-production');
+    if(cProdEl) cProdEl.value=c.production||'';
     document.getElementById('c-status').value=c.status||'published';
     if(c.image)livePreview('c-img-prev','c-img-hint',c.image);
   }
@@ -2292,7 +2302,7 @@ function saveCourse(status){
     return;
   }
   const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
-  const item={title,date:lastDate,dateDisplay:dateVal,time:timeStr,type:ctype,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,status};
+  const item={title,date:lastDate,dateDisplay:dateVal,time:timeStr,type:ctype,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
   window.FB.save('courses', eCourseId||null, item).then(newId=>{
     if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
     else COURSES.push({id:newId,...item});
@@ -2364,6 +2374,45 @@ function toggleHideExpiredCourses(){
 }
 
 // ── 重複資料偵測 ──
+function copyShow(id){
+  const s = (window._SHOWS||SHOWS).find(x=>x.id===id);
+  if(!s) return;
+  // 開啟新增 modal，帶入原資料，清空日期時間讓使用者自行修改
+  openShowModal(null);
+  // 填入原資料
+  document.getElementById('s-title').value = s.title||'';
+  document.getElementById('s-performer').value = s.performer||'';
+  document.getElementById('s-price').value = s.price||'';
+  document.getElementById('s-ticketurl').value = s.ticketUrl||'';
+  document.getElementById('s-desc').value = s.description||'';
+  const prodEl = document.getElementById('s-production');
+  if(prodEl) prodEl.value = s.production||'';
+  document.getElementById('s-venue').value = s.venue||'';
+  document.getElementById('s-area').value = s.area||'';
+  document.getElementById('s-platform').value = s.platform||'kktix';
+  document.getElementById('s-status').value = 'pending';
+  // 類型 checkbox
+  const types = s.types||(s.type?[s.type]:[]);
+  document.querySelectorAll('.type-cb-lbl input[type=checkbox]').forEach(cb=>{
+    cb.checked = types.includes(cb.value);
+    cb.closest('.type-cb-lbl')?.classList.toggle('checked', cb.checked);
+  });
+  document.getElementById('s-types').value = types.join(',');
+  // 圖片
+  if(s.image){
+    document.getElementById('s-image').value = s.image;
+    const mId = s.image.match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+    const imgIdEl = document.getElementById('s-image-id');
+    if(imgIdEl) imgIdEl.value = mId ? mId[1] : '';
+    livePreview('s-img-prev','s-img-hint',s.image);
+  }
+  const rawSrc = s.imgSrc||'';
+  document.getElementById('s-imgsrc').value = rawSrc.replace(/^圖片來源：/,'');
+  // 標題改為複製提示
+  document.getElementById('modal-show-title').textContent = '複製演出（請修改日期與時間）';
+  showToast('已複製，請修改日期與時間後發布','ok');
+}
+
 function isDuplicateShow(title, date, time, excludeId){
   return SHOWS.some(s =>
     s.id !== excludeId &&
