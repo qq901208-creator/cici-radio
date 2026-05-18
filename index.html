@@ -1754,8 +1754,15 @@ function getShowAreaLabelById(id) {
 // 每個場地 ID 對應到它應該比對的 venueLabel 字串群組（substring match）
 const VENUE_GROUPS = {
   'comedy-plus': ['卡米地＋', '卡米地+', 'comedy plus'],
-  'laughhouse':  ['來福好事', 'laugh house', 'islands art'],
-  'takao':       ['喜劇開港', 'takao comedy'],
+  'two-three':   ['23喜劇', 'two three comedy', '23 comedy'],
+  'fakers':      ['飛客劇', 'fakers', 'basis coffee'],
+  'beitou':      ['北投喜劇', 'beitou comedy', '山峸'],
+  'ginting':     ['樂君亭', 'gingting', 'ginting'],
+  'windcity':    ['站立風城', 'windy city', 'wind city', '馬拉桑'],
+  'smo':         ['思mic歐', 'smo', 's.m.o', '不染'],
+  'laughhouse':  ['來福好事', 'laugh house', 'laughhouse', '群島'],
+  'tainan':      ['府城喜劇', 'tainan comedy', 'sasadra'],
+  'takao':       ['喜劇開港', 'takao comedy', '鸚鵡螺'],
 };
 // 「其他」篩選時要排除的已知場地 ID
 const KNOWN_VENUE_IDS = ['comedy-plus','two-three','fakers','beitou','ginting','windcity','smo','laughhouse','tainan','takao'];
@@ -1763,14 +1770,17 @@ const KNOWN_VENUE_IDS = ['comedy-plus','two-three','fakers','beitou','ginting','
 function venueMatchesFilter(s, fVenue) {
   if (fVenue === 'all') return true;
   if (fVenue === 'other') {
-    // 不屬於任何已知場地 ID → 歸「其他」
-    return !KNOWN_VENUE_IDS.includes(s.venue);
-  }
-  // 先嘗試精確 ID 比對
-  if (s.venue === fVenue) return true;
-  // 群組模糊比對（比對 venueLabel）
-  if (VENUE_GROUPS[fVenue]) {
+    // 不屬於任何已知場地 ID，且 label 也不含任何已知場地關鍵字 → 歸「其他」
+    if (KNOWN_VENUE_IDS.includes(s.venue)) return false;
     const lbl = (s.venueLabel || s.venue || '').toLowerCase();
+    // 若 label 含任何已知場地的關鍵字，也不歸「其他」
+    return !Object.values(VENUE_GROUPS).some(kws => kws.some(kw => lbl.includes(kw.toLowerCase())));
+  }
+  // 精確 ID 比對
+  if (s.venue === fVenue) return true;
+  // 群組關鍵字比對（venueLabel 和 venue 字串都查）
+  if (VENUE_GROUPS[fVenue]) {
+    const lbl = ((s.venueLabel || '') + ' ' + (s.venue || '')).toLowerCase();
     return VENUE_GROUPS[fVenue].some(kw => lbl.includes(kw.toLowerCase()));
   }
   return false;
@@ -2897,27 +2907,37 @@ function saveVmInlineEdit(input) {
 }
 
 // Rebuild the filter chips in shows page based on current venue/area lists
+// Only called after admin edits in venue manager — NOT on page load
 function rebuildShowFilterChips() {
   const lang = getLang();
   const venues = getShowVenues();
   const areas = getShowAreas();
 
-  // Venue filter row
+  // ── Venue filter row ──
   const vRow = document.querySelector('.filter-row [data-f="venue"][data-v="all"]')?.parentElement;
   if(vRow) {
-    // Keep "All" chip, replace rest
+    // Preserve the filter-lbl span if present
+    const lbl = vRow.querySelector('.filter-lbl');
     const allChip = vRow.querySelector('[data-v="all"]');
     vRow.innerHTML = '';
-    if(allChip) vRow.appendChild(allChip);
+    if(lbl) vRow.appendChild(lbl);
+    if(allChip) {
+      // Re-attach click
+      allChip.onclick = function(){
+        document.querySelectorAll('.chip[data-f="venue"]').forEach(c=>c.classList.toggle('on',c===allChip));
+        fVenue='all'; showsPage=1; renderShows(); syncFiltersToURL();
+      };
+      vRow.appendChild(allChip);
+    }
     venues.forEach(v => {
-      const lbl = lang==='en' ? (v.labelEn||v.labelZh||v.id) : (v.labelZh||v.id);
+      const label = lang==='en' ? (v.labelEn||v.labelZh||v.id) : (v.labelZh||v.id);
       const chip = document.createElement('button');
       chip.className = 'chip' + (fVenue===v.id?' on':'');
       chip.dataset.f = 'venue';
       chip.dataset.v = v.id;
-      chip.textContent = lbl;
+      chip.innerHTML = label; // Use innerHTML so zh/en spans could work if needed
       chip.addEventListener('click', function(){
-        document.querySelectorAll(`.chip[data-f="venue"]`).forEach(c=>c.classList.remove('on'));
+        document.querySelectorAll('.chip[data-f="venue"]').forEach(c=>c.classList.remove('on'));
         this.classList.add('on');
         fVenue = v.id; showsPage=1; renderShows(); syncFiltersToURL();
       });
@@ -2925,21 +2945,29 @@ function rebuildShowFilterChips() {
     });
   }
 
-  // Area filter row
+  // ── Area filter row ──
   const aRow = document.querySelector('.filter-row [data-f="area"][data-v="all"]')?.parentElement;
   if(aRow) {
+    const lbl = aRow.querySelector('.filter-lbl');
     const allChip = aRow.querySelector('[data-v="all"]');
     aRow.innerHTML = '';
-    if(allChip) aRow.appendChild(allChip);
+    if(lbl) aRow.appendChild(lbl);
+    if(allChip) {
+      allChip.onclick = function(){
+        document.querySelectorAll('.chip[data-f="area"]').forEach(c=>c.classList.toggle('on',c===allChip));
+        fArea='all'; showsPage=1; renderShows(); syncFiltersToURL();
+      };
+      aRow.appendChild(allChip);
+    }
     areas.forEach(a => {
-      const lbl = lang==='en' ? (a.labelEn||a.labelZh||a.id) : (a.labelZh||a.id);
+      const label = lang==='en' ? (a.labelEn||a.labelZh||a.id) : (a.labelZh||a.id);
       const chip = document.createElement('button');
       chip.className = 'chip' + (fArea===a.id?' on':'');
       chip.dataset.f = 'area';
       chip.dataset.v = a.id;
-      chip.textContent = lbl;
+      chip.innerHTML = label;
       chip.addEventListener('click', function(){
-        document.querySelectorAll(`.chip[data-f="area"]`).forEach(c=>c.classList.remove('on'));
+        document.querySelectorAll('.chip[data-f="area"]').forEach(c=>c.classList.remove('on'));
         this.classList.add('on');
         fArea = a.id; showsPage=1; renderShows(); syncFiltersToURL();
       });
@@ -3144,7 +3172,6 @@ function restorePageFromHash(){
 
 window.addEventListener('load', ()=>{
   initReveal();
-  if(typeof rebuildShowFilterChips==='function') rebuildShowFilterChips();
   restorePageFromHash();
   document.body.classList.add('ready');
   const badge = document.getElementById('sessionBadge');
@@ -3281,7 +3308,6 @@ function setLang(l){
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('on',b.textContent.trim()===(l==='zh'?'繁中':'EN')));
   // Re-render to update language-dependent labels
   const cur=document.querySelector('.page.active')?.id?.replace('page-','');
-  if(typeof rebuildShowFilterChips==='function') rebuildShowFilterChips();
   if(typeof populateShowSelects==='function') populateShowSelects('','');
   if(cur==='shows')renderShows();
   if(cur==='courses')renderCourses();
