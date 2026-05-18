@@ -1533,7 +1533,7 @@ async function loadAllData() {
       if(typeof renderHeroStats==='function') renderHeroStats();
     }
     if(activePage==='shows' && typeof renderShows==='function') renderShows();
-    if(activePage==='opmic' && typeof renderMicTable==='function') renderMicTable();
+    if(activePage==='opmic' && typeof selectMicDay==='function') selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));
     if(activePage==='venues' && typeof renderVenues==='function') renderVenues();
     if(activePage==='courses' && typeof renderCourses==='function') renderCourses();
     if(activePage==='about' && typeof renderAbout==='function') renderAbout();
@@ -2281,9 +2281,17 @@ function sanitizeMicMethod(raw) {
             });
 }
 
+// 清理舊資料中「上午 當天現場」/「下午 當天現場」等格式
+function cleanMicTime(str) {
+  if(!str) return '';
+  // 若是「上午/下午 + 純文字（無數字）」→ 去掉前綴
+  return str.replace(/^(上午|下午)\s+(?=\D+$)/, '').trim();
+}
+
 function renderMicTable() {
   const tbody=document.getElementById('mic-tbody'); if(!tbody)return;
   const isAdmin=isLoggedIn();
+  const lang=getLang();
   const rows=MICS.filter(m=>m.day===micDay).sort((a,b)=>{
     const oa = MIC_CITY_ORDER.indexOf(a.city||'other');
     const ob = MIC_CITY_ORDER.indexOf(b.city||'other');
@@ -2292,12 +2300,13 @@ function renderMicTable() {
   });
   if(!rows.length){tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">本日無場次</td></tr>`;return;}
   tbody.innerHTML=rows.map(m=>{
-    const lang = getLang();
     const cityLblZh = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'}[m.city||'other']||'';
     const cityLblEn = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'}[m.city||'other']||'';
     const venueDisplay = lang==='en' ? (m.venueEn||m.venue||'') : (m.venue||'');
     const cityLbl = lang==='en' ? cityLblEn : cityLblZh;
     const methodHtml = sanitizeMicMethod(m.method||'');
+    const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'');
+    const checkinDisplay = cleanMicTime(m.checkinTime||'');
     return `<tr>
       <td>
         <strong style="font-family:var(--f-zh)">${venueDisplay}</strong>
@@ -2305,8 +2314,8 @@ function renderMicTable() {
       </td>
       <td style="font-family:var(--f-zh);font-weight:700">${m.name||'—'}</td>
       <td style="font-family:var(--f-zh)">${m.showTime||'—'}</td>
-      <td style="font-family:var(--f-zh);color:var(--or);font-weight:600">${m.signupTime||m.signupDeadline||'—'}</td>
-      <td style="font-family:var(--f-zh)">${m.checkinTime||'—'}</td>
+      <td style="font-family:var(--f-zh);color:var(--or);font-weight:600">${signupDisplay||'—'}</td>
+      <td style="font-family:var(--f-zh)">${checkinDisplay||'—'}</td>
       <td style="font-family:var(--f-zh);line-height:1.6">${methodHtml}</td>
       <td style="font-family:var(--f-zh);font-size:.8rem;color:var(--ts)">${m.notes||'—'}
         ${isAdmin?`<div style="margin-top:4px;display:flex;gap:4px"><button class="ca-btn ca-edit" style="width:24px;height:24px;font-size:.62rem;display:inline-flex" onclick="openMicModal('${m.id}')">✏️</button><button class="ca-btn ca-del" style="width:24px;height:24px;font-size:.62rem;display:inline-flex" onclick="delMic('${m.id}')">🗑</button></div>`:''}
@@ -3488,7 +3497,6 @@ function showToast(msg,type=''){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  selectMicDay(1,document.querySelector('.day-tab[data-day="1"]'));
   updFbBadge();
 });
 </script>
