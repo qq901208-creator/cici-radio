@@ -652,7 +652,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <!-- 搜尋欄 -->
     <div class="shows-search-wrap">
       <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
-      <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="renderShows()">
+      <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="renderShows();syncFiltersToURL()">
     </div>
     <div class="filter-section">
       <!-- TYPE filter: zh shows Chinese only, en shows English only -->
@@ -1509,6 +1509,44 @@ let eShowId=null, eMicId=null, eVenueId=null, eCourseId=null;
 let fType='all', fVenue='all', fArea='all', fDay='all', fCtype='all', fCity='all';
 let micDay = 1;
 
+// ── 篩選條件 URL 同步 ──
+function syncFiltersToURL(){
+  const hash = location.hash.split('?')[0];
+  const params = new URLSearchParams();
+  if(fType!=='all')   params.set('type',  fType);
+  if(fVenue!=='all')  params.set('venue', fVenue);
+  if(fArea!=='all')   params.set('area',  fArea);
+  if(fDay!=='all')    params.set('day',   fDay);
+  if(fCtype!=='all')  params.set('ctype', fCtype);
+  if(fCity!=='all')   params.set('city',  fCity);
+  const q = document.getElementById('shows-search')?.value?.trim();
+  if(q) params.set('q', q);
+  const qs = params.toString();
+  history.replaceState(history.state,'', hash + (qs?'?'+qs:''));
+}
+
+function restoreFiltersFromURL(){
+  const qs = location.search || location.hash.split('?')[1] || '';
+  if(!qs) return;
+  const params = new URLSearchParams(qs);
+  if(params.get('type'))  { fType  = params.get('type');  setChip('type',  fType); }
+  if(params.get('venue')) { fVenue = params.get('venue'); setChip('venue', fVenue); }
+  if(params.get('area'))  { fArea  = params.get('area');  setChip('area',  fArea); }
+  if(params.get('day'))   { fDay   = params.get('day');   setChip('day',   fDay); }
+  if(params.get('ctype')) { fCtype = params.get('ctype'); setChip('ctype', fCtype); }
+  if(params.get('city'))  { fCity  = params.get('city');  setChip('city',  fCity); }
+  if(params.get('q')) {
+    const el = document.getElementById('shows-search');
+    if(el) el.value = params.get('q');
+  }
+}
+
+function setChip(filterName, value){
+  document.querySelectorAll(`.chip[data-f="${filterName}"]`).forEach(c=>{
+    c.classList.toggle('on', c.dataset.v === value);
+  });
+}
+
 const AREA_ORDER = ['taipei','newtaipei','taoyuan','hsinchu','taichung','tainan','kaohsiung','other'];
 function showSortKey(s){
   const dateTime = (s.date||'9999-99-99') + 'T' + (s.time||'00:00');
@@ -1950,12 +1988,12 @@ document.querySelectorAll('.chip').forEach(btn=>{
     const f=this.dataset.f, v=this.dataset.v;
     document.querySelectorAll(`.chip[data-f="${f}"]`).forEach(c=>c.classList.remove('on'));
     this.classList.add('on');
-    if(f==='type') {fType=v;renderShows();}
-    if(f==='venue'){fVenue=v;renderShows();}
-    if(f==='area') {fArea=v;renderShows();}
-    if(f==='day')  {fDay=v;renderShows();}
-    if(f==='ctype'){fCtype=v;renderCourses();}
-    if(f==='city') {fCity=v;renderVenues();}
+    if(f==='type') {fType=v;renderShows();syncFiltersToURL();}
+    if(f==='venue'){fVenue=v;renderShows();syncFiltersToURL();}
+    if(f==='area') {fArea=v;renderShows();syncFiltersToURL();}
+    if(f==='day')  {fDay=v;renderShows();syncFiltersToURL();}
+    if(f==='ctype'){fCtype=v;renderCourses();syncFiltersToURL();}
+    if(f==='city') {fCity=v;renderVenues();syncFiltersToURL();}
   });
 });
 function setShowsView(v){
@@ -2638,9 +2676,15 @@ function initReveal(){
 // ── 從 hash 還原頁面 ──
 function restorePageFromHash(){
   const validPages = ['home','shows','opmic','venues','courses','about','board'];
-  const hash = location.hash.replace('#','');
+  const hash = location.hash.split('?')[0].replace('#','');
   const page = validPages.includes(hash) ? hash : 'home';
-  showPage(page, true); // skipHistory=true，用 replaceState 不是 pushState
+  showPage(page, true);
+  // 還原篩選條件（需在 showPage 後執行，確保 chips 已存在）
+  restoreFiltersFromURL();
+  // 根據還原的篩選重新 render
+  if(page==='shows') renderShows();
+  if(page==='courses') renderCourses();
+  if(page==='venues') renderVenues();
 }
 
 window.addEventListener('load', ()=>{
