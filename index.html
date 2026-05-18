@@ -1312,34 +1312,30 @@ window._onSnapshot = onSnapshot;
 async function loadAllData() {
   try {
     const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap] = await Promise.all([
-      getDocs(query(collection(db,'shows'), orderBy('date','asc'))),
+      getDocs(collection(db,'shows')),
       getDocs(collection(db,'mics')),
       getDocs(collection(db,'venues')),
-      getDocs(query(collection(db,'courses'), orderBy('date','asc'))),
-      getDocs(query(collection(db,'comments'), orderBy('time','desc'))),
+      getDocs(collection(db,'courses')),
+      getDocs(collection(db,'comments')),
     ]);
-    // ★ 直接賦值給 window，讓普通 script 也能讀到最新資料
     window.SHOWS    = showsSnap.docs.map(d=>({id:d.id,...d.data()}));
     window.MICS     = micsSnap.docs.map(d=>({id:d.id,...d.data()}));
-    // ★ VENUES 合併邏輯：以 DEFAULT_VENUES 為底，Firebase 同 id 的資料覆蓋，Firebase 獨有的資料附加
     const fbVenues = venuesSnap.docs.map(d=>({id:d.id,...d.data()}));
     const mergedVenues = window.DEFAULT_VENUES.map(def => {
       const fb = fbVenues.find(v=>v.id===def.id);
       return fb ? {...def,...fb} : def;
     });
-    // 附加 Firebase 有但 DEFAULT 沒有的場地
     fbVenues.forEach(fb => {
       if(!mergedVenues.find(v=>v.id===fb.id)) mergedVenues.push(fb);
     });
-    window.VENUES = mergedVenues.sort((a,b)=>(a._order??999)-(b._order??999));
+    window.VENUES   = mergedVenues.sort((a,b)=>(a._order??999)-(b._order??999));
     window.COURSES  = coursesSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window.COMMENTS = commentsSnap.docs.map(d=>({id:d.id,...d.data()}));
-    // Fallback to defaults if Firestore is empty
+    window.COMMENTS = commentsSnap.docs.map(d=>({id:d.id,...d.data()}))
+      .sort((a,b)=>(b.time||0)-(a.time||0));
     if(!window.SHOWS.length)    window.SHOWS    = window.DEFAULT_SHOWS;
     if(!window.MICS.length)     window.MICS     = window.DEFAULT_MICS;
     if(!window.COURSES.length)  window.COURSES  = window.DEFAULT_COURSES;
     if(!window.COMMENTS.length) window.COMMENTS = window.DEFAULT_COMMENTS;
-    // ★★★ 關鍵：同步回全域 let 變數，renderShows 等函數讀的是這些
     SHOWS    = window.SHOWS;
     MICS     = window.MICS;
     VENUES   = window.VENUES;
@@ -1358,7 +1354,6 @@ async function loadAllData() {
     COURSES  = window.COURSES;
     COMMENTS = window.COMMENTS;
   }
-  // Re-render after data loaded — setTimeout 確保所有 script 都已載入
   setTimeout(()=>{
     if(typeof renderHomeShows==='function') renderHomeShows();
     if(typeof renderHeroStats==='function') renderHeroStats();
@@ -1368,7 +1363,7 @@ async function loadAllData() {
     if(typeof renderMicTable==='function') renderMicTable();
     if(typeof renderHomeComments==='function') renderHomeComments();
     if(typeof updFbBadge==='function') updFbBadge();
-  }, 0);
+  }, 50);
 }
 window._loadAllData = loadAllData;
 
