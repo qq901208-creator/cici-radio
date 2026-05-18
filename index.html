@@ -1363,14 +1363,22 @@ async function loadAllData() {
   }
   setTimeout(()=>{
     if(typeof window._syncData==='function') window._syncData();
-    if(typeof renderHomeShows==='function') renderHomeShows();
-    if(typeof renderHeroStats==='function') renderHeroStats();
-    if(typeof renderShows==='function') renderShows();
-    if(typeof renderVenues==='function') renderVenues();
-    if(typeof renderCourses==='function') renderCourses();
-    if(typeof renderMicTable==='function') renderMicTable();
-    if(typeof renderHomeComments==='function') renderHomeComments();
-    if(typeof renderAbout==='function') renderAbout();
+    // 只 render 當前顯示中的頁面，不切換頁面
+    const activePage = document.querySelector('.page.active')?.id?.replace('page-','') || 'home';
+    if(activePage==='home'){
+      if(typeof renderHomeShows==='function') renderHomeShows();
+      if(typeof renderHomeComments==='function') renderHomeComments();
+      if(typeof renderHeroStats==='function') renderHeroStats();
+    }
+    if(activePage==='shows' && typeof renderShows==='function') renderShows();
+    if(activePage==='opmic' && typeof renderMicTable==='function') renderMicTable();
+    if(activePage==='venues' && typeof renderVenues==='function') renderVenues();
+    if(activePage==='courses' && typeof renderCourses==='function') renderCourses();
+    if(activePage==='about' && typeof renderAbout==='function') renderAbout();
+    if(activePage==='board'){
+      if(typeof renderFpList==='function') renderFpList();
+      if(typeof renderRatBar==='function') renderRatBar();
+    }
     if(typeof updFbBadge==='function') updFbBadge();
   }, 200);
 }
