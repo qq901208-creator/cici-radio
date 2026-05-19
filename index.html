@@ -598,8 +598,8 @@ body.edit .edit-bar{display:flex!important}
   .hero-h1{font-size:2.1rem}
   .nav-links{display:none}
   .nav-links.open{
-    display:flex!important;flex-direction:column;position:fixed;top:60px;left:0;right:0;
-    background:var(--sd);z-index:9999;padding:12px 0 24px;
+    display:flex!important;flex-direction:column;position:fixed;top:var(--nav);left:0;right:0;
+    background:var(--sd);z-index:9999;padding:16px 0 28px;
     box-shadow:0 8px 32px rgba(0,0,0,.4);gap:0;
     border-top:1.5px solid rgba(245,213,88,.2)
   }
@@ -619,6 +619,8 @@ body.edit .edit-bar{display:flex!important}
   .fp-inner{width:100%}
   .fp-nr{flex-direction:column;gap:6px}
   .fp-ni{width:100%}
+  .hero{padding:calc(var(--nav) + 48px) 5vw 52px}
+  .about-hero{padding:calc(var(--nav) + 40px) 5vw 52px}
   .sec{padding:44px 4vw}
 }
 .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:8px 6px;border:none;background:transparent;margin-left:6px;flex-shrink:0}
@@ -1988,8 +1990,39 @@ function openShowDetail(id) {
 // ── PAGINATION ──
 let showsPage = 1;
 let coursesPage = 1;
-const SHOWS_PER_PAGE = 20;
-const COURSES_PER_PAGE = 12;
+
+// ── 響應式每頁筆數計算 ──
+// 依 grid 容器實際欄數計算每頁筆數（3 行），Mobile 固定 10 筆
+function getGridCols(gridId) {
+  const el = document.getElementById(gridId);
+  if(!el) return 4; // fallback
+  const style = window.getComputedStyle(el);
+  const cols = style.gridTemplateColumns.split(' ').filter(s => s.trim() !== '');
+  return Math.max(1, cols.length);
+}
+
+function calcPerPage(gridId, mobilePerPage) {
+  if(window.innerWidth <= 768) return mobilePerPage || 10;
+  const cols = getGridCols(gridId);
+  return cols * 3; // 3 行
+}
+
+// resize 時重新計算並重繪
+let _resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(() => {
+    const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
+    if(activePage === 'shows') {
+      showsPage = 1;
+      renderShows();
+    }
+    if(activePage === 'courses') {
+      coursesPage = 1;
+      renderCourses();
+    }
+  }, 120);
+});
 
 function renderPagination(containerId, currentPage, totalPages, onPageChange){
   const el = document.getElementById(containerId);
@@ -2048,10 +2081,11 @@ function renderShows() {
   }).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
 
   // 篩選條件改變時重置到第一頁
-  const totalPages = Math.ceil(fil.length / SHOWS_PER_PAGE);
-  if(showsPage > totalPages) showsPage = 1;
-  const start = (showsPage-1) * SHOWS_PER_PAGE;
-  const paged = fil.slice(start, start + SHOWS_PER_PAGE);
+  const perPage = calcPerPage('shows-grid', 10);
+  const totalPages = Math.ceil(fil.length / perPage);
+  if(showsPage > totalPages) showsPage = Math.max(1, totalPages);
+  const start = (showsPage-1) * perPage;
+  const paged = fil.slice(start, start + perPage);
 
   grid.innerHTML = fil.length
     ? paged.map(showCardHTML).join('')
@@ -2192,10 +2226,11 @@ function renderCourses() {
     return true;
   }).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
 
-  const totalPages = Math.ceil(fil.length / COURSES_PER_PAGE);
-  if(coursesPage > totalPages) coursesPage = 1;
-  const start = (coursesPage-1) * COURSES_PER_PAGE;
-  const paged = fil.slice(start, start + COURSES_PER_PAGE);
+  const perPage = calcPerPage('courses-grid', 10);
+  const totalPages = Math.ceil(fil.length / perPage);
+  if(coursesPage > totalPages) coursesPage = Math.max(1, totalPages);
+  const start = (coursesPage-1) * perPage;
+  const paged = fil.slice(start, start + perPage);
 
   g.innerHTML=fil.length
     ? paged.map(courseCardHTML).join('')
