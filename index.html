@@ -1381,6 +1381,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <select class="fs" id="v-city"><option value="taipei">台北市 Taipei</option><option value="newtaipei">新北市 New Taipei</option><option value="taoyuan">桃園市 Taoyuan</option><option value="hsinchu">新竹市 Hsinchu</option><option value="taichung">台中市 Taichung</option><option value="chiayi">嘉義市 Chiayi</option><option value="tainan">台南市 Tainan</option><option value="kaohsiung">高雄市 Kaohsiung</option><option value="other">其他 Others</option></select>
     </div>
     <div class="fg-g"><label class="fl">地址</label><input class="fi" type="text" id="v-address"></div>
+    <div class="fg-g"><label class="fl">Google Maps 連結</label><input class="fi" type="url" id="v-mapurl" placeholder="https://maps.app.goo.gl/... （留空自動用地址產生）"></div>
     <div class="fg-g"><label class="fl">Facebook URL</label><input class="fi" type="url" id="v-fb" placeholder="https://www.facebook.com/..."></div>
     <div class="fg-g"><label class="fl">Instagram URL</label><input class="fi" type="url" id="v-ig" placeholder="https://www.instagram.com/..."></div>
     <div class="fg-g full">
@@ -2286,9 +2287,23 @@ function renderHeroStats(){
 function renderHomeShows() {
   const g = document.getElementById('home-shows-grid'); if (!g) return;
   const shows = window._SHOWS || SHOWS || [];
-  const count = window.innerWidth >= 1024 ? 5 : 4;
-  const fil = shows.filter(s=>(s.status||'published')==='published' && !isExpired(s.date, s.time)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0, count);
-  g.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div class="empty-state"><div class="empty-state-icon">🎭</div><div class="empty-state-title"><span class="zh-text">近期資訊整理中，敬請期待！</span><span class="en-text">More comedy events coming soon!</span></div><button class="empty-state-btn" onclick="showPage('opmic')"><span class="zh-text">查看本週 Open Mic 場次</span><span class="en-text">Browse This Week's Open Mic Shows</span></button></div>`;
+  const isMobile = window.innerWidth <= 768;
+
+  const doRender = () => {
+    // 讀取實際 grid 欄數，顯示剛好整行的張數
+    const styleStr = window.getComputedStyle(g).gridTemplateColumns;
+    const cols = Math.max(1, styleStr.split(' ').filter(s=>s.trim()!=='').length);
+    const count = isMobile ? 4 : Math.min(cols, 5);
+    const fil = shows.filter(s=>(s.status||'published')==='published' && !isExpired(s.date, s.time))
+      .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0, count);
+    g.innerHTML = fil.length
+      ? fil.map(showCardHTML).join('')
+      : `<div class="empty-state"><div class="empty-state-icon">🎭</div><div class="empty-state-title"><span class="zh-text">近期資訊整理中，敬請期待！</span><span class="en-text">More comedy events coming soon!</span></div><button class="empty-state-btn" onclick="showPage('opmic')"><span class="zh-text">查看本週 Open Mic 場次</span><span class="en-text">Browse This Week's Open Mic Shows</span></button></div>`;
+  };
+
+  // 讓瀏覽器先完成 layout 再讀取欄數
+  if(typeof requestAnimationFrame !== 'undefined') requestAnimationFrame(doRender);
+  else doRender();
 }
 
 // ── COURSES ──
@@ -2389,7 +2404,7 @@ function venueCardHTML(v) {
     <div class="venue-links" onclick="event.stopPropagation()" style="margin-top:auto">
       ${v.fb?`<a class="vlb vlb-fb" href="${v.fb}" target="_blank">f FB</a>`:''}
       ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank">ig IG</a>`:''}
-      ${v.address?`<a class="vlb vlb-map" href="https://maps.google.com/?q=${encodeURIComponent(v.address)}" target="_blank">📍 Map</a>`:''}
+      ${v.address||v.mapUrl?`<a class="vlb vlb-map" href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank">📍 Map</a>`:''}
     </div>
     ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55"><span style="font-weight:700;color:var(--or)">💬 嘻嘻小建議</span><br>${v.tip}</div>`:''}
     <div class="card-eo">
@@ -2465,7 +2480,7 @@ function showVenueDetail(id) {
     <div style="display:flex;gap:9px;flex-wrap:wrap">
       ${v.fb?`<a href="${v.fb}" target="_blank" class="btn-or" style="padding:8px 18px;font-size:.8rem">Facebook ↗</a>`:''}
       ${v.ig?`<a href="${v.ig}" target="_blank" class="btn-ww" style="padding:8px 18px;font-size:.8rem">Instagram ↗</a>`:''}
-      ${v.address?`<a href="https://maps.google.com/?q=${encodeURIComponent(v.address)}" target="_blank" class="btn-ww" style="padding:8px 18px;font-size:.8rem">Google Maps ↗</a>`:''}
+      ${v.address||v.mapUrl?`<a href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank" class="btn-ww" style="padding:8px 18px;font-size:.8rem">Google Maps ↗</a>`:''}
     </div>`;
   document.getElementById('modal-venue-detail').classList.add('open');
 }
@@ -3090,9 +3105,9 @@ function openVenueModal(id){
   eVenueId=id||null;
   const v=id?VENUES.find(x=>x.id===id):null;
   document.getElementById('modal-venue-title').textContent=v?'編輯場地':'新增場地';
-  ['v-namezh','v-nameen','v-address','v-fb','v-ig','v-logourl','v-desc','v-partner','v-tags','v-tip'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  ['v-namezh','v-nameen','v-address','v-mapurl','v-fb','v-ig','v-logourl','v-desc','v-partner','v-tags','v-tip'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
   const lp=document.getElementById('v-logo-prev');if(lp){lp.src='';lp.style.display='none';}
-  if(v){document.getElementById('v-namezh').value=v.nameZh||'';document.getElementById('v-nameen').value=v.nameEn||'';document.getElementById('v-city').value=v.city||'taipei';document.getElementById('v-address').value=v.address||'';document.getElementById('v-fb').value=v.fb||'';document.getElementById('v-ig').value=v.ig||'';document.getElementById('v-logourl').value=v.logoUrl||'';document.getElementById('v-desc').value=v.description||'';document.getElementById('v-partner').value=v.partner||'';document.getElementById('v-tags').value=(v.tags||[]).join(', ');document.getElementById('v-tip').value=v.tip||'';if(v.logoUrl)prevVenueLogo(v.logoUrl);}
+  if(v){document.getElementById('v-namezh').value=v.nameZh||'';document.getElementById('v-nameen').value=v.nameEn||'';document.getElementById('v-city').value=v.city||'taipei';document.getElementById('v-address').value=v.address||'';document.getElementById('v-mapurl').value=v.mapUrl||'';document.getElementById('v-fb').value=v.fb||'';document.getElementById('v-ig').value=v.ig||'';document.getElementById('v-logourl').value=v.logoUrl||'';document.getElementById('v-desc').value=v.description||'';document.getElementById('v-partner').value=v.partner||'';document.getElementById('v-tags').value=(v.tags||[]).join(', ');document.getElementById('v-tip').value=v.tip||'';if(v.logoUrl)prevVenueLogo(v.logoUrl);}
   document.getElementById('modal-venue').classList.add('open');
 }
 function saveVenue(){
@@ -3102,7 +3117,7 @@ function saveVenue(){
   const tagsRaw = document.getElementById('v-tags').value.trim();
   const tags = tagsRaw ? tagsRaw.split(',').map(t=>t.trim()).filter(Boolean) : [];
   const tip = document.getElementById('v-tip').value.trim();
-  const item={nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,description:document.getElementById('v-desc').value,partner:document.getElementById('v-partner').value.trim(),tags,tip};
+  const item={nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,mapUrl:document.getElementById('v-mapurl').value.trim(),fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,description:document.getElementById('v-desc').value,partner:document.getElementById('v-partner').value.trim(),tags,tip};
   window.FB.save('venues', eVenueId||null, item).then(newId=>{
     if(eVenueId){const i=VENUES.findIndex(x=>x.id===eVenueId);if(i>=0)VENUES[i]={id:eVenueId,...item};}
     else VENUES.push({id:newId,...item});
