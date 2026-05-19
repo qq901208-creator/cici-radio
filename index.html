@@ -941,8 +941,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="day-tab" data-day="5" onclick="selectMicDay(5,this)"><span class="zh-text">週五</span><span class="en-text">Fri.</span></button>
       <button class="day-tab" data-day="6" onclick="selectMicDay(6,this)"><span class="zh-text">週六</span><span class="en-text">Sat.</span></button>
       <button class="day-tab" data-day="0" onclick="selectMicDay(0,this)"><span class="zh-text">週日</span><span class="en-text">Sun.</span></button>
+      <button class="day-tab" data-day="irregular" onclick="selectMicDay('irregular',this)"><span class="zh-text">不定期開放</span><span class="en-text">Irregular</span></button>
     </div>
-    <p class="mic-tab-hint"><span class="zh-text">以上「週一～週日」標籤是 Open Mic 開放報名的星期，不是實際演出日期與時間喔！</span><span class="en-text">The Mon.–Sun. tabs above indicate when Open Mic sign-ups open, not the actual show date or time.</span></p>
+    <p class="mic-tab-hint"><span class="zh-text">以上「週一～週日」標籤是 Open Mic 開放報名的星期，不是實際演出日期與時間喔！部分 Open Mic 無固定報名星期，請依主辦公告為主。</span><span class="en-text">The Mon.–Sun. tabs above indicate when Open Mic sign-ups open, not the actual show date or time. Some Open Mics do not have a fixed sign-up day — please refer to the organizer's announcements.</span></p>
     <!-- Desktop 表格 -->
     <div class="mic-table-wrap" id="mic-table-wrap">
       <table class="mic-table"><thead><tr>
@@ -1301,7 +1302,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <div class="modal-title" id="modal-mic-title">新增 Open Mic 場次</div>
   <div class="fg">
     <div class="fg-g"><label class="fl">星期 <span class="req">*</span></label>
-      <select class="fs" id="m-day"><option value="1">週一 Mon.</option><option value="2">週二 Tue.</option><option value="3">週三 Wed.</option><option value="4">週四 Thu.</option><option value="5">週五 Fri.</option><option value="6">週六 Sat.</option><option value="0">週日 Sun.</option></select>
+      <select class="fs" id="m-day"><option value="1">週一 Mon.</option><option value="2">週二 Tue.</option><option value="3">週三 Wed.</option><option value="4">週四 Thu.</option><option value="5">週五 Fri.</option><option value="6">週六 Sat.</option><option value="0">週日 Sun.</option><option value="irregular">不定期開放 Irregular</option></select>
     </div>
     <div class="fg-g"><label class="fl">城市 <span class="req">*</span></label>
       <select class="fs" id="m-city">
@@ -2613,16 +2614,24 @@ function renderMicTable() {
 
   const isAdmin = isLoggedIn() && editMode; // 必須登入且在編輯模式
   const lang=getLang();
-  const rows=MICS.filter(m=>m.day===micDay).sort((a,b)=>{
+  const isIrregular = micDay === 'irregular';
+  const rows=MICS.filter(m=>{
+    if(isIrregular) return m.day === 'irregular';
+    return m.day === micDay;
+  }).sort((a,b)=>{
     const oa = MIC_CITY_ORDER.indexOf(a.city||'other');
     const ob = MIC_CITY_ORDER.indexOf(b.city||'other');
     if(oa!==ob) return (oa<0?99:oa)-(ob<0?99:ob);
     return (a.venue||'').localeCompare(b.venue||'','zh-TW');
   });
 
+  const emptyMsg = isIrregular
+    ? `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)"><span class="zh-text">目前沒有不定期開放的 Open Mic 資訊。</span><span class="en-text">No irregular Open Mic sign-up info at the moment.</span></td></tr>`
+    : `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">本日無場次</td></tr>`;
+
   if(!rows.length){
-    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">本日無場次</td></tr>`;
-    renderMicCards([], isAdmin, lang);
+    tbody.innerHTML = emptyMsg;
+    renderMicCards([], isAdmin, lang, isIrregular);
     return;
   }
 
@@ -2659,17 +2668,20 @@ function renderMicTable() {
   }).join('');
 
   // 同步手機版卡片
-  renderMicCards(rows, isAdmin, lang);
+  renderMicCards(rows, isAdmin, lang, isIrregular);
 }
 
-function renderMicCards(rows, isAdmin, lang) {
+function renderMicCards(rows, isAdmin, lang, isIrregular) {
   const container = document.getElementById('mic-cards');
   if(!container) return;
   const todayDay = new Date().getDay();
   const DAY_ZH = ['週日','週一','週二','週三','週四','週五','週六'];
   const DAY_EN = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'];
   if(!rows || !rows.length) {
-    container.innerHTML = `<div style="text-align:center;padding:32px;color:var(--ts);font-family:var(--f-zh)"><span class="zh-text">本日無場次</span><span class="en-text">No shows today</span></div>`;
+    const msg = isIrregular
+      ? `<span class="zh-text">目前沒有不定期開放的 Open Mic 資訊。</span><span class="en-text">No irregular Open Mic sign-up info at the moment.</span>`
+      : `<span class="zh-text">本日無場次</span><span class="en-text">No shows today</span>`;
+    container.innerHTML = `<div style="text-align:center;padding:32px;color:var(--ts);font-family:var(--f-zh)">${msg}</div>`;
     return;
   }
   const CITY_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'};
@@ -2683,7 +2695,7 @@ function renderMicCards(rows, isAdmin, lang) {
     const showTimeDisplay = [showDayLabel, cleanMicTime(m.showTime||'', lang)].filter(Boolean).join(' ');
     const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'', lang);
     const checkinDisplay = cleanMicTime(m.checkinTime||'', lang);
-    const isToday = m.day === todayDay;
+    const isToday = !isIrregular && (m.day === todayDay);
     const todayBadge = isToday
       ? `<span class="mic-card-badge"><span class="zh-text">今天</span><span class="en-text">Today</span></span>` : '';
 
@@ -2718,7 +2730,14 @@ function renderMicCards(rows, isAdmin, lang) {
     </div>`;
   }).join('');
 }
-function selectMicDay(d,el){micDay=parseInt(d);document.querySelectorAll('.day-tab').forEach(t=>t.classList.toggle('on',parseInt(t.dataset.day)===micDay));renderMicTable();}
+function selectMicDay(d,el){
+  micDay = (d === 'irregular') ? 'irregular' : parseInt(d);
+  document.querySelectorAll('.day-tab').forEach(t=>{
+    const tv = t.dataset.day;
+    t.classList.toggle('on', tv === String(micDay) || (tv === 'irregular' && micDay === 'irregular'));
+  });
+  renderMicTable();
+}
 
 // ── TODAY HIGHLIGHT ──
 function initTodayTab() {
@@ -2726,6 +2745,8 @@ function initTodayTab() {
   document.querySelectorAll('.day-tab').forEach(btn => {
     btn.classList.remove('today-tab');
     const old = btn.querySelector('.today-badge'); if(old) old.remove();
+    // irregular tab 永遠不加 today highlight
+    if(btn.dataset.day === 'irregular') return;
     if(parseInt(btn.dataset.day) === todayDay) {
       btn.classList.add('today-tab');
       const badge = document.createElement('span');
@@ -2736,7 +2757,10 @@ function initTodayTab() {
   });
   // auto-select today
   micDay = todayDay;
-  document.querySelectorAll('.day-tab').forEach(t=>t.classList.toggle('on', parseInt(t.dataset.day)===todayDay));
+  document.querySelectorAll('.day-tab').forEach(t=>{
+    if(t.dataset.day === 'irregular') { t.classList.remove('on'); return; }
+    t.classList.toggle('on', parseInt(t.dataset.day)===todayDay);
+  });
 }
 
 // ── ABOUT / MEMBERS ──
@@ -2996,7 +3020,7 @@ function openMicModal(id){
     const el=document.getElementById(k); if(el) el.value='下午';
   });
   if(m){
-    document.getElementById('m-day').value=String(m.day);
+    document.getElementById('m-day').value = m.day !== undefined ? String(m.day) : '1';
     document.getElementById('m-city').value=m.city||'taipei';
     document.getElementById('m-name').value=m.name||'';
     document.getElementById('m-venue').value=m.venue||'';
@@ -3035,8 +3059,9 @@ function saveMic(){
   const signupTime = buildMicTime('m-signuptime-ampm','m-signuptime-h');
   const checkinTime= buildMicTime('m-checkintime-ampm','m-checkintime-h');
   const showDayVal = document.getElementById('m-showday')?.value;
+  const dayVal = document.getElementById('m-day').value;
   const item={
-    day:parseInt(document.getElementById('m-day').value),
+    day: dayVal === 'irregular' ? 'irregular' : parseInt(dayVal),
     city:document.getElementById('m-city').value,
     name:document.getElementById('m-name').value.trim(),
     venue,
