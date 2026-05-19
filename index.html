@@ -2698,7 +2698,7 @@ function renderMicTable() {
       <td style="font-family:var(--f-zh);line-height:1.6">${methodHtml}</td>
       <td style="font-family:var(--f-zh);font-size:.82rem">${m.timeLimit||'—'}</td>
       <td style="font-family:var(--f-zh);font-size:.82rem">${m.signupFee||'—'}</td>
-      <td style="font-family:var(--f-zh);font-size:.8rem;color:var(--ts)">${m.notes||'—'}
+      <td style="font-family:var(--f-zh);font-size:.8rem;color:var(--ts);white-space:pre-line">${m.notes||'—'}
         ${isAdmin?`<div style="margin-top:4px;display:flex;gap:4px"><button class="ca-btn ca-edit" style="width:24px;height:24px;font-size:.62rem;display:inline-flex" onclick="openMicModal('${m.id}')">✏️</button><button class="ca-btn ca-del" style="width:24px;height:24px;font-size:.62rem;display:inline-flex" onclick="delMic('${m.id}')">🗑</button></div>`:''}
       </td>
     </tr>`;
@@ -2759,7 +2759,7 @@ function renderMicCards(rows, isAdmin, lang, isIrregular) {
         ${row('💰','報名費用','Sign-up Fee', m.signupFee||'')}
       </div>
       ${methodHtml ? `<div class="mic-card-method">📌 <strong>${lang==='en'?'How to Sign Up':'報名方式'}：</strong>${methodHtml}</div>` : ''}
-      ${m.notes ? `<div class="mic-card-notes">📋 <strong>${lang==='en'?'Notes':'備註'}：</strong>${m.notes}</div>` : ''}
+      ${m.notes ? `<div class="mic-card-notes" style="white-space:pre-line">📋 <strong>${lang==='en'?'Notes':'備註'}：</strong>${m.notes}</div>` : ''}
       <div class="mic-card-footer">
         ${signupBtn}
         ${isAdmin ? `<div class="mic-card-admin"><button class="ca-btn ca-edit" onclick="openMicModal('${m.id}')">✏️</button><button class="ca-btn ca-del" onclick="delMic('${m.id}')">🗑</button></div>` : ''}
