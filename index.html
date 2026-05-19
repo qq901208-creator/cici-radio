@@ -2637,9 +2637,28 @@ function renderMicTable() {
     if(isIrregular) return m.day === 'irregular';
     return m.day === micDay;
   }).sort((a,b)=>{
+    // ① 報名時間由早到晚（轉 24 小時制，無法解析排最後）
+    const timeVal = str => {
+      if(!str) return Infinity;
+      const s = str.trim();
+      const m = s.match(/(\d{1,2}):(\d{2})/);
+      if(!m) return Infinity;
+      let h = parseInt(m[1]), min = parseInt(m[2]);
+      if(s.startsWith('下午') || s.startsWith('晚上')) { if(h < 12) h += 12; }
+      else if(s.startsWith('中午')) { if(h < 12) h = 12; }
+      else if(s.startsWith('上午')) { if(h === 12) h = 0; }
+      // 若無前綴，下午慣例：若小時 < 6 視為 pm（e.g. pm 8:00 常見）
+      else if(!s.startsWith('上午') && h > 0 && h < 6) h += 12;
+      return h * 60 + min;
+    };
+    const ta = timeVal(a.signupTime||a.signupDeadline||'');
+    const tb = timeVal(b.signupTime||b.signupDeadline||'');
+    if(ta !== tb) return ta - tb;
+    // ② 地區由北到南
     const oa = MIC_CITY_ORDER.indexOf(a.city||'other');
     const ob = MIC_CITY_ORDER.indexOf(b.city||'other');
-    if(oa!==ob) return (oa<0?99:oa)-(ob<0?99:ob);
+    if(oa !== ob) return (oa<0?99:oa) - (ob<0?99:ob);
+    // ③ 場地名稱
     return (a.venue||'').localeCompare(b.venue||'','zh-TW');
   });
 
