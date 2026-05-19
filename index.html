@@ -122,7 +122,10 @@ body.ready{visibility:visible}
 .podcast-btns{display:flex;gap:8px;flex-wrap:wrap}
 .podcast-btn{padding:7px 16px;border-radius:var(--r-pill);font-size:.78rem;font-weight:700;font-family:var(--f-bo);text-decoration:none;border:1.5px solid var(--or);color:var(--or);background:transparent;transition:all .15s;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
 .podcast-btn:hover{background:var(--or);color:#fff}
-.podcast-iframe-wrap{border-radius:var(--r-md);overflow:hidden;width:100%;height:232px;background:rgba(45,43,31,.04);border:1px solid rgba(45,43,31,.08)}
+.podcast-iframe-wrap{border-radius:var(--r-md);width:100%;min-height:232px;background:rgba(45,43,31,.04);border:1px solid rgba(45,43,31,.08);overflow:hidden;position:relative}
+.podcast-fallback{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;text-align:center;position:absolute;inset:0;z-index:0}
+.podcast-platform-btn{display:block;padding:9px 18px;border-radius:var(--r-pill);font-size:.82rem;font-weight:700;font-family:var(--f-bo);text-decoration:none;text-align:center;transition:opacity .15s}
+.podcast-platform-btn:hover{opacity:.85}
 @media(max-width:768px){.podcast-card{grid-template-columns:1fr;padding:20px 16px;gap:18px}.podcast-title{font-size:1rem}}
 /* ── EMPTY STATE ── */
 .empty-state{grid-column:1/-1;text-align:center;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px}
@@ -697,9 +700,18 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <span class="en-text">Feeling like some comedy tonight?<br>Cici Radio curates ticketed comedy show listings from across Taiwan,<br>so you'll always know where to go!</span>
     </p>
     <div class="hero-ctas">
-      <a href="#" class="btn-or" onclick="showPage('shows');return false">📅 <span class="zh-text desk-text">看演出資訊</span><span class="zh-text mob-text">演出一覽</span><span class="en-text">Browse Shows</span></a>
-      <a href="#" class="btn-ww" onclick="showPage('opmic');return false">🎤 <span class="zh-text desk-text">Open Mic 報名資訊</span><span class="zh-text mob-text">Open Mic 報名</span><span class="en-text">Open Mic Info</span></a>
-      <a href="#" class="btn-ww" onclick="showPage('venues');return false">📍 <span class="zh-text desk-text">全台喜劇據點</span><span class="zh-text mob-text">喜劇據點</span><span class="en-text">Comedy Venues</span></a>
+      <a href="#" class="btn-or" onclick="showPage('shows');return false">📅
+        <span class="zh-text"><span class="desk-text">演出資訊一覽</span><span class="mob-text">演出一覽</span></span>
+        <span class="en-text">Browse Shows</span>
+      </a>
+      <a href="#" class="btn-ww" onclick="showPage('opmic');return false">🎤
+        <span class="zh-text"><span class="desk-text">Open Mic 報名資訊</span><span class="mob-text">Open Mic 報名</span></span>
+        <span class="en-text">Open Mic Info</span>
+      </a>
+      <a href="#" class="btn-ww" onclick="showPage('venues');return false">📍
+        <span class="zh-text"><span class="desk-text">全台喜劇據點</span><span class="mob-text">喜劇據點</span></span>
+        <span class="en-text">Comedy Venues</span>
+      </a>
     </div>
     <!-- 數字統計列 -->
     <div class="hero-stats" id="hero-stats">
@@ -755,7 +767,17 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         </div>
       </div>
       <div class="podcast-iframe-wrap">
-        <iframe style="border-radius:12px;width:100%;height:232px;border:none;display:block" src="https://open.spotify.com/embed/show/1NVkhQJcHj91hIdBJ5QAIC?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="嘻嘻哪哩唷 Podcast on Spotify"></iframe>
+        <iframe width="100%" height="232" style="border-radius:12px;border:none;display:block;position:relative;z-index:1" src="https://open.spotify.com/embed/show/1NVkhQJcHj91hIdBJ5QAIC?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="嘻嘻哪哩唷 Podcast on Spotify"
+        onerror="this.style.display='none'"></iframe>
+        <div class="podcast-fallback">
+          <div style="font-size:2rem;margin-bottom:10px">🎙️</div>
+          <div style="font-size:.85rem;font-weight:700;color:var(--tm);font-family:var(--f-zh);margin-bottom:14px"><span class="zh-text">在你喜歡的平台收聽</span><span class="en-text">Listen on your favourite platform</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="https://open.spotify.com/show/1NVkhQJcHj91hIdBJ5QAIC" target="_blank" rel="noopener" class="podcast-platform-btn" style="background:#1db954;color:#fff">🎵 Spotify</a>
+            <a href="https://podcasts.apple.com/tw/podcast/%E5%98%BB%E5%98%BB%E5%93%AA%E5%93%A9%E5%94%B7/id1625193833" target="_blank" rel="noopener" class="podcast-platform-btn" style="background:#9933cc;color:#fff">🎙 Apple Podcasts</a>
+            <a href="https://player.soundon.fm/p/62d755ad-810c-4d6e-9ed5-56bb24140d13" target="_blank" rel="noopener" class="podcast-platform-btn" style="background:#ff6b35;color:#fff">🎧 SoundOn</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1887,7 +1909,34 @@ function getShowAreaLabelById(id) {
   return lang==='en' ? (a.labelEn||a.labelZh||a.label||id) : (a.labelZh||a.label||a.labelEn||id);
 }
 
-// ── VENUE FILTER GROUPS ──
+// 從混合字串「中文名 English Name - 副場地」拆出對應語言部分
+// e.g. "飛客劇樂部 Fakers Club - basis coffee."
+//   zh → "飛客劇樂部 - basis coffee."
+//   en → "Fakers Club - basis coffee."
+function extractVenueLabelByLang(raw, lang) {
+  if(!raw) return '';
+  // 先試看看能否從 VENUE_GROUPS 反查英文名
+  if(lang === 'en') {
+    for(const [id, kws] of Object.entries(VENUE_GROUPS||{})) {
+      const lower = raw.toLowerCase();
+      if(kws.some(k => lower.includes(k.toLowerCase()))) {
+        // 查 DEFAULT_SHOW_VENUES
+        const v = (DEFAULT_SHOW_VENUES||[]).find(x=>x.id===id);
+        if(v && v.labelEn) return v.labelEn;
+      }
+    }
+  } else {
+    for(const [id, kws] of Object.entries(VENUE_GROUPS||{})) {
+      const lower = raw.toLowerCase();
+      if(kws.some(k => lower.includes(k.toLowerCase()))) {
+        const v = (DEFAULT_SHOW_VENUES||[]).find(x=>x.id===id);
+        if(v && v.labelZh) return v.labelZh;
+      }
+    }
+  }
+  // 最後 fallback：直接回傳原字串
+  return raw;
+}
 // 每個場地 ID 對應到它應該比對的 venueLabel 字串群組（substring match）
 const VENUE_GROUPS = {
   'comedy-plus': ['卡米地＋', '卡米地+', 'comedy plus'],
@@ -2185,7 +2234,14 @@ function renderHeroStats(){
   const nextEl = document.getElementById('hero-next-show');
   if(next && nextEl){
     const lang = getLang();
-    const venueLabel = getShowVenueLabelById(next.venue) || next.venueLabel || next.venue;
+    // getShowVenueLabelById 依語言查 DEFAULT_SHOW_VENUES，找不到才 fallback
+    let venueLabel = getShowVenueLabelById(next.venue);
+    if(!venueLabel) {
+      // fallback：嘗試從混合字串拆出對應語言部分
+      // 格式：「中文名 English Name - 副場地」或「中文名 - 副場地」
+      const raw = next.venueLabel || next.venue || '';
+      venueLabel = extractVenueLabelByLang(raw, lang);
+    }
     const label = lang==='en'
       ? `Next show: <strong>${next.date} · ${next.title} · ${venueLabel}</strong> →`
       : `最近一場演出：<strong>${next.date} · ${next.title} · ${venueLabel}</strong> →`;
@@ -3681,6 +3737,7 @@ function setLang(l){
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('on',b.textContent.trim()===(l==='zh'?'繁中':'EN')));
   const cur=document.querySelector('.page.active')?.id?.replace('page-','');
   if(typeof populateShowSelects==='function') populateShowSelects('','');
+  if(cur==='home' && window._dataReady) renderHeroStats();
   if(cur==='shows')renderShows();
   if(cur==='courses')renderCourses();
   if(cur==='opmic' && window._dataReady) renderMicTable();
