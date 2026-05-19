@@ -1393,6 +1393,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <img id="v-logo-prev" class="logo-prev-img" src="" alt="">
       </div>
     </div>
+    <div class="fg-g full"><label class="fl">用一句話形容場地</label><input class="fi" type="text" id="v-tagline" placeholder="e.g. 台灣現場喜劇的重要起點！"></div>
     <div class="fg-g full"><label class="fl">場地簡介</label><textarea class="fta" id="v-desc"></textarea></div>
     <div class="fg-g full"><label class="fl">合作場地名稱</label><input class="fi" type="text" id="v-partner" placeholder="e.g. 鸚鵡螺餐酒館（留空則不顯示）"></div>
     <div class="fg-g full">
@@ -2398,6 +2399,7 @@ function venueCardHTML(v) {
   return `<div class="venue-card" data-id="${v.id}" onclick="showVenueDetail('${v.id}')" style="display:flex;flex-direction:column">
     <div class="venue-logo">${logo}</div>
     <div class="venue-name">${nameDisplay}<small>${nameAlt}</small></div>
+    ${v.tagline?`<div style="font-size:.76rem;color:var(--ts);font-family:var(--f-zh);margin:-4px 0 4px;line-height:1.5;font-style:italic">${v.tagline}</div>`:''}
     <div class="venue-city-lbl">📍 ${CITY_LBL[v.city]||v.city}</div>
     ${v.partner?`<div style="margin-top:2px"><span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;background:rgba(239,111,32,.1);color:var(--or);border:1px solid rgba(239,111,32,.25);border-radius:var(--r-pill);padding:2px 8px;font-family:var(--f-zh)">🤝 ${v.partner}</span></div>`:''}
     ${(v.tags&&v.tags.length)?`<div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div>`:''}
@@ -2467,7 +2469,7 @@ function showVenueDetail(id) {
   document.getElementById('venue-detail-body').innerHTML=`
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
       <div class="venue-logo" style="width:54px;height:54px;border-radius:11px">${logo}</div>
-      <div><div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh)">${nameMain}</div><div style="font-size:.82rem;color:var(--ts);font-family:var(--f-bo)">${nameAlt}</div></div>
+      <div><div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh)">${nameMain}</div><div style="font-size:.82rem;color:var(--ts);font-family:var(--f-bo)">${nameAlt}</div>${v.tagline?`<div style="font-size:.8rem;color:var(--ts);font-family:var(--f-zh);margin-top:3px;font-style:italic">${v.tagline}</div>`:''}</div>
     </div>
     <table style="width:100%;border-collapse:collapse;font-size:.88rem;font-family:var(--f-zh);margin-bottom:18px">
       <tr><td style="padding:10px 12px 10px 0;color:var(--ts);font-size:.88rem;font-weight:600;width:65px;vertical-align:top;border-bottom:1px solid rgba(45,43,31,.07)">${lang==='en'?'City':'城市'}</td><td style="padding:10px 0;border-bottom:1px solid rgba(45,43,31,.07)">${CITY_LBL[v.city]||v.city}</td></tr>
@@ -3105,9 +3107,9 @@ function openVenueModal(id){
   eVenueId=id||null;
   const v=id?VENUES.find(x=>x.id===id):null;
   document.getElementById('modal-venue-title').textContent=v?'編輯場地':'新增場地';
-  ['v-namezh','v-nameen','v-address','v-mapurl','v-fb','v-ig','v-logourl','v-desc','v-partner','v-tags','v-tip'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  ['v-namezh','v-nameen','v-address','v-mapurl','v-fb','v-ig','v-logourl','v-tagline','v-desc','v-partner','v-tags','v-tip'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
   const lp=document.getElementById('v-logo-prev');if(lp){lp.src='';lp.style.display='none';}
-  if(v){document.getElementById('v-namezh').value=v.nameZh||'';document.getElementById('v-nameen').value=v.nameEn||'';document.getElementById('v-city').value=v.city||'taipei';document.getElementById('v-address').value=v.address||'';document.getElementById('v-mapurl').value=v.mapUrl||'';document.getElementById('v-fb').value=v.fb||'';document.getElementById('v-ig').value=v.ig||'';document.getElementById('v-logourl').value=v.logoUrl||'';document.getElementById('v-desc').value=v.description||'';document.getElementById('v-partner').value=v.partner||'';document.getElementById('v-tags').value=(v.tags||[]).join(', ');document.getElementById('v-tip').value=v.tip||'';if(v.logoUrl)prevVenueLogo(v.logoUrl);}
+  if(v){document.getElementById('v-namezh').value=v.nameZh||'';document.getElementById('v-nameen').value=v.nameEn||'';document.getElementById('v-city').value=v.city||'taipei';document.getElementById('v-address').value=v.address||'';document.getElementById('v-mapurl').value=v.mapUrl||'';document.getElementById('v-fb').value=v.fb||'';document.getElementById('v-ig').value=v.ig||'';document.getElementById('v-logourl').value=v.logoUrl||'';document.getElementById('v-tagline').value=v.tagline||'';document.getElementById('v-desc').value=v.description||'';document.getElementById('v-partner').value=v.partner||'';document.getElementById('v-tags').value=(v.tags||[]).join(', ');document.getElementById('v-tip').value=v.tip||'';if(v.logoUrl)prevVenueLogo(v.logoUrl);}
   document.getElementById('modal-venue').classList.add('open');
 }
 function saveVenue(){
@@ -3117,7 +3119,7 @@ function saveVenue(){
   const tagsRaw = document.getElementById('v-tags').value.trim();
   const tags = tagsRaw ? tagsRaw.split(',').map(t=>t.trim()).filter(Boolean) : [];
   const tip = document.getElementById('v-tip').value.trim();
-  const item={nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,mapUrl:document.getElementById('v-mapurl').value.trim(),fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,description:document.getElementById('v-desc').value,partner:document.getElementById('v-partner').value.trim(),tags,tip};
+  const item={nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,mapUrl:document.getElementById('v-mapurl').value.trim(),fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,tagline:document.getElementById('v-tagline').value.trim(),description:document.getElementById('v-desc').value,partner:document.getElementById('v-partner').value.trim(),tags,tip};
   window.FB.save('venues', eVenueId||null, item).then(newId=>{
     if(eVenueId){const i=VENUES.findIndex(x=>x.id===eVenueId);if(i>=0)VENUES[i]={id:eVenueId,...item};}
     else VENUES.push({id:newId,...item});
