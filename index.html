@@ -3679,7 +3679,17 @@ function restorePageFromHash(){
 
 window.addEventListener('load', ()=>{
   try { initReveal(); } catch(e) { console.warn('initReveal error:', e); }
-  try { restorePageFromHash(); } catch(e) { console.warn('restorePageFromHash error:', e); }
+  try { restorePageFromHash(); } catch(e) {
+    console.warn('restorePageFromHash error:', e);
+    // 保底：確保至少首頁顯示
+    const home = document.getElementById('page-home');
+    if(home && !document.querySelector('.page.active')) home.classList.add('active');
+  }
+  // 若仍沒有 active page，強制顯示首頁
+  if(!document.querySelector('.page.active')) {
+    const home = document.getElementById('page-home');
+    if(home) home.classList.add('active');
+  }
   document.body.classList.add('ready');
   const badge = document.getElementById('sessionBadge');
   if (isLoggedIn() && badge) badge.classList.add('visible');
