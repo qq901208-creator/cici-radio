@@ -256,6 +256,33 @@ body.ready{visibility:visible}
 #mic-loading.hidden{display:none}
 .mic-table-wrap{background:var(--ww);border-radius:var(--r-lg);overflow-x:auto;border:1.5px solid rgba(45,43,31,.09)}
 .mic-table{width:100%;min-width:820px;border-collapse:collapse}
+/* ── MIC TAB HINT ── */
+.mic-tab-hint{font-size:.76rem;color:var(--ts);font-family:var(--f-zh);margin:-10px 0 18px;line-height:1.6;opacity:.8}
+/* ── MIC CARDS (mobile only) ── */
+.mic-cards-list{display:none;flex-direction:column;gap:14px;margin-bottom:20px}
+.mic-card{background:var(--ww);border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.1);padding:18px;position:relative}
+.mic-card.today-card{border-color:var(--y);box-shadow:0 0 0 2.5px rgba(245,213,88,.4)}
+.mic-card-badge{position:absolute;top:14px;right:14px;background:var(--y);color:var(--sd);font-size:.62rem;font-weight:900;font-family:var(--f-bo);border-radius:var(--r-pill);padding:2px 9px;letter-spacing:.04em}
+.mic-card-venue{font-size:.96rem;font-weight:900;font-family:var(--f-zh);color:var(--sd);margin-bottom:2px;padding-right:64px}
+.mic-card-city{font-size:.72rem;color:var(--ts);margin-bottom:8px}
+.mic-card-name{font-size:.88rem;font-weight:700;color:var(--or);font-family:var(--f-zh);margin-bottom:12px;line-height:1.4}
+.mic-card-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.mic-card-row{display:flex;gap:8px;font-size:.83rem;font-family:var(--f-zh);color:var(--tm);line-height:1.55;align-items:flex-start}
+.mic-card-row .ri{flex-shrink:0;width:1.3em;text-align:center}
+.mic-card-method{font-size:.83rem;font-family:var(--f-zh);color:var(--tm);line-height:1.65;word-break:break-word;padding:10px 12px;background:rgba(45,43,31,.04);border-radius:var(--r-sm);margin-bottom:10px}
+.mic-card-notes{font-size:.78rem;color:var(--ts);font-family:var(--f-zh);line-height:1.65;padding-top:10px;border-top:1px solid rgba(45,43,31,.08);word-break:break-word;margin-top:4px}
+.mic-card-footer{margin-top:14px;display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.mic-card-signup-btn{padding:9px 20px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.84rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:background .15s}
+.mic-card-signup-btn:hover{background:#d45c10}
+.mic-card-admin{display:flex;gap:6px}
+/* desktop: show table hide cards; mobile: show cards hide table */
+@media(min-width:769px){
+  .mic-cards-list{display:none!important}
+}
+@media(max-width:768px){
+  .mic-table-wrap{display:none!important}
+  .mic-cards-list{display:flex!important}
+}
 .mic-table thead th{padding:11px 14px;background:var(--sd);color:var(--y);font-size:.73rem;font-weight:700;text-align:left;font-family:var(--f-zh)}
 .mic-table tbody tr{border-bottom:1px solid rgba(45,43,31,.06);transition:background .12s}
 .mic-table tbody tr:last-child{border-bottom:none}
@@ -905,7 +932,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="sec-label">Open Mic</div>
     <h2 class="sec-title"><span class="zh-text">演員 Open Mic 報名資訊</span><span class="en-text">Open Mic Sign-Up Info</span></h2>
     <p class="sec-desc editable" contenteditable="false"><span class="zh-text">今晚去哪試段子好呢？嘻嘻報你知！<br>下方「週一～週日」標籤是 Open Mic 開放報名的星期，不是實際演出日期與時間！<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充場次？歡迎回報 →</a></span><span class="en-text">Not sure where to try your set tonight? Cici's got you!<br>The tabs below are filtered by <strong>Open Mic sign-up availability and weekday</strong> — not actual show dates or times!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
-    <div style="display:block;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:10px 16px;margin-bottom:22px;font-size:.84rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">
+    <div style="display:block;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:10px 16px;margin-bottom:14px;font-size:.84rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">⚠️ <span class="zh-text">點擊報名連結將跳轉至外部頁面，本站不參與任何報名流程！</span><span class="en-text">Sign-up links lead to external pages. We are not involved in any sign-up process.</span></div>
     <div class="day-tabs" id="day-tabs-row">
       <button class="day-tab on" data-day="1" onclick="selectMicDay(1,this)"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
       <button class="day-tab" data-day="2" onclick="selectMicDay(2,this)"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
@@ -915,6 +942,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="day-tab" data-day="6" onclick="selectMicDay(6,this)"><span class="zh-text">週六</span><span class="en-text">Sat.</span></button>
       <button class="day-tab" data-day="0" onclick="selectMicDay(0,this)"><span class="zh-text">週日</span><span class="en-text">Sun.</span></button>
     </div>
+    <p class="mic-tab-hint"><span class="zh-text">以上「週一～週日」標籤是 Open Mic 開放報名的星期，不是實際演出日期與時間喔！</span><span class="en-text">The Mon.–Sun. tabs above indicate when Open Mic sign-ups open, not the actual show date or time.</span></p>
+    <!-- Desktop 表格 -->
     <div class="mic-table-wrap" id="mic-table-wrap">
       <table class="mic-table"><thead><tr>
         <th><span class="zh-text">場地</span><span class="en-text">Venue</span></th>
@@ -928,6 +957,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <th><span class="zh-text">備註</span><span class="en-text">Notes</span></th>
       </tr></thead><tbody id="mic-tbody"></tbody></table>
     </div>
+    <!-- Mobile 卡片 -->
+    <div id="mic-cards" class="mic-cards-list"></div>
     <div id="mic-loading" style="text-align:center;padding:40px 0;color:var(--ts);font-family:var(--f-zh);font-size:.9rem">載入中…</div>
     <button class="edit-add-btn" onclick="openMicModal(null)">＋ <span class="zh-text">新增 Open Mic 場次</span><span class="en-text">Add Open Mic</span></button>
   </section>
@@ -2511,14 +2542,14 @@ function cleanMicTime(str, lang) {
 
 function renderMicTable() {
   const tbody=document.getElementById('mic-tbody'); if(!tbody)return;
-  if(!window._dataReady) return; // 等 Firebase 就緒，保持 loading 狀態
+  if(!window._dataReady) return;
 
-  // 顯示表格、隱藏 loading
   const wrap = document.getElementById('mic-table-wrap');
   const loading = document.getElementById('mic-loading');
   if(wrap) wrap.classList.add('ready');
   if(loading) loading.classList.add('hidden');
-  const isAdmin=isLoggedIn();
+
+  const isAdmin = isLoggedIn() && editMode; // 必須登入且在編輯模式
   const lang=getLang();
   const rows=MICS.filter(m=>m.day===micDay).sort((a,b)=>{
     const oa = MIC_CITY_ORDER.indexOf(a.city||'other');
@@ -2526,15 +2557,22 @@ function renderMicTable() {
     if(oa!==ob) return (oa<0?99:oa)-(ob<0?99:ob);
     return (a.venue||'').localeCompare(b.venue||'','zh-TW');
   });
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">本日無場次</td></tr>`;return;}
+
+  if(!rows.length){
+    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">本日無場次</td></tr>`;
+    renderMicCards([], isAdmin, lang);
+    return;
+  }
+
+  const DAY_ZH = ['週日','週一','週二','週三','週四','週五','週六'];
+  const DAY_EN = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'];
+
   tbody.innerHTML=rows.map(m=>{
     const cityLblZh = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'}[m.city||'other']||'';
     const cityLblEn = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'}[m.city||'other']||'';
     const venueDisplay = lang==='en' ? getMicVenueEn(m) : getMicVenueZh(m);
     const cityLbl = lang==='en' ? cityLblEn : cityLblZh;
     const methodHtml = sanitizeMicMethod(m.method||'');
-    const DAY_ZH = ['週日','週一','週二','週三','週四','週五','週六'];
-    const DAY_EN = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'];
     const showDayLabel = m.showDay !== null && m.showDay !== undefined
       ? (lang==='en' ? DAY_EN[m.showDay] : DAY_ZH[m.showDay]) : '';
     const showTimeDisplay = [showDayLabel, cleanMicTime(m.showTime||'', lang)].filter(Boolean).join(' ');
@@ -2556,6 +2594,66 @@ function renderMicTable() {
         ${isAdmin?`<div style="margin-top:4px;display:flex;gap:4px"><button class="ca-btn ca-edit" style="width:24px;height:24px;font-size:.62rem;display:inline-flex" onclick="openMicModal('${m.id}')">✏️</button><button class="ca-btn ca-del" style="width:24px;height:24px;font-size:.62rem;display:inline-flex" onclick="delMic('${m.id}')">🗑</button></div>`:''}
       </td>
     </tr>`;
+  }).join('');
+
+  // 同步手機版卡片
+  renderMicCards(rows, isAdmin, lang);
+}
+
+function renderMicCards(rows, isAdmin, lang) {
+  const container = document.getElementById('mic-cards');
+  if(!container) return;
+  const todayDay = new Date().getDay();
+  const DAY_ZH = ['週日','週一','週二','週三','週四','週五','週六'];
+  const DAY_EN = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'];
+  if(!rows || !rows.length) {
+    container.innerHTML = `<div style="text-align:center;padding:32px;color:var(--ts);font-family:var(--f-zh)"><span class="zh-text">本日無場次</span><span class="en-text">No shows today</span></div>`;
+    return;
+  }
+  const CITY_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'};
+  const CITY_EN = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'};
+  container.innerHTML = rows.map(m => {
+    const venueDisplay = lang==='en' ? getMicVenueEn(m) : getMicVenueZh(m);
+    const cityLbl = lang==='en' ? (CITY_EN[m.city||'other']||'') : (CITY_ZH[m.city||'other']||'');
+    const methodHtml = sanitizeMicMethod(m.method||'');
+    const showDayLabel = (m.showDay !== null && m.showDay !== undefined)
+      ? (lang==='en' ? DAY_EN[m.showDay] : DAY_ZH[m.showDay]) : '';
+    const showTimeDisplay = [showDayLabel, cleanMicTime(m.showTime||'', lang)].filter(Boolean).join(' ');
+    const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'', lang);
+    const checkinDisplay = cleanMicTime(m.checkinTime||'', lang);
+    const isToday = m.day === todayDay;
+    const todayBadge = isToday
+      ? `<span class="mic-card-badge"><span class="zh-text">今天</span><span class="en-text">Today</span></span>` : '';
+
+    // helper: only show row if value is non-empty
+    const row = (icon, zhLbl, enLbl, val) => {
+      if(!val) return '';
+      return `<div class="mic-card-row"><span class="ri">${icon}</span><span><strong>${lang==='en'?enLbl:zhLbl}：</strong>${val}</span></div>`;
+    };
+
+    const signupBtn = (m.link && m.link !== '#')
+      ? `<a class="mic-card-signup-btn" href="${m.link}" target="_blank" rel="noopener" onclick="return confirm('即將前往外部報名頁面，本站不參與報名流程。\\n\\n確定要前往嗎？')"><span class="zh-text">前往報名 ↗</span><span class="en-text">Sign Up ↗</span></a>`
+      : '';
+
+    return `<div class="mic-card${isToday?' today-card':''}">
+      ${todayBadge}
+      <div class="mic-card-venue">${venueDisplay}</div>
+      ${cityLbl ? `<div class="mic-card-city">📍 ${cityLbl}</div>` : ''}
+      ${m.name ? `<div class="mic-card-name">${m.name}</div>` : ''}
+      <div class="mic-card-rows">
+        ${row('🕗','演出時間','Show Time', showTimeDisplay)}
+        ${row('📝','報名時間','Sign-up Opens', signupDisplay)}
+        ${row('🚪','報到時間','Check-in', checkinDisplay)}
+        ${row('🎭','演出限制','Time Limit', m.timeLimit||'')}
+        ${row('💰','報名費用','Sign-up Fee', m.signupFee||'')}
+      </div>
+      ${methodHtml ? `<div class="mic-card-method">📌 <strong>${lang==='en'?'How to Sign Up':'報名方式'}：</strong>${methodHtml}</div>` : ''}
+      ${m.notes ? `<div class="mic-card-notes">📋 <strong>${lang==='en'?'Notes':'備註'}：</strong>${m.notes}</div>` : ''}
+      <div class="mic-card-footer">
+        ${signupBtn}
+        ${isAdmin ? `<div class="mic-card-admin"><button class="ca-btn ca-edit" onclick="openMicModal('${m.id}')">✏️</button><button class="ca-btn ca-del" onclick="delMic('${m.id}')">🗑</button></div>` : ''}
+      </div>
+    </div>`;
   }).join('');
 }
 function selectMicDay(d,el){micDay=parseInt(d);document.querySelectorAll('.day-tab').forEach(t=>t.classList.toggle('on',parseInt(t.dataset.day)===micDay));renderMicTable();}
@@ -2821,6 +2919,7 @@ function buildMicTimeRange(ampm1Id, h1Id, ampm2Id, h2Id) {
 }
 
 function openMicModal(id){
+  if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}
   eMicId=id||null;
   const m=id?MICS.find(x=>x.id===id):null;
   document.getElementById('modal-mic-title').textContent=m?'編輯 Open Mic 場次':'新增 Open Mic 場次';
@@ -2867,6 +2966,7 @@ function openMicModal(id){
   document.getElementById('modal-mic').classList.add('open');
 }
 function saveMic(){
+  if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}
   const venue=document.getElementById('m-venue').value.trim();
   if(!venue){showToast('請填入場地名稱','err');return;}
   const showTime   = buildMicTimeRange('m-showtime-ampm','m-showtime-h','m-showtime-end-ampm','m-showtime-end-h');
@@ -2896,7 +2996,7 @@ function saveMic(){
     closeModal('mic');renderMicTable();showToast('✅ Open Mic 已儲存','ok');
   }).catch(()=>showToast('❌ 儲存失敗','err'));
 }
-function delMic(id){if(!confirm('確定刪除？'))return;window.FB.del('mics',id).then(()=>{MICS=MICS.filter(x=>x.id!==id);renderMicTable();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
+function delMic(id){if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}if(!confirm('確定刪除？'))return;window.FB.del('mics',id).then(()=>{MICS=MICS.filter(x=>x.id!==id);renderMicTable();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
 // ── VENUE MODAL ──
 function openVenueModal(id){
