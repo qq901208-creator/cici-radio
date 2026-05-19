@@ -61,7 +61,7 @@ body.ready{visibility:visible}
 .sec-desc{font-size:.95rem;color:var(--ts);max-width:540px;line-height:1.78;font-family:var(--f-zh);margin-bottom:40px}
 
 /* HERO */
-.hero{background:var(--py);padding:calc(var(--nav)+68px) 5vw 76px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;overflow:hidden}
+.hero{background:var(--py);padding:calc(var(--nav)+96px) 5vw 76px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:var(--y);opacity:.38;top:-200px;right:-150px;pointer-events:none}
 .hero::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:var(--or);opacity:.09;bottom:-60px;left:-80px;pointer-events:none}
 .hero-logo{width:148px;height:148px;border-radius:26px;overflow:hidden;border:4px solid rgba(239,111,32,.28);box-shadow:0 10px 44px rgba(239,111,32,.18);margin-bottom:26px;position:relative;z-index:1;background:var(--ww)}
@@ -619,8 +619,8 @@ body.edit .edit-bar{display:flex!important}
   .fp-inner{width:100%}
   .fp-nr{flex-direction:column;gap:6px}
   .fp-ni{width:100%}
-  .hero{padding:calc(var(--nav) + 48px) 5vw 52px}
-  .about-hero{padding:calc(var(--nav) + 40px) 5vw 52px}
+  .hero{padding:calc(var(--nav) + 24px) 5vw 52px}
+  .about-hero{padding:calc(var(--nav) + 20px) 5vw 52px}
   .sec{padding:44px 4vw}
 }
 .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:8px 6px;border:none;background:transparent;margin-left:6px;flex-shrink:0}
@@ -1250,8 +1250,18 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g full"><label class="fl">場地名稱（中文）<span class="req">*</span></label><input class="fi" type="text" id="m-venue" placeholder="e.g. 卡米地+"></div>
     <div class="fg-g full"><label class="fl">Venue Name (EN)</label><input class="fi" type="text" id="m-venue-en" placeholder="e.g. Comedy Plus"></div>
     <div class="fg-g full">
-      <label class="fl">演出時間</label>
+      <label class="fl">演出星期／時間</label>
       <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+        <select class="fs" id="m-showday" style="width:100px">
+          <option value="">（不指定）</option>
+          <option value="1">週一 Mon.</option>
+          <option value="2">週二 Tue.</option>
+          <option value="3">週三 Wed.</option>
+          <option value="4">週四 Thu.</option>
+          <option value="5">週五 Fri.</option>
+          <option value="6">週六 Sat.</option>
+          <option value="0">週日 Sun.</option>
+        </select>
         <select class="fs" id="m-showtime-ampm" style="width:82px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
         <input class="fi" type="text" id="m-showtime-h" placeholder="9:30" style="width:90px">
         <span style="color:var(--ts);font-size:.82rem">至</span>
@@ -2165,9 +2175,10 @@ function renderHeroStats(){
   const nextEl = document.getElementById('hero-next-show');
   if(next && nextEl){
     const lang = getLang();
+    const venueLabel = getShowVenueLabelById(next.venue) || next.venueLabel || next.venue;
     const label = lang==='en'
-      ? `Next up: <strong>${next.date} · ${next.venueLabel||next.venue} · ${next.title}</strong> →`
-      : `最近一場：<strong>${next.date} · ${next.venueLabel||next.venue} · ${next.title}</strong> →`;
+      ? `Next show: <strong>${next.date} · ${next.title} · ${venueLabel}</strong> →`
+      : `最近一場演出：<strong>${next.date} · ${next.title} · ${venueLabel}</strong> →`;
     nextEl.innerHTML = label;
     nextEl.style.display = 'block';
   }
@@ -2414,11 +2425,20 @@ function getMicVenueZh(m) {
   return extractZh(m.venue||'') || m.venue||'';
 }
 
-// 清理舊資料中「上午 當天現場」/「下午 當天現場」等格式
-function cleanMicTime(str) {
+// 清理舊資料中「上午 當天現場」/「下午 當天現場」等格式，英文時轉 am/pm
+function cleanMicTime(str, lang) {
   if(!str) return '';
+  const s = str.trim();
+  const isEn = (lang || getLang()) === 'en';
   // 若是「上午/下午 + 純文字（無數字）」→ 去掉前綴
-  return str.replace(/^(上午|下午)\s+(?=\D+$)/, '').trim();
+  const plainText = s.replace(/^(上午|下午)\s+(?=\D+$)/, '').trim();
+  if(plainText !== s) return plainText; // 純文字，直接回傳
+  // 有數字的時間 → 英文時替換 am/pm
+  if(isEn) {
+    return s.replace(/^上午\s*/, 'am ').replace(/^下午\s*/, 'pm ')
+            .replace(/\s*–\s*上午\s*/g, ' – am ').replace(/\s*–\s*下午\s*/g, ' – pm ');
+  }
+  return s;
 }
 
 function renderMicTable() {
@@ -2445,15 +2465,20 @@ function renderMicTable() {
     const venueDisplay = lang==='en' ? getMicVenueEn(m) : getMicVenueZh(m);
     const cityLbl = lang==='en' ? cityLblEn : cityLblZh;
     const methodHtml = sanitizeMicMethod(m.method||'');
-    const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'');
-    const checkinDisplay = cleanMicTime(m.checkinTime||'');
+    const DAY_ZH = ['週日','週一','週二','週三','週四','週五','週六'];
+    const DAY_EN = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'];
+    const showDayLabel = m.showDay !== null && m.showDay !== undefined
+      ? (lang==='en' ? DAY_EN[m.showDay] : DAY_ZH[m.showDay]) : '';
+    const showTimeDisplay = [showDayLabel, cleanMicTime(m.showTime||'', lang)].filter(Boolean).join(' ');
+    const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'', lang);
+    const checkinDisplay = cleanMicTime(m.checkinTime||'', lang);
     return `<tr>
       <td>
         <strong style="font-family:var(--f-zh)">${venueDisplay}</strong>
         ${cityLbl?`<div style="font-size:.7rem;color:var(--ts);margin-top:2px">📍 ${cityLbl}</div>`:''}
       </td>
       <td style="font-family:var(--f-zh);font-weight:700">${m.name||'—'}</td>
-      <td style="font-family:var(--f-zh)">${m.showTime||'—'}</td>
+      <td style="font-family:var(--f-zh)">${showTimeDisplay||'—'}</td>
       <td style="font-family:var(--f-zh);color:var(--or);font-weight:600">${signupDisplay||'—'}</td>
       <td style="font-family:var(--f-zh)">${checkinDisplay||'—'}</td>
       <td style="font-family:var(--f-zh);line-height:1.6">${methodHtml}</td>
@@ -2735,6 +2760,8 @@ function openMicModal(id){
   ['m-venue','m-venue-en','m-name','m-showtime-h','m-showtime-end-h','m-signuptime-h','m-checkintime-h','m-method','m-timelimit','m-signupfee','m-notes'].forEach(k=>{
     const el=document.getElementById(k); if(el) el.value='';
   });
+  const showDayEl = document.getElementById('m-showday');
+  if(showDayEl) showDayEl.value = '';
   // 重設 ampm 預設值
   ['m-showtime-ampm','m-showtime-end-ampm','m-signuptime-ampm','m-checkintime-ampm'].forEach(k=>{
     const el=document.getElementById(k); if(el) el.value='下午';
@@ -2745,6 +2772,7 @@ function openMicModal(id){
     document.getElementById('m-name').value=m.name||'';
     document.getElementById('m-venue').value=m.venue||'';
     document.getElementById('m-venue-en').value=m.venueEn||'';
+    if(showDayEl) showDayEl.value = m.showDay !== undefined ? String(m.showDay) : '';
     // 解析演出時間（可能含 –）
     const showParts = (m.showTime||'').split('–');
     const sp = parseMicTime(showParts[0]);
@@ -2776,12 +2804,14 @@ function saveMic(){
   const showTime   = buildMicTimeRange('m-showtime-ampm','m-showtime-h','m-showtime-end-ampm','m-showtime-end-h');
   const signupTime = buildMicTime('m-signuptime-ampm','m-signuptime-h');
   const checkinTime= buildMicTime('m-checkintime-ampm','m-checkintime-h');
+  const showDayVal = document.getElementById('m-showday')?.value;
   const item={
     day:parseInt(document.getElementById('m-day').value),
     city:document.getElementById('m-city').value,
     name:document.getElementById('m-name').value.trim(),
     venue,
     venueEn:document.getElementById('m-venue-en').value.trim(),
+    showDay: showDayVal !== '' && showDayVal !== undefined ? parseInt(showDayVal) : null,
     showTime,
     signupTime,
     signupDeadline: signupTime, // 向下相容
