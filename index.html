@@ -61,7 +61,7 @@ body.ready{visibility:visible}
 .sec-desc{font-size:.95rem;color:var(--ts);max-width:540px;line-height:1.78;font-family:var(--f-zh);margin-bottom:40px}
 
 /* HERO */
-.hero{background:var(--py);padding:calc(var(--nav)+96px) 5vw 76px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;overflow:hidden}
+.hero{background:var(--py);padding:calc(var(--nav)+80px) 5vw 76px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:var(--y);opacity:.38;top:-200px;right:-150px;pointer-events:none}
 .hero::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:var(--or);opacity:.09;bottom:-60px;left:-80px;pointer-events:none}
 .hero-logo{width:148px;height:148px;border-radius:26px;overflow:hidden;border:4px solid rgba(239,111,32,.28);box-shadow:0 10px 44px rgba(239,111,32,.18);margin-bottom:26px;position:relative;z-index:1;background:var(--ww)}
@@ -619,8 +619,18 @@ body.edit .edit-bar{display:flex!important}
   .fp-inner{width:100%}
   .fp-nr{flex-direction:column;gap:6px}
   .fp-ni{width:100%}
-  .hero{padding:calc(var(--nav) + 24px) 5vw 52px}
-  .about-hero{padding:calc(var(--nav) + 20px) 5vw 52px}
+  .hero{padding:calc(var(--nav) + 14px) 5vw 44px}
+  .about-hero{padding:calc(var(--nav) + 12px) 5vw 44px}
+  /* CTA 按鈕同一排 */
+  .hero-ctas{flex-wrap:nowrap;gap:6px;width:100%}
+  .hero-ctas .btn-or,
+  .hero-ctas .btn-ww{flex:1;padding:9px 4px;font-size:.75rem;min-width:0;justify-content:center;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+  /* 數字統計同一排不換行 */
+  .hero-stats{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px;padding-bottom:2px;scrollbar-width:none;justify-content:flex-start}
+  .hero-stats::-webkit-scrollbar{display:none}
+  .hero-stat{padding:7px 8px;min-width:0;flex:1;flex-shrink:0}
+  .hero-stat-num{font-size:1.1rem}
+  .hero-stat-lbl{font-size:.6rem;white-space:nowrap}
   .sec{padding:44px 4vw}
 }
 .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:8px 6px;border:none;background:transparent;margin-left:6px;flex-shrink:0}
@@ -682,9 +692,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <span class="en-text">Feeling like some comedy tonight?<br>Cici Radio curates ticketed comedy show listings from across Taiwan,<br>so you'll always know where to go!</span>
     </p>
     <div class="hero-ctas">
-      <a href="#" class="btn-or" onclick="showPage('shows');return false">📅 <span class="zh-text">看演出資訊</span><span class="en-text">Browse Shows</span></a>
-      <a href="#" class="btn-ww" onclick="showPage('opmic');return false">🎤 <span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic Info</span></a>
-      <a href="#" class="btn-ww" onclick="showPage('venues');return false">📍 <span class="zh-text">全台喜劇據點</span><span class="en-text">Comedy Venues</span></a>
+      <a href="#" class="btn-or" onclick="showPage('shows');return false">📅 <span class="zh-text">演出</span><span class="en-text">Shows</span></a>
+      <a href="#" class="btn-ww" onclick="showPage('opmic');return false">🎤 Open Mic</a>
+      <a href="#" class="btn-ww" onclick="showPage('venues');return false">📍 <span class="zh-text">據點</span><span class="en-text">Venues</span></a>
     </div>
     <!-- 數字統計列 -->
     <div class="hero-stats" id="hero-stats">
@@ -2023,14 +2033,9 @@ window.addEventListener('resize', () => {
   clearTimeout(_resizeTimer);
   _resizeTimer = setTimeout(() => {
     const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
-    if(activePage === 'shows') {
-      showsPage = 1;
-      renderShows();
-    }
-    if(activePage === 'courses') {
-      coursesPage = 1;
-      renderCourses();
-    }
+    if(activePage === 'home' && typeof renderHomeShows === 'function') renderHomeShows();
+    if(activePage === 'shows') { showsPage = 1; renderShows(); }
+    if(activePage === 'courses') { coursesPage = 1; renderCourses(); }
   }, 120);
 });
 
@@ -2187,7 +2192,8 @@ function renderHeroStats(){
 function renderHomeShows() {
   const g = document.getElementById('home-shows-grid'); if (!g) return;
   const shows = window._SHOWS || SHOWS || [];
-  const fil = shows.filter(s=>(s.status||'published')==='published' && !isExpired(s.date, s.time)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0,6);
+  const count = window.innerWidth >= 1024 ? 5 : 4;
+  const fil = shows.filter(s=>(s.status||'published')==='published' && !isExpired(s.date, s.time)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0, count);
   g.innerHTML = fil.length ? fil.map(showCardHTML).join('') : `<div class="empty-state"><div class="empty-state-icon">🎭</div><div class="empty-state-title"><span class="zh-text">近期資訊整理中，敬請期待！</span><span class="en-text">More comedy events coming soon!</span></div><button class="empty-state-btn" onclick="showPage('opmic')"><span class="zh-text">查看本週 Open Mic 場次</span><span class="en-text">Browse This Week's Open Mic Shows</span></button></div>`;
 }
 
