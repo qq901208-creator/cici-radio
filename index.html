@@ -2399,13 +2399,13 @@ function venueCardHTML(v) {
   return `<div class="venue-card" data-id="${v.id}" onclick="showVenueDetail('${v.id}')" style="display:flex;flex-direction:column">
     <div class="venue-logo">${logo}</div>
     <div class="venue-name">${nameDisplay}<small>${nameAlt}</small></div>
-    ${v.tagline?`<div style="font-size:.76rem;color:var(--ts);font-family:var(--f-zh);margin:-4px 0 4px;line-height:1.5;font-style:italic">${v.tagline}</div>`:''}
     <div class="venue-city-lbl">📍 ${CITY_LBL[v.city]||v.city}</div>
+    ${v.tagline?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin:5px 0 2px;line-height:1.5">「${v.tagline}」</div>`:''}
     ${v.partner?`<div style="margin-top:2px"><span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:600;background:rgba(45,43,31,.06);color:var(--ts);border:1px solid rgba(45,43,31,.14);border-radius:var(--r-pill);padding:2px 8px;font-family:var(--f-zh)">🤝 ${v.partner}</span></div>`:''}
     ${(v.tags&&v.tags.length)?`<div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div>`:''}
     <div class="venue-links" onclick="event.stopPropagation()" style="margin-top:auto">
-      ${v.fb?`<a class="vlb vlb-fb" href="${v.fb}" target="_blank">f FB</a>`:''}
-      ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank">ig IG</a>`:''}
+      ${v.fb?`<a class="vlb vlb-fb" href="${v.fb}" target="_blank">Facebook</a>`:''}
+      ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank">Instagram</a>`:''}
       ${v.address||v.mapUrl?`<a class="vlb vlb-map" href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank">📍 Map</a>`:''}
     </div>
     ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(45,43,31,.04);border-left:2px solid rgba(45,43,31,.18);border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55;white-space:pre-line"><span style="font-weight:700;color:var(--tm)">💬 嘻嘻小建議</span><br>${v.tip}</div>`:''}
