@@ -2627,7 +2627,7 @@ function renderMicTable() {
 
   const emptyMsg = isIrregular
     ? `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)"><span class="zh-text">目前沒有不定期開放的 Open Mic 資訊。</span><span class="en-text">No irregular Open Mic sign-up info at the moment.</span></td></tr>`
-    : `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">本日無場次</td></tr>`;
+    : `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)"><span class="zh-text">本日無場次可報名，太可惜了😢</span><span class="en-text">No Open Mic sign-ups today — what a bummer 😢</span></td></tr>`;
 
   if(!rows.length){
     tbody.innerHTML = emptyMsg;
@@ -2680,7 +2680,7 @@ function renderMicCards(rows, isAdmin, lang, isIrregular) {
   if(!rows || !rows.length) {
     const msg = isIrregular
       ? `<span class="zh-text">目前沒有不定期開放的 Open Mic 資訊。</span><span class="en-text">No irregular Open Mic sign-up info at the moment.</span>`
-      : `<span class="zh-text">本日無場次</span><span class="en-text">No shows today</span>`;
+      : `<span class="zh-text">本日無場次可報名，太可惜了😢</span><span class="en-text">No Open Mic sign-ups today — what a bummer 😢</span>`;
     container.innerHTML = `<div style="text-align:center;padding:32px;color:var(--ts);font-family:var(--f-zh)">${msg}</div>`;
     return;
   }
