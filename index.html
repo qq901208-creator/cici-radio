@@ -200,9 +200,7 @@ body.ready{visibility:visible}
   .sc-img{width:100%;height:90px;flex-shrink:0;border-radius:var(--r-lg) 0 0 0}
   .sc-img img.sc-poster{width:100%;height:90px;object-fit:contain;display:block;background:var(--ww)}
   .sc-imgsrc{padding:3px 6px 4px;font-size:.55rem;text-align:center;background:rgba(45,43,31,.04);border-radius:0 0 0 var(--r-lg);flex:1;display:flex;align-items:center;justify-content:center;line-height:1.3}
-  /* Open Mic: mobile shows cards, hides table */
-  .mic-table-wrap{display:none!important}
-  .mic-cards-list{display:flex!important}
+  /* 手機版：標籤移到文字區，圖片不疊標籤 */
   .sc-types-desktop{display:none!important}
   .sc-types-mobile{display:flex!important}
   /* 手機版：顯示 mobile 版，隱藏 desktop 版 */
@@ -252,28 +250,10 @@ body.ready{visibility:visible}
 .day-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
 .day-tab{padding:6px 15px;border-radius:var(--r-pill);font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
 .day-tab.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
-/* ── OPEN MIC CARDS (mobile) ── */
-.mic-tab-hint{font-size:.76rem;color:var(--ts);font-family:var(--f-zh);margin:6px 0 16px;line-height:1.6;opacity:.8}
-.mic-cards-list{display:none;flex-direction:column;gap:14px;margin-bottom:20px}
-.mic-card{background:var(--ww);border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.1);padding:16px;position:relative;overflow:hidden}
-.mic-card.today-card{border-color:var(--y);box-shadow:0 0 0 2px rgba(245,213,88,.4)}
-.mic-card-venue{font-size:.92rem;font-weight:900;font-family:var(--f-zh);color:var(--sd);margin-bottom:3px}
-.mic-card-city{font-size:.7rem;color:var(--ts);margin-bottom:8px}
-.mic-card-name{font-size:.88rem;font-weight:700;font-family:var(--f-zh);color:var(--or);margin-bottom:10px;line-height:1.4}
-.mic-card-rows{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
-.mic-card-row{display:flex;gap:8px;font-size:.82rem;font-family:var(--f-zh);color:var(--tm);line-height:1.5}
-.mic-card-row .mic-row-icon{width:1.2em;flex-shrink:0;text-align:center}
-.mic-card-row .mic-row-val{flex:1;word-break:break-word}
-.mic-card-method{font-size:.82rem;font-family:var(--f-zh);color:var(--tm);line-height:1.6;word-break:break-word;margin-bottom:10px}
-.mic-card-notes{font-size:.78rem;color:var(--ts);font-family:var(--f-zh);line-height:1.6;padding-top:8px;border-top:1px solid rgba(45,43,31,.07);word-break:break-word}
-.mic-card-footer{margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.mic-card-badge{position:absolute;top:12px;right:12px;background:var(--y);color:var(--sd);font-size:.6rem;font-weight:900;font-family:var(--f-bo);border-radius:var(--r-pill);padding:2px 8px}
-.mic-card-admin{display:flex;gap:6px;margin-top:8px}
-/* desktop: show table, hide cards */
-@media(min-width:769px){
-  .mic-cards-list{display:none!important}
-  #mic-table-wrap.ready{display:block}
-}
+#mic-table-wrap{display:none}
+#mic-table-wrap.ready{display:block}
+#mic-loading{display:block}
+#mic-loading.hidden{display:none}
 .mic-table-wrap{background:var(--ww);border-radius:var(--r-lg);overflow-x:auto;border:1.5px solid rgba(45,43,31,.09)}
 .mic-table{width:100%;min-width:820px;border-collapse:collapse}
 .mic-table thead th{padding:11px 14px;background:var(--sd);color:var(--y);font-size:.73rem;font-weight:700;text-align:left;font-family:var(--f-zh)}
@@ -925,6 +905,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="sec-label">Open Mic</div>
     <h2 class="sec-title"><span class="zh-text">演員 Open Mic 報名資訊</span><span class="en-text">Open Mic Sign-Up Info</span></h2>
     <p class="sec-desc editable" contenteditable="false"><span class="zh-text">今晚去哪試段子好呢？嘻嘻報你知！<br>下方「週一～週日」標籤是 Open Mic 開放報名的星期，不是實際演出日期與時間！<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充場次？歡迎回報 →</a></span><span class="en-text">Not sure where to try your set tonight? Cici's got you!<br>The tabs below are filtered by <strong>Open Mic sign-up availability and weekday</strong> — not actual show dates or times!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
+    <div style="display:block;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:10px 16px;margin-bottom:22px;font-size:.84rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">
     <div class="day-tabs" id="day-tabs-row">
       <button class="day-tab on" data-day="1" onclick="selectMicDay(1,this)"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
       <button class="day-tab" data-day="2" onclick="selectMicDay(2,this)"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
@@ -934,8 +915,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="day-tab" data-day="6" onclick="selectMicDay(6,this)"><span class="zh-text">週六</span><span class="en-text">Sat.</span></button>
       <button class="day-tab" data-day="0" onclick="selectMicDay(0,this)"><span class="zh-text">週日</span><span class="en-text">Sun.</span></button>
     </div>
-    <p class="mic-tab-hint"><span class="zh-text">以上標籤為 Open Mic 開放報名的星期，不是實際演出日期與時間喔！</span><span class="en-text">The tabs above indicate when Open Mic sign-ups open, not the actual show date or time.</span></p>
-    <!-- Desktop 表格 -->
     <div class="mic-table-wrap" id="mic-table-wrap">
       <table class="mic-table"><thead><tr>
         <th><span class="zh-text">場地</span><span class="en-text">Venue</span></th>
@@ -949,8 +928,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <th><span class="zh-text">備註</span><span class="en-text">Notes</span></th>
       </tr></thead><tbody id="mic-tbody"></tbody></table>
     </div>
-    <!-- Mobile 卡片 -->
-    <div id="mic-cards" class="mic-cards-list"></div>
     <div id="mic-loading" style="text-align:center;padding:40px 0;color:var(--ts);font-family:var(--f-zh);font-size:.9rem">載入中…</div>
     <button class="edit-add-btn" onclick="openMicModal(null)">＋ <span class="zh-text">新增 Open Mic 場次</span><span class="en-text">Add Open Mic</span></button>
   </section>
@@ -1656,18 +1633,15 @@ async function loadAllData() {
   setTimeout(()=>{
     if(typeof window._syncData==='function') window._syncData();
     window._dataReady = true;
-    // Firebase 載完後，無論目前在哪一頁都執行完整 render
-    // 先 render 首頁（stats + shows）
-    if(typeof renderHeroStats==='function') renderHeroStats();
-    if(typeof renderHomeShows==='function') renderHomeShows();
-    if(typeof renderHomeComments==='function') renderHomeComments();
-    // 再 render 當前顯示中的頁面
+    // 只 render 當前顯示中的頁面
     const activePage = document.querySelector('.page.active')?.id?.replace('page-','') || 'home';
-    if(activePage==='shows' && typeof renderShows==='function') renderShows();
-    if(activePage==='opmic' && typeof selectMicDay==='function'){
-      if(typeof initTodayTab==='function') initTodayTab();
-      selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));
+    if(activePage==='home'){
+      if(typeof renderHomeShows==='function') renderHomeShows();
+      if(typeof renderHomeComments==='function') renderHomeComments();
+      if(typeof renderHeroStats==='function') renderHeroStats();
     }
+    if(activePage==='shows' && typeof renderShows==='function') renderShows();
+    if(activePage==='opmic' && typeof selectMicDay==='function'){initTodayTab();selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));}
     if(activePage==='venues' && typeof renderVenues==='function') renderVenues();
     if(activePage==='courses' && typeof renderCourses==='function') renderCourses();
     if(activePage==='about' && typeof renderAbout==='function') renderAbout();
@@ -2544,18 +2518,15 @@ function renderMicTable() {
   const loading = document.getElementById('mic-loading');
   if(wrap) wrap.classList.add('ready');
   if(loading) loading.classList.add('hidden');
-  const isAdmin=isLoggedIn() && editMode;
+  const isAdmin=isLoggedIn();
   const lang=getLang();
   const rows=MICS.filter(m=>m.day===micDay).sort((a,b)=>{
     const oa = MIC_CITY_ORDER.indexOf(a.city||'other');
     const ob = MIC_CITY_ORDER.indexOf(b.city||'other');
     if(oa!==ob) return (oa<0?99:oa)-(ob<0?99:ob);
     return (a.venue||'').localeCompare(b.venue||'','zh-TW');
-  });  if(!rows.length){
-    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">本日無場次</td></tr>`;
-    renderMicCards([], isAdmin, lang);
-    return;
-  }
+  });
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">本日無場次</td></tr>`;return;}
   tbody.innerHTML=rows.map(m=>{
     const cityLblZh = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'}[m.city||'other']||'';
     const cityLblEn = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'}[m.city||'other']||'';
@@ -2586,57 +2557,8 @@ function renderMicTable() {
       </td>
     </tr>`;
   }).join('');
-  // 同步更新手機版卡片
-  renderMicCards(rows, isAdmin, lang);
 }
-
-function renderMicCards(rows, isAdmin, lang) {
-  const container = document.getElementById('mic-cards');
-  if(!container) return;
-  const todayDay = new Date().getDay();
-  const DAY_ZH = ['週日','週一','週二','週三','週四','週五','週六'];
-  const DAY_EN = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'];
-  if(!rows || !rows.length) {
-    container.innerHTML = `<div style="text-align:center;padding:32px;color:var(--ts);font-family:var(--f-zh)"><span class="zh-text">本日無場次</span><span class="en-text">No shows today</span></div>`;
-    return;
-  }
-  container.innerHTML = rows.map(m => {
-    const cityLblZh = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'}[m.city||'other']||'';
-    const cityLblEn = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'}[m.city||'other']||'';
-    const venueDisplay = lang==='en' ? getMicVenueEn(m) : getMicVenueZh(m);
-    const cityLbl = lang==='en' ? cityLblEn : cityLblZh;
-    const methodHtml = sanitizeMicMethod(m.method||'');
-    const showDayLabel = m.showDay !== null && m.showDay !== undefined ? (lang==='en' ? DAY_EN[m.showDay] : DAY_ZH[m.showDay]) : '';
-    const showTimeDisplay = [showDayLabel, cleanMicTime(m.showTime||'', lang)].filter(Boolean).join(' ');
-    const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'', lang);
-    const checkinDisplay = cleanMicTime(m.checkinTime||'', lang);
-    const isToday = m.day === todayDay;
-    const todayBadge = isToday ? `<span class="mic-card-badge"><span class="zh-text">今天</span><span class="en-text">Today</span></span>` : '';
-
-    const row = (icon, labelZh, labelEn, val) => {
-      if(!val || val === '—') return '';
-      const lbl = lang==='en' ? labelEn : labelZh;
-      return `<div class="mic-card-row"><span class="mic-row-icon">${icon}</span><span class="mic-row-val"><strong>${lbl}：</strong>${val}</span></div>`;
-    };
-
-    return `<div class="mic-card${isToday?' today-card':''}">
-      ${todayBadge}
-      <div class="mic-card-venue">${venueDisplay}</div>
-      ${cityLbl ? `<div class="mic-card-city">📍 ${cityLbl}</div>` : ''}
-      ${m.name ? `<div class="mic-card-name">${m.name}</div>` : ''}
-      <div class="mic-card-rows">
-        ${row('🕗', '演出時間', 'Show Time', showTimeDisplay)}
-        ${row('📝', '報名時間', 'Sign-up Opens', signupDisplay)}
-        ${row('🚪', '報到時間', 'Check-in', checkinDisplay)}
-        ${row('🎭', '演出限制', 'Time Limit', m.timeLimit||'')}
-        ${row('💰', '報名費用', 'Sign-up Fee', m.signupFee||'')}
-      </div>
-      ${methodHtml && methodHtml !== '—' ? `<div class="mic-card-method">📌 <strong>${lang==='en'?'Sign Up':'報名方式'}：</strong>${methodHtml}</div>` : ''}
-      ${m.notes ? `<div class="mic-card-notes">📋 ${lang==='en'?'Notes':'備註'}：${m.notes}</div>` : ''}
-      ${isAdmin ? `<div class="mic-card-admin"><button class="ca-btn ca-edit" onclick="openMicModal('${m.id}')">✏️ <span class="zh-text">編輯</span><span class="en-text">Edit</span></button><button class="ca-btn ca-del" onclick="delMic('${m.id}')">🗑 <span class="zh-text">刪除</span><span class="en-text">Delete</span></button></div>` : ''}
-    </div>`;
-  }).join('');
-}(d,el){micDay=parseInt(d);document.querySelectorAll('.day-tab').forEach(t=>t.classList.toggle('on',parseInt(t.dataset.day)===micDay));renderMicTable();}
+function selectMicDay(d,el){micDay=parseInt(d);document.querySelectorAll('.day-tab').forEach(t=>t.classList.toggle('on',parseInt(t.dataset.day)===micDay));renderMicTable();}
 
 // ── TODAY HIGHLIGHT ──
 function initTodayTab() {
@@ -2899,7 +2821,6 @@ function buildMicTimeRange(ampm1Id, h1Id, ampm2Id, h2Id) {
 }
 
 function openMicModal(id){
-  if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}
   eMicId=id||null;
   const m=id?MICS.find(x=>x.id===id):null;
   document.getElementById('modal-mic-title').textContent=m?'編輯 Open Mic 場次':'新增 Open Mic 場次';
@@ -2946,7 +2867,6 @@ function openMicModal(id){
   document.getElementById('modal-mic').classList.add('open');
 }
 function saveMic(){
-  if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}
   const venue=document.getElementById('m-venue').value.trim();
   if(!venue){showToast('請填入場地名稱','err');return;}
   const showTime   = buildMicTimeRange('m-showtime-ampm','m-showtime-h','m-showtime-end-ampm','m-showtime-end-h');
@@ -2976,7 +2896,7 @@ function saveMic(){
     closeModal('mic');renderMicTable();showToast('✅ Open Mic 已儲存','ok');
   }).catch(()=>showToast('❌ 儲存失敗','err'));
 }
-function delMic(id){if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}if(!confirm('確定刪除？'))return;window.FB.del('mics',id).then(()=>{MICS=MICS.filter(x=>x.id!==id);renderMicTable();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
+function delMic(id){if(!confirm('確定刪除？'))return;window.FB.del('mics',id).then(()=>{MICS=MICS.filter(x=>x.id!==id);renderMicTable();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
 // ── VENUE MODAL ──
 function openVenueModal(id){
@@ -3658,37 +3578,35 @@ function restorePageFromHash(){
   const validPages = ['home','shows','opmic','venues','courses','about','board'];
   const hash = location.hash.split('?')[0].replace('#','');
   const page = validPages.includes(hash) ? hash : 'home';
-  // 切換頁面
+  // 先切換頁面（不 render 內容）
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const el = document.getElementById('page-'+page);
   if(el) el.classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
   history.replaceState({page},'','#'+page+(location.hash.includes('?')?'?'+location.hash.split('?')[1]:''));
-  // 還原篩選條件
+  // 還原篩選條件（chips 已存在）
   restoreFiltersFromURL();
-  // 不在這裡 render 資料（Firebase 還沒載完）
-  // 資料由 loadAllData 的 setTimeout callback 統一 render
+  // render 一次（opmic 等 Firebase 載完才 render，避免空資料閃爍）
+  if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
+  if(page==='shows') renderShows();
+  if(page==='venues') renderVenues();
+  if(page==='courses') renderCourses();
+  if(page==='about') renderAbout();
+  if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
+  // opmic: 顯示 loading 佔位，Firebase callback 後才真正 render
+  if(page==='opmic'){
+    const tbody=document.getElementById('mic-tbody');
+    if(tbody) tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">載入中…</td></tr>`;
+  }
 }
 
 window.addEventListener('load', ()=>{
-  try { initReveal(); } catch(e) { console.warn('initReveal error:', e); }
-  try { restorePageFromHash(); } catch(e) {
-    console.warn('restorePageFromHash error:', e);
-    // 保底：確保至少首頁顯示
-    const home = document.getElementById('page-home');
-    if(home && !document.querySelector('.page.active')) home.classList.add('active');
-  }
-  // 若仍沒有 active page，強制顯示首頁
-  if(!document.querySelector('.page.active')) {
-    const home = document.getElementById('page-home');
-    if(home) home.classList.add('active');
-  }
+  initReveal();
+  restorePageFromHash();
   document.body.classList.add('ready');
   const badge = document.getElementById('sessionBadge');
   if (isLoggedIn() && badge) badge.classList.add('visible');
 });
-// 安全保底：若 body 仍為 visibility:hidden，2秒後強制顯示
-setTimeout(()=>{ document.body.classList.add('ready'); }, 2000);
 </script>
 
 <!-- ═══════════════════════════════════════
