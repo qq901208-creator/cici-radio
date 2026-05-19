@@ -1656,15 +1656,18 @@ async function loadAllData() {
   setTimeout(()=>{
     if(typeof window._syncData==='function') window._syncData();
     window._dataReady = true;
-    // 只 render 當前顯示中的頁面
+    // Firebase 載完後，無論目前在哪一頁都執行完整 render
+    // 先 render 首頁（stats + shows）
+    if(typeof renderHeroStats==='function') renderHeroStats();
+    if(typeof renderHomeShows==='function') renderHomeShows();
+    if(typeof renderHomeComments==='function') renderHomeComments();
+    // 再 render 當前顯示中的頁面
     const activePage = document.querySelector('.page.active')?.id?.replace('page-','') || 'home';
-    if(activePage==='home'){
-      if(typeof renderHomeShows==='function') renderHomeShows();
-      if(typeof renderHomeComments==='function') renderHomeComments();
-      if(typeof renderHeroStats==='function') renderHeroStats();
-    }
     if(activePage==='shows' && typeof renderShows==='function') renderShows();
-    if(activePage==='opmic' && typeof selectMicDay==='function'){initTodayTab();selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));}
+    if(activePage==='opmic' && typeof selectMicDay==='function'){
+      if(typeof initTodayTab==='function') initTodayTab();
+      selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));
+    }
     if(activePage==='venues' && typeof renderVenues==='function') renderVenues();
     if(activePage==='courses' && typeof renderCourses==='function') renderCourses();
     if(activePage==='about' && typeof renderAbout==='function') renderAbout();
@@ -3655,26 +3658,16 @@ function restorePageFromHash(){
   const validPages = ['home','shows','opmic','venues','courses','about','board'];
   const hash = location.hash.split('?')[0].replace('#','');
   const page = validPages.includes(hash) ? hash : 'home';
-  // 先切換頁面（不 render 內容）
+  // 切換頁面
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const el = document.getElementById('page-'+page);
   if(el) el.classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
   history.replaceState({page},'','#'+page+(location.hash.includes('?')?'?'+location.hash.split('?')[1]:''));
-  // 還原篩選條件（chips 已存在）
+  // 還原篩選條件
   restoreFiltersFromURL();
-  // render 一次（opmic 等 Firebase 載完才 render，避免空資料閃爍）
-  if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
-  if(page==='shows') renderShows();
-  if(page==='venues') renderVenues();
-  if(page==='courses') renderCourses();
-  if(page==='about') renderAbout();
-  if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
-  // opmic: 顯示 loading 佔位，Firebase callback 後才真正 render
-  if(page==='opmic'){
-    const tbody=document.getElementById('mic-tbody');
-    if(tbody) tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">載入中…</td></tr>`;
-  }
+  // 不在這裡 render 資料（Firebase 還沒載完）
+  // 資料由 loadAllData 的 setTimeout callback 統一 render
 }
 
 window.addEventListener('load', ()=>{
