@@ -2151,13 +2151,22 @@ function renderPagination(containerId, currentPage, totalPages, onPageChange){
 function goShowsPage(p){
   showsPage = p;
   renderShows();
-  document.getElementById('page-shows')?.scrollIntoView({behavior:'smooth',block:'start'});
+  // 滾動到演出卡片區頂部，扣除固定 nav bar 高度
+  const grid = document.getElementById('shows-grid');
+  if(grid){
+    const top = grid.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({top: Math.max(0, top), behavior:'smooth'});
+  }
 }
 
 function goCoursesPage(p){
   coursesPage = p;
   renderCourses();
-  document.getElementById('page-courses')?.scrollIntoView({behavior:'smooth',block:'start'});
+  const grid = document.getElementById('courses-grid');
+  if(grid){
+    const top = grid.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({top: Math.max(0, top), behavior:'smooth'});
+  }
 }
 
 function renderShows() {
