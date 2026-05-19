@@ -2496,6 +2496,7 @@ const MIC_VENUE_EN_MAP = [
   ['樂君亭',   'Gingting Comedy'],
   ['站立風城', 'Windy City Stand-up'],
   ['思mic歐',  'S.M.O'],
+  ['思MIC歐',  'S.M.O'],
   ['s.m.o',    'S.M.O'],
   ['來福好事', 'Laugh House'],
   ['府城喜劇', 'Tainan Comedy'],
@@ -2520,25 +2521,35 @@ function parseMicVenueStr(str) {
 // e.g. "卡米地＋ Comedy Plus" → "卡米地＋"
 function extractMainZh(str) {
   if(!str) return '';
-  // 去掉第一個全英文單字及之後的英文（保留開頭的中文）
-  // 策略：找第一個純 ASCII 字元群開始的位置
-  const m = str.match(/^([\u3000-\u9fff\uff00-\uffef\u4e00-\u9fa5\s＋＊！？。，、「」『』【】〔〕《》…—～·\+\*!?\.\d]+)/);
+  // 先查 MIC_VENUE_EN_MAP，找已知英文名在字串裡的位置，之前就是中文名
+  const lower = str.toLowerCase();
+  for(const [, enVal] of MIC_VENUE_EN_MAP) {
+    const enLower = enVal.toLowerCase();
+    const idx = lower.indexOf(enLower);
+    if(idx > 0 && str[idx-1] === ' ') {
+      return str.slice(0, idx).trim();
+    }
+  }
+  // fallback：用正則抓開頭的中文＋可能夾雜的大寫英文縮寫（如 MIC）
+  const m = str.match(/^([\u4e00-\u9fa5\uff00-\uffefA-Z0-9＋＊\s]+?)(?=\s+[A-Z][a-z])/);
   if(m) return m[1].trim();
-  return str.trim();
+  // 再 fallback：去掉尾部純英文
+  return str.replace(/\s+[A-Za-z][A-Za-z0-9\s\.\+\*!?'&,\-]*$/, '').trim() || str.trim();
 }
 
-// 從主場地字串取英文部分（去掉前面的中文）
+// 從主場地字串取英文部分
+// e.g. "思MIC歐 S.M.O" → "S.M.O"
 // e.g. "府城喜劇 Tainan Comedy" → "Tainan Comedy"
 function extractMainEn(str) {
   if(!str) return '';
-  // 找第一個大寫英文字母開始的段落
-  const m = str.match(/([A-Z][A-Za-z0-9\s\.\+\*!?'&,\-]+)$/);
-  if(m) return m[1].trim();
-  // fallback: 查 MIC_VENUE_EN_MAP
+  // 先查 MIC_VENUE_EN_MAP
   const lower = str.toLowerCase();
-  for(const [key, val] of MIC_VENUE_EN_MAP){
-    if(lower.includes(key.toLowerCase())) return val;
+  for(const [, enVal] of MIC_VENUE_EN_MAP) {
+    if(lower.includes(enVal.toLowerCase())) return enVal;
   }
+  // fallback：找第一個小寫英文前有空格的位置（即英文名稱起點）
+  const m = str.match(/\s([A-Z][A-Za-z0-9\s\.\+\*!?'&,\-]+)$/);
+  if(m) return m[1].trim();
   return '';
 }
 
