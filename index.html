@@ -2406,7 +2406,7 @@ function venueCardHTML(v) {
       ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank">ig IG</a>`:''}
       ${v.address||v.mapUrl?`<a class="vlb vlb-map" href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank">📍 Map</a>`:''}
     </div>
-    ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55"><span style="font-weight:700;color:var(--or)">💬 嘻嘻小建議</span><br>${v.tip}</div>`:''}
+    ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55;white-space:pre-line"><span style="font-weight:700;color:var(--or)">💬 嘻嘻小建議</span><br>${v.tip}</div>`:''}
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openVenueModal('${v.id}')">✏️</button>
       <button class="ca-btn ca-del" onclick="event.stopPropagation();delVenue('${v.id}')">🗑</button>
@@ -2474,7 +2474,7 @@ function showVenueDetail(id) {
       <tr><td style="padding:7px 0;color:var(--ts)">${lang==='en'?'Address':'地址'}</td><td>${v.address||'—'}</td></tr>
       ${v.partner?`<tr><td style="padding:7px 0;color:var(--ts)">${lang==='en'?'Partner':'合作場地'}</td><td><span style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:700;background:rgba(239,111,32,.1);color:var(--or);border:1px solid rgba(239,111,32,.25);border-radius:var(--r-pill);padding:3px 10px">🤝 ${v.partner}</span></td></tr>`:''}
       ${(v.tags&&v.tags.length)?`<tr><td style="padding:7px 0;color:var(--ts);vertical-align:top">${lang==='en'?'Tags':'標籤'}</td><td><div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div></td></tr>`:''}
-      <tr><td style="padding:7px 0;color:var(--ts)">${lang==='en'?'About':'簡介'}</td><td>${v.description||'—'}</td></tr>
+      <tr><td style="padding:7px 0;color:var(--ts)">${lang==='en'?'About':'簡介'}</td><td style="white-space:pre-line">${v.description||'—'}</td></tr>
     </table>
     ${v.tip?`<div style="padding:10px 14px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;margin-bottom:14px"><div style="font-size:.78rem;font-weight:700;color:var(--or);margin-bottom:4px">💬 嘻嘻小建議</div><div style="font-size:.85rem;font-family:var(--f-zh);color:var(--tm);line-height:1.65;white-space:pre-line">${v.tip}</div></div>`:''}
     <div style="display:flex;gap:9px;flex-wrap:wrap">
