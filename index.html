@@ -2502,26 +2502,77 @@ const MIC_VENUE_EN_MAP = [
   ['喜劇開港', 'Takao Comedy Bay'],
 ];
 
-// 只取中文部分（去掉尾部的英文）
-function extractZh(str) {
-  if(!str) return '';
-  // 去除末尾連續英文+空格（保留純中文部分）
-  return str.replace(/[\s]*[A-Za-z][A-Za-z\s\.\+\-]*$/, '').trim() || str.trim();
+// 解析場地字串：分出「主場地」和「副場地（- 後面）」
+// e.g. "府城喜劇 Tainan Comedy - SASADRA cafe"
+//   → { main: "府城喜劇 Tainan Comedy", sub: "SASADRA cafe" }
+function parseMicVenueStr(str) {
+  if(!str) return {main:'', sub:''};
+  // 找最後一個「 - 」分隔副場地（避免誤切英文名中的 -）
+  const dashIdx = str.lastIndexOf(' - ');
+  if(dashIdx >= 0) {
+    return { main: str.slice(0, dashIdx).trim(), sub: str.slice(dashIdx+3).trim() };
+  }
+  return { main: str.trim(), sub: '' };
 }
 
-// 取英文名稱：優先用 venueEn 欄位，再查對照表，最後 fallback 原字串
-function getMicVenueEn(m) {
-  if(m.venueEn) return m.venueEn;
-  const lower = (m.venue||'').toLowerCase();
+// 從主場地字串取中文部分（去掉後面的英文）
+// e.g. "府城喜劇 Tainan Comedy" → "府城喜劇"
+// e.g. "卡米地＋ Comedy Plus" → "卡米地＋"
+function extractMainZh(str) {
+  if(!str) return '';
+  // 去掉第一個全英文單字及之後的英文（保留開頭的中文）
+  // 策略：找第一個純 ASCII 字元群開始的位置
+  const m = str.match(/^([\u3000-\u9fff\uff00-\uffef\u4e00-\u9fa5\s＋＊！？。，、「」『』【】〔〕《》…—～·\+\*!?\.\d]+)/);
+  if(m) return m[1].trim();
+  return str.trim();
+}
+
+// 從主場地字串取英文部分（去掉前面的中文）
+// e.g. "府城喜劇 Tainan Comedy" → "Tainan Comedy"
+function extractMainEn(str) {
+  if(!str) return '';
+  // 找第一個大寫英文字母開始的段落
+  const m = str.match(/([A-Z][A-Za-z0-9\s\.\+\*!?'&,\-]+)$/);
+  if(m) return m[1].trim();
+  // fallback: 查 MIC_VENUE_EN_MAP
+  const lower = str.toLowerCase();
   for(const [key, val] of MIC_VENUE_EN_MAP){
     if(lower.includes(key.toLowerCase())) return val;
   }
-  return m.venue||'';
+  return '';
 }
 
-// 取中文名稱：優先用 venue 欄位（去掉英文後綴）
+// 取中文顯示名稱
+// 優先 venueEn 欄位（若有填就是乾淨的英文），否則解析 venue 字串
 function getMicVenueZh(m) {
-  return extractZh(m.venue||'') || m.venue||'';
+  if(m.venue) {
+    const {main, sub} = parseMicVenueStr(m.venue);
+    const mainZh = extractMainZh(main) || main;
+    return sub ? `${mainZh} - ${sub}` : mainZh;
+  }
+  return '';
+}
+
+// 取英文顯示名稱
+function getMicVenueEn(m) {
+  if(m.venueEn) {
+    // venueEn 是乾淨的英文主場地名，副場地從 venue 取
+    const {sub} = parseMicVenueStr(m.venue||'');
+    return sub ? `${m.venueEn} - ${sub}` : m.venueEn;
+  }
+  if(m.venue) {
+    const {main, sub} = parseMicVenueStr(m.venue);
+    const mainEn = extractMainEn(main);
+    if(mainEn) return sub ? `${mainEn} - ${sub}` : mainEn;
+    // fallback: 查對照表
+    const lower = main.toLowerCase();
+    for(const [key, val] of MIC_VENUE_EN_MAP){
+      if(lower.includes(key.toLowerCase())) return sub ? `${val} - ${sub}` : val;
+    }
+    // 最後 fallback: 原字串
+    return m.venue;
+  }
+  return '';
 }
 
 // 清理舊資料中「上午 當天現場」/「下午 當天現場」等格式，英文時轉 am/pm
