@@ -948,8 +948,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <table class="mic-table"><thead><tr>
         <th><span class="zh-text">場地</span><span class="en-text">Venue</span></th>
         <th><span class="zh-text">Open Mic 名稱</span><span class="en-text">Show Name</span></th>
-        <th><span class="zh-text">演出星期／時間</span><span class="en-text">Show Day / Time</span></th>
         <th><span class="zh-text">報名時間</span><span class="en-text">Sign-up Time</span></th>
+        <th><span class="zh-text">演出星期／時間</span><span class="en-text">Show Day / Time</span></th>
         <th><span class="zh-text">報到時間</span><span class="en-text">Check-in</span></th>
         <th><span class="zh-text">報名方式</span><span class="en-text">How to Sign Up</span></th>
         <th><span class="zh-text">演出時長限制</span><span class="en-text">Time Limit</span></th>
@@ -2635,8 +2635,8 @@ function renderMicTable() {
         ${cityLbl?`<div style="font-size:.7rem;color:var(--ts);margin-top:2px">📍 ${cityLbl}</div>`:''}
       </td>
       <td style="font-family:var(--f-zh);font-weight:700">${m.name||'—'}</td>
-      <td style="font-family:var(--f-zh)">${showTimeDisplay||'—'}</td>
       <td style="font-family:var(--f-zh);color:var(--or);font-weight:600">${signupDisplay||'—'}</td>
+      <td style="font-family:var(--f-zh)">${showTimeDisplay||'—'}</td>
       <td style="font-family:var(--f-zh)">${checkinDisplay||'—'}</td>
       <td style="font-family:var(--f-zh);line-height:1.6">${methodHtml}</td>
       <td style="font-family:var(--f-zh);font-size:.82rem">${m.timeLimit||'—'}</td>
@@ -2692,8 +2692,8 @@ function renderMicCards(rows, isAdmin, lang) {
       ${cityLbl ? `<div class="mic-card-city">📍 ${cityLbl}</div>` : ''}
       ${m.name ? `<div class="mic-card-name">${m.name}</div>` : ''}
       <div class="mic-card-rows">
-        ${row('🕗','演出時間','Show Time', showTimeDisplay)}
         ${row('📝','報名時間','Sign-up Opens', signupDisplay)}
+        ${row('🕗','演出時間','Show Time', showTimeDisplay)}
         ${row('🚪','報到時間','Check-in', checkinDisplay)}
         ${row('🎭','演出限制','Time Limit', m.timeLimit||'')}
         ${row('💰','報名費用','Sign-up Fee', m.signupFee||'')}
