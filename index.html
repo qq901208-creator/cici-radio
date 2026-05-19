@@ -79,6 +79,9 @@ body.ready{visibility:visible}
 .btn-ww{padding:11px 24px;background:var(--ww);color:var(--sd);font-weight:600;font-size:.9rem;border:2px solid rgba(45,43,31,.14);border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh)}
 .btn-ww:hover{border-color:var(--or);color:var(--or);transform:translateY(-2px)}
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
+/* 桌機顯示完整文字，手機顯示縮短文字 */
+.mob-text{display:none}
+.desk-text{display:inline}
 .scroll-hint{margin-top:52px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--ts);font-size:.7rem;font-family:var(--f-bo);animation:bob 2s infinite;opacity:.55;position:relative;z-index:1}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 
@@ -119,7 +122,7 @@ body.ready{visibility:visible}
 .podcast-btns{display:flex;gap:8px;flex-wrap:wrap}
 .podcast-btn{padding:7px 16px;border-radius:var(--r-pill);font-size:.78rem;font-weight:700;font-family:var(--f-bo);text-decoration:none;border:1.5px solid var(--or);color:var(--or);background:transparent;transition:all .15s;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
 .podcast-btn:hover{background:var(--or);color:#fff}
-.podcast-iframe-wrap{border-radius:var(--r-md);overflow:hidden;background:rgba(45,43,31,.04);min-height:180px;display:flex;align-items:center;justify-content:center;width:100%;border:1px solid rgba(45,43,31,.08)}
+.podcast-iframe-wrap{border-radius:var(--r-md);overflow:hidden;width:100%;height:232px;background:rgba(45,43,31,.04);border:1px solid rgba(45,43,31,.08)}
 @media(max-width:768px){.podcast-card{grid-template-columns:1fr;padding:20px 16px;gap:18px}.podcast-title{font-size:1rem}}
 /* ── EMPTY STATE ── */
 .empty-state{grid-column:1/-1;text-align:center;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px}
@@ -621,11 +624,13 @@ body.edit .edit-bar{display:flex!important}
   .fp-ni{width:100%}
   .hero{padding:calc(var(--nav) + 14px) 5vw 44px}
   .about-hero{padding:calc(var(--nav) + 12px) 5vw 44px}
-  /* CTA 按鈕同一排 */
-  .hero-ctas{flex-wrap:nowrap;gap:6px;width:100%}
+  /* CTA 按鈕手機版 - 自適應寬度、不等寬 */
+  .hero-ctas{flex-wrap:nowrap;gap:7px}
+  .mob-text{display:inline}
+  .desk-text{display:none}
   .hero-ctas .btn-or,
-  .hero-ctas .btn-ww{flex:1;padding:9px 4px;font-size:.75rem;min-width:0;justify-content:center;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
-  /* 數字統計同一排不換行 */
+  .hero-ctas .btn-ww{padding:9px 12px;font-size:.8rem;white-space:nowrap}
+  .hero-next{font-size:.8rem;display:block;text-align:center}
   .hero-stats{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px;padding-bottom:2px;scrollbar-width:none;justify-content:flex-start}
   .hero-stats::-webkit-scrollbar{display:none}
   .hero-stat{padding:7px 8px;min-width:0;flex:1;flex-shrink:0}
@@ -692,9 +697,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <span class="en-text">Feeling like some comedy tonight?<br>Cici Radio curates ticketed comedy show listings from across Taiwan,<br>so you'll always know where to go!</span>
     </p>
     <div class="hero-ctas">
-      <a href="#" class="btn-or" onclick="showPage('shows');return false">📅 <span class="zh-text">演出</span><span class="en-text">Shows</span></a>
-      <a href="#" class="btn-ww" onclick="showPage('opmic');return false">🎤 Open Mic</a>
-      <a href="#" class="btn-ww" onclick="showPage('venues');return false">📍 <span class="zh-text">據點</span><span class="en-text">Venues</span></a>
+      <a href="#" class="btn-or" onclick="showPage('shows');return false">📅 <span class="zh-text desk-text">看演出資訊</span><span class="zh-text mob-text">演出一覽</span><span class="en-text">Browse Shows</span></a>
+      <a href="#" class="btn-ww" onclick="showPage('opmic');return false">🎤 <span class="zh-text desk-text">Open Mic 報名資訊</span><span class="zh-text mob-text">Open Mic 報名</span><span class="en-text">Open Mic Info</span></a>
+      <a href="#" class="btn-ww" onclick="showPage('venues');return false">📍 <span class="zh-text desk-text">全台喜劇據點</span><span class="zh-text mob-text">喜劇據點</span><span class="en-text">Comedy Venues</span></a>
     </div>
     <!-- 數字統計列 -->
     <div class="hero-stats" id="hero-stats">
@@ -750,7 +755,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         </div>
       </div>
       <div class="podcast-iframe-wrap">
-        <iframe style="border-radius:12px;width:100%;min-height:180px;border:none" src="https://open.spotify.com/embed/show/1NVkhQJcHj91hIdBJ5QAIC?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <iframe style="border-radius:12px;width:100%;height:232px;border:none;display:block" src="https://open.spotify.com/embed/show/1NVkhQJcHj91hIdBJ5QAIC?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="嘻嘻哪哩唷 Podcast on Spotify"></iframe>
       </div>
     </div>
   </section>
