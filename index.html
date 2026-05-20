@@ -1762,8 +1762,13 @@ window.FB = {
       // 自動更新該頁面的最後更新時間
       const metaKey = PAGE_META_MAP[colName];
       if(metaKey) {
-        setDoc(doc(db, 'meta', 'lastUpdated'), { [metaKey]: Date.now() }, { merge: true })
+        const now = Date.now();
+        setDoc(doc(db, 'meta', 'lastUpdated'), { [metaKey]: now }, { merge: true })
           .catch(()=>{});
+        // 同步更新記憶體，立即顯示
+        window._LAST_UPDATED = window._LAST_UPDATED || {};
+        window._LAST_UPDATED[metaKey] = now;
+        if(typeof updateLastUpdatedDisplay==='function') updateLastUpdatedDisplay();
       }
       return id;
     } catch(e) { console.error('FB.save error:', e); throw e; }
@@ -1774,8 +1779,12 @@ window.FB = {
       // 刪除也算更新
       const metaKey = PAGE_META_MAP[colName];
       if(metaKey) {
-        setDoc(doc(db, 'meta', 'lastUpdated'), { [metaKey]: Date.now() }, { merge: true })
+        const now = Date.now();
+        setDoc(doc(db, 'meta', 'lastUpdated'), { [metaKey]: now }, { merge: true })
           .catch(()=>{});
+        window._LAST_UPDATED = window._LAST_UPDATED || {};
+        window._LAST_UPDATED[metaKey] = now;
+        if(typeof updateLastUpdatedDisplay==='function') updateLastUpdatedDisplay();
       }
     }
     catch(e) { console.error('FB.del error:', e); throw e; }
