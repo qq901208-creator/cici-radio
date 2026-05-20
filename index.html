@@ -26,7 +26,9 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:17px}
-body{font-family:var(--f-bo);background:var(--cr);color:var(--tm);line-height:1.65;overflow-x:hidden;visibility:hidden}
+body{font-family:var(--f-bo);background:var(--cr);color:var(--tm);line-height:1.65;overflow-x:hidden;visibility:hidden;animation:revealBody 0s 3s forwards}
+body.ready{visibility:visible;animation:none}
+@keyframes revealBody{to{visibility:visible}}
 body.ready{visibility:visible}
 
 /* NAV */
@@ -845,7 +847,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
         <div class="filter-chips">
         <button class="chip on" data-f="type" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
-        <button class="chip" data-f="type" data-v="opmic">Open Mic</button>
+        <button class="chip" data-f="type" data-v="opmic"><span class="zh-text">售票 Open Mic</span><span class="en-text">Ticketed Open Mic</span></button>
         <button class="chip" data-f="type" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
         <button class="chip" data-f="type" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
         <button class="chip" data-f="type" data-v="sketch"><span class="zh-text">素描短劇</span><span class="en-text">Sketch</span></button>
@@ -1263,7 +1265,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g full">
       <label class="fl">表演類型（可複選）<span class="req">*</span></label>
       <div class="type-cbs" id="s-types">
-        <label class="type-cb-lbl"><input type="checkbox" value="opmic" onchange="syncCB(this)">Open Mic</label>
+        <label class="type-cb-lbl"><input type="checkbox" value="opmic" onchange="syncCB(this)"><span class="zh-text">售票 Open Mic</span><span class="en-text">Ticketed Open Mic</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="standup" onchange="syncCB(this)"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="improv" onchange="syncCB(this)"><span class="zh-text">即興</span><span class="en-text">Improv</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="sketch" onchange="syncCB(this)"><span class="zh-text">素描短劇</span><span class="en-text">Sketch</span></label>
@@ -1760,7 +1762,7 @@ document.addEventListener('DOMContentLoaded', ()=>{ loadAllData(); });
 <script>
 // ── TYPE METADATA ──
 const TYPE_META = {
-  opmic:    {bg:'#fff3a0',color:'#5e4200',  label:'Open Mic',   labelEn:'Open Mic'},
+  opmic:    {bg:'#fff3a0',color:'#5e4200',  label:'售票 Open Mic', labelEn:'Ticketed Open Mic'},
   standup:  {bg:'#ffd6b3',color:'#7a2e00',  label:'站立喜劇',   labelEn:'Stand-up'},
   improv:   {bg:'#b8f0d0',color:'#0d5c30',  label:'即興',       labelEn:'Improv'},
   sketch:   {bg:'#ffe0b3',color:'#7a4000',  label:'素描短劇',   labelEn:'Sketch'},
