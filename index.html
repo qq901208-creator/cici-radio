@@ -2145,8 +2145,8 @@ function openShowDetail(id) {
     </table>
     ${s.description?`<p class="sd-desc">${s.description}</p>`:''}
     ${s.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em">${getLang()==='en'?'Production Team':'製作團隊 Production Team'}</div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${s.production}</p></div>`:''}
-    ${s.ticketUrl&&s.ticketUrl!=='#'?`<a href="${s.ticketUrl}" target="_blank" rel="noopener" class="sd-ticket-btn" style="margin-top:20px;display:inline-block">${getLang()==='en'?'Buy Tickets ↗':'前往售票頁面 ↗'}</a><p class="sd-disclaimer"><span class="zh-text">本站僅提供資訊整理與導流，<br>實際購票、退票及演出變動請洽原售票平台與主辦單位。</span><span class="en-text">This site only provides information aggregation.<br>For ticketing, refunds, or event changes, please contact the original ticketing platform or organizer.</span></p>`:''}
-    ${s.imgSrc?`<p class="sd-imgsrc">📷 ${s.imgSrc}</p>`:''}
+    ${s.ticketUrl&&s.ticketUrl!=='#'?`<a href="${s.ticketUrl}" target="_blank" rel="noopener" class="sd-ticket-btn" style="margin-top:20px;display:inline-block">${getLang()==='en'?'Buy Tickets ↗':'前往售票頁面 ↗'}</a><p class="sd-disclaimer"><span class="zh-text">本站僅提供資訊整理，購票、退票及演出變動請洽原售票平台與主辦單位。</span><span class="en-text">For ticketing, refunds, or event changes, please contact the original platform or organizer.</span></p>`:''}
+    ${s.imgSrc?`<p class="sd-imgsrc" style="margin-top:8px">📷 ${s.imgSrc}</p>`:''}
   `;
   document.getElementById('modal-show-detail').classList.add('open');
 }
