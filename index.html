@@ -1097,7 +1097,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <p class="sec-desc"><span class="zh-text">歡迎留下你的想法、回饋或對演出的心得，我們都會認真看！</span><span class="en-text">Share your thoughts, feedback, or reviews — we read everything!</span></p>
 
     <!-- 評分統計 -->
-    <div class="fp-rating-bar" id="fpRating" style="border-radius:var(--r-md);margin-bottom:18px;border:1.5px solid rgba(45,43,31,.08)"></div>
+    <div class="fp-rating-bar" id="fpRating" style="border-radius:var(--r-md);margin-bottom:18px;border:1.5px solid rgba(45,43,31,.08);display:none"></div>
 
     <!-- 分頁標籤 -->
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
@@ -1109,11 +1109,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
 
     <!-- 留言小提醒 -->
-    <div style="background:rgba(245,213,88,.18);border:1.5px solid rgba(239,111,32,.2);border-radius:var(--r-md);padding:14px 18px;margin-bottom:18px;font-family:var(--f-zh)">
+    <div id="comment-guidelines" style="background:rgba(245,213,88,.18);border:1.5px solid rgba(239,111,32,.2);border-radius:var(--r-md);padding:14px 18px;margin-bottom:18px;font-family:var(--f-zh);transition:box-shadow .3s">
       <div style="font-size:.88rem;font-weight:700;color:var(--tm);margin-bottom:8px">💬 <span class="zh-text">留言小提醒</span><span class="en-text">Comment Guidelines</span></div>
       <div style="font-size:.82rem;color:var(--ts);line-height:1.75">
-        <span class="zh-text">歡迎分享你的觀後心得、推薦演出與交流想法！<br>但也請避免仇恨言論、人身攻擊、歧視內容、惡意挑釁、洗版與騷擾。<br>一起讓嘻嘻哪哩唷成為一個舒服、友善的喜劇交流空間 :)</span>
-        <span class="en-text">Feel free to share your thoughts, show recommendations, and comedy-related ideas!<br>Please avoid hate speech, personal attacks, discriminatory content, malicious provocation, spamming or harassment.<br>Let's keep Cici Radio a welcoming and friendly space for comedy discussions.</span>
+        <span class="zh-text">歡迎分享你的觀後心得、推薦演出與交流想法！<br>但也請避免<strong>仇恨言論、人身攻擊、歧視內容、惡意挑釁、洗版與騷擾</strong>。<br>一起讓嘻嘻哪哩唷成為一個舒服、友善的喜劇交流空間 :)</span>
+        <span class="en-text">Feel free to share your thoughts, show recommendations, and comedy-related ideas!<br>Please avoid <strong>hate speech, personal attacks, discriminatory content, malicious provocation, spamming or harassment</strong>.<br>Let's keep Cici Radio a welcoming and friendly space for comedy discussions.</span>
       </div>
     </div>
 
@@ -1124,7 +1124,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <div class="fp-inner" style="flex:1">
           <div class="fp-nr">
             <input type="text" class="fp-ni" id="fpNI" placeholder="暱稱 / Nickname" oninput="updAv()" maxlength="20">
-            <div class="fp-sr"><span style="font-size:.73rem;color:var(--ts);font-family:var(--f-bo)"><span class="zh-text">評：</span><span class="en-text">Rate:</span></span><span id="starBtns"></span></div>
           </div>
           <textarea class="fp-ta" id="fpTA" placeholder="留言… / Comment…" oninput="updCC()" maxlength="300" rows="4"></textarea>
           <!-- 防灌水問答 -->
@@ -1139,8 +1138,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <div style="margin-top:10px;display:flex;align-items:flex-start;gap:8px">
             <input type="checkbox" id="fpAgree" style="margin-top:3px;accent-color:var(--or);width:15px;height:15px;flex-shrink:0;cursor:pointer">
             <label for="fpAgree" style="font-size:.8rem;color:var(--ts);font-family:var(--f-zh);cursor:pointer;line-height:1.55">
-              <span class="zh-text">我已閱讀並同意遵守留言規範</span>
-              <span class="en-text">I have read and agree to follow the comment guidelines.</span>
+              <span class="zh-text">我已閱讀並同意遵守</span><span class="en-text">I have read and agree to follow the </span><a onclick="event.preventDefault();scrollToGuidelines()" href="#" style="color:var(--or);text-decoration:underline;text-underline-offset:2px;font-weight:600"><span class="zh-text">留言規範</span><span class="en-text">comment guidelines</span></a>
             </label>
           </div>
           <div class="fp-cf" style="margin-top:10px">
@@ -1157,9 +1155,15 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
     <!-- 留言列表 -->
     <div style="background:var(--ww);border-radius:var(--r-lg);border:1.5px solid rgba(45,43,31,.08);box-shadow:var(--sc)">
-      <div style="padding:14px 22px;border-bottom:1px solid rgba(45,43,31,.07);display:flex;align-items:center;gap:8px">
+      <div style="padding:14px 22px;border-bottom:1px solid rgba(45,43,31,.07);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <span style="font-size:.9rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)"><span class="zh-text">所有留言</span><span class="en-text">All Comments</span></span>
         <span class="fp-cnt" id="fpCnt">0</span>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:6px;background:var(--cr);border:1.5px solid rgba(45,43,31,.12);border-radius:var(--r-pill);padding:5px 12px;transition:border-color .15s" onfocusin="this.style.borderColor='var(--or)'" onfocusout="this.style.borderColor='rgba(45,43,31,.12)'">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--ts);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+          <input id="fp-search" type="text" placeholder="搜尋演員、場地、演出… / Search…" maxlength="40"
+            style="border:none;background:transparent;font-size:.78rem;font-family:var(--f-zh);color:var(--tm);outline:none;width:180px;min-width:0"
+            oninput="renderFpList()">
+        </div>
       </div>
       <div class="fp-list" id="fpList"></div>
     </div>
@@ -3909,9 +3913,11 @@ function relTime(ts){const d=(Date.now()-ts)/1000;if(d<60)return'剛剛';if(d<36
 function renderFpList(){
   const list=document.getElementById('fpList');
   const isAdmin=isLoggedIn();
-  const fil=COMMENTS.filter(c=>(!c.hidden||isAdmin)&&(fpTab==='all'||c.page===fpTab));
+  const q=(document.getElementById('fp-search')?.value||'').trim().toLowerCase();
+  let fil=COMMENTS.filter(c=>(!c.hidden||isAdmin)&&(fpTab==='all'||c.page===fpTab));
+  if(q) fil=fil.filter(c=>(c.text||'').toLowerCase().includes(q)||(c.name||'').toLowerCase().includes(q));
   document.getElementById('fpCnt').textContent=COMMENTS.filter(c=>!c.hidden).length;
-  if(!fil.length){list.innerHTML=`<div style="text-align:center;padding:36px;color:var(--ts);font-family:var(--f-zh)">目前沒有留言</div>`;return;}
+  if(!fil.length){list.innerHTML=`<div style="text-align:center;padding:36px;color:var(--ts);font-family:var(--f-zh)">${q?`<span class="zh-text">沒有符合「${q}」的留言</span><span class="en-text">No comments matching "${q}"</span>`:'目前沒有留言'}</div>`;return;}
   list.innerHTML=fil.map(c=>{const pl=PAGE_LBL[c.page]||PAGE_LBL.general;return`<div class="fp-item" ${c.hidden?'style="opacity:.4"':''}>
     <div class="fp-ih"><div class="fp-iav" style="background:hsl(${c.avatar.charCodeAt(0)*13%360},55%,82%)">${c.avatar}</div><div class="fp-im"><div class="fp-in">${c.name} ${c.rating?'⭐'.repeat(c.rating):''}</div><div class="fp-it">${relTime(c.time)}</div></div>
     <span class="fp-pt" style="background:${pl.c};color:${pl.tc}">${pl.zh}</span>${c.pinned?`<span class="fp-pin">📌 精選</span>`:''}
@@ -3935,6 +3941,15 @@ function checkCaptcha(){
   if(errEl) errEl.style.display = ok?'none':'block';
   return ok;
 }
+function scrollToGuidelines(){
+  const el = document.getElementById('comment-guidelines');
+  if(!el) return;
+  el.scrollIntoView({behavior:'smooth', block:'center'});
+  // 短暫高亮
+  el.style.boxShadow = '0 0 0 3px rgba(239,111,32,.5)';
+  setTimeout(()=>{ el.style.boxShadow = ''; }, 1800);
+}
+
 // ── 留言關鍵字防呆 ──
 const BANNED_WORDS = [
   '幹你娘','幹你','操你','幹妳','fuck you','motherfucker',
@@ -3969,14 +3984,14 @@ function submitComment(){
     return;
   }
   const page=document.querySelector('.page.active')?.id?.replace('page-','')||'general';
-  const c={name,avatar:name[0].toUpperCase(),text,time:Date.now(),page:fpTab==='all'?page:fpTab,rating:selRating,reactions:{like:0,fire:0,haha:0},myReactions:[],pinned:false,hidden:false,isFlagged:false};
+  const c={name,avatar:name[0].toUpperCase(),text,time:Date.now(),page:fpTab==='all'?page:fpTab,reactions:{like:0,fire:0,haha:0},myReactions:[],pinned:false,hidden:false,isFlagged:false};
   window.FB.save('comments',null,c).then(newId=>{
     COMMENTS.unshift({id:newId,...c});
     document.getElementById('fpTA').value='';
     document.getElementById('fpNI').value='';
     if(document.getElementById('fpCaptcha')) document.getElementById('fpCaptcha').value='';
-    if(agreeEl) agreeEl.checked=false; // 重置 checkbox
-    selRating=0;renderStars(0);updAv();updCC();renderFpList();renderRatBar();renderHomeComments();
+    if(agreeEl) agreeEl.checked=false;
+    updAv();updCC();renderFpList();renderRatBar();renderHomeComments();
     showToast('✅ 留言已送出','ok');updFbBadge();
   }).catch(()=>showToast('❌ 送出失敗','err'));
 }
@@ -3985,7 +4000,7 @@ function pinC(id){const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.pinned=!c.p
 function delC(id){if(!confirm('確定刪除？'))return;window.FB.del('comments',id).then(()=>{COMMENTS=COMMENTS.filter(x=>x.id!==id);renderFpList();renderHomeComments();showToast('已刪除','ok');});}
 function hideC(id){const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.hidden=!c.hidden;window.FB.save('comments',id,c).then(()=>{renderFpList();showToast(c.hidden?'已隱藏':'已顯示','ok');});}
 function sendReply(id){const inp=document.getElementById('ri-'+id);if(!inp||!inp.value.trim())return;const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.reply=inp.value.trim();window.FB.save('comments',id,c).then(()=>{renderFpList();showToast('✅ 回覆已儲存','ok');});}
-function renderRatBar(){const fil=COMMENTS.filter(c=>!c.hidden&&c.rating>0&&(fpTab==='all'||c.page===fpTab));const el=document.getElementById('fpRating');if(!fil.length){el.innerHTML='';return;}const avg=(fil.reduce((a,c)=>a+c.rating,0)/fil.length).toFixed(1);el.innerHTML=`<div class="fp-avg">${avg}</div><div><div style="color:#f5d558;font-size:.95rem">${'⭐'.repeat(Math.round(parseFloat(avg)))}</div><div class="fp-avg-sub">${fil.length} 則評分</div></div>`;}
+function renderRatBar(){const fil=COMMENTS.filter(c=>!c.hidden&&c.rating>0&&(fpTab==='all'||c.page===fpTab));const el=document.getElementById('fpRating');if(!fil.length){el.innerHTML='';el.style.display='none';return;}el.style.display='';const avg=(fil.reduce((a,c)=>a+c.rating,0)/fil.length).toFixed(1);el.innerHTML=`<div class="fp-avg">${avg}</div><div><div style="color:#f5d558;font-size:.95rem">${'⭐'.repeat(Math.round(parseFloat(avg)))}</div><div class="fp-avg-sub">${fil.length} 則評分</div></div>`;}
 function renderHomeComments(){const g=document.getElementById('home-comments-grid');if(!g)return;const pins=COMMENTS.filter(c=>c.pinned&&!c.hidden).slice(0,3);if(!pins.length){g.innerHTML='';return;}g.innerHTML=pins.map(c=>`<div style="background:var(--ww);border-radius:var(--r-lg);padding:20px;border:1.5px solid rgba(45,43,31,.08);box-shadow:var(--sc)"><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><div style="width:34px;height:34px;border-radius:50%;background:hsl(${c.avatar.charCodeAt(0)*13%360},55%,82%);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;font-family:var(--f-bo)">${c.avatar}</div><div><div style="font-weight:700;font-size:.85rem;font-family:var(--f-zh)">${c.name}</div><div style="font-size:.68rem;color:var(--ts)">${'⭐'.repeat(c.rating||0)} ${relTime(c.time)}</div></div><span style="margin-left:auto;background:var(--y);color:var(--sd);font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:var(--r-pill)">📌</span></div><div style="font-size:.85rem;color:var(--tm);font-family:var(--f-zh);line-height:1.62">${c.text}</div></div>`).join('');}
 function updFbBadge(){const cnt=COMMENTS.filter(c=>!c.hidden).length;const b=document.getElementById('fbBadge');b.textContent=cnt;b.classList.toggle('show',cnt>0);}
 </script>
