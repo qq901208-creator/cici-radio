@@ -1112,8 +1112,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div id="comment-guidelines" style="background:rgba(245,213,88,.18);border:1.5px solid rgba(239,111,32,.2);border-radius:var(--r-md);padding:14px 18px;margin-bottom:18px;font-family:var(--f-zh);transition:box-shadow .3s">
       <div style="font-size:.88rem;font-weight:700;color:var(--tm);margin-bottom:8px">💬 <span class="zh-text">留言小提醒</span><span class="en-text">Comment Guidelines</span></div>
       <div style="font-size:.82rem;color:var(--ts);line-height:1.75">
-        <span class="zh-text">歡迎分享你的觀後心得、推薦演出與交流想法！<br>但也請避免仇恨言論、人身攻擊、歧視內容、惡意挑釁、洗版與騷擾。<br><span style="font-size:.92rem;font-weight:700;color:var(--tm)">一起讓嘻嘻哪哩唷成為一個舒服、友善的喜劇交流空間 :)</span></span>
-        <span class="en-text">Feel free to share your thoughts, show recommendations, and comedy-related ideas!<br>Please avoid hate speech, personal attacks, discriminatory content, malicious provocation, spamming or harassment.<br><span style="font-size:.92rem;font-weight:700;color:var(--tm)">Let's keep Cici Radio a welcoming and friendly space for comedy discussions.</span></span>
+        <span class="zh-text">歡迎分享你的觀後心得、推薦演出與交流想法！<br><span style="font-weight:700;color:var(--tm)">但也請避免仇恨言論、人身攻擊、歧視內容、惡意挑釁、洗版與騷擾。</span><br><span style="font-size:.92rem;font-weight:600;color:var(--ts)">一起讓嘻嘻哪哩唷成為一個舒服、友善的喜劇交流空間 :)</span></span>
+        <span class="en-text">Feel free to share your thoughts, show recommendations, and comedy-related ideas!<br><span style="font-weight:700;color:var(--tm)">Please avoid hate speech, personal attacks, discriminatory content, malicious provocation, spamming or harassment.</span><br><span style="font-size:.92rem;font-weight:600;color:var(--ts)">Let's keep Cici Radio a welcoming and friendly space for comedy discussions.</span></span>
       </div>
     </div>
 
@@ -1138,7 +1138,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <div style="margin-top:10px;display:flex;align-items:flex-start;gap:8px">
             <input type="checkbox" id="fpAgree" style="margin-top:3px;accent-color:var(--or);width:15px;height:15px;flex-shrink:0;cursor:pointer">
             <label for="fpAgree" style="font-size:.8rem;color:var(--ts);font-family:var(--f-zh);cursor:pointer;line-height:1.55">
-              <span class="zh-text">我已閱讀並同意遵守</span><span class="en-text">I have read and agree to follow the </span><a onclick="event.preventDefault();scrollToGuidelines()" href="#" style="color:var(--or);text-decoration:underline;text-underline-offset:2px;font-weight:600"><span class="zh-text">留言規範</span><span class="en-text">comment guidelines</span></a>
+              <span class="zh-text">我已閱讀並同意遵守</span><span class="en-text">I have read and agree to follow the </span><a onclick="event.preventDefault();document.getElementById('modal-guidelines').classList.add('open')" href="#" style="color:var(--or);text-decoration:underline;text-underline-offset:2px;font-weight:600"><span class="zh-text">留言規範</span><span class="en-text">comment guidelines</span></a>
             </label>
           </div>
           <div class="fp-cf" style="margin-top:10px">
@@ -1614,7 +1614,27 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   </div>
 </div>
 
-<!-- Feedback panel moved to 留言板 page -->
+<!-- 留言規範 Modal -->
+<div class="modal-ov" id="modal-guidelines"><div class="modal" style="max-width:500px">
+  <button class="modal-close" onclick="closeModal('guidelines')">✕</button>
+  <div class="modal-title" style="font-size:1.05rem"><span class="zh-text">嘻嘻哪哩唷｜留言規範</span><span class="en-text">Cici Radio｜Comment Guidelines</span></div>
+  <div style="font-size:.88rem;font-family:var(--f-zh);line-height:1.8;color:var(--tm)">
+    <p style="margin:0 0 14px"><span class="zh-text">歡迎分享你的觀後心得、推薦演出與交流想法！<br>但也請避免以下內容：</span><span class="en-text">Feel free to share your thoughts, show recommendations, and comedy-related ideas!<br>But please avoid the following:</span></p>
+    <ul style="margin:0 0 16px;padding-left:1.4em;display:flex;flex-direction:column;gap:6px">
+      <li style="font-weight:700"><span class="zh-text">仇恨言論</span><span class="en-text">Hate speech</span></li>
+      <li style="font-weight:700"><span class="zh-text">人身攻擊</span><span class="en-text">Personal attacks</span></li>
+      <li style="font-weight:700"><span class="zh-text">歧視內容</span><span class="en-text">Discriminatory content</span></li>
+      <li style="font-weight:700"><span class="zh-text">惡意挑釁</span><span class="en-text">Malicious provocation</span></li>
+      <li style="font-weight:700"><span class="zh-text">洗版與騷擾</span><span class="en-text">Spamming or harassment</span></li>
+    </ul>
+    <p style="margin:0 0 12px"><span class="zh-text">我們希望「嘻嘻哪哩唷」能成為一個舒服、友善，也讓大家願意安心交流喜劇的空間。</span><span class="en-text">We want Cici Radio to be a comfortable, friendly space where everyone feels safe discussing comedy.</span></p>
+    <p style="margin:0 0 16px;font-size:.82rem;color:var(--ts)"><span class="zh-text">若留言涉及上述內容，本站有權隱藏或刪除相關留言，嚴重者將限制留言功能。</span><span class="en-text">Comments involving the above may be hidden or deleted. Repeated violations may result in restricted access.</span></p>
+    <p style="margin:0;font-weight:700;color:var(--or)"><span class="zh-text">一起讓現場喜劇的交流環境變得更好！</span><span class="en-text">Let's make the live comedy community a better place together!</span></p>
+  </div>
+  <div class="fa" style="margin-top:18px">
+    <button class="fa-pub" onclick="closeModal('guidelines');document.getElementById('fpAgree').checked=true"><span class="zh-text">我同意，關閉</span><span class="en-text">I agree, close</span></button>
+  </div>
+</div></div>
 
 <!-- ═══════════════════════════════════════
      FIREBASE SDK
@@ -4053,7 +4073,7 @@ function setLang(l){
 
 function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
 // 只有閱讀類 modal 允許點背景關閉，編輯類（show/mic/course/venue）不允許
-const READ_ONLY_MODALS = ['modal-show-detail','modal-course-detail','modal-venue-detail','modal-report','modal-copyright','modal-venue-manager'];
+const READ_ONLY_MODALS = ['modal-show-detail','modal-course-detail','modal-venue-detail','modal-report','modal-copyright','modal-venue-manager','modal-guidelines'];
 document.querySelectorAll('.modal-ov').forEach(o=>{
   o.addEventListener('click', e=>{
     if(e.target === o && READ_ONLY_MODALS.includes(o.id)){
