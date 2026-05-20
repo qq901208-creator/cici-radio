@@ -322,7 +322,7 @@ body.ready{visibility:visible}
 .cc-body{padding:14px 16px 0;display:flex;flex-direction:column;gap:5px}
 .cc-title{font-size:.94rem;font-weight:700;font-family:var(--f-zh);line-height:1.35}
 .cc-meta{display:flex;flex-wrap:wrap;gap:7px;font-size:.74rem;color:var(--ts);font-family:var(--f-zh)}
-.cc-desc{font-size:.8rem;color:var(--ts);line-height:1.62;font-family:var(--f-zh);margin-top:3px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.cc-desc{font-size:.8rem;color:var(--ts);line-height:1.62;font-family:var(--f-zh);margin-top:3px;white-space:pre-line;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
 .cc-foot{padding:11px 16px 14px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(45,43,31,.07);margin-top:10px}
 .cc-plat{font-size:.68rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);text-transform:uppercase;background:rgba(45,43,31,.06);padding:3px 8px;border-radius:var(--r-pill)}
 .cc-link{font-size:.76rem;font-weight:600;color:var(--or);text-decoration:none;font-family:var(--f-bo);display:flex;align-items:center;gap:4px;padding:5px 11px;border:1.5px solid rgba(239,111,32,.28);border-radius:var(--r-pill);transition:all .13s}
@@ -983,6 +983,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="chip" data-f="city" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
     </div>
     <div class="venue-grid" id="venues-grid"></div>
+    <div id="venues-loading" style="text-align:center;padding:48px 0;color:var(--ts);font-family:var(--f-zh)">載入中…</div>
     <button class="edit-add-btn" onclick="openVenueModal(null)">＋ <span class="zh-text">新增場地</span><span class="en-text">Add Venue</span></button>
   </section>
 </div>
@@ -1831,7 +1832,7 @@ window.DEFAULT_COMMENTS = [];
 window._dataReady = false;
 window._SHOWS    = [];
 window._MICS     = [];
-window._VENUES   = window.DEFAULT_VENUES.slice();
+window._VENUES   = [];
 window._COURSES  = [];
 window._COMMENTS = [];
 
@@ -2468,6 +2469,9 @@ function venueCardHTML(v) {
 }
 function renderVenues() {
   const g=document.getElementById('venues-grid'); if(!g)return;
+  if(!window._dataReady) return; // 等 Firebase 載完，保持 loading 狀態
+  const loading=document.getElementById('venues-loading');
+  if(loading) loading.style.display='none';
   const venues = window._VENUES || VENUES || [];
   const fil=venues.filter(v=>fCity==='all'||v.city===fCity);
   g.innerHTML=fil.map(venueCardHTML).join('')+`<div class="venue-card" style="border-style:dashed;align-items:center;justify-content:center;text-align:center;cursor:default;min-height:100px"><div style="color:var(--ts);font-size:.85rem;font-family:var(--f-zh)">期待更多場地陸續加入❤️‍🔥</div></div>`;
@@ -3863,15 +3867,10 @@ function restorePageFromHash(){
   // render 一次（opmic 等 Firebase 載完才 render，避免空資料閃爍）
   if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
   if(page==='shows') renderShows();
-  if(page==='venues') renderVenues();
   if(page==='courses') renderCourses();
   if(page==='about') renderAbout();
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
-  // opmic: 顯示 loading 佔位，Firebase callback 後才真正 render
-  if(page==='opmic'){
-    const tbody=document.getElementById('mic-tbody');
-    if(tbody) tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--ts);font-family:var(--f-zh)">載入中…</td></tr>`;
-  }
+  // venues + opmic：資料等 Firebase callback 後才 render，保持 loading 狀態
 }
 
 window.addEventListener('load', ()=>{
