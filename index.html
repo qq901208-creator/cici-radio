@@ -1743,11 +1743,19 @@ async function loadAllData() {
     if(typeof updFbBadge==='function') updFbBadge();
     if(typeof updateLastUpdatedDisplay==='function') updateLastUpdatedDisplay();
     // 分享連結：若 URL 帶有 ?show=ID 或 ?course=ID，自動打開對應詳情
-    const params = new URLSearchParams(location.search || location.hash.split('?')[1] || '');
+    const hashStr = location.hash || '';
+    const qStr = hashStr.includes('?') ? hashStr.split('?')[1] : location.search.replace('?','');
+    const params = new URLSearchParams(qStr);
     const shareShowId = params.get('show');
     const shareCourseId = params.get('course');
-    if(shareShowId && typeof openShowDetail==='function') setTimeout(()=>openShowDetail(shareShowId), 50);
-    if(shareCourseId && typeof openCourseDetail==='function') setTimeout(()=>openCourseDetail(shareCourseId), 50);
+    if(shareShowId && typeof openShowDetail==='function'){
+      if(typeof showPage==='function') showPage('shows');
+      setTimeout(()=>openShowDetail(shareShowId), 100);
+    }
+    if(shareCourseId && typeof openCourseDetail==='function'){
+      if(typeof showPage==='function') showPage('courses');
+      setTimeout(()=>openCourseDetail(shareCourseId), 100);
+    }
   }, 200);
 }
 window._loadAllData = loadAllData;
