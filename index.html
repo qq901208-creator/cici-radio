@@ -4044,7 +4044,7 @@ function toggleFeedback(){showPage('board');}
 function openFeedback(){showPage('board');}
 function closeFeedback(){}
 function switchFpTab(t,el){fpTab=t;document.querySelectorAll('.fp-tab').forEach(x=>x.classList.remove('on'));el.classList.add('on');renderFpList();renderRatBar();}
-function renderStars(v){document.getElementById('starBtns').innerHTML=[1,2,3,4,5].map(i=>`<button class="star-btn ${i<=v?'lit':'dim'}" onclick="setStar(${i})">${i<=v?'⭐':'☆'}</button>`).join('');}
+function renderStars(v){const el=document.getElementById('starBtns');if(!el)return;el.innerHTML=[1,2,3,4,5].map(i=>`<button class="star-btn ${i<=v?'lit':'dim'}" onclick="setStar(${i})">${i<=v?'⭐':'☆'}</button>`).join('');}
 function setStar(n){selRating=n;renderStars(n);}
 function updAv(){const n=document.getElementById('fpNI').value.trim();const i=n?n[0].toUpperCase():'?';document.getElementById('fpAvI').textContent=i;document.getElementById('fpAv').style.background=n?`hsl(${n.charCodeAt(0)*13%360},55%,82%)`:'var(--py)';}
 function updCC(){const l=document.getElementById('fpTA').value.length;const el=document.getElementById('fpCC');el.textContent=l+'/300';el.style.color=l>260?'#e74c3c':'';}
@@ -4144,13 +4144,13 @@ function submitComment(){
     fetch('https://ntfy.sh/ciciradio-comment-2026', {
       method: 'POST',
       headers: {
-        'Content-Type': 'text/plain;charset=UTF-8',
-        'Title': '嘻嘻哪哩唷 新留言',
+        'Title': 'New Comment on Cici Radio',
         'Priority': 'default',
-        'Tags': 'speech_balloon'
+        'Tags': 'speech_balloon',
+        'Content-Type': 'text/plain'
       },
-      body: `${name}：${text.slice(0,80)}${text.length>80?'…':''}`
-    }).catch(()=>{});
+      body: `${name}: ${text.slice(0,100)}${text.length>100?'...':''}`
+    }).then(r=>console.log('[ntfy] status:', r.status)).catch(e=>console.error('[ntfy] error:', e));
   }).catch(()=>showToast('❌ 送出失敗','err'));
 }
 function react(id,t){const c=COMMENTS.find(x=>x.id===id);if(!c)return;if(!c.myReactions)c.myReactions=[];const i=c.myReactions.indexOf(t);if(i>=0){c.myReactions.splice(i,1);c.reactions[t]--;}else{c.myReactions.push(t);c.reactions[t]++;}window.FB.save('comments',id,c).then(()=>renderFpList());}
