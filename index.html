@@ -4066,7 +4066,7 @@ function renderFpList(){
     <div class="fp-ih"><div class="fp-iav" style="background:hsl(${c.avatar.charCodeAt(0)*13%360},55%,82%)">${c.avatar}</div><div class="fp-im"><div class="fp-in">${c.name} ${c.rating?'⭐'.repeat(c.rating):''}</div><div class="fp-it">${relTime(c.time)}</div></div>
     <span class="fp-pt" style="background:${pl.c};color:${pl.tc}">${pl.zh}</span>${c.pinned?`<span class="fp-pin">📌 精選</span>`:''}
     </div>
-    <div class="fp-itxt">${c.text}</div>
+    <div class="fp-itxt">${linkify(c.text)}</div>
     ${c.reply?`<div class="fp-reply"><img class="fp-reply-logo" src="https://cici-radio.vercel.app/assets/ciciradio.jpg" alt="logo" onerror="this.style.display='none'"><div class="fp-reply-body"><div class="fp-reply-name">嘻嘻哪哩唷 官方回覆</div><div class="fp-reply-text">${linkify(c.reply)}</div></div></div>`:''}
     <div class="fp-if">
       <button class="fp-rb ${c.myReactions?.includes('like')?'on':''}" onclick="react('${c.id}','like')">👍 ${c.reactions.like}</button>
@@ -4143,7 +4143,12 @@ function submitComment(){
     // ntfy 推播通知
     fetch('https://ntfy.sh/ciciradio-comment-2026', {
       method: 'POST',
-      headers: { 'Title': '嘻嘻哪哩唷｜新留言通知', 'Priority': 'default', 'Tags': 'speech_balloon' },
+      headers: {
+        'Content-Type': 'text/plain;charset=UTF-8',
+        'Title': '嘻嘻哪哩唷 新留言',
+        'Priority': 'default',
+        'Tags': 'speech_balloon'
+      },
       body: `${name}：${text.slice(0,80)}${text.length>80?'…':''}`
     }).catch(()=>{});
   }).catch(()=>showToast('❌ 送出失敗','err'));
