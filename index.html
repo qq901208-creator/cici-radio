@@ -2211,12 +2211,14 @@ function openShowDetail(id) {
       <tr><td>地區</td><td>${getShowAreaLabelById(s.area)||s.area||'—'}</td></tr>
       ${s.performer?`<tr><td>表演者</td><td>${s.performer}</td></tr>`:''}
       ${s.price?`<tr><td>票價</td><td>${s.price}</td></tr>`:''}
-      <tr><td>平台</td><td>${(s.platform||'').toUpperCase()}</td></tr>
+      ${s.platform?`<tr><td>平台</td><td>${(s.platform||'').toUpperCase()}</td></tr>`:''}
     </table>
+    <div style="margin-top:10px">
+      <button onclick="copyShareLink()" style="padding:5px 14px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.76rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">分享演出資訊</span><span class="en-text">Share</span></button>
+    </div>
     ${s.description?`<p class="sd-desc">${s.description}</p>`:''}
     ${s.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em">${getLang()==='en'?'Production Team':'製作團隊 Production Team'}</div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${s.production}</p></div>`:''}
     ${s.ticketUrl&&s.ticketUrl!=='#'?`<a href="${s.ticketUrl}" target="_blank" rel="noopener" class="sd-ticket-btn" style="margin-top:20px;display:inline-block">${getLang()==='en'?'Buy Tickets ↗':'前往售票頁面 ↗'}</a><p class="sd-disclaimer"><span class="zh-text">本站僅提供資訊整理，購票、退票及演出變動請洽原售票平台與主辦單位。</span><span class="en-text">For ticketing, refunds, or event changes, please contact the original platform or organizer.</span></p>`:''}
-    <button onclick="copyShareLink()" style="margin-top:12px;padding:7px 16px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.78rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">複製分享連結</span><span class="en-text">Copy Link</span></button>
     ${s.imgSrc?`<p class="sd-imgsrc" style="margin-top:8px">📷 ${s.imgSrc}</p>`:''}
   `;
   document.getElementById('modal-show-detail').classList.add('open');
@@ -2524,11 +2526,13 @@ function openCourseDetail(id){
       ${c.organizer?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${lang==='en'?'Organizer':'主辦'}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06)">${c.organizer}</td></tr>`:''}
       ${c.fee?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top">${lang==='en'?'Fee':'費用'}</td><td style="padding:7px 0;font-weight:700;color:var(--or)">${c.fee}</td></tr>`:''}
     </table>
+    <div style="margin-top:10px">
+      <button onclick="copyShareLink()" style="padding:5px 14px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.76rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">分享課程資訊</span><span class="en-text">Share</span></button>
+    </div>
     ${c.description?`<p style="margin:14px 0;font-size:.88rem;line-height:1.75;color:var(--tm);font-family:var(--f-zh);white-space:pre-line">${c.description}</p>`:''}
     ${c.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em">${prodLbl}</div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${c.production}</p></div>`:''}
     ${c.imgSrc?`<div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:14px;margin-bottom:12px">${c.imgSrc}</div>`:''}
     ${(c.url&&c.url!=='#')?`<a href="${c.url}" target="_blank" rel="noopener" class="btn-or" style="display:inline-block;text-decoration:none;margin-top:6px">${lang==='en'?'Sign Up ↗':'立即報名 ↗'}</a>`:''}
-    <button onclick="copyShareLink()" style="margin-top:12px;padding:7px 16px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.78rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">複製分享連結</span><span class="en-text">Copy Link</span></button>
   `;
   document.getElementById('modal-course-detail').classList.add('open');
 }
