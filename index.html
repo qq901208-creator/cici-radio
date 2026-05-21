@@ -2186,7 +2186,8 @@ function showCardHTML(s) {
 
 // ── SHOW DETAIL MODAL ──
 function openShowDetail(id) {
-  const s = SHOWS.find(x=>x.id===id); if (!s) return;
+  const allShows = window._SHOWS || SHOWS || [];
+  const s = allShows.find(x=>x.id===id); if (!s) return;
   // 更新 URL，方便分享
   history.replaceState(null,'', location.hash.split('?')[0] + '?show=' + id);
   const types = s.types || (s.type ? [s.type] : []);
@@ -2504,7 +2505,8 @@ function renderCourses() {
 }
 
 function openCourseDetail(id){
-  const c=COURSES.find(x=>x.id===id); if(!c)return;
+  const allCourses = window._COURSES || COURSES || [];
+  const c=allCourses.find(x=>x.id===id); if(!c)return;
   // 更新 URL，方便分享
   history.replaceState(null,'', location.hash.split('?')[0] + '?course=' + id);
   const lang = getLang();
