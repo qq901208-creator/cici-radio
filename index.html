@@ -4088,6 +4088,7 @@ function checkCaptcha(){
 function linkify(text){
   return text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:var(--or);text-decoration:underline;text-underline-offset:2px;word-break:break-all">$1</a>');
 }
+function scrollToGuidelines(){
   const el = document.getElementById('comment-guidelines');
   if(!el) return;
   el.scrollIntoView({behavior:'smooth', block:'center'});
