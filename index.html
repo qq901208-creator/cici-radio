@@ -1742,6 +1742,12 @@ async function loadAllData() {
     }
     if(typeof updFbBadge==='function') updFbBadge();
     if(typeof updateLastUpdatedDisplay==='function') updateLastUpdatedDisplay();
+    // 分享連結：若 URL 帶有 ?show=ID 或 ?course=ID，自動打開對應詳情
+    const params = new URLSearchParams(location.search || location.hash.split('?')[1] || '');
+    const shareShowId = params.get('show');
+    const shareCourseId = params.get('course');
+    if(shareShowId && typeof openShowDetail==='function') setTimeout(()=>openShowDetail(shareShowId), 50);
+    if(shareCourseId && typeof openCourseDetail==='function') setTimeout(()=>openCourseDetail(shareCourseId), 50);
   }, 200);
 }
 window._loadAllData = loadAllData;
@@ -2175,6 +2181,8 @@ function showCardHTML(s) {
 // ── SHOW DETAIL MODAL ──
 function openShowDetail(id) {
   const s = SHOWS.find(x=>x.id===id); if (!s) return;
+  // 更新 URL，方便分享
+  history.replaceState(null,'', location.hash.split('?')[0] + '?show=' + id);
   const types = s.types || (s.type ? [s.type] : []);
   const typeTags = types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color};padding:3px 10px;font-size:.72rem">${typeLabel(t)}</span>`;}).join(' ');
   const d = new Date(s.date+'T00:00');
@@ -2200,6 +2208,7 @@ function openShowDetail(id) {
     ${s.description?`<p class="sd-desc">${s.description}</p>`:''}
     ${s.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em">${getLang()==='en'?'Production Team':'製作團隊 Production Team'}</div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${s.production}</p></div>`:''}
     ${s.ticketUrl&&s.ticketUrl!=='#'?`<a href="${s.ticketUrl}" target="_blank" rel="noopener" class="sd-ticket-btn" style="margin-top:20px;display:inline-block">${getLang()==='en'?'Buy Tickets ↗':'前往售票頁面 ↗'}</a><p class="sd-disclaimer"><span class="zh-text">本站僅提供資訊整理，購票、退票及演出變動請洽原售票平台與主辦單位。</span><span class="en-text">For ticketing, refunds, or event changes, please contact the original platform or organizer.</span></p>`:''}
+    <button onclick="copyShareLink()" style="margin-top:12px;padding:7px 16px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.78rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">複製分享連結</span><span class="en-text">Copy Link</span></button>
     ${s.imgSrc?`<p class="sd-imgsrc" style="margin-top:8px">📷 ${s.imgSrc}</p>`:''}
   `;
   document.getElementById('modal-show-detail').classList.add('open');
@@ -2488,6 +2497,8 @@ function renderCourses() {
 
 function openCourseDetail(id){
   const c=COURSES.find(x=>x.id===id); if(!c)return;
+  // 更新 URL，方便分享
+  history.replaceState(null,'', location.hash.split('?')[0] + '?course=' + id);
   const lang = getLang();
   const m=COURSE_META[c.type]||COURSE_META.other;
   const imgHtml=c.image?`<div style="width:100%;max-height:280px;overflow:hidden;border-radius:var(--r-md);background:${m.bg};margin-bottom:18px;display:flex;align-items:center;justify-content:center"><img src="${c.image}" alt="${c.title}" style="width:100%;max-height:280px;object-fit:contain;display:block;background:var(--cr)" onerror="this.style.display='none'"></div>`:'';
@@ -2509,6 +2520,7 @@ function openCourseDetail(id){
     ${c.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em">${prodLbl}</div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${c.production}</p></div>`:''}
     ${c.imgSrc?`<div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:14px;margin-bottom:12px">${c.imgSrc}</div>`:''}
     ${(c.url&&c.url!=='#')?`<a href="${c.url}" target="_blank" rel="noopener" class="btn-or" style="display:inline-block;text-decoration:none;margin-top:6px">${lang==='en'?'Sign Up ↗':'立即報名 ↗'}</a>`:''}
+    <button onclick="copyShareLink()" style="margin-top:12px;padding:7px 16px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.78rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">複製分享連結</span><span class="en-text">Copy Link</span></button>
   `;
   document.getElementById('modal-course-detail').classList.add('open');
 }
@@ -4139,7 +4151,30 @@ function setLang(l){
   if(window._dataReady) updateLastUpdatedDisplay();
 }
 
-function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
+function copyShareLink(){
+  const url = location.href;
+  navigator.clipboard.writeText(url).then(()=>{
+    showToast(getLang()==='en'?'✅ Link copied!':'✅ 連結已複製','ok');
+  }).catch(()=>{
+    // fallback for older browsers
+    const el = document.createElement('input');
+    el.value = url;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast(getLang()==='en'?'✅ Link copied!':'✅ 連結已複製','ok');
+  });
+}
+
+function closeModal(id){
+  document.getElementById('modal-'+id).classList.remove('open');
+  // 關閉演出/課程詳情時清除分享參數
+  if(id==='show-detail'||id==='course-detail'){
+    const base = location.hash.split('?')[0];
+    history.replaceState(null,'', base);
+  }
+}
 // 只有閱讀類 modal 允許點背景關閉，編輯類（show/mic/course/venue）不允許
 const READ_ONLY_MODALS = ['modal-show-detail','modal-course-detail','modal-venue-detail','modal-report','modal-copyright','modal-venue-manager','modal-guidelines'];
 document.querySelectorAll('.modal-ov').forEach(o=>{
