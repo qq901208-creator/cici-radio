@@ -1724,21 +1724,21 @@ async function loadAllData() {
   setTimeout(()=>{
     if(typeof window._syncData==='function') window._syncData();
     window._dataReady = true;
-    // 只 render 當前顯示中的頁面
-    const activePage = document.querySelector('.page.active')?.id?.replace('page-','') || 'home';
-    if(activePage==='home'){
-      if(typeof renderHomeShows==='function') renderHomeShows();
-      if(typeof renderHomeComments==='function') renderHomeComments();
-      if(typeof renderHeroStats==='function') renderHeroStats();
-    }
-    if(activePage==='shows' && typeof renderShows==='function') renderShows();
-    if(activePage==='opmic' && typeof selectMicDay==='function'){initTodayTab();selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));}
-    if(activePage==='venues' && typeof renderVenues==='function') renderVenues();
-    if(activePage==='courses' && typeof renderCourses==='function') renderCourses();
-    if(activePage==='about' && typeof renderAbout==='function') renderAbout();
-    if(activePage==='board'){
-      if(typeof renderFpList==='function') renderFpList();
-      if(typeof renderRatBar==='function') renderRatBar();
+    // Firebase 載完後全部 render 一遍
+    // 各函數內部有 guard（找不到 DOM 元素就 return），不會有副作用
+    if(typeof renderHeroStats==='function') renderHeroStats();
+    if(typeof renderHomeShows==='function') renderHomeShows();
+    if(typeof renderHomeComments==='function') renderHomeComments();
+    if(typeof renderShows==='function') renderShows();
+    if(typeof renderVenues==='function') renderVenues();
+    if(typeof renderCourses==='function') renderCourses();
+    if(typeof renderAbout==='function') renderAbout();
+    if(typeof renderFpList==='function') renderFpList();
+    if(typeof renderRatBar==='function') renderRatBar();
+    // opmic 需要先初始化 tab
+    if(typeof selectMicDay==='function'){
+      if(typeof initTodayTab==='function') initTodayTab();
+      selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));
     }
     if(typeof updFbBadge==='function') updFbBadge();
     if(typeof updateLastUpdatedDisplay==='function') updateLastUpdatedDisplay();
@@ -2153,17 +2153,17 @@ function showCardHTML(s) {
       <div class="sc-meta">📍 ${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</div>
       ${s.performer?`<div class="sc-meta">🎙 ${s.performer}</div>`:''}
       ${s.price?`<div class="sc-price">💰 ${s.price}</div>`:''}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">
+        ${(s.ticketUrl&&s.ticketUrl!=='#'&&!s.soldOut)
+          ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">馬上購票</span><span class="en-text">Buy Tickets</span></a>`
+          : s.soldOut
+            ? `<span style="font-size:.74rem;color:#8b1a1a;font-family:var(--f-zh)">已售完</span>`
+            : `<span></span>`
+        }
+        <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);display:flex;align-items:center;gap:3px;opacity:.7"><span class="zh-text">詳情</span><span class="en-text">Details</span> ↗</span>
+      </div>
+      ${s.imgSrc?`<div class="sc-imgsrc sc-imgsrc-desktop" style="margin-top:4px">${s.imgSrc}</div>`:''}
     </div>
-    <div style="padding:10px 16px 13px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(45,43,31,.07)">
-      ${(s.ticketUrl&&s.ticketUrl!=='#'&&!s.soldOut)
-        ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">馬上購票</span><span class="en-text">Buy Tickets</span></a>`
-        : s.soldOut
-          ? `<span style="font-size:.74rem;color:#8b1a1a;font-family:var(--f-zh)">已售完</span>`
-          : `<span></span>`
-      }
-      <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);display:flex;align-items:center;gap:3px;opacity:.7"><span class="zh-text">詳情</span><span class="en-text">Details</span> ↗</span>
-    </div>
-    ${s.imgSrc?`<div class="sc-imgsrc sc-imgsrc-desktop">${s.imgSrc}</div>`:''}
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openShowModal('${s.id}')">✏️</button>
       <button class="ca-btn" style="background:#6b6440;color:#fff" onclick="event.stopPropagation();copyShow('${s.id}')" title="複製此演出">⧉</button>
