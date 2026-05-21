@@ -4055,6 +4055,7 @@ function renderFpList(){
   const isAdmin=isLoggedIn() && editMode;
   const q=(document.getElementById('fp-search')?.value||'').trim().toLowerCase();
   const allComments = window._COMMENTS || COMMENTS || [];
+  console.log('[renderFpList] allComments:', allComments.length, 'fpTab:', fpTab, 'isAdmin:', isAdmin);
   let fil=allComments.filter(c=>(!c.hidden||isAdmin)&&(fpTab==='all'||c.page===fpTab));
   if(q) fil=fil.filter(c=>(c.text||'').toLowerCase().includes(q)||(c.name||'').toLowerCase().includes(q));
   // 精選留言置頂
