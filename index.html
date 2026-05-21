@@ -1749,12 +1749,10 @@ async function loadAllData() {
     const shareShowId = params.get('show');
     const shareCourseId = params.get('course');
     if(shareShowId && typeof openShowDetail==='function'){
-      if(typeof showPage==='function') showPage('shows');
-      setTimeout(()=>openShowDetail(shareShowId), 100);
+      setTimeout(()=>{ openShowDetail(shareShowId); }, 150);
     }
     if(shareCourseId && typeof openCourseDetail==='function'){
-      if(typeof showPage==='function') showPage('courses');
-      setTimeout(()=>openCourseDetail(shareCourseId), 100);
+      setTimeout(()=>{ openCourseDetail(shareCourseId); }, 150);
     }
   }, 200);
 }
