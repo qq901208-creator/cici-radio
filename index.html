@@ -4136,6 +4136,12 @@ function submitComment(){
     if(agreeEl) agreeEl.checked=false;
     updAv();updCC();renderFpList();renderRatBar();renderHomeComments();
     showToast('✅ 留言已送出','ok');updFbBadge();
+    // ntfy 推播通知
+    fetch('https://ntfy.sh/ciciradio-comment-2026', {
+      method: 'POST',
+      headers: { 'Title': '嘻嘻哪哩唷｜新留言通知', 'Priority': 'default', 'Tags': 'speech_balloon' },
+      body: `${name}：${text.slice(0,80)}${text.length>80?'…':''}`
+    }).catch(()=>{});
   }).catch(()=>showToast('❌ 送出失敗','err'));
 }
 function react(id,t){const c=COMMENTS.find(x=>x.id===id);if(!c)return;if(!c.myReactions)c.myReactions=[];const i=c.myReactions.indexOf(t);if(i>=0){c.myReactions.splice(i,1);c.reactions[t]--;}else{c.myReactions.push(t);c.reactions[t]++;}window.FB.save('comments',id,c).then(()=>renderFpList());}
