@@ -2323,7 +2323,14 @@ function renderShows() {
     const types = s.types||(s.type?[s.type]:[]);
     if (fType!=='all' && !types.includes(fType)) return false;
     if (!venueMatchesFilter(s, fVenue)) return false;
-    if (fArea!=='all' && s.area!==fArea) return false;
+    const KNOWN_AREAS = ['taipei','newtaipei','taoyuan','hsinchu','taichung','tainan','kaohsiung'];
+    if (fArea!=='all'){
+      if(fArea==='other'){
+        if(KNOWN_AREAS.includes(s.area)) return false;
+      } else {
+        if(s.area!==fArea) return false;
+      }
+    }
     const dow = new Date(s.date+'T00:00').getDay();
     if (fDay!=='all' && String(dow)!==fDay) return false;
     // 搜尋篩選
@@ -3911,7 +3918,6 @@ function _handleGoogleCredential(response) {
   const errEl = document.getElementById('authErr');
   errEl.textContent = '';
   try {
-    // Decode JWT payload (client-side, for email verification only)
     const payload = JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
     const email = (payload.email || '').toLowerCase().trim();
     if (email === AUTH_EMAIL) {
