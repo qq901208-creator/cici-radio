@@ -1752,11 +1752,21 @@ async function loadAllData() {
     console.log('[share] SHOWS count:', (window._SHOWS||[]).length);
     if(shareShowId && typeof openShowDetail==='function'){
       console.log('[share] opening show:', shareShowId);
-      setTimeout(()=>{ openShowDetail(shareShowId); }, 150);
+      const tryOpenShow = (attempts) => {
+        const found = (window._SHOWS||[]).find(x=>x.id===shareShowId);
+        if(found){ openShowDetail(shareShowId); }
+        else if(attempts > 0){ setTimeout(()=>tryOpenShow(attempts-1), 300); }
+      };
+      setTimeout(()=>tryOpenShow(10), 200);
     }
     if(shareCourseId && typeof openCourseDetail==='function'){
       console.log('[share] opening course:', shareCourseId);
-      setTimeout(()=>{ openCourseDetail(shareCourseId); }, 150);
+      const tryOpenCourse = (attempts) => {
+        const found = (window._COURSES||[]).find(x=>x.id===shareCourseId);
+        if(found){ openCourseDetail(shareCourseId); }
+        else if(attempts > 0){ setTimeout(()=>tryOpenCourse(attempts-1), 300); }
+      };
+      setTimeout(()=>tryOpenCourse(10), 200);
     }
   }, 200);
 }
