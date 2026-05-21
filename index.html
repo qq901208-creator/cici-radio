@@ -4064,7 +4064,7 @@ function renderFpList(){
     <span class="fp-pt" style="background:${pl.c};color:${pl.tc}">${pl.zh}</span>${c.pinned?`<span class="fp-pin">📌 精選</span>`:''}
     </div>
     <div class="fp-itxt">${c.text}</div>
-    ${c.reply?`<div class="fp-reply"><img class="fp-reply-logo" src="https://cici-radio.vercel.app/assets/ciciradio.jpg" alt="logo" onerror="this.style.display='none'"><div class="fp-reply-body"><div class="fp-reply-name">嘻嘻哪哩唷 官方回覆</div><div class="fp-reply-text">${c.reply}</div></div></div>`:''}
+    ${c.reply?`<div class="fp-reply"><img class="fp-reply-logo" src="https://cici-radio.vercel.app/assets/ciciradio.jpg" alt="logo" onerror="this.style.display='none'"><div class="fp-reply-body"><div class="fp-reply-name">嘻嘻哪哩唷 官方回覆</div><div class="fp-reply-text">${linkify(c.reply)}</div></div></div>`:''}
     <div class="fp-if">
       <button class="fp-rb ${c.myReactions?.includes('like')?'on':''}" onclick="react('${c.id}','like')">👍 ${c.reactions.like}</button>
       <button class="fp-rb ${c.myReactions?.includes('fire')?'on':''}" onclick="react('${c.id}','fire')">🔥 ${c.reactions.fire}</button>
@@ -4082,7 +4082,9 @@ function checkCaptcha(){
   if(errEl) errEl.style.display = ok?'none':'block';
   return ok;
 }
-function scrollToGuidelines(){
+function linkify(text){
+  return text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:var(--or);text-decoration:underline;text-underline-offset:2px;word-break:break-all">$1</a>');
+}
   const el = document.getElementById('comment-guidelines');
   if(!el) return;
   el.scrollIntoView({behavior:'smooth', block:'center'});
