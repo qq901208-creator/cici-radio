@@ -1722,10 +1722,9 @@ async function loadAllData() {
     window._COMMENTS = window.DEFAULT_COMMENTS;
   }
   setTimeout(()=>{
+    try {
     if(typeof window._syncData==='function') window._syncData();
     window._dataReady = true;
-    // Firebase 載完後全部 render 一遍
-    // 各函數內部有 guard（找不到 DOM 元素就 return），不會有副作用
     if(typeof renderHeroStats==='function') renderHeroStats();
     if(typeof renderHomeShows==='function') renderHomeShows();
     if(typeof renderHomeComments==='function') renderHomeComments();
@@ -1735,7 +1734,6 @@ async function loadAllData() {
     if(typeof renderAbout==='function') renderAbout();
     if(typeof renderFpList==='function') renderFpList();
     if(typeof renderRatBar==='function') renderRatBar();
-    // opmic 需要先初始化 tab
     if(typeof selectMicDay==='function'){
       if(typeof initTodayTab==='function') initTodayTab();
       selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));
@@ -1748,10 +1746,7 @@ async function loadAllData() {
     const params = new URLSearchParams(qStr);
     const shareShowId = params.get('show');
     const shareCourseId = params.get('course');
-    console.log('[share] hash:', hashStr, 'qStr:', qStr, 'showId:', shareShowId, 'courseId:', shareCourseId);
-    console.log('[share] SHOWS count:', (window._SHOWS||[]).length);
     if(shareShowId && typeof openShowDetail==='function'){
-      console.log('[share] opening show:', shareShowId);
       const tryOpenShow = (attempts) => {
         const found = (window._SHOWS||[]).find(x=>x.id===shareShowId);
         if(found){ openShowDetail(shareShowId); }
@@ -1760,7 +1755,6 @@ async function loadAllData() {
       setTimeout(()=>tryOpenShow(10), 200);
     }
     if(shareCourseId && typeof openCourseDetail==='function'){
-      console.log('[share] opening course:', shareCourseId);
       const tryOpenCourse = (attempts) => {
         const found = (window._COURSES||[]).find(x=>x.id===shareCourseId);
         if(found){ openCourseDetail(shareCourseId); }
@@ -1768,6 +1762,7 @@ async function loadAllData() {
       };
       setTimeout(()=>tryOpenCourse(10), 200);
     }
+    } catch(e){ console.error('Firebase callback error:', e); }
   }, 200);
 }
 window._loadAllData = loadAllData;
@@ -3993,11 +3988,13 @@ function restorePageFromHash(){
 }
 
 window.addEventListener('load', ()=>{
-  initReveal();
-  restorePageFromHash();
+  try { initReveal(); } catch(e){ console.error('initReveal:', e); }
+  try { restorePageFromHash(); } catch(e){ console.error('restorePageFromHash:', e); }
   document.body.classList.add('ready');
-  const badge = document.getElementById('sessionBadge');
-  if (isLoggedIn() && badge) badge.classList.add('visible');
+  try {
+    const badge = document.getElementById('sessionBadge');
+    if (isLoggedIn() && badge) badge.classList.add('visible');
+  } catch(e){}
 });
 </script>
 
