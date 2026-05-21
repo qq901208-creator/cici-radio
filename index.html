@@ -1658,6 +1658,9 @@ import {
   getDocs, getDoc, addDoc, setDoc, deleteDoc, updateDoc,
   query, orderBy, onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import {
+  getAuth, signInWithCredential, GoogleAuthProvider, signOut
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDXW1OHmAAc8v2nbrhHYNPqmoCsUsc3RHw",
@@ -1671,6 +1674,11 @@ const firebaseConfig = {
 
 const _app = initializeApp(firebaseConfig);
 const db = getFirestore(_app);
+const _auth = getAuth(_app);
+window._auth = _auth;
+window._signOut = () => signOut(_auth);
+window._GoogleAuthProvider = GoogleAuthProvider;
+window._signInWithCredential = signInWithCredential;
 
 // ── Expose DB helpers globally ──
 window._db = db;
@@ -3911,10 +3919,14 @@ function _handleGoogleCredential(response) {
   const errEl = document.getElementById('authErr');
   errEl.textContent = '';
   try {
-    // Decode JWT payload (client-side, for email verification only)
     const payload = JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
     const email = (payload.email || '').toLowerCase().trim();
     if (email === AUTH_EMAIL) {
+      // 同時用 Firebase Auth 登入，讓 Security Rules 可以驗證
+      if(window._auth && window._GoogleAuthProvider && window._signInWithCredential){
+        const credential = window._GoogleAuthProvider.credential(response.credential);
+        window._signInWithCredential(window._auth, credential).catch(e=>console.warn('Firebase Auth sign-in:', e));
+      }
       sessionStorage.setItem(SESSION_KEY, 'ok');
       closeAuth();
       unlockAdmin();
@@ -3935,6 +3947,7 @@ function unlockAdmin() {
 
 window.ciciLogout = function() {
   sessionStorage.removeItem(SESSION_KEY);
+  if(window._signOut) window._signOut().catch(()=>{});
   if (editMode) toggleEdit();
   const badge = document.getElementById('sessionBadge');
   if (badge) badge.classList.remove('visible');
