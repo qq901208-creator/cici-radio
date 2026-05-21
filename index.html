@@ -4053,11 +4053,12 @@ function renderFpList(){
   const list=document.getElementById('fpList');
   const isAdmin=isLoggedIn() && editMode;
   const q=(document.getElementById('fp-search')?.value||'').trim().toLowerCase();
-  let fil=COMMENTS.filter(c=>(!c.hidden||isAdmin)&&(fpTab==='all'||c.page===fpTab));
+  const allComments = window._COMMENTS || COMMENTS || [];
+  let fil=allComments.filter(c=>(!c.hidden||isAdmin)&&(fpTab==='all'||c.page===fpTab));
   if(q) fil=fil.filter(c=>(c.text||'').toLowerCase().includes(q)||(c.name||'').toLowerCase().includes(q));
   // 精選留言置頂
   fil.sort((a,b)=>{if(a.pinned&&!b.pinned)return -1;if(!a.pinned&&b.pinned)return 1;return b.time-a.time;});
-  document.getElementById('fpCnt').textContent=COMMENTS.filter(c=>!c.hidden).length;
+  document.getElementById('fpCnt').textContent=allComments.filter(c=>!c.hidden).length;
   if(!fil.length){list.innerHTML=`<div style="text-align:center;padding:36px;color:var(--ts);font-family:var(--f-zh)">${q?`<span class="zh-text">沒有符合「${q}」的留言</span><span class="en-text">No comments matching "${q}"</span>`:'目前沒有留言'}</div>`;return;}
   list.innerHTML=fil.map(c=>{const pl=PAGE_LBL[c.page]||PAGE_LBL.general;return`<div class="fp-item" ${c.hidden?'style="opacity:.4"':''}>
     <div class="fp-ih"><div class="fp-iav" style="background:hsl(${c.avatar.charCodeAt(0)*13%360},55%,82%)">${c.avatar}</div><div class="fp-im"><div class="fp-in">${c.name} ${c.rating?'⭐'.repeat(c.rating):''}</div><div class="fp-it">${relTime(c.time)}</div></div>
