@@ -1713,7 +1713,6 @@ async function loadAllData() {
     window._COURSES  = coursesSnap.docs.map(d=>({id:d.id,...d.data()}));
     window._COMMENTS = commentsSnap.docs.map(d=>({id:d.id,...d.data()}))
       .sort((a,b)=>(b.time||0)-(a.time||0));
-    console.log('[debug] COMMENTS loaded:', window._COMMENTS.length);
     if(!window._SHOWS.length)    window._SHOWS    = window.DEFAULT_SHOWS;
     if(!window._MICS.length)     window._MICS     = window.DEFAULT_MICS;
     if(!window._COURSES.length)  window._COURSES  = window.DEFAULT_COURSES;
@@ -4055,7 +4054,6 @@ function renderFpList(){
   const isAdmin=isLoggedIn() && editMode;
   const q=(document.getElementById('fp-search')?.value||'').trim().toLowerCase();
   const allComments = window._COMMENTS || COMMENTS || [];
-  console.log('[renderFpList] allComments:', allComments.length, 'fpTab:', fpTab, 'isAdmin:', isAdmin);
   let fil=allComments.filter(c=>(!c.hidden||isAdmin)&&(fpTab==='all'||c.page===fpTab));
   if(q) fil=fil.filter(c=>(c.text||'').toLowerCase().includes(q)||(c.name||'').toLowerCase().includes(q));
   // 精選留言置頂
@@ -4150,7 +4148,7 @@ function submitComment(){
         'Content-Type': 'text/plain'
       },
       body: `${name}: ${text.slice(0,100)}${text.length>100?'...':''}`
-    }).then(r=>console.log('[ntfy] status:', r.status)).catch(e=>console.error('[ntfy] error:', e));
+    }).catch(()=>{});
   }).catch(()=>showToast('❌ 送出失敗','err'));
 }
 function react(id,t){const c=COMMENTS.find(x=>x.id===id);if(!c)return;if(!c.myReactions)c.myReactions=[];const i=c.myReactions.indexOf(t);if(i>=0){c.myReactions.splice(i,1);c.reactions[t]--;}else{c.myReactions.push(t);c.reactions[t]++;}window.FB.save('comments',id,c).then(()=>renderFpList());}
