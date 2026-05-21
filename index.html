@@ -1293,7 +1293,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div class="fg-g"><label class="fl">演員 / 表演者</label><input class="fi" type="text" id="s-performer"></div>
     <div class="fg-g"><label class="fl">票價</label><input class="fi" type="text" id="s-price" placeholder="e.g. NT$300 / 免費"></div>
-    <div class="fg-g"><label class="fl">售票平台</label><select class="fs" id="s-platform"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="opentix">OPENTIX</option><option value="google-form">Google 表單</option><option value="other">其他</option></select></div>
+    <div class="fg-g"><label class="fl">售票平台</label><select class="fs" id="s-platform"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="opentix">OPENTIX</option><option value="google-form">Google 表單</option><option value="jokesonme">看我笑話工作室官方網站</option><option value="other">其他</option></select></div>
     <div class="fg-g"><label class="fl">售票連結</label><input class="fi" type="url" id="s-ticketurl" placeholder="https://..."></div>
     <div class="fg-g full">
       <label class="fl">活動圖片網址</label>
@@ -2230,7 +2230,7 @@ function openShowDetail(id) {
       <tr><td>地區</td><td>${getShowAreaLabelById(s.area)||s.area||'—'}</td></tr>
       ${s.performer?`<tr><td>表演者</td><td>${s.performer}</td></tr>`:''}
       ${s.price?`<tr><td>票價</td><td>${s.price}</td></tr>`:''}
-      ${s.platform?`<tr><td>平台</td><td>${(s.platform||'').toUpperCase()}</td></tr>`:''}
+      ${s.platform?`<tr><td>平台</td><td>${({kktix:'KKTIX',accupass:'Accupass',opentix:'OPENTIX','google-form':'Google 表單',jokesonme:getLang()==='en'?'Jokes On Me Studio':'看我笑話工作室官方網站',other:'其他'}[s.platform]||s.platform.toUpperCase())}</td></tr>`:''}
     </table>
     <div style="margin-top:10px">
       <button onclick="copyShareLink()" style="padding:5px 14px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.76rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">分享演出資訊</span><span class="en-text">Share</span></button>
