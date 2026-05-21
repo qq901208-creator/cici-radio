@@ -1748,10 +1748,14 @@ async function loadAllData() {
     const params = new URLSearchParams(qStr);
     const shareShowId = params.get('show');
     const shareCourseId = params.get('course');
+    console.log('[share] hash:', hashStr, 'qStr:', qStr, 'showId:', shareShowId, 'courseId:', shareCourseId);
+    console.log('[share] SHOWS count:', (window._SHOWS||[]).length);
     if(shareShowId && typeof openShowDetail==='function'){
+      console.log('[share] opening show:', shareShowId);
       setTimeout(()=>{ openShowDetail(shareShowId); }, 150);
     }
     if(shareCourseId && typeof openCourseDetail==='function'){
+      console.log('[share] opening course:', shareCourseId);
       setTimeout(()=>{ openCourseDetail(shareCourseId); }, 150);
     }
   }, 200);
