@@ -4153,18 +4153,23 @@ function setLang(l){
 
 function copyShareLink(){
   const url = location.href;
-  navigator.clipboard.writeText(url).then(()=>{
-    showToast(getLang()==='en'?'✅ Link copied!':'✅ 連結已複製','ok');
-  }).catch(()=>{
-    // fallback for older browsers
-    const el = document.createElement('input');
-    el.value = url;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    showToast(getLang()==='en'?'✅ Link copied!':'✅ 連結已複製','ok');
-  });
+  if(navigator.share){
+    // 手機：呼叫系統分享選單
+    navigator.share({ url }).catch(()=>{});
+  } else {
+    // 桌機：複製到剪貼簿
+    navigator.clipboard.writeText(url).then(()=>{
+      showToast(getLang()==='en'?'✅ Link copied!':'✅ 連結已複製','ok');
+    }).catch(()=>{
+      const el=document.createElement('input');
+      el.value=url;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      showToast(getLang()==='en'?'✅ Link copied!':'✅ 連結已複製','ok');
+    });
+  }
 }
 
 function closeModal(id){
