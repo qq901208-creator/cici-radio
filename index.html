@@ -2151,7 +2151,10 @@ function gradientForTypes(types) {
 // ── SHOW CARD — card click opens detail modal, only edit/del buttons trigger edit ──
 function showCardHTML(s) {
   const d = new Date(s.date + 'T00:00');
-  const dow = ['日','一','二','三','四','五','六'][d.getDay()];
+  const lang = getLang();
+  const dowZh = ['日','一','二','三','四','五','六'][d.getDay()];
+  const dowEn = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'][d.getDay()];
+  const dow = lang==='en' ? dowEn : `週${dowZh}`;
   const types = s.types || (s.type ? [s.type] : ['opmic']);
   const typeTags = types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color}">${typeLabel(t)}</span>`;}).join('');
   // Image: show poster if URL available, fallback to emoji
@@ -2174,7 +2177,7 @@ function showCardHTML(s) {
     </div>
     <div class="sc-body">
       <div class="sc-types sc-types-mobile">${typeTags}</div>
-      <div class="sc-date">📅 ${s.date} (週${dow}) ${s.time||''}${soldTag}${expiredTag}</div>
+      <div class="sc-date">📅 ${s.date} (${dow}) ${s.time||''}${soldTag}${expiredTag}</div>
       <div class="sc-title">${s.title}</div>
       <div class="sc-meta">📍 ${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</div>
       ${s.performer?`<div class="sc-meta">🎙 ${s.performer}</div>`:''}
@@ -2207,7 +2210,10 @@ function openShowDetail(id) {
   const types = s.types || (s.type ? [s.type] : []);
   const typeTags = types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color};padding:3px 10px;font-size:.72rem">${typeLabel(t)}</span>`;}).join(' ');
   const d = new Date(s.date+'T00:00');
-  const dow = ['日','一','二','三','四','五','六'][d.getDay()];
+  const lang = getLang();
+  const dowZh2 = ['日','一','二','三','四','五','六'][d.getDay()];
+  const dowEn2 = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'][d.getDay()];
+  const dow = lang==='en' ? dowEn2 : `週${dowZh2}`;
   const imgEl = s.image
     ? `<img src="${s.image}" alt="${s.title}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
     : '';
@@ -2219,7 +2225,7 @@ function openShowDetail(id) {
     <h2 style="font-size:1.25rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:4px">${s.title}</h2>
     ${s.soldOut?`<span style="display:inline-block;font-size:.72rem;font-weight:700;padding:3px 10px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-bottom:10px">售完 Sold Out</span>`:''}
     <table class="sd-table">
-      <tr><td>日期</td><td>${s.date} (週${dow}) ${s.time||''}</td></tr>
+      <tr><td>日期</td><td>${s.date} (${dow}) ${s.time||''}</td></tr>
       <tr><td>場地</td><td>${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</td></tr>
       <tr><td>地區</td><td>${getShowAreaLabelById(s.area)||s.area||'—'}</td></tr>
       ${s.performer?`<tr><td>表演者</td><td>${s.performer}</td></tr>`:''}
