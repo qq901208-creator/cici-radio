@@ -1713,6 +1713,7 @@ async function loadAllData() {
     window._COURSES  = coursesSnap.docs.map(d=>({id:d.id,...d.data()}));
     window._COMMENTS = commentsSnap.docs.map(d=>({id:d.id,...d.data()}))
       .sort((a,b)=>(b.time||0)-(a.time||0));
+    console.log('[debug] COMMENTS loaded:', window._COMMENTS.length);
     if(!window._SHOWS.length)    window._SHOWS    = window.DEFAULT_SHOWS;
     if(!window._MICS.length)     window._MICS     = window.DEFAULT_MICS;
     if(!window._COURSES.length)  window._COURSES  = window.DEFAULT_COURSES;
@@ -1726,25 +1727,25 @@ async function loadAllData() {
     window._COMMENTS = window.DEFAULT_COMMENTS;
   }
   setTimeout(()=>{
-    try {
-    if(typeof window._syncData==='function') window._syncData();
+    if(typeof window._syncData==='function') try{window._syncData();}catch(e){}
     window._dataReady = true;
-    if(typeof renderHeroStats==='function') renderHeroStats();
-    if(typeof renderHomeShows==='function') renderHomeShows();
-    if(typeof renderHomeComments==='function') renderHomeComments();
-    if(typeof renderShows==='function') renderShows();
-    if(typeof renderVenues==='function') renderVenues();
-    if(typeof renderCourses==='function') renderCourses();
-    if(typeof renderAbout==='function') renderAbout();
-    if(typeof renderFpList==='function') renderFpList();
-    if(typeof renderRatBar==='function') renderRatBar();
-    if(typeof selectMicDay==='function'){
+    if(typeof renderHeroStats==='function') try{renderHeroStats();}catch(e){console.error('renderHeroStats:',e);}
+    if(typeof renderHomeShows==='function') try{renderHomeShows();}catch(e){console.error('renderHomeShows:',e);}
+    if(typeof renderHomeComments==='function') try{renderHomeComments();}catch(e){console.error('renderHomeComments:',e);}
+    if(typeof renderShows==='function') try{renderShows();}catch(e){console.error('renderShows:',e);}
+    if(typeof renderVenues==='function') try{renderVenues();}catch(e){console.error('renderVenues:',e);}
+    if(typeof renderCourses==='function') try{renderCourses();}catch(e){console.error('renderCourses:',e);}
+    if(typeof renderAbout==='function') try{renderAbout();}catch(e){console.error('renderAbout:',e);}
+    if(typeof renderFpList==='function') try{renderFpList();}catch(e){console.error('renderFpList:',e);}
+    if(typeof renderRatBar==='function') try{renderRatBar();}catch(e){}
+    if(typeof selectMicDay==='function') try{
       if(typeof initTodayTab==='function') initTodayTab();
       selectMicDay(micDay, document.querySelector(`.day-tab[data-day="${micDay}"]`));
-    }
+    }catch(e){}
     if(typeof updFbBadge==='function') try{ updFbBadge(); }catch(e){}
-    if(typeof updateLastUpdatedDisplay==='function') updateLastUpdatedDisplay();
+    if(typeof updateLastUpdatedDisplay==='function') try{updateLastUpdatedDisplay();}catch(e){}
     // 分享連結：若 URL 帶有 ?show=ID 或 ?course=ID，自動打開對應詳情
+    try{
     const hashStr = location.hash || '';
     const qStr = hashStr.includes('?') ? hashStr.split('?')[1] : location.search.replace('?','');
     const params = new URLSearchParams(qStr);
@@ -1766,7 +1767,7 @@ async function loadAllData() {
       };
       setTimeout(()=>tryOpenCourse(10), 200);
     }
-    } catch(e){ console.error('Firebase callback error:', e); }
+    }catch(e){}
   }, 200);
 }
 window._loadAllData = loadAllData;
