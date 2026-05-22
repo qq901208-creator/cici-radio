@@ -1606,8 +1606,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <input id="sc-poster-url" type="text" placeholder="貼入海報圖片網址…" style="width:100%;padding:6px 10px;border-radius:var(--r-md);border:1px solid rgba(45,43,31,.15);font-size:.78rem;font-family:var(--f-zh);outline:none;box-sizing:border-box" oninput="updateStoryPoster(this.value)">
     </div>
   </div>
-  <button onclick="downloadStoryCard()" style="width:100%;margin-top:14px;padding:11px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.88rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" id="sc-download-btn">⬇ <span class="zh-text">下載圖片</span><span class="en-text">Save Image</span></button>
-  <p style="font-size:.7rem;color:var(--ts);font-family:var(--f-zh);margin-top:8px;text-align:center;opacity:.7"><span class="zh-text">儲存後貼到 IG 限動即可</span><span class="en-text">Save then post to IG Stories</span></p>
+  <button onclick="downloadStoryCard()" style="width:100%;margin-top:14px;padding:11px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.88rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" id="sc-download-btn">⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span></button>
+  <div id="sc-img-result" style="display:none;margin-top:14px"></div>
+  <p style="font-size:.7rem;color:var(--ts);font-family:var(--f-zh);margin-top:8px;text-align:center;opacity:.7"><span class="zh-text">生成後長按圖片儲存到相片，再貼到 IG 限動</span><span class="en-text">Long-press the image to save, then post to IG Stories</span></p>
 </div></div>
 
 <!-- Venue Detail Modal -->
@@ -4352,7 +4353,6 @@ function downloadStoryCard(){
   const origText = btn.innerHTML;
   btn.innerHTML = '⏳ 生成中…';
   btn.disabled = true;
-  // 動態載入 html2canvas
   if(!window.html2canvas){
     const s = document.createElement('script');
     s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
@@ -4365,13 +4365,19 @@ function downloadStoryCard(){
 }
 function runHtml2Canvas(el, btn, origText){
   window.html2canvas(el, { scale:2, useCORS:true, backgroundColor:'#1a1000' }).then(canvas=>{
-    const link = document.createElement('a');
-    link.download = 'ciciradio-story.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    btn.innerHTML = origText;
+    const dataUrl = canvas.toDataURL('image/png');
+    // 顯示圖片讓使用者長按儲存
+    const imgWrap = document.getElementById('sc-img-result');
+    if(imgWrap){
+      imgWrap.innerHTML = `
+        <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);text-align:center;margin-bottom:8px;font-weight:700">📲 長按圖片 → 儲存到相片</p>
+        <img src="${dataUrl}" style="width:100%;border-radius:12px;display:block" alt="story card">
+      `;
+      imgWrap.style.display = 'block';
+      imgWrap.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+    btn.innerHTML = '🔄 重新生成';
     btn.disabled = false;
-    showToast('✅ 圖片已下載','ok');
   }).catch(()=>{
     btn.innerHTML = origText;
     btn.disabled = false;
@@ -4395,12 +4401,16 @@ function openStoryCard(id){
   document.getElementById('sc-time').textContent = s.time||'—';
   document.getElementById('sc-venue').textContent = getShowVenueLabelById(s.venue)||s.venueLabel||s.venue||'—';
   document.getElementById('sc-price').textContent = s.price||'—';
-  // 重置海報
+  // 重置
   document.getElementById('sc-show-poster').checked = false;
   document.getElementById('sc-poster-row').style.display = 'none';
   document.getElementById('sc-poster-area').style.display = 'none';
   document.getElementById('sc-overlay').style.display = 'none';
   document.getElementById('sc-poster-url').value = '';
+  const imgResult = document.getElementById('sc-img-result');
+  if(imgResult){ imgResult.style.display='none'; imgResult.innerHTML=''; }
+  const btn = document.getElementById('sc-download-btn');
+  if(btn) btn.innerHTML = '⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span>';
   // 如果演出有圖片，自動填入但不顯示（讓使用者自己勾選）
   if(s.image) document.getElementById('sc-poster-url').value = s.image;
   document.getElementById('modal-story-card').classList.add('open');
