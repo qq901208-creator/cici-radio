@@ -1363,8 +1363,17 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <button class="modal-close" onclick="closeModal('mic')">✕</button>
   <div class="modal-title" id="modal-mic-title">新增 Open Mic 場次</div>
   <div class="fg">
-    <div class="fg-g"><label class="fl">星期 <span class="req">*</span></label>
-      <select class="fs" id="m-day"><option value="1">週一 Mon.</option><option value="2">週二 Tue.</option><option value="3">週三 Wed.</option><option value="4">週四 Thu.</option><option value="5">週五 Fri.</option><option value="6">週六 Sat.</option><option value="0">週日 Sun.</option><option value="irregular">不定期開放 Irregular</option></select>
+    <div class="fg-g full"><label class="fl">星期 <span class="req">*</span>（可複選）</label>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px" id="m-day-group">
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="1" style="accent-color:var(--or)"> 週一</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="2" style="accent-color:var(--or)"> 週二</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="3" style="accent-color:var(--or)"> 週三</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="4" style="accent-color:var(--or)"> 週四</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="5" style="accent-color:var(--or)"> 週五</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="6" style="accent-color:var(--or)"> 週六</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="0" style="accent-color:var(--or)"> 週日</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="irregular" style="accent-color:var(--or)"> 不定期</label>
+      </div>
     </div>
     <div class="fg-g"><label class="fl">城市 <span class="req">*</span></label>
       <select class="fs" id="m-city">
@@ -2882,8 +2891,9 @@ function renderMicTable() {
   const lang=getLang();
   const isIrregular = micDay === 'irregular';
   const rows=MICS.filter(m=>{
-    if(isIrregular) return m.day === 'irregular';
-    return m.day === micDay;
+    const days = Array.isArray(m.day) ? m.day : [m.day];
+    if(isIrregular) return days.includes('irregular');
+    return days.includes(micDay);
   }).sort((a,b)=>{
     // ① 報名時間由早到晚（轉 24 小時制，無法解析排最後）
     const timeVal = str => {
@@ -3346,6 +3356,8 @@ function openMicModal(id){
   ['m-venue','m-venue-en','m-name','m-showtime-h','m-showtime-end-h','m-signuptime-h','m-checkintime-h','m-method','m-timelimit','m-signupfee','m-notes'].forEach(k=>{
     const el=document.getElementById(k); if(el) el.value='';
   });
+  // 重設星期 checkbox
+  document.querySelectorAll('#m-day-group input[type=checkbox]').forEach(cb=>cb.checked=false);
   const showDayEl = document.getElementById('m-showday');
   if(showDayEl) showDayEl.value = '';
   // 重設 ampm 預設值
@@ -3353,7 +3365,13 @@ function openMicModal(id){
     const el=document.getElementById(k); if(el) el.value='下午';
   });
   if(m){
-    document.getElementById('m-day').value = m.day !== undefined ? String(m.day) : '1';
+    // 還原星期複選
+  document.querySelectorAll('#m-day-group input[type=checkbox]').forEach(cb=>cb.checked=false);
+  const days = Array.isArray(m.day) ? m.day : (m.day !== undefined ? [m.day] : [1]);
+  days.forEach(d=>{
+    const cb = document.querySelector(`#m-day-group input[value="${d}"]`);
+    if(cb) cb.checked=true;
+  });
     document.getElementById('m-city').value=m.city||'taipei';
     document.getElementById('m-name').value=m.name||'';
     document.getElementById('m-venue').value=m.venue||'';
@@ -3392,9 +3410,11 @@ function saveMic(){
   const signupTime = buildMicTime('m-signuptime-ampm','m-signuptime-h');
   const checkinTime= buildMicTime('m-checkintime-ampm','m-checkintime-h');
   const showDayVal = document.getElementById('m-showday')?.value;
-  const dayVal = document.getElementById('m-day').value;
+  const dayChecked = [...document.querySelectorAll('#m-day-group input[type=checkbox]:checked')].map(cb=>cb.value==='irregular'?'irregular':parseInt(cb.value));
+  if(!dayChecked.length){showToast('請至少選擇一個星期','err');return;}
+  const dayVal = dayChecked.length===1 ? dayChecked[0] : dayChecked;
   const item={
-    day: dayVal === 'irregular' ? 'irregular' : parseInt(dayVal),
+    day: dayVal,
     city:document.getElementById('m-city').value,
     name:document.getElementById('m-name').value.trim(),
     venue,
