@@ -900,6 +900,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="venue" data-v="laughhouse"><span class="zh-text">來福好事 - 群島藝術園區</span><span class="en-text">Laugh House - Archipelago Arts</span></button>
         <button class="chip" data-f="venue" data-v="tainan"><span class="zh-text">府城喜劇 - SASADRA cafe</span><span class="en-text">Tainan Comedy</span></button>
         <button class="chip" data-f="venue" data-v="takao"><span class="zh-text">喜劇開港</span><span class="en-text">Takao Comedy Bay</span></button>
+        <button class="chip" data-f="venue" data-v="ponwo"><span class="zh-text">月半窩</span><span class="en-text">Ponwo Cafe</span></button>
         <button class="chip" data-f="venue" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
         </div>
       </div>
@@ -1281,6 +1282,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <option value="laughhouse">來福好事 Laugh House</option>
         <option value="tainan">府城喜劇</option>
         <option value="takao">喜劇開港 Takaocomedybay</option>
+        <option value="ponwo">月半窩 Ponwo Cafe</option>
         <option value="other">其他 Others</option>
       </select>
     </div>
@@ -2187,9 +2189,10 @@ const VENUE_GROUPS = {
   'laughhouse':  ['來福好事', 'laugh house', 'laughhouse', '群島'],
   'tainan':      ['府城喜劇', 'tainan comedy', 'sasadra'],
   'takao':       ['喜劇開港', 'takao comedy', '鸚鵡螺'],
+  'ponwo':       ['月半窩', 'ponwo', 'ponwo cafe'],
 };
 // 「其他」篩選時要排除的已知場地 ID
-const KNOWN_VENUE_IDS = ['comedy-plus','two-three','fakers','beitou','ginting','windcity','smo','laughhouse','tainan','takao'];
+const KNOWN_VENUE_IDS = ['comedy-plus','two-three','fakers','beitou','ginting','windcity','smo','laughhouse','tainan','takao','ponwo'];
 
 function venueMatchesFilter(s, fVenue) {
   if (fVenue === 'all') return true;
@@ -3690,6 +3693,7 @@ const DEFAULT_SHOW_VENUES = [
   {id:'laughhouse',  labelZh:'來福好事 - 群島藝術園區',               labelEn:'Laugh House - Islands Art Park'},
   {id:'tainan',      labelZh:'府城喜劇 - SASADRA cafe',               labelEn:'Tainan Comedy - SASADRA cafe'},
   {id:'takao',       labelZh:'喜劇開港',                               labelEn:'Takao Comedy Bay'},
+  {id:'ponwo',       labelZh:'月半窩',                                 labelEn:'Ponwo Cafe'},
   {id:'other',       labelZh:'其他',                                   labelEn:'Others'},
 ];
 const DEFAULT_SHOW_AREAS = [
