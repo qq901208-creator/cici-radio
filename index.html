@@ -4364,7 +4364,7 @@ function downloadStoryCard(){
   }
 }
 function runHtml2Canvas(el, btn, origText){
-  window.html2canvas(el, { scale:2, useCORS:true, backgroundColor:'#1a1000' }).then(canvas=>{
+  window.html2canvas(el, { scale:3, useCORS:true, backgroundColor:'#1a1000' }).then(canvas=>{
     const dataUrl = canvas.toDataURL('image/png');
     // 顯示圖片讓使用者長按儲存
     const imgWrap = document.getElementById('sc-img-result');
