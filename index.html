@@ -1575,7 +1575,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <div class="modal-ov" id="modal-story-card"><div class="modal" style="max-width:360px">
   <button class="modal-close" onclick="closeModal('story-card')">✕</button>
   <div class="modal-title" style="font-size:.95rem"><span class="zh-text">📱 生成限動圖</span><span class="en-text">Story Card</span></div>
-  <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:14px;line-height:1.6"><span class="zh-text">長按下方圖卡儲存到手機，貼到 IG 限動。</span><span class="en-text">Long-press to save, then share to IG Stories.</span></p>
+  <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:14px;line-height:1.6"><span class="zh-text">點「下載圖片」儲存到手機，再貼到 IG 限動。</span><span class="en-text">Tap "Save Image" then share to IG Stories.</span></p>
   <div id="story-card-preview" style="width:100%;border-radius:12px;background:#1a1000;overflow:hidden;border:1px solid #333;position:relative">
     <div id="sc-poster-area" style="display:none"><img id="sc-poster-img" style="width:100%;height:140px;object-fit:cover;display:block;opacity:0.85" src="" alt=""></div>
     <div id="sc-overlay" style="display:none;height:30px;background:linear-gradient(to bottom,transparent,#1a1000);margin-top:-30px;position:relative"></div>
@@ -1606,7 +1606,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <input id="sc-poster-url" type="text" placeholder="貼入海報圖片網址…" style="width:100%;padding:6px 10px;border-radius:var(--r-md);border:1px solid rgba(45,43,31,.15);font-size:.78rem;font-family:var(--f-zh);outline:none;box-sizing:border-box" oninput="updateStoryPoster(this.value)">
     </div>
   </div>
-  <p style="font-size:.7rem;color:var(--ts);font-family:var(--f-zh);margin-top:10px;text-align:center;opacity:.7"><span class="zh-text">長按圖卡 → 儲存圖片 → 貼到 IG 限動</span><span class="en-text">Long-press → Save → Post to IG Stories</span></p>
+  <button onclick="downloadStoryCard()" style="width:100%;margin-top:14px;padding:11px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.88rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" id="sc-download-btn">⬇ <span class="zh-text">下載圖片</span><span class="en-text">Save Image</span></button>
+  <p style="font-size:.7rem;color:var(--ts);font-family:var(--f-zh);margin-top:8px;text-align:center;opacity:.7"><span class="zh-text">儲存後貼到 IG 限動即可</span><span class="en-text">Save then post to IG Stories</span></p>
 </div></div>
 
 <!-- Venue Detail Modal -->
@@ -4342,6 +4343,40 @@ function setLang(l){
   if(cur==='courses')renderCourses();
   if(cur==='opmic' && window._dataReady) renderMicTable();
   if(window._dataReady) updateLastUpdatedDisplay();
+}
+
+function downloadStoryCard(){
+  const btn = document.getElementById('sc-download-btn');
+  const el = document.getElementById('story-card-preview');
+  if(!el) return;
+  const origText = btn.innerHTML;
+  btn.innerHTML = '⏳ 生成中…';
+  btn.disabled = true;
+  // 動態載入 html2canvas
+  if(!window.html2canvas){
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    s.onload = () => runHtml2Canvas(el, btn, origText);
+    s.onerror = () => { btn.innerHTML = origText; btn.disabled = false; showToast('❌ 載入失敗，請重試','err'); };
+    document.head.appendChild(s);
+  } else {
+    runHtml2Canvas(el, btn, origText);
+  }
+}
+function runHtml2Canvas(el, btn, origText){
+  window.html2canvas(el, { scale:2, useCORS:true, backgroundColor:'#1a1000' }).then(canvas=>{
+    const link = document.createElement('a');
+    link.download = 'ciciradio-story.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    btn.innerHTML = origText;
+    btn.disabled = false;
+    showToast('✅ 圖片已下載','ok');
+  }).catch(()=>{
+    btn.innerHTML = origText;
+    btn.disabled = false;
+    showToast('❌ 生成失敗，請重試','err');
+  });
 }
 
 function openStoryCard(id){
