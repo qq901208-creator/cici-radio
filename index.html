@@ -1391,18 +1391,17 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g full"><label class="fl">場地名稱（中文）<span class="req">*</span></label><input class="fi" type="text" id="m-venue" placeholder="e.g. 卡米地+"></div>
     <div class="fg-g full"><label class="fl">Venue Name (EN)</label><input class="fi" type="text" id="m-venue-en" placeholder="e.g. Comedy Plus"></div>
     <div class="fg-g full">
-      <label class="fl">演出星期／時間</label>
+      <label class="fl">演出星期／時間（可複選）</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px" id="m-showday-group">
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="1" style="accent-color:var(--or)"> 週一</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="2" style="accent-color:var(--or)"> 週二</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="3" style="accent-color:var(--or)"> 週三</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="4" style="accent-color:var(--or)"> 週四</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="5" style="accent-color:var(--or)"> 週五</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="6" style="accent-color:var(--or)"> 週六</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="0" style="accent-color:var(--or)"> 週日</label>
+      </div>
       <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
-        <select class="fs" id="m-showday" style="width:100px">
-          <option value="">（不指定）</option>
-          <option value="1">週一 Mon.</option>
-          <option value="2">週二 Tue.</option>
-          <option value="3">週三 Wed.</option>
-          <option value="4">週四 Thu.</option>
-          <option value="5">週五 Fri.</option>
-          <option value="6">週六 Sat.</option>
-          <option value="0">週日 Sun.</option>
-        </select>
         <select class="fs" id="m-showtime-ampm" style="width:82px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
         <input class="fi" type="text" id="m-showtime-h" placeholder="9:30" style="width:90px">
         <span style="color:var(--ts);font-size:.82rem">至</span>
@@ -2939,8 +2938,8 @@ function renderMicTable() {
     const venueDisplay = lang==='en' ? getMicVenueEn(m) : getMicVenueZh(m);
     const cityLbl = lang==='en' ? cityLblEn : cityLblZh;
     const methodHtml = sanitizeMicMethod(m.method||'');
-    const showDayLabel = m.showDay !== null && m.showDay !== undefined
-      ? (lang==='en' ? DAY_EN[m.showDay] : DAY_ZH[m.showDay]) : '';
+    const showDays = Array.isArray(m.showDay) ? m.showDay : (m.showDay !== null && m.showDay !== undefined ? [m.showDay] : []);
+    const showDayLabel = showDays.length ? showDays.map(d=>lang==='en'?DAY_EN[d]:DAY_ZH[d]).join('、') : '';
     const showTimeDisplay = [showDayLabel, cleanMicTime(m.showTime||'', lang)].filter(Boolean).join(' ');
     const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'', lang);
     const checkinDisplay = cleanMicTime(m.checkinTime||'', lang);
@@ -3031,8 +3030,8 @@ function renderMicCards(rows, isAdmin, lang, isIrregular) {
     const venueDisplay = lang==='en' ? getMicVenueEn(m) : getMicVenueZh(m);
     const cityLbl = lang==='en' ? (CITY_EN[m.city||'other']||'') : (CITY_ZH[m.city||'other']||'');
     const methodHtml = sanitizeMicMethod(m.method||'');
-    const showDayLabel = (m.showDay !== null && m.showDay !== undefined)
-      ? (lang==='en' ? DAY_EN[m.showDay] : DAY_ZH[m.showDay]) : '';
+    const showDays2 = Array.isArray(m.showDay) ? m.showDay : (m.showDay !== null && m.showDay !== undefined ? [m.showDay] : []);
+    const showDayLabel = showDays2.length ? showDays2.map(d=>lang==='en'?DAY_EN[d]:DAY_ZH[d]).join('、') : '';
     const showTimeDisplay = [showDayLabel, cleanMicTime(m.showTime||'', lang)].filter(Boolean).join(' ');
     const signupDisplay = cleanMicTime(m.signupTime||m.signupDeadline||'', lang);
     const checkinDisplay = cleanMicTime(m.checkinTime||'', lang);
@@ -3358,6 +3357,8 @@ function openMicModal(id){
   });
   // 重設星期 checkbox
   document.querySelectorAll('#m-day-group input[type=checkbox]').forEach(cb=>cb.checked=false);
+  // 重設演出星期 checkbox
+  document.querySelectorAll('#m-showday-group input[type=checkbox]').forEach(cb=>cb.checked=false);
   const showDayEl = document.getElementById('m-showday');
   if(showDayEl) showDayEl.value = '';
   // 重設 ampm 預設值
@@ -3365,8 +3366,14 @@ function openMicModal(id){
     const el=document.getElementById(k); if(el) el.value='下午';
   });
   if(m){
-    // 還原星期複選
-  document.querySelectorAll('#m-day-group input[type=checkbox]').forEach(cb=>cb.checked=false);
+    // 還原演出星期複選
+  if(m){
+    const showDays = Array.isArray(m.showDay) ? m.showDay : (m.showDay !== null && m.showDay !== undefined ? [m.showDay] : []);
+    showDays.forEach(d=>{
+      const cb = document.querySelector(`#m-showday-group input[value="${d}"]`);
+      if(cb) cb.checked = true;
+    });
+  }
   const days = Array.isArray(m.day) ? m.day : (m.day !== undefined ? [m.day] : [1]);
   days.forEach(d=>{
     const cb = document.querySelector(`#m-day-group input[value="${d}"]`);
@@ -3409,7 +3416,8 @@ function saveMic(){
   const showTime   = buildMicTimeRange('m-showtime-ampm','m-showtime-h','m-showtime-end-ampm','m-showtime-end-h');
   const signupTime = buildMicTime('m-signuptime-ampm','m-signuptime-h');
   const checkinTime= buildMicTime('m-checkintime-ampm','m-checkintime-h');
-  const showDayVal = document.getElementById('m-showday')?.value;
+  const showDayChecked = [...document.querySelectorAll('#m-showday-group input[type=checkbox]:checked')].map(cb=>parseInt(cb.value));
+  const showDayVal = showDayChecked.length === 0 ? null : showDayChecked.length === 1 ? showDayChecked[0] : showDayChecked;
   const dayChecked = [...document.querySelectorAll('#m-day-group input[type=checkbox]:checked')].map(cb=>cb.value==='irregular'?'irregular':parseInt(cb.value));
   if(!dayChecked.length){showToast('請至少選擇一個星期','err');return;}
   const dayVal = dayChecked.length===1 ? dayChecked[0] : dayChecked;
@@ -3419,7 +3427,7 @@ function saveMic(){
     name:document.getElementById('m-name').value.trim(),
     venue,
     venueEn:document.getElementById('m-venue-en').value.trim(),
-    showDay: showDayVal !== '' && showDayVal !== undefined ? parseInt(showDayVal) : null,
+    showDay: showDayVal,
     showTime,
     signupTime,
     signupDeadline: signupTime, // 向下相容
