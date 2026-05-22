@@ -1188,10 +1188,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="color:var(--ts);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
           <input id="fp-search" type="text" placeholder="搜尋演員、場地、演出… / Search…" maxlength="40"
             style="border:none;background:transparent;font-size:.78rem;font-family:var(--f-zh);color:var(--tm);outline:none;width:180px;min-width:0"
-            oninput="renderFpList()">
+            oninput="window._fpPage=1;renderFpList()">
         </div>
       </div>
       <div class="fp-list" id="fpList"></div>
+      <div id="fp-pagination"></div>
     </div>
   </section>
 </div>
@@ -4114,7 +4115,7 @@ let fpTab='all',selRating=0,fbOpen=false;
 function toggleFeedback(){showPage('board');}
 function openFeedback(){showPage('board');}
 function closeFeedback(){}
-function switchFpTab(t,el){fpTab=t;document.querySelectorAll('.fp-tab').forEach(x=>x.classList.remove('on'));el.classList.add('on');renderFpList();renderRatBar();}
+function switchFpTab(t,el){fpTab=t;window._fpPage=1;document.querySelectorAll('.fp-tab').forEach(x=>x.classList.remove('on'));el.classList.add('on');renderFpList();renderRatBar();}
 function renderStars(v){const el=document.getElementById('starBtns');if(!el)return;el.innerHTML=[1,2,3,4,5].map(i=>`<button class="star-btn ${i<=v?'lit':'dim'}" onclick="setStar(${i})">${i<=v?'⭐':'☆'}</button>`).join('');}
 function setStar(n){selRating=n;renderStars(n);}
 function updAv(){const n=document.getElementById('fpNI').value.trim();const i=n?n[0].toUpperCase():'?';document.getElementById('fpAvI').textContent=i;document.getElementById('fpAv').style.background=n?`hsl(${n.charCodeAt(0)*13%360},55%,82%)`:'var(--py)';}
@@ -4130,9 +4131,17 @@ function renderFpList(){
   if(q) fil=fil.filter(c=>(c.text||'').toLowerCase().includes(q)||(c.name||'').toLowerCase().includes(q));
   // 精選留言置頂
   fil.sort((a,b)=>{if(a.pinned&&!b.pinned)return -1;if(!a.pinned&&b.pinned)return 1;return b.time-a.time;});
+
+  // 分頁
+  const isMobile = window.innerWidth <= 768;
+  const perPage = isMobile ? 5 : 10;
+  const totalPages = Math.max(1, Math.ceil(fil.length / perPage));
+  if(window._fpPage === undefined) window._fpPage = 1;
+  if(window._fpPage > totalPages) window._fpPage = totalPages;
+  const paged = fil.slice((window._fpPage-1)*perPage, window._fpPage*perPage);
   document.getElementById('fpCnt').textContent=allComments.filter(c=>!c.hidden).length;
-  if(!fil.length){list.innerHTML=`<div style="text-align:center;padding:36px;color:var(--ts);font-family:var(--f-zh)">${q?`<span class="zh-text">沒有符合「${q}」的留言</span><span class="en-text">No comments matching "${q}"</span>`:'目前沒有留言'}</div>`;return;}
-  list.innerHTML=fil.map(c=>{const pl=PAGE_LBL[c.page]||PAGE_LBL.general;return`<div class="fp-item" ${c.hidden?'style="opacity:.4"':''}>
+  if(!fil.length){list.innerHTML=`<div style="text-align:center;padding:36px;color:var(--ts);font-family:var(--f-zh)">${q?`<span class="zh-text">沒有符合「${q}」的留言</span><span class="en-text">No comments matching "${q}"</span>`:'目前沒有留言'}</div>`;const pp=document.getElementById('fp-pagination');if(pp)pp.innerHTML='';return;}
+  list.innerHTML=paged.map(c=>{const pl=PAGE_LBL[c.page]||PAGE_LBL.general;return`<div class="fp-item" ${c.hidden?'style="opacity:.4"':''}>
     <div class="fp-ih"><div class="fp-iav" style="background:hsl(${c.avatar.charCodeAt(0)*13%360},55%,82%)">${c.avatar}</div><div class="fp-im"><div class="fp-in">${c.name} ${c.rating?'⭐'.repeat(c.rating):''}</div><div class="fp-it">${relTime(c.time)}</div></div>
     <span class="fp-pt" style="background:${pl.c};color:${pl.tc}">${pl.zh}</span>${c.pinned?`<span class="fp-pin">📌 精選</span>`:''}
     </div>
@@ -4146,6 +4155,18 @@ function renderFpList(){
     ${isAdmin?`<div class="fp-admin-btns"><button class="fp-ab fp-pin-btn" onclick="pinC('${c.id}')">${c.pinned?'取消精選':'📌 精選'}</button><button class="fp-ab fp-del-btn" onclick="delC('${c.id}')">刪除</button><button class="fp-ab fp-hide-btn" onclick="hideC('${c.id}')">${c.hidden?'顯示':'隱藏'}</button></div>
     <div class="fp-ra"><input class="fp-ri" id="ri-${c.id}" placeholder="官方回覆…" value="${(c.reply||'').replace(/"/g,'&quot;')}" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendReply('${c.id}')}"><button class="fp-rs" onclick="sendReply('${c.id}')">${c.reply?'更新回覆':'回覆'}</button>${c.reply?`<button class="fp-ab fp-del-btn" style="margin-left:4px" onclick="delReply('${c.id}')">刪除回覆</button>`:''}</div>`:''}
   </div>`;}).join('');
+  // 分頁控制
+  const pp = document.getElementById('fp-pagination');
+  if(pp){
+    if(totalPages <= 1){ pp.innerHTML=''; }
+    else {
+      const btns = [];
+      for(let i=1;i<=totalPages;i++){
+        btns.push(`<button onclick="window._fpPage=${i};renderFpList()" style="padding:5px 12px;border-radius:var(--r-pill);border:1.5px solid ${i===window._fpPage?'var(--or)':'rgba(45,43,31,.2)'};background:${i===window._fpPage?'var(--or)':'transparent'};color:${i===window._fpPage?'#fff':'var(--ts)'};font-size:.8rem;cursor:pointer;font-family:var(--f-bo)">${i}</button>`);
+      }
+      pp.innerHTML=`<div style="display:flex;justify-content:center;gap:6px;padding:16px 0;flex-wrap:wrap">${btns.join('')}</div>`;
+    }
+  }
 }
 const CAPTCHA_ANSWERS = ['嘻嘻哪哩唷','嘻嘻哪裡唷','嘻嘻哪裡喲','嘻嘻哪哩喲','嘻嘻哪哩呦','嘻嘻哪裡呦','Cici Radio','cici radio','ciciradio','CICIRADIO','CICI RADIO'];
 function checkCaptcha(){
