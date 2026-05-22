@@ -1673,6 +1673,9 @@ import {
   getDocs, getDoc, addDoc, setDoc, deleteDoc, updateDoc,
   query, orderBy, onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import {
+  getAuth, signInWithCredential, GoogleAuthProvider, signOut
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDXW1OHmAAc8v2nbrhHYNPqmoCsUsc3RHw",
@@ -1686,6 +1689,11 @@ const firebaseConfig = {
 
 const _app = initializeApp(firebaseConfig);
 const db = getFirestore(_app);
+const _auth = getAuth(_app);
+window._fbAuth = _auth;
+window._fbGoogleCred = (token) => GoogleAuthProvider.credential(token);
+window._fbSignIn = (cred) => signInWithCredential(_auth, cred);
+window._fbSignOut = () => signOut(_auth);
 
 // ── Expose DB helpers globally ──
 window._db = db;
@@ -3985,6 +3993,11 @@ function _handleGoogleCredential(response) {
     const payload = JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
     const email = (payload.email || '').toLowerCase().trim();
     if (email === AUTH_EMAIL) {
+      // 同時用 Firebase Auth 登入，讓 Security Rules 可以驗證
+      if(window._fbGoogleCred && window._fbSignIn){
+        const cred = window._fbGoogleCred(response.credential);
+        window._fbSignIn(cred).catch(e=>console.warn('Firebase Auth:', e));
+      }
       sessionStorage.setItem(SESSION_KEY, 'ok');
       closeAuth();
       unlockAdmin();
@@ -4005,6 +4018,7 @@ function unlockAdmin() {
 
 window.ciciLogout = function() {
   sessionStorage.removeItem(SESSION_KEY);
+  if(window._fbSignOut) window._fbSignOut().catch(()=>{});
   if (editMode) toggleEdit();
   const badge = document.getElementById('sessionBadge');
   if (badge) badge.classList.remove('visible');
