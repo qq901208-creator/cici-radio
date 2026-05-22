@@ -2333,8 +2333,8 @@ window.addEventListener('resize', () => {
   _resizeTimer = setTimeout(() => {
     const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
     if(activePage === 'home' && typeof renderHomeShows === 'function') renderHomeShows();
-    if(activePage === 'shows') { showsPage = 1; renderShows(); }
-    if(activePage === 'courses') { coursesPage = 1; renderCourses(); }
+    if(activePage === 'shows' && typeof renderShows === 'function') renderShows();
+    if(activePage === 'courses' && typeof renderCourses === 'function') renderCourses();
   }, 120);
 });
 
