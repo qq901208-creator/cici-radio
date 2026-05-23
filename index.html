@@ -1320,8 +1320,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div class="fg-g"><label class="fl">演員 / 表演者</label><input class="fi" type="text" id="s-performer"></div>
     <div class="fg-g"><label class="fl">票價</label><input class="fi" type="text" id="s-price" placeholder="e.g. NT$300 / 免費"></div>
-    <div class="fg-g"><label class="fl">售票平台</label><select class="fs" id="s-platform"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="opentix">OPENTIX</option><option value="google-form">Google 表單</option><option value="jokesonme">看我笑話工作室官方網站</option><option value="other">其他</option></select></div>
-    <div class="fg-g"><label class="fl">售票連結</label><input class="fi" type="url" id="s-ticketurl" placeholder="https://..."></div>
+    <div class="fg-g"><label class="fl">售票平台</label><select class="fs" id="s-platform" onchange="toggleTicketUrl(this.value)"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="opentix">OPENTIX</option><option value="google-form">Google 表單</option><option value="jokesonme">看我笑話工作室官方網站</option><option value="door">現場低消</option><option value="other">其他</option></select></div>
+    <div class="fg-g" id="s-ticket-url-row"><label class="fl">售票連結</label><input class="fi" type="url" id="s-ticketurl" placeholder="https://..."></div>
     <div class="fg-g full">
       <label class="fl">活動圖片網址</label>
       <div style="display:flex;align-items:center;gap:0;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-md);overflow:hidden;background:#fff;margin-bottom:6px">
@@ -2257,7 +2257,9 @@ function showCardHTML(s) {
           ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">馬上購票</span><span class="en-text">Buy Tickets</span></a>`
           : s.soldOut
             ? `<span style="font-size:.74rem;color:#8b1a1a;font-family:var(--f-zh)">已售完</span>`
-            : `<span></span>`
+            : s.platform==='door'
+              ? `<span style="font-size:.74rem;color:var(--or);font-family:var(--f-zh);font-weight:600"><span class="zh-text">現場付費</span><span class="en-text">Door Charge</span></span>`
+              : `<span></span>`
         }
         <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);display:flex;align-items:center;gap:3px;opacity:.7"><span class="zh-text">詳情</span><span class="en-text">Details</span> ↗</span>
       </div>
@@ -2300,7 +2302,7 @@ function openShowDetail(id) {
       <tr><td>地區</td><td>${getShowAreaLabelById(s.area)||s.area||'—'}</td></tr>
       ${s.performer?`<tr><td>表演者</td><td>${s.performer}</td></tr>`:''}
       ${s.price?`<tr><td>票價</td><td>${s.price}</td></tr>`:''}
-      ${s.platform?`<tr><td>平台</td><td>${({kktix:'KKTIX',accupass:'Accupass',opentix:'OPENTIX','google-form':'Google 表單',jokesonme:getLang()==='en'?'Jokes On Me Studio':'看我笑話工作室官方網站',other:'其他'}[s.platform]||s.platform.toUpperCase())}</td></tr>`:''}
+      ${s.platform?`<tr><td>平台</td><td>${({kktix:'KKTIX',accupass:'Accupass',opentix:'OPENTIX','google-form':'Google 表單',jokesonme:getLang()==='en'?'Jokes On Me Studio':'看我笑話工作室官方網站',door:getLang()==='en'?'Door Charge':'現場低消',other:'其他'}[s.platform]||s.platform.toUpperCase())}</td></tr>`:''}
     </table>
     <div style="margin-top:10px">
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
@@ -3247,6 +3249,7 @@ function openShowModal(id){
     document.getElementById('s-performer').value=s.performer||'';
     document.getElementById('s-price').value=s.price||'';
     document.getElementById('s-platform').value=s.platform||'kktix';
+    if(typeof toggleTicketUrl==='function') toggleTicketUrl(s.platform||'kktix');
     document.getElementById('s-ticketurl').value=s.ticketUrl||'';
     document.getElementById('s-image').value=s.image||'';
     // 從完整 URL 擷取 ID 填入輸入框
@@ -3634,6 +3637,7 @@ function copyShow(id){
   document.getElementById('s-venue').value = s.venue||'';
   document.getElementById('s-area').value = s.area||'';
   document.getElementById('s-platform').value = s.platform||'kktix';
+  if(typeof toggleTicketUrl==='function') toggleTicketUrl(s.platform||'kktix');
   document.getElementById('s-status').value = 'pending';
   // 類型 checkbox
   const types = s.types||(s.type?[s.type]:[]);
@@ -4451,6 +4455,11 @@ function updateStoryPoster(url){
     document.getElementById('sc-poster-area').style.display = 'block';
     document.getElementById('sc-overlay').style.display = 'block';
   };
+}
+
+function toggleTicketUrl(val){
+  const row = document.getElementById('s-ticket-url-row');
+  if(row) row.style.display = val==='door' ? 'none' : '';
 }
 
 function copyShareLink(){
