@@ -2253,12 +2253,12 @@ function showCardHTML(s) {
       ${s.performer?`<div class="sc-meta">🎙 ${s.performer}</div>`:''}
       ${s.price?`<div class="sc-price">💰 ${s.price}</div>`:''}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">
-        ${(s.ticketUrl&&s.ticketUrl!=='#'&&!s.soldOut)
-          ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">馬上購票</span><span class="en-text">Buy Tickets</span></a>`
-          : s.soldOut
-            ? `<span style="font-size:.74rem;color:#8b1a1a;font-family:var(--f-zh)">已售完</span>`
-            : s.platform==='door'
-              ? `<span style="font-size:.74rem;color:var(--or);font-family:var(--f-zh);font-weight:600"><span class="zh-text">現場付費</span><span class="en-text">Door Charge</span></span>`
+        ${s.soldOut
+          ? `<span style="font-size:.74rem;color:#8b1a1a;font-family:var(--f-zh)">已售完</span>`
+          : s.platform==='door'
+            ? `<span style="font-size:.74rem;color:var(--or);font-family:var(--f-zh);font-weight:600"><span class="zh-text">現場付費</span><span class="en-text">Door Charge</span></span>`
+            : (s.ticketUrl&&s.ticketUrl!=='#')
+              ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">馬上購票</span><span class="en-text">Buy Tickets</span></a>`
               : `<span></span>`
         }
         <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);display:flex;align-items:center;gap:3px;opacity:.7"><span class="zh-text">詳情</span><span class="en-text">Details</span> ↗</span>
