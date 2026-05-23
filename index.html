@@ -1795,7 +1795,7 @@ async function loadAllData() {
     window._COURSES  = window.DEFAULT_COURSES;
     window._COMMENTS = window.DEFAULT_COMMENTS;
   }
-  setTimeout(()=>{
+  const doRender = () => {
     if(typeof window._syncData==='function') try{window._syncData();}catch(e){}
     window._dataReady = true;
     if(typeof renderHeroStats==='function') try{renderHeroStats();}catch(e){console.error('renderHeroStats:',e);}
@@ -1815,29 +1815,35 @@ async function loadAllData() {
     if(typeof updateLastUpdatedDisplay==='function') try{updateLastUpdatedDisplay();}catch(e){}
     // 分享連結：若 URL 帶有 ?show=ID 或 ?course=ID，自動打開對應詳情
     try{
-    const hashStr = location.hash || '';
-    const qStr = hashStr.includes('?') ? hashStr.split('?')[1] : location.search.replace('?','');
-    const params = new URLSearchParams(qStr);
-    const shareShowId = params.get('show');
-    const shareCourseId = params.get('course');
-    if(shareShowId && typeof openShowDetail==='function'){
-      const tryOpenShow = (attempts) => {
-        const found = (window._SHOWS||[]).find(x=>x.id===shareShowId);
-        if(found){ openShowDetail(shareShowId); }
-        else if(attempts > 0){ setTimeout(()=>tryOpenShow(attempts-1), 300); }
-      };
-      setTimeout(()=>tryOpenShow(10), 200);
-    }
-    if(shareCourseId && typeof openCourseDetail==='function'){
-      const tryOpenCourse = (attempts) => {
-        const found = (window._COURSES||[]).find(x=>x.id===shareCourseId);
-        if(found){ openCourseDetail(shareCourseId); }
-        else if(attempts > 0){ setTimeout(()=>tryOpenCourse(attempts-1), 300); }
-      };
-      setTimeout(()=>tryOpenCourse(10), 200);
-    }
+      const hashStr = location.hash || '';
+      const qStr = hashStr.includes('?') ? hashStr.split('?')[1] : location.search.replace('?','');
+      const params = new URLSearchParams(qStr);
+      const shareShowId = params.get('show');
+      const shareCourseId = params.get('course');
+      if(shareShowId && typeof openShowDetail==='function'){
+        const tryOpenShow = (attempts) => {
+          const found = (window._SHOWS||[]).find(x=>x.id===shareShowId);
+          if(found){ openShowDetail(shareShowId); }
+          else if(attempts > 0){ setTimeout(()=>tryOpenShow(attempts-1), 300); }
+        };
+        setTimeout(()=>tryOpenShow(10), 200);
+      }
+      if(shareCourseId && typeof openCourseDetail==='function'){
+        const tryOpenCourse = (attempts) => {
+          const found = (window._COURSES||[]).find(x=>x.id===shareCourseId);
+          if(found){ openCourseDetail(shareCourseId); }
+          else if(attempts > 0){ setTimeout(()=>tryOpenCourse(attempts-1), 300); }
+        };
+        setTimeout(()=>tryOpenCourse(10), 200);
+      }
     }catch(e){}
-  }, 200);
+  };
+  // 等 window.load 確保所有 JS 函數都就緒後才 render，解決手機時序問題
+  if(document.readyState === 'complete'){
+    setTimeout(doRender, 50);
+  } else {
+    window.addEventListener('load', ()=>setTimeout(doRender, 50), {once:true});
+  }
 }
 window._loadAllData = loadAllData;
 
