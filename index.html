@@ -4427,7 +4427,7 @@ function openStoryCard(id){
   document.getElementById('sc-date').textContent = `${s.date}（${dow}）`;
   document.getElementById('sc-time').textContent = s.time||'—';
   document.getElementById('sc-venue').textContent = getShowVenueLabelById(s.venue)||s.venueLabel||s.venue||'—';
-  document.getElementById('sc-price').textContent = s.price||'—';
+  document.getElementById('sc-price').textContent = s.soldOut ? `${s.price||'—'}　已完售` : (s.price||'—');
   // 重置
   document.getElementById('sc-show-poster').checked = false;
   document.getElementById('sc-poster-row').style.display = 'none';
