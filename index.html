@@ -1598,6 +1598,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:36px;padding-top:1px;font-family:var(--f-bo)">日期</span><span id="sc-date" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
       <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:36px;padding-top:1px;font-family:var(--f-bo)">時間</span><span id="sc-time" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
       <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:36px;padding-top:1px;font-family:var(--f-bo)">場地</span><span id="sc-venue" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
+      <div id="sc-performer-row" style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:36px;padding-top:1px;font-family:var(--f-bo)">演者</span><span id="sc-performer" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
       <div style="height:1px;background:rgba(255,255,255,0.08);margin:8px 0"></div>
       <div style="display:flex"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:36px;padding-top:1px;font-family:var(--f-bo)">票價</span><span id="sc-price" style="font-size:11px;font-weight:700;color:#ef6f20;flex:1;font-family:var(--f-zh)"></span></div>
       <div style="border-top:1px solid rgba(255,255,255,0.08);margin-top:10px;padding-top:8px;display:flex;align-items:center;justify-content:space-between">
@@ -4427,6 +4428,10 @@ function openStoryCard(id){
   document.getElementById('sc-date').textContent = `${s.date}（${dow}）`;
   document.getElementById('sc-time').textContent = s.time||'—';
   document.getElementById('sc-venue').textContent = getShowVenueLabelById(s.venue)||s.venueLabel||s.venue||'—';
+  const performerEl = document.getElementById('sc-performer');
+  const performerRow = document.getElementById('sc-performer-row');
+  if(s.performer){ performerEl.textContent=s.performer; performerRow.style.display='flex'; }
+  else { performerRow.style.display='none'; }
   document.getElementById('sc-price').textContent = s.soldOut ? `${s.price||'—'}　已完售` : (s.price||'—');
   // 重置
   document.getElementById('sc-show-poster').checked = false;
