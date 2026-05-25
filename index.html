@@ -942,10 +942,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <h3 style="font-size:1rem;font-weight:700;font-family:var(--f-zh);margin:0">🗄 封存演出列表</h3>
           <input id="archived-search" type="text" placeholder="搜尋名稱或場地…" maxlength="40"
             style="padding:5px 12px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.8rem;font-family:var(--f-zh);outline:none;min-width:180px"
-            oninput="renderArchivedShows()">
+            oninput="window._archivedPage=1;renderArchivedShows()">
           <span id="archived-count" style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo)"></span>
         </div>
         <div id="archived-list" style="display:flex;flex-direction:column;gap:8px"></div>
+        <div id="archived-pagination"></div>
       </div>
     </div>
     <div id="view-cal" style="display:none">
@@ -2284,6 +2285,9 @@ function showCardHTML(s) {
 function openShowDetail(id) {
   const allShows = window._SHOWS || SHOWS || [];
   const s = allShows.find(x=>x.id===id); if (!s) return;
+  // 若在首頁，先切到演出資訊頁再開 Modal
+  const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
+  if(activePage === 'home') showPage('shows');
   // 更新 URL，方便分享
   history.replaceState(null,'', location.hash.split('?')[0] + '?show=' + id);
   const types = s.types || (s.type ? [s.type] : []);
@@ -3011,7 +3015,6 @@ function renderArchivedShows(){
   const list = document.getElementById('archived-list');
   const countEl = document.getElementById('archived-count');
   if(!panel || !list) return;
-  // 只在管理模式顯示
   if(!isLoggedIn() || !editMode){ panel.style.display='none'; return; }
   panel.style.display='block';
   const q = (document.getElementById('archived-search')?.value||'').trim().toLowerCase();
@@ -3024,11 +3027,21 @@ function renderArchivedShows(){
   );
   archived.sort((a,b) => (b.date||'').localeCompare(a.date||''));
   if(countEl) countEl.textContent = `共 ${archived.length} 筆`;
-  if(!archived.length){
+
+  // 分頁（搜尋時顯示全部）
+  const perPage = 20;
+  const isSearching = q.length > 0;
+  const totalPages = isSearching ? 1 : Math.max(1, Math.ceil(archived.length / perPage));
+  if(!window._archivedPage) window._archivedPage = 1;
+  if(window._archivedPage > totalPages) window._archivedPage = totalPages;
+  const paged = isSearching ? archived : archived.slice((window._archivedPage-1)*perPage, window._archivedPage*perPage);
+
+  if(!paged.length){
     list.innerHTML=`<div style="text-align:center;padding:24px;color:var(--ts);font-family:var(--f-zh);font-size:.88rem">目前沒有封存的演出</div>`;
+    const pp=document.getElementById('archived-pagination'); if(pp) pp.innerHTML='';
     return;
   }
-  list.innerHTML = archived.map(s=>`
+  list.innerHTML = paged.map(s=>`
     <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--ww);border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.09);flex-wrap:wrap">
       <div style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo);white-space:nowrap;min-width:90px">${s.date||'—'}</div>
       <div style="font-weight:700;font-family:var(--f-zh);font-size:.88rem;flex:1;min-width:120px">${s.title||'—'}</div>
@@ -3039,6 +3052,19 @@ function renderArchivedShows(){
       <button onclick="openShowModal('${s.id}')" style="padding:4px 12px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;color:var(--ts);font-size:.74rem;font-family:var(--f-zh);cursor:pointer;white-space:nowrap">✏️ 編輯</button>
     </div>
   `).join('');
+
+  // 分頁按鈕
+  const pp = document.getElementById('archived-pagination');
+  if(pp){
+    if(totalPages <= 1 || isSearching){ pp.innerHTML=''; }
+    else{
+      const btns = [];
+      for(let i=1;i<=totalPages;i++){
+        btns.push(`<button onclick="window._archivedPage=${i};renderArchivedShows()" style="padding:4px 10px;border-radius:var(--r-pill);border:1.5px solid ${i===window._archivedPage?'var(--or)':'rgba(45,43,31,.2)'};background:${i===window._archivedPage?'var(--or)':'transparent'};color:${i===window._archivedPage?'#fff':'var(--ts)'};font-size:.76rem;cursor:pointer;font-family:var(--f-bo)">${i}</button>`);
+      }
+      pp.innerHTML=`<div style="display:flex;justify-content:center;gap:5px;padding:12px 0;flex-wrap:wrap">${btns.join('')}</div>`;
+    }
+  }
 }
 function restoreShow(id){
   if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}
