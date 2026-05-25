@@ -2675,12 +2675,14 @@ function renderVenues() {
   const loading=document.getElementById('venues-loading');
   if(loading) loading.style.display='none';
   const venues = window._VENUES || VENUES || [];
-  const fil=venues.filter(v=>fCity==='all'||v.city===fCity);
+  const fil=venues
+    .filter(v=>fCity==='all'||v.city===fCity)
+    .sort((a,b)=>(a._order??999)-(b._order??999));
   g.innerHTML=fil.map(venueCardHTML).join('')+`<div class="venue-card" style="border-style:dashed;align-items:center;justify-content:center;text-align:center;cursor:default;min-height:100px"><div style="color:var(--ts);font-size:.85rem;font-family:var(--f-zh)">期待更多場地陸續加入❤️‍🔥</div></div>`;
   
 
-  // 拖曳排序（僅管理員模式）
-  if(!isLoggedIn()) return;
+  // 拖曳排序（僅管理員編輯模式）
+  if(!isLoggedIn() || !editMode) return;
   let dragId=null;
   g.querySelectorAll('.venue-card[data-id]').forEach(el=>{
     el.setAttribute('draggable','true');
@@ -2703,14 +2705,15 @@ function renderVenues() {
       e.preventDefault();
       el.style.outline='';
       if(!dragId||dragId===el.dataset.id) return;
-      const fromIdx=VENUES.findIndex(v=>v.id===dragId);
+      const allVenues = window._VENUES || VENUES;
+      const fromIdx=allVenues.findIndex(v=>v.id===dragId);
       const toId=el.dataset.id;
-      const toIdx=VENUES.findIndex(v=>v.id===toId);
+      const toIdx=allVenues.findIndex(v=>v.id===toId);
       if(fromIdx<0||toIdx<0) return;
-      const moved=VENUES.splice(fromIdx,1)[0];
-      VENUES.splice(toIdx,0,moved);
+      const moved=allVenues.splice(fromIdx,1)[0];
+      allVenues.splice(toIdx,0,moved);
       // 儲存新順序到 Firebase
-      VENUES.forEach((v,i)=>{ window.FB.save('venues',v.id,{...v,_order:i}); });
+      allVenues.forEach((v,i)=>{ window.FB.save('venues',v.id,{...v,_order:i}); });
       dragId=null;
       renderVenues();
       showToast('✅ 排序已更新','ok');
