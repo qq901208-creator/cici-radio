@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>嘻嘻哪哩唷｜台灣喜劇演出資訊站</title>
-<meta name="description" content="提供全台 Stand-up Comedy、Open Mic、漫才、即興劇與喜劇專場資訊，整理售票演出、Open Mic 報名、喜劇場地與課程講座，陪你找到想看的現場喜劇。| 嘻嘻哪哩唷 Cici Radio">
+<meta name="description" content="嘻嘻哪哩唷｜台灣現場喜劇資訊站。整理全台售票喜劇演出、Open Mic 報名、喜劇場地與課程資訊，Stand-up Comedy、漫才、即興劇應有盡有，陪你找到想看的現場喜劇。">
 <meta name="keywords" content="台灣喜劇,Stand-up Comedy,Open Mic,漫才,即興劇,喜劇演出,售票演出,喜劇課程,喜劇場地,現場喜劇,嘻嘻哪哩唷,Cici Radio">
 <meta name="google-site-verification" content="LbYfjuGxGYZXoOxodtVgERdeGINZwNjqZQVAsH0cGy0" />
 <meta property="og:title" content="嘻嘻哪哩唷｜台灣喜劇演出資訊站" />
@@ -4353,6 +4353,11 @@ function showPage(page, skipHistory){
   if(page==='courses')renderCourses();
   if(page==='about')renderAbout();
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
+  // GA4 虛擬頁面瀏覽追蹤
+  const pageTitles = {home:'首頁',shows:'演出資訊',opmic:'Open Mic',venues:'喜劇場地',courses:'課程講座',about:'關於本站',board:'留言板'};
+  if(typeof gtag==='function'){
+    gtag('event','page_view',{page_title: pageTitles[page]||page, page_location: location.href, page_path: '#'+page});
+  }
 }
 // 瀏覽器上一頁/下一頁
 window.addEventListener('popstate', e=>{
