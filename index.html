@@ -2683,12 +2683,15 @@ function renderVenues() {
 
   // 拖曳排序（僅管理員編輯模式）
   if(!isLoggedIn() || !editMode) return;
-  let dragId=null;
+  let dragEl=null, dragId=null, placeholder=null;
+
   g.querySelectorAll('.venue-card[data-id]').forEach(el=>{
     el.setAttribute('draggable','true');
     el.style.cursor='grab';
+
+    // 桌機 drag events
     el.addEventListener('dragstart',e=>{
-      dragId=el.dataset.id;
+      dragId=el.dataset.id; dragEl=el;
       el.style.opacity='.4';
       e.dataTransfer.effectAllowed='move';
     });
@@ -2707,14 +2710,50 @@ function renderVenues() {
       if(!dragId||dragId===el.dataset.id) return;
       const allVenues = window._VENUES || VENUES;
       const fromIdx=allVenues.findIndex(v=>v.id===dragId);
-      const toId=el.dataset.id;
-      const toIdx=allVenues.findIndex(v=>v.id===toId);
+      const toIdx=allVenues.findIndex(v=>v.id===el.dataset.id);
       if(fromIdx<0||toIdx<0) return;
       const moved=allVenues.splice(fromIdx,1)[0];
       allVenues.splice(toIdx,0,moved);
-      // 儲存新順序到 Firebase
       allVenues.forEach((v,i)=>{ window.FB.save('venues',v.id,{...v,_order:i}); });
-      dragId=null;
+      dragId=null; dragEl=null;
+      renderVenues();
+      showToast('✅ 排序已更新','ok');
+    });
+
+    // 手機 touch events
+    el.addEventListener('touchstart',e=>{
+      dragId=el.dataset.id; dragEl=el;
+      el.style.opacity='.5';
+      el.style.outline='2px solid var(--or)';
+    },{passive:true});
+
+    el.addEventListener('touchmove',e=>{
+      e.preventDefault();
+      const touch=e.touches[0];
+      const target=document.elementFromPoint(touch.clientX,touch.clientY);
+      const targetCard=target?.closest('.venue-card[data-id]');
+      g.querySelectorAll('.venue-card').forEach(x=>x.style.background='');
+      if(targetCard && targetCard!==dragEl){
+        targetCard.style.background='rgba(239,111,32,.1)';
+      }
+    },{passive:false});
+
+    el.addEventListener('touchend',e=>{
+      el.style.opacity='';
+      el.style.outline='';
+      g.querySelectorAll('.venue-card').forEach(x=>x.style.background='');
+      const touch=e.changedTouches[0];
+      const target=document.elementFromPoint(touch.clientX,touch.clientY);
+      const targetCard=target?.closest('.venue-card[data-id]');
+      if(!targetCard||!dragId||targetCard.dataset.id===dragId){dragId=null;dragEl=null;return;}
+      const allVenues = window._VENUES || VENUES;
+      const fromIdx=allVenues.findIndex(v=>v.id===dragId);
+      const toIdx=allVenues.findIndex(v=>v.id===targetCard.dataset.id);
+      if(fromIdx<0||toIdx<0){dragId=null;dragEl=null;return;}
+      const moved=allVenues.splice(fromIdx,1)[0];
+      allVenues.splice(toIdx,0,moved);
+      allVenues.forEach((v,i)=>{ window.FB.save('venues',v.id,{...v,_order:i}); });
+      dragId=null; dragEl=null;
       renderVenues();
       showToast('✅ 排序已更新','ok');
     });
@@ -3236,6 +3275,7 @@ function toggleEdit(){
   renderMicTable();
   if(typeof renderFpList==='function') renderFpList();
   if(typeof renderArchivedShows==='function') renderArchivedShows();
+  if(typeof renderVenues==='function') renderVenues();
   showToast(editMode?'✏️ 編輯模式已啟用':'✅ 編輯模式已關閉',editMode?'':'ok');
 }
 
