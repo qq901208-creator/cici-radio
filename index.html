@@ -4398,8 +4398,10 @@ function showPage(page, skipHistory){
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
   // GA4 虛擬頁面瀏覽追蹤
   const pageTitles = {home:'首頁',shows:'演出資訊',opmic:'Open Mic',venues:'喜劇場地',courses:'課程講座',about:'關於本站',board:'留言板'};
+  const pageTitle = (pageTitles[page]||page) + ' | 嘻嘻哪哩唷';
+  document.title = pageTitle;
   if(typeof gtag==='function'){
-    gtag('event','page_view',{page_title: pageTitles[page]||page, page_location: location.href, page_path: '#'+page});
+    gtag('config','G-N8SY933TK6',{page_title: pageTitle, page_location: location.href});
   }
 }
 // 瀏覽器上一頁/下一頁
