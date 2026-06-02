@@ -595,7 +595,9 @@ body.edit .edit-bar{display:flex!important}
 .vm-add-btn:hover{background:#d45c10}
 @media(max-width:540px){
   .vm-item{grid-template-columns:18px 1fr auto!important}
-  .vm-item .vm-label-en{display:none}
+  .vm-item .vm-label-en{display:none!important;width:0!important;padding:0!important;margin:0!important;overflow:hidden}
+  .vm-input-row{grid-template-columns:1fr!important}
+  .vm-header-en{display:none!important}
 }
 .vm-tabs{display:flex;gap:6px;margin-bottom:14px}
 .vm-tab{padding:6px 16px;border-radius:var(--r-pill);font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
@@ -1097,11 +1099,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <button class="vm-tab" onclick="switchVmTab('area',this)">地區</button>
   </div>
   <div id="vm-venue-panel">
-    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:4px;padding:5px 0 7px;font-size:.7rem;font-weight:700;color:var(--ts);font-family:var(--f-bo)"><span>中文名稱</span><span>英文名稱 (EN)</span><span></span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:4px;padding:5px 0 7px;font-size:.7rem;font-weight:700;color:var(--ts);font-family:var(--f-bo)"><span>中文名稱</span><span class="vm-header-en">英文名稱 (EN)</span><span></span></div>
     <div class="vm-list" id="vm-venue-list"></div>
     <div style="margin-top:12px;padding:12px 14px;background:var(--cr);border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.1)">
       <div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">新增場地</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
+      <div class="vm-input-row" style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
         <input class="fi" type="text" id="vm-venue-input-zh" placeholder="場地名稱（中文）*" onkeydown="if(event.key==='Enter'){event.preventDefault();}">
         <input class="fi" type="text" id="vm-venue-input-en" placeholder="Name (EN)" onkeydown="if(event.key==='Enter'){event.preventDefault();}">
       </div>
@@ -1110,11 +1112,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
   </div>
   <div id="vm-area-panel" style="display:none">
-    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:4px;padding:5px 0 7px;font-size:.7rem;font-weight:700;color:var(--ts);font-family:var(--f-bo)"><span>中文名稱</span><span>英文名稱 (EN)</span><span></span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:4px;padding:5px 0 7px;font-size:.7rem;font-weight:700;color:var(--ts);font-family:var(--f-bo)"><span>中文名稱</span><span class="vm-header-en">英文名稱 (EN)</span><span></span></div>
     <div class="vm-list" id="vm-area-list"></div>
     <div style="margin-top:12px;padding:12px 14px;background:var(--cr);border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.1)">
       <div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">新增地區</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
+      <div class="vm-input-row" style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px">
         <input class="fi" type="text" id="vm-area-input-zh" placeholder="地區名稱（中文）*" onkeydown="if(event.key==='Enter'){event.preventDefault();}">
         <input class="fi" type="text" id="vm-area-input-en" placeholder="Area Name (EN)" onkeydown="if(event.key==='Enter'){event.preventDefault();}">
       </div>
