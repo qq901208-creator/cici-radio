@@ -1777,15 +1777,33 @@ window._onSnapshot = onSnapshot;
 // ── Load all data from Firestore on startup ──
 async function loadAllData() {
   try {
-    const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, metaSnap] = await Promise.all([
+    const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, metaSnap, showVenuesSnap, showAreasSnap] = await Promise.all([
       getDocs(collection(db,'shows')),
       getDocs(collection(db,'mics')),
       getDocs(collection(db,'venues')),
       getDocs(collection(db,'courses')),
       getDocs(collection(db,'comments')),
       getDoc(doc(db,'meta','lastUpdated')),
+      getDoc(doc(db,'meta','showVenues')),
+      getDoc(doc(db,'meta','showAreas')),
     ]);
     window._LAST_UPDATED = metaSnap.exists() ? metaSnap.data() : {};
+    // 載入自訂場地和地區
+    window._SHOW_VENUES = showVenuesSnap.exists() ? showVenuesSnap.data().items : null;
+    window._SHOW_AREAS  = showAreasSnap.exists()  ? showAreasSnap.data().items  : null;
+    // 從 localStorage 遷移舊資料到 Firebase（一次性）
+    if(!window._SHOW_VENUES){
+      try{
+        const ls = JSON.parse(localStorage.getItem('cici_show_venues'));
+        if(ls && ls.length){ window._SHOW_VENUES = ls; window.FB.save('meta','showVenues',{items:ls}).catch(()=>{}); }
+      }catch{}
+    }
+    if(!window._SHOW_AREAS){
+      try{
+        const ls = JSON.parse(localStorage.getItem('cici_show_areas'));
+        if(ls && ls.length){ window._SHOW_AREAS = ls; window.FB.save('meta','showAreas',{items:ls}).catch(()=>{}); }
+      }catch{}
+    }
     window._SHOWS    = showsSnap.docs.map(d=>({id:d.id,...d.data()}));
     window._MICS     = micsSnap.docs.map(d=>({id:d.id,...d.data()}));
     const fbVenues   = venuesSnap.docs.map(d=>({id:d.id,...d.data()}));
@@ -1996,6 +2014,8 @@ window._MICS     = [];
 window._VENUES   = [];
 window._COURSES  = [];
 window._COMMENTS = [];
+window._SHOW_VENUES = null;
+window._SHOW_AREAS  = null;
 
 // 讓全站 JS 直接用 SHOWS / VENUES 等變數名稱
 var SHOWS    = window._SHOWS;
@@ -3806,34 +3826,23 @@ const DEFAULT_SHOW_AREAS = [
 ];
 
 function getShowVenues(){
-  try{
-    const stored = JSON.parse(localStorage.getItem(LS_VENUES_KEY));
-    if(stored && stored.length) {
-      // Migrate old format (label only) to zh/en
-      return stored.map(v => ({
-        id: v.id,
-        labelZh: v.labelZh || v.label || '',
-        labelEn: v.labelEn || v.label || '',
-      }));
-    }
-  } catch{}
+  const stored = window._SHOW_VENUES;
+  if(stored && stored.length) return stored.map(v=>({id:v.id,labelZh:v.labelZh||v.label||'',labelEn:v.labelEn||v.label||''}));
   return DEFAULT_SHOW_VENUES.map(v=>({...v}));
 }
 function getShowAreas(){
-  try{
-    const stored = JSON.parse(localStorage.getItem(LS_AREAS_KEY));
-    if(stored && stored.length) {
-      return stored.map(a => ({
-        id: a.id,
-        labelZh: a.labelZh || a.label || '',
-        labelEn: a.labelEn || a.label || '',
-      }));
-    }
-  } catch{}
+  const stored = window._SHOW_AREAS;
+  if(stored && stored.length) return stored.map(a=>({id:a.id,labelZh:a.labelZh||a.label||'',labelEn:a.labelEn||a.label||''}));
   return DEFAULT_SHOW_AREAS.map(a=>({...a}));
 }
-function saveShowVenues(v){try{localStorage.setItem(LS_VENUES_KEY,JSON.stringify(v));}catch{}}
-function saveShowAreas(a){try{localStorage.setItem(LS_AREAS_KEY,JSON.stringify(a));}catch{}}
+function saveShowVenues(v){
+  window._SHOW_VENUES = v;
+  window.FB.save('meta','showVenues',{items:v}).catch(()=>{});
+}
+function saveShowAreas(a){
+  window._SHOW_AREAS = a;
+  window.FB.save('meta','showAreas',{items:a}).catch(()=>{});
+}
 
 // Returns display label for current language, fallback to zh
 function getVmLabel(item) {
