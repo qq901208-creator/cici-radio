@@ -641,7 +641,9 @@ body.edit .edit-bar{display:flex!important}
 @media(max-width:768px){
   .ft-grid{grid-template-columns:1fr}
   .fg{grid-template-columns:1fr}
-  .modal{padding:22px 18px}
+  .modal{padding:22px 18px;max-height:90vh;overflow-y:auto}
+  .modal-ov{align-items:flex-end;padding:0}
+  .modal{border-radius:20px 20px 0 0;width:100%;max-width:100%!important}
   .hero-h1{font-size:2.1rem}
   .nav-links{display:none}
   .nav-links.open{
