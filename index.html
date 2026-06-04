@@ -95,7 +95,8 @@ body.ready{visibility:visible}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 
 /* FEAT CARDS */
-.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.feat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+@media(max-width:768px){.feat-grid{grid-template-columns:repeat(2,1fr);gap:12px}}
 .feat-card{background:var(--ww);border-radius:var(--r-lg);padding:26px 22px;border:2px solid rgba(45,43,31,.07);color:var(--tm);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;gap:11px;position:relative;overflow:hidden;cursor:pointer}
 .feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--accent,var(--y))}
 .feat-card:hover{transform:translateY(-5px);box-shadow:var(--sh)}
@@ -680,11 +681,9 @@ body.edit .edit-bar{display:flex!important}
   .hero{padding:calc(var(--nav) + 14px) 5vw 44px}
   .about-hero{padding:calc(var(--nav) + 12px) 5vw 44px}
   /* CTA 按鈕手機版 - 自適應寬度、不等寬 */
-  .hero-ctas{flex-wrap:nowrap;gap:5px}
-  .mob-text{display:inline}
-  .desk-text{display:none}
+  .hero-ctas{flex-wrap:wrap;gap:8px;justify-content:center}
   .hero-ctas .btn-or,
-  .hero-ctas .btn-ww{padding:8px 9px;font-size:.72rem;white-space:nowrap;gap:4px}
+  .hero-ctas .btn-ww{padding:9px 14px;font-size:.8rem;white-space:nowrap;flex:0 0 calc(50% - 4px)}
   .hero-next{font-size:.8rem;display:block;text-align:center}
   .hero-stats{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px;padding-bottom:2px;scrollbar-width:none;justify-content:flex-start}
   .hero-stats::-webkit-scrollbar{display:none}
@@ -805,6 +804,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="feat-card" style="--accent:#ef6f20;--icon-bg:#fde3cc" onclick="showPage('opmic')"><div class="feat-icon">🎤</div><div class="feat-title"><span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic</span><small>Signup Info</small></div><div class="feat-desc"><span class="zh-text">依星期查詢各場地 Open Mic 報名方式與時間。</span><span class="en-text">Find open mic sign-ups by day across all venues.</span></div><div class="feat-arrow"><span class="zh-text">找報名資訊 →</span><span class="en-text">Find Sign-Ups →</span></div></div>
       <div class="feat-card" style="--accent:#2ecc71;--icon-bg:#d0f0de" onclick="showPage('venues')"><div class="feat-icon">📍</div><div class="feat-title"><span class="zh-text">全台喜劇據點一覽</span><span class="en-text">Venues</span><small>Venues</small></div><div class="feat-desc"><span class="zh-text">呈現全台喜劇據點，包含地址、簡介與官方連結。</span><span class="en-text">Comedy clubs across Taiwan with addresses and links.</span></div><div class="feat-arrow"><span class="zh-text">看場地 →</span><span class="en-text">View Venues →</span></div></div>
       <div class="feat-card" style="--accent:#f5d558;--icon-bg:#fffbda" onclick="showPage('courses')"><div class="feat-icon">📚</div><div class="feat-title"><span class="zh-text">課程與講座</span><span class="en-text">Courses & Talks</span><small>Courses</small></div><div class="feat-desc"><span class="zh-text">Stand-up 課、即興課、漫才工作坊，想學喜劇從這裡開始。</span><span class="en-text">Stand-up, improv, and mancai workshops — start your comedy journey here.</span></div><div class="feat-arrow"><span class="zh-text">找課程 →</span><span class="en-text">Find Courses →</span></div></div>
+      <div class="feat-card" style="--accent:#b39ddb;--icon-bg:#ede7f6" onclick="showPage('performers')"><div class="feat-icon">🎭</div><div class="feat-title"><span class="zh-text">演員資料庫</span><span class="en-text">Performers</span><small>New</small></div><div class="feat-desc"><span class="zh-text">認識台灣現場喜劇演員，查看他們的近期演出與詳細資料。</span><span class="en-text">Meet Taiwan's live comedy performers and browse their upcoming shows.</span></div><div class="feat-arrow"><span class="zh-text">認識演員 →</span><span class="en-text">Meet Performers →</span></div></div>
     </div>
   </section>
 
