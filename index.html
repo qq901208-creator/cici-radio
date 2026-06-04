@@ -309,7 +309,15 @@ body.ready{visibility:visible}
 .venue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:14px}
 .venue-card{background:var(--ww);border-radius:var(--r-md);padding:17px 15px;border:1.5px solid rgba(45,43,31,.08);color:var(--tm);transition:all .17s;display:flex;flex-direction:column;gap:9px;cursor:pointer;position:relative;overflow:hidden}
 .venue-card:hover{border-color:var(--or);transform:translateY(-3px);box-shadow:0 8px 22px rgba(45,43,31,.1)}
-.venue-logo{width:50px;height:50px;border-radius:10px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;border:1px solid rgba(45,43,31,.08)}
+.performer-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-lg);padding:18px 14px;text-align:center;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s}
+.performer-card:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--or)}
+.performer-avatar{width:72px;height:72px;border-radius:50%;object-fit:cover;margin:0 auto 10px;display:block;background:var(--py);border:2px solid rgba(45,43,31,.08)}
+.performer-avatar-fallback{width:72px;height:72px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;font-weight:700;font-family:var(--f-zh)}
+.performer-name{font-size:.92rem;font-weight:700;font-family:var(--f-zh);color:var(--tm);margin-bottom:4px}
+.performer-tagline{font-size:.72rem;color:var(--ts);font-family:var(--f-zh);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.performer-types{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-top:7px}
+.performer-type-tag{font-size:.62rem;padding:2px 7px;border-radius:var(--r-pill);font-weight:600;font-family:var(--f-bo)}
+@media(max-width:768px){#performers-grid{grid-template-columns:repeat(2,1fr);gap:12px}.performer-avatar,.performer-avatar-fallback{width:60px;height:60px}}border-radius:10px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;border:1px solid rgba(45,43,31,.08)}
 .venue-logo img{width:100%;height:100%;object-fit:contain;display:block}
 .venue-name{font-size:.86rem;font-weight:700;font-family:var(--f-zh);line-height:1.32}
 .venue-name small{display:block;font-size:.68rem;font-weight:400;color:var(--ts);font-family:var(--f-bo);margin-top:1px}
@@ -672,11 +680,11 @@ body.edit .edit-bar{display:flex!important}
   .hero{padding:calc(var(--nav) + 14px) 5vw 44px}
   .about-hero{padding:calc(var(--nav) + 12px) 5vw 44px}
   /* CTA 按鈕手機版 - 自適應寬度、不等寬 */
-  .hero-ctas{flex-wrap:nowrap;gap:7px}
+  .hero-ctas{flex-wrap:nowrap;gap:5px}
   .mob-text{display:inline}
   .desk-text{display:none}
   .hero-ctas .btn-or,
-  .hero-ctas .btn-ww{padding:9px 12px;font-size:.8rem;white-space:nowrap}
+  .hero-ctas .btn-ww{padding:8px 9px;font-size:.72rem;white-space:nowrap;gap:4px}
   .hero-next{font-size:.8rem;display:block;text-align:center}
   .hero-stats{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px;padding-bottom:2px;scrollbar-width:none;justify-content:flex-start}
   .hero-stats::-webkit-scrollbar{display:none}
@@ -718,6 +726,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <li><a data-page="shows" onclick="showPage('shows')"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></a></li>
     <li><a data-page="opmic" onclick="showPage('opmic')"><span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic</span></a></li>
     <li><a data-page="venues" onclick="showPage('venues')"><span class="zh-text">全台喜劇據點</span><span class="en-text">Venues</span></a></li>
+    <li><a data-page="performers" onclick="showPage('performers')"><span class="zh-text">演員資料庫</span><span class="en-text">Performers</span> <span style="font-size:.6rem;background:var(--or);color:#fff;padding:1px 5px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">新</span></a></li>
     <li><a data-page="courses" onclick="showPage('courses')"><span class="zh-text">課程講座</span><span class="en-text">Courses</span></a></li>
     <li><a data-page="about" onclick="showPage('about')"><span class="zh-text">關於我們</span><span class="en-text">About</span></a></li>
     <li><a data-page="board" onclick="showPage('board')"><span class="zh-text">留言板</span><span class="en-text">Board</span></a></li>
@@ -765,6 +774,10 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <a href="#" class="btn-ww" onclick="showPage('venues');return false">📍
         <span class="zh-text"><span class="desk-text">全台喜劇據點</span><span class="mob-text">喜劇據點</span></span>
         <span class="en-text">Comedy Venues</span>
+      </a>
+      <a href="#" class="btn-ww" onclick="showPage('performers');return false">🎭
+        <span class="zh-text">認識演員</span>
+        <span class="en-text">Performers</span>
       </a>
     </div>
     <a href="https://forms.gle/H6c37tkif4USJWs29" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:4px;padding:7px 16px;background:rgba(45,43,31,.07);border-radius:var(--r-pill);font-size:.78rem;font-family:var(--f-zh);color:var(--ts);text-decoration:none;transition:background .15s;position:relative;z-index:1" onmouseover="this.style.background='rgba(45,43,31,.13)'" onmouseout="this.style.background='rgba(45,43,31,.07)'">🎉 <span class="zh-text">網站試營運中，歡迎填寫回饋表單幫我們變得更好 →</span><span class="en-text">We're in beta — fill out our feedback form and help us improve →</span></a>
@@ -1032,6 +1045,43 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 </div>
 
 <!-- COURSES PAGE — no Open Mic / English Comedy -->
+<div class="page" id="page-performers">
+  <section class="sec" style="background:#f6efcf">
+    <div class="sec-label"><span class="zh-text">認識他們</span><span class="en-text">Meet the Comedians</span></div>
+    <h2 class="sec-title"><span class="zh-text">演員資料庫 <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">新功能更新中</span></span><span class="en-text">Performer Directory <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">New</span></span></h2>
+    <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br>本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義❤️‍🔥</span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br>Sorted by stroke order / alphabet — the order means nothing ❤️‍🔥</span></p>
+    <!-- 篩選列 -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
+      <input id="performers-search" type="text" placeholder="搜尋演員名稱…" maxlength="30"
+        style="padding:8px 14px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.84rem;font-family:var(--f-zh);outline:none;min-width:180px;background:var(--ww)"
+        oninput="window._performersPage=1;renderPerformers()">
+      <select id="performers-type" class="chip-select"
+        style="padding:7px 14px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.82rem;font-family:var(--f-zh);background:var(--ww);outline:none;cursor:pointer"
+        onchange="window._performersPage=1;renderPerformers()">
+        <option value="all">所有類型</option>
+        <option value="standup">站立喜劇</option>
+        <option value="improv">即興</option>
+        <option value="mancai">漫才</option>
+        <option value="musicom">音樂喜劇</option>
+        <option value="sketch">素描短劇</option>
+        <option value="crosstalk">相聲</option>
+        <option value="rakugo">落語</option>
+        <option value="other">其他</option>
+      </select>
+      <span id="performers-count" style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo)"></span>
+    </div>
+    <!-- 格狀列表 -->
+    <div id="performers-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px"></div>
+    <div id="performers-pagination"></div>
+  </section>
+</div>
+
+<!-- Performer Detail Modal -->
+<div class="modal-ov" id="modal-performer-detail"><div class="modal" style="max-width:520px">
+  <button class="modal-close" onclick="closeModal('performer-detail')">✕</button>
+  <div id="performer-detail-body"></div>
+</div></div>
+
 <div class="page" id="page-courses">
   <section class="sec" style="background:var(--cr)">
     <div class="sec-label"><span class="zh-text">課程講座</span><span class="en-text">Courses & Talks</span></div>
@@ -1780,17 +1830,19 @@ window._onSnapshot = onSnapshot;
 // ── Load all data from Firestore on startup ──
 async function loadAllData() {
   try {
-    const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, metaSnap, showVenuesSnap, showAreasSnap] = await Promise.all([
+    const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, performersSnap, metaSnap, showVenuesSnap, showAreasSnap] = await Promise.all([
       getDocs(collection(db,'shows')),
       getDocs(collection(db,'mics')),
       getDocs(collection(db,'venues')),
       getDocs(collection(db,'courses')),
       getDocs(collection(db,'comments')),
+      getDocs(collection(db,'performers')),
       getDoc(doc(db,'meta','lastUpdated')),
       getDoc(doc(db,'meta','showVenues')),
       getDoc(doc(db,'meta','showAreas')),
     ]);
     window._LAST_UPDATED = metaSnap.exists() ? metaSnap.data() : {};
+    window._PERFORMERS = performersSnap.docs.map(d=>({id:d.id,...d.data()}));
     // 載入自訂場地和地區
     window._SHOW_VENUES = showVenuesSnap.exists() ? showVenuesSnap.data().items : null;
     window._SHOW_AREAS  = showAreasSnap.exists()  ? showAreasSnap.data().items  : null;
@@ -1839,6 +1891,7 @@ async function loadAllData() {
     if(typeof renderHomeComments==='function') try{renderHomeComments();}catch(e){console.error('renderHomeComments:',e);}
     if(typeof renderShows==='function') try{renderShows();}catch(e){console.error('renderShows:',e);}
     if(typeof renderVenues==='function') try{renderVenues();}catch(e){console.error('renderVenues:',e);}
+    if(typeof renderPerformers==='function') try{renderPerformers();}catch(e){console.error('renderPerformers:',e);}
     if(typeof renderCourses==='function') try{renderCourses();}catch(e){console.error('renderCourses:',e);}
     if(typeof renderAbout==='function') try{renderAbout();}catch(e){console.error('renderAbout:',e);}
     if(typeof renderFpList==='function') try{renderFpList();}catch(e){console.error('renderFpList:',e);}
@@ -2017,6 +2070,7 @@ window._MICS     = [];
 window._VENUES   = [];
 window._COURSES  = [];
 window._COMMENTS = [];
+window._PERFORMERS = [];
 window._SHOW_VENUES = null;
 window._SHOW_AREAS  = null;
 
@@ -3114,6 +3168,131 @@ function restoreShow(id){
     renderArchivedShows();
     showToast('✅ 已恢復顯示','ok');
   }).catch(()=>showToast('❌ 操作失敗','err'));
+}
+function renderPerformers(){
+  const grid = document.getElementById('performers-grid');
+  const countEl = document.getElementById('performers-count');
+  if(!grid) return;
+  const q = (document.getElementById('performers-search')?.value||'').trim().toLowerCase();
+  const fType = document.getElementById('performers-type')?.value||'all';
+
+  // 虛擬資料已移除，等待真實演員資料上架
+  const all = window._PERFORMERS && window._PERFORMERS.length > 0 ? window._PERFORMERS : [];
+  window._PERFORMERS_DISPLAY = all;
+
+  let fil = all.filter(p=>{
+    if(q){
+      const names = [p.name||'',...(p.aliases||[])].join(' ').toLowerCase();
+      if(!names.includes(q)) return false;
+    }
+    if(fType!=='all'){
+      const types = p.types||[];
+      if(!types.includes(fType)) return false;
+    }
+    return true;
+  });
+  fil.sort((a,b)=>{
+    if(a.featured && !b.featured) return -1;
+    if(!a.featured && b.featured) return 1;
+    return (a.name||'').localeCompare(b.name||'','zh-TW');
+  });
+  if(countEl) countEl.textContent = `共 ${fil.length} 位`;
+
+  // 分頁
+  const perPage = 20;
+  const totalPages = Math.max(1, Math.ceil(fil.length/perPage));
+  if(!window._performersPage) window._performersPage = 1;
+  if(window._performersPage > totalPages) window._performersPage = totalPages;
+  const isSearching = q.length > 0 || fType !== 'all';
+  const paged = isSearching ? fil : fil.slice((window._performersPage-1)*perPage, window._performersPage*perPage);
+
+  if(!paged.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--ts);font-family:var(--f-zh)">${q||fType!=='all'?'沒有符合條件的演員':'演員資料庫建置中，敬請期待！'}</div>`;
+    const pp=document.getElementById('performers-pagination');if(pp)pp.innerHTML='';
+    return;
+  }
+  const lang = getLang();
+  grid.innerHTML = paged.map(p=>{
+    const types = p.types||[];
+    const typeTags = types.slice(0,3).map(t=>{
+      const m = TYPE_META[t]||TYPE_META.other;
+      return `<span class="performer-type-tag" style="background:${m.bg};color:${m.color}">${lang==='en'?(m.labelEn||m.label):m.label}</span>`;
+    }).join('');
+    const avatar = p.photoUrl
+      ? `<img class="performer-avatar" src="${p.photoUrl}" alt="${p.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
+      : '';
+    const fallback = `<div class="performer-avatar-fallback" ${p.photoUrl?'style="display:none"':''}>${(p.name||'?')[0]}</div>`;
+    return `<div class="performer-card" onclick="openPerformerDetail('${p.id}')" style="position:relative">
+      ${p.featured ? `<span style="position:absolute;top:8px;right:8px;font-size:.6rem;font-weight:700;padding:2px 7px;background:var(--or);color:#fff;border-radius:var(--r-pill);font-family:var(--f-bo)">精選</span>` : ''}
+      ${avatar}${fallback}
+      <div class="performer-name">${p.name||''}</div>
+      ${p.tagline?`<div class="performer-tagline">${p.tagline}</div>`:''}
+      <div class="performer-types">${typeTags}</div>
+    </div>`;
+  }).join('');
+
+  // 分頁按鈕（篩選時不顯示）
+  const pp = document.getElementById('performers-pagination');
+  if(pp){
+    if(totalPages<=1||isSearching){ pp.innerHTML=''; }
+    else{
+      const btns=[];
+      for(let i=1;i<=totalPages;i++){
+        btns.push(`<button onclick="window._performersPage=${i};renderPerformers()" style="padding:5px 12px;border-radius:var(--r-pill);border:1.5px solid ${i===window._performersPage?'var(--or)':'rgba(45,43,31,.2)'};background:${i===window._performersPage?'var(--or)':'transparent'};color:${i===window._performersPage?'#fff':'var(--ts)'};font-size:.8rem;cursor:pointer;font-family:var(--f-bo)">${i}</button>`);
+      }
+      pp.innerHTML=`<div style="display:flex;justify-content:center;gap:6px;padding:20px 0;flex-wrap:wrap">${btns.join('')}</div>`;
+    }
+  }
+}
+
+function openPerformerDetail(id){
+  const all = window._PERFORMERS_DISPLAY || window._PERFORMERS || [];
+  const p = all.find(x=>x.id===id);
+  if(!p) return;
+  const lang = getLang();
+  const types = p.types||[];
+  const typeTags = types.map(t=>{
+    const m=TYPE_META[t]||TYPE_META.other;
+    return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color};padding:3px 10px;font-size:.72rem">${lang==='en'?(m.labelEn||m.label):m.label}</span>`;
+  }).join(' ');
+  const avatar = p.photoUrl
+    ? `<img src="${p.photoUrl}" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid rgba(45,43,31,.1);flex-shrink:0" onerror="this.style.display='none'">`
+    : `<div style="width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:#fff;font-weight:700;flex-shrink:0">${(p.name||'?')[0]}</div>`;
+  // 近期演出
+  const allShows = window._SHOWS||[];
+  const names = [p.name||'',...(p.aliases||[])].map(n=>n.toLowerCase().trim());
+  const upcoming = allShows.filter(s=>{
+    const perf = (s.performer||'').toLowerCase();
+    return names.some(n=>n&&perf.includes(n)) && !isExpired(s.date,s.time) && s.status!=='hidden';
+  }).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
+  const showsList = upcoming.length
+    ? upcoming.map(s=>`<div onclick="closeModal('performer-detail');openShowDetail('${s.id}')" style="padding:8px 12px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px" onmouseover="this.style.background='var(--py)'" onmouseout="this.style.background='var(--cr)'">
+      <div><div style="font-size:.82rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)">${s.title}</div><div style="font-size:.72rem;color:var(--ts);font-family:var(--f-zh);margin-top:2px">📅 ${s.date} · 📍 ${s.venueLabel||s.venue||''}</div></div>
+      <span style="font-size:.68rem;color:var(--or);font-family:var(--f-bo);white-space:nowrap">查看 →</span>
+    </div>`).join('')
+    : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">近期暫無演出資訊</div>`;
+  const socialLinks = [
+    p.fb ? `<a href="${p.fb}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Facebook</a>` : '',
+    p.ig ? `<a href="${p.ig}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Instagram</a>` : '',
+    p.website ? `<a href="${p.website}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Website</a>` : '',
+  ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
+  document.getElementById('performer-detail-body').innerHTML = `
+    <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:18px">
+      ${avatar}
+      <div style="flex:1">
+        <div style="font-size:1.2rem;font-weight:700;font-family:var(--f-zh);color:var(--tm);margin-bottom:6px">${p.name||''}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">${typeTags}</div>
+        ${socialLinks ? `<div style="margin-top:4px">${socialLinks}</div>` : ''}
+      </div>
+    </div>
+    ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--tm);margin-bottom:10px">${p.tagline}</p>`:''}
+    ${p.bio?`<p style="font-size:.85rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin-bottom:18px">${p.bio}</p>`:''}
+    ${p.style?`<div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:4px">風格</div><p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:18px">${p.style}</p>`:''}
+    ${p.venues?`<div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:4px">常出沒場地</div><p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:18px">${p.venues}</p>`:''}
+    <div style="font-size:.78rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>
+    ${showsList}
+  `;
+  document.getElementById('modal-performer-detail').classList.add('open');
 }
 function renderMicCards(rows, isAdmin, lang, isIrregular) {
   const container = document.getElementById('mic-cards');
@@ -4445,11 +4624,12 @@ function showPage(page, skipHistory){
   if(page==='shows')renderShows();
   if(page==='opmic'){initTodayTab();selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));}
   if(page==='venues')renderVenues();
+  if(page==='performers')renderPerformers();
   if(page==='courses')renderCourses();
   if(page==='about')renderAbout();
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
   // GA4 虛擬頁面瀏覽追蹤
-  const pageTitles = {home:'首頁',shows:'演出資訊',opmic:'Open Mic',venues:'喜劇場地',courses:'課程講座',about:'關於本站',board:'留言板'};
+  const pageTitles = {home:'首頁',shows:'演出資訊',opmic:'Open Mic',venues:'喜劇場地',performers:'演員資料庫',courses:'課程講座',about:'關於本站',board:'留言板'};
   const pageTitle = (pageTitles[page]||page) + ' | 嘻嘻哪哩唷';
   document.title = pageTitle;
   if(typeof gtag==='function'){
@@ -4605,7 +4785,7 @@ function closeModal(id){
   }
 }
 // 只有閱讀類 modal 允許點背景關閉，編輯類（show/mic/course/venue）不允許
-const READ_ONLY_MODALS = ['modal-show-detail','modal-course-detail','modal-venue-detail','modal-report','modal-copyright','modal-venue-manager','modal-guidelines','modal-story-card'];
+const READ_ONLY_MODALS = ['modal-show-detail','modal-course-detail','modal-venue-detail','modal-report','modal-copyright','modal-venue-manager','modal-guidelines','modal-story-card','modal-performer-detail'];
 document.querySelectorAll('.modal-ov').forEach(o=>{
   o.addEventListener('click', e=>{
     if(e.target === o && READ_ONLY_MODALS.includes(o.id)){
