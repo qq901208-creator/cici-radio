@@ -2823,7 +2823,7 @@ function venueCardHTML(v) {
   const lang = getLang();
   const nameDisplay = lang==='en' ? (v.nameEn||v.nameZh) : (v.nameZh||v.nameEn);
   const nameAlt = lang==='en' ? (v.nameZh||'') : (v.nameEn||'');
-  const logo = v.logoUrl ? `<img src="${v.logoUrl}" alt="${nameDisplay}" style="width:100%;height:100%;object-fit:contain" onerror="this.outerHTML='<span>📍</span>'">` : '<span>📍</span>';
+  const logo = v.logoUrl ? `<img src="${v.logoUrl}" alt="${nameDisplay}" onerror="this.outerHTML='<span>📍</span>'">` : '<span>📍</span>';
   return `<div class="venue-card" data-id="${v.id}" onclick="showVenueDetail('${v.id}')" style="display:flex;flex-direction:column">
     <div class="venue-logo">${logo}</div>
     <div class="venue-name">${nameDisplay}<small>${nameAlt}</small></div>
