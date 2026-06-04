@@ -1049,7 +1049,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:#f6efcf">
     <div class="sec-label"><span class="zh-text">認識他們</span><span class="en-text">Meet the Comedians</span></div>
     <h2 class="sec-title"><span class="zh-text">演員資料庫 <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">新功能更新中</span></span><span class="en-text">Performer Directory <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">New</span></span></h2>
-    <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br>本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義❤️‍🔥</span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br>Sorted by stroke order / alphabet — the order means nothing ❤️‍🔥</span></p>
+    <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br>本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義❤️‍🔥<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem"><span class="zh-text">發現資訊有誤或想把自己的資訊放上頁面嗎？歡迎回報 →</span></a></span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br>Sorted by stroke order / alphabet — the order means nothing ❤️‍🔥<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found an error or want to add yourself? Let us know →</a></span></p>
     <!-- 篩選列 -->
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
       <input id="performers-search" type="text" placeholder="搜尋演員名稱…" maxlength="30"
@@ -1811,6 +1811,15 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="report-ch-info">
         <strong><span class="zh-text">回報錯誤 ／ 補充演出資訊</span><span class="en-text">Report Error / Submit Show Info</span></strong>
         <span><span class="zh-text">發現資訊有誤或想補充新演出？<br>點這裡填表單告訴我！</span><span class="en-text">Found an error or want to add a show?<br>Fill out the form and let me know!</span></span>
+      </div>
+    </a>
+    <a class="report-channel" href="https://forms.gle/8TZ7Q97Cs5v6gVvXA" target="_blank" rel="noopener">
+      <div class="report-ch-icon" style="background:#fff;padding:2px;display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 48 48" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path d="M30 2H10C7.8 2 6 3.8 6 6v36c0 2.2 1.8 4 4 4h28c2.2 0 4-1.8 4-4V14L30 2z" fill="#7986cb"/><path d="M30 2v12h12L30 2z" fill="#c5cae9"/><path d="M14 22h20v2H14zm0 6h20v2H14zm0 6h12v2H14z" fill="#fff"/></svg>
+      </div>
+      <div class="report-ch-info">
+        <strong><span class="zh-text">演員頁面資料申請表</span><span class="en-text">Performer Profile Application</span></strong>
+        <span><span class="zh-text">想把自己的資料放上演員資料庫嗎？<br>點這裡填表單申請！</span><span class="en-text">Want to be listed in the performer directory?<br>Fill out the form to apply!</span></span>
       </div>
     </a>
     <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);line-height:1.7;margin-top:14px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)">＊若有資訊錯誤或圖片侵權疑慮，歡迎來信告知，我們將第一時間為您處理。</p>
