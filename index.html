@@ -618,11 +618,11 @@ body.edit .edit-bar{display:flex!important}
 .venue-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
 .report-fab{position:fixed;bottom:26px;right:26px;z-index:250;background:var(--sd);color:var(--y);border:2px solid rgba(245,213,88,.3);border-radius:var(--r-pill);padding:9px 18px;font-size:.78rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 18px rgba(0,0,0,.18);transition:all .18s}
 .report-fab:hover{background:#3d3b2d;transform:translateY(-2px)}
-.report-channel{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--cr);border-radius:var(--r-md);text-decoration:none;color:var(--tm);transition:all .15s;border:1.5px solid transparent;margin-bottom:10px}
+.report-channel{display:flex;align-items:center;gap:12px;padding:10px 13px;background:var(--cr);border-radius:var(--r-md);text-decoration:none;color:var(--tm);transition:all .15s;border:1.5px solid transparent;margin-bottom:8px}
 .report-channel:hover{border-color:var(--or);background:var(--py);transform:translateX(3px)}
-.report-ch-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;background:var(--py)}
-.report-ch-info strong{display:block;font-size:.88rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)}
-.report-ch-info span{font-size:.75rem;color:var(--ts);font-family:var(--f-bo)}
+.report-ch-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:var(--py)}
+.report-ch-info strong{display:block;font-size:.84rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)}
+.report-ch-info span{font-size:.72rem;color:var(--ts);font-family:var(--f-bo)}
 .toast{position:fixed;bottom:80px;right:22px;z-index:600;background:var(--sd);color:#fff;border-radius:var(--r-md);padding:11px 16px;font-size:.8rem;font-family:var(--f-bo);font-weight:600;box-shadow:0 6px 22px rgba(0,0,0,.2);transform:translateY(18px);opacity:0;transition:all .23s;border-left:4px solid var(--or);pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.ok{border-left-color:#2ecc71}
@@ -1051,7 +1051,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:#f6efcf">
     <div class="sec-label"><span class="zh-text">認識他們</span><span class="en-text">Meet the Comedians</span></div>
     <h2 class="sec-title"><span class="zh-text">演員資料庫 <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">新功能更新中</span></span><span class="en-text">Performer Directory <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">New</span></span></h2>
-    <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br>本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義❤️‍🔥<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem"><span class="zh-text">發現資訊有誤或想把自己的資訊放上頁面嗎？歡迎回報 →</span></a></span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br>Sorted by stroke order / alphabet — the order means nothing ❤️‍🔥<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found an error or want to add yourself? Let us know →</a></span></p>
+    <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem"><span class="zh-text">發現資訊有誤或想把自己的資訊放上頁面嗎？歡迎回報 →</span></a></span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found an error or want to add yourself? Let us know →</a></span></p>
+    <p style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-bottom:16px;opacity:.7"><span class="zh-text">本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義❤️‍🔥</span><span class="en-text">Sorted by stroke order / alphabet — the order means nothing ❤️‍🔥</span></p>
     <!-- 篩選列 -->
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
       <input id="performers-search" type="text" placeholder="搜尋演員名稱…" maxlength="30"
@@ -1149,7 +1150,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 </div></div>
 
 <!-- Performer Detail Modal -->
-<div class="modal-ov" id="modal-performer-detail"><div class="modal" style="max-width:520px">
+<div class="modal-ov" id="modal-performer-detail"><div class="modal" style="max-width:640px">
   <button class="modal-close" onclick="closeModal('performer-detail')">✕</button>
   <div id="performer-detail-body"></div>
 </div></div>
@@ -1779,7 +1780,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <div class="modal" style="max-width:420px">
     <button class="modal-close" onclick="document.getElementById('modal-report').classList.remove('open')">✕</button>
     <div class="modal-title">💬 <span class="zh-text">聯絡我們</span><span class="en-text">Contact Us</span></div>
-    <p style="font-size:.88rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:20px;line-height:1.7"><span class="zh-text">無論是想回報資訊有誤、補充內容、合作洽談，或是單純想打聲招呼，都歡迎透過以下管道找到我們！</span><span class="en-text">Whether you'd like to report an error, suggest content, collaborate, or just say hi — we'd love to hear from you.</span></p>
+    <p style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:14px;line-height:1.6"><span class="zh-text">無論是想回報資訊有誤、補充內容、合作洽談，或是單純想打聲招呼，都歡迎透過以下管道找到我們！</span><span class="en-text">Whether you'd like to report an error, suggest content, collaborate, or just say hi — we'd love to hear from you.</span></p>
     <a class="report-channel" href="https://www.instagram.com/cici._.radio/" target="_blank" rel="noopener">
       <div class="report-ch-icon" style="background:radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);color:#fff;font-size:.7rem;display:flex;align-items:center;justify-content:center">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -3445,10 +3446,6 @@ function openPerformerDetail(id){
     const m=TYPE_META[t]||TYPE_META.other;
     return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color};padding:3px 10px;font-size:.72rem">${lang==='en'?(m.labelEn||m.label):m.label}</span>`;
   }).join(' ');
-  const avatar = p.photoUrl
-    ? `<img src="${p.photoUrl}" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid rgba(45,43,31,.1);flex-shrink:0" onerror="this.style.display='none'">`
-    : `<div style="width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:#fff;font-weight:700;flex-shrink:0">${(p.name||'?')[0]}</div>`;
-  // 近期演出
   const allShows = window._SHOWS||[];
   const names = [p.name||'',...(p.aliases||[])].map(n=>n.toLowerCase().trim());
   const upcoming = allShows.filter(s=>{
@@ -3461,28 +3458,29 @@ function openPerformerDetail(id){
       <span style="font-size:.68rem;color:var(--or);font-family:var(--f-bo);white-space:nowrap">查看 →</span>
     </div>`).join('')
     : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">近期暫無演出資訊</div>`;
+  const venueDisplay = p.venueIds&&p.venueIds.length ? p.venueIds.map(v=>getShowVenueLabelById(v)||v).join('、') : (p.venues||'');
   const socialLinks = [
     p.fb ? `<a href="${p.fb}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Facebook</a>` : '',
     p.ig ? `<a href="${p.ig}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Instagram</a>` : '',
     p.youtube ? `<a href="${p.youtube}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">YouTube</a>` : '',
     p.website ? `<a href="${p.website}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Website</a>` : '',
   ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
+  const heroAvatar = p.photoUrl
+    ? `<img src="${p.photoUrl}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(45,43,31,.1);flex-shrink:0">`
+    : `<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;font-weight:700;flex-shrink:0">${(p.name||'?')[0]}</div>`;
   document.getElementById('performer-detail-body').innerHTML = `
-    <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:18px">
-      ${avatar}
-      <div style="flex:1">
-        <div style="font-size:1.2rem;font-weight:700;font-family:var(--f-zh);color:var(--tm);margin-bottom:6px">${p.name||''}</div>
+    <div style="display:flex;gap:16px;align-items:center;margin-bottom:16px">
+      ${heroAvatar}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:6px">${p.name||''}</div>
         <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">${typeTags}</div>
-        ${socialLinks ? `<div style="margin-top:4px">${socialLinks}</div>` : ''}
+        ${socialLinks?`<div>${socialLinks}</div>`:''}
       </div>
     </div>
-    ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--tm);margin-bottom:10px">${p.tagline}</p>`:''}
-    ${p.bio?`<p style="font-size:.85rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin-bottom:18px">${p.bio}</p>`:''}
-    ${p.style?`<div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:4px">風格</div><p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:18px">${p.style}</p>`:''}
-    ${p.venueIds&&p.venueIds.length?`<div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:4px">常出沒場地</div><p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:18px">${p.venueIds.map(v=>getShowVenueLabelById(v)||v).join('、')}</p>`:''}
-    ${p.venues?`<div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:4px">常出沒場地</div><p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:18px">${p.venues}</p>`:''}
-    <div style="font-size:.78rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>
-    ${showsList}
+    ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin-bottom:10px">${p.tagline}</p>`:''}
+    ${venueDisplay?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px">常出沒場地<br><span style="font-weight:600;color:var(--tm)">${venueDisplay}</span></div>`:''}
+    ${p.bio?`<p class="sd-desc">${p.bio}</p>`:''}
+    ${upcoming.length?`<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>${showsList}</div>`:''}
   `;
   document.getElementById('modal-performer-detail').classList.add('open');
 }
