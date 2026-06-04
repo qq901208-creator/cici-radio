@@ -311,6 +311,7 @@ body.ready{visibility:visible}
 .venue-card{background:var(--ww);border-radius:var(--r-md);padding:17px 15px;border:1.5px solid rgba(45,43,31,.08);color:var(--tm);transition:all .17s;display:flex;flex-direction:column;gap:9px;cursor:pointer;position:relative;overflow:hidden}
 .venue-card:hover{border-color:var(--or);transform:translateY(-3px);box-shadow:0 8px 22px rgba(45,43,31,.1)}
 .performer-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-lg);padding:18px 14px;text-align:center;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s}
+#performers-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
 .performer-card:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--or)}
 .performer-avatar{width:72px;height:72px;border-radius:50%;object-fit:cover;margin:0 auto 10px;display:block;background:var(--py);border:2px solid rgba(45,43,31,.08)}
 .performer-avatar-fallback{width:72px;height:72px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;font-weight:700;font-family:var(--f-zh)}
@@ -1073,7 +1074,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="edit-add-btn" onclick="openPerformerModal(null)">＋ <span class="zh-text">新增演員</span><span class="en-text">Add Performer</span></button>
     </div>
     <!-- 格狀列表 -->
-    <div id="performers-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px"></div>
+    <div id="performers-grid"></div>
     <div id="performers-pagination"></div>
   </section>
 </div>
@@ -3404,9 +3405,9 @@ function renderPerformers(){
       return `<span class="performer-type-tag" style="background:${m.bg};color:${m.color}">${lang==='en'?(m.labelEn||m.label):m.label}</span>`;
     }).join('');
     const avatar = p.photoUrl
-      ? `<img class="performer-avatar" src="${p.photoUrl}" alt="${p.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
+      ? `<img class="performer-avatar" src="${p.photoUrl}" alt="${p.name}" onerror="this.style.display='none';document.getElementById('pf-${p.id}').style.display='flex'">`
       : '';
-    const fallback = `<div class="performer-avatar-fallback" ${p.photoUrl?'style="display:none"':''}>${(p.name||'?')[0]}</div>`;
+    const fallback = `<div class="performer-avatar-fallback" id="pf-${p.id}" ${p.photoUrl?'style="display:none"':''}>${(p.name||'?')[0]}</div>`;
     return `<div class="performer-card" onclick="openPerformerDetail('${p.id}')" style="position:relative">
       ${p.featured ? `<span style="position:absolute;top:8px;right:8px;font-size:.6rem;font-weight:700;padding:2px 7px;background:var(--or);color:#fff;border-radius:var(--r-pill);font-family:var(--f-bo)">精選</span>` : ''}
       ${isAdmin ? `<div style="position:absolute;top:8px;left:8px;display:flex;gap:4px;z-index:2">
