@@ -1136,6 +1136,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div class="fg-g"><label class="fl"><svg width="14" height="14" viewBox="0 0 24 24" fill="#1877f2" style="vertical-align:middle;margin-right:4px"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook</label><input class="fi" type="url" id="p-fb" placeholder="https://facebook.com/..."></div>
     <div class="fg-g"><label class="fl"><svg width="14" height="14" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:4px"><defs><radialGradient id="ig-g" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><path fill="url(#ig-g)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>Instagram</label><input class="fi" type="url" id="p-ig" placeholder="https://instagram.com/..."></div>
+    <div class="fg-g"><label class="fl"><svg width="14" height="14" viewBox="0 0 24 24" fill="#ff0000" style="vertical-align:middle;margin-right:4px"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YouTube</label><input class="fi" type="url" id="p-youtube" placeholder="https://youtube.com/@..."></div>
     <div class="fg-g"><label class="fl">其他連結</label><input class="fi" type="url" id="p-website" placeholder="https://..."></div>
     <div class="fg-g full"><label style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" id="p-featured" style="accent-color:var(--or)"> 設為精選演員（置頂顯示）</label></div>
   </div>
@@ -2003,6 +2004,15 @@ async function loadAllData() {
           else if(attempts > 0){ setTimeout(()=>tryOpenCourse(attempts-1), 300); }
         };
         setTimeout(()=>tryOpenCourse(10), 200);
+      }
+      const sharePerformerId = params.get('performer');
+      if(sharePerformerId && typeof openPerformerDetail==='function'){
+        const tryOpenPerformer = (attempts) => {
+          const found = (window._PERFORMERS||[]).find(x=>x.id===sharePerformerId);
+          if(found){ openPerformerDetail(sharePerformerId); }
+          else if(attempts > 0){ setTimeout(()=>tryOpenPerformer(attempts-1), 300); }
+        };
+        setTimeout(()=>tryOpenPerformer(10), 200);
       }
     }catch(e){}
   };
@@ -3255,7 +3265,7 @@ function openPerformerModal(id){
   const p = id ? (window._PERFORMERS||[]).find(x=>x.id===id) : null;
   document.getElementById('modal-performer-title').textContent = p?'編輯演員':'新增演員';
   // 清空
-  ['p-name','p-aliases','p-tagline','p-bio','p-style','p-photo','p-photo-id','p-fb','p-ig','p-website'].forEach(k=>{
+  ['p-name','p-aliases','p-tagline','p-bio','p-style','p-photo','p-photo-id','p-fb','p-ig','p-youtube','p-website'].forEach(k=>{
     const el=document.getElementById(k); if(el) el.value='';
   });
   document.querySelectorAll('#p-types-group input[type=checkbox]').forEach(cb=>cb.checked=false);
@@ -3275,6 +3285,7 @@ function openPerformerModal(id){
     document.getElementById('p-style').value=p.style||'';
     document.getElementById('p-fb').value=p.fb||'';
     document.getElementById('p-ig').value=p.ig||'';
+    document.getElementById('p-youtube').value=p.youtube||'';
     document.getElementById('p-website').value=p.website||'';
     document.getElementById('p-featured').checked=!!p.featured;
     (p.types||[]).forEach(t=>{
@@ -3311,6 +3322,7 @@ function savePerformer(){
     photoUrl: document.getElementById('p-photo').value.trim(),
     fb: document.getElementById('p-fb').value.trim(),
     ig: document.getElementById('p-ig').value.trim(),
+    youtube: document.getElementById('p-youtube').value.trim(),
     website: document.getElementById('p-website').value.trim(),
     featured: document.getElementById('p-featured').checked,
     types,
@@ -3424,6 +3436,7 @@ function openPerformerDetail(id){
   const all = window._PERFORMERS_DISPLAY || window._PERFORMERS || [];
   const p = all.find(x=>x.id===id);
   if(!p) return;
+  history.replaceState(null,'', location.hash.split('?')[0] + '?performer=' + id);
   const lang = getLang();
   const types = p.types||[];
   const typeTags = types.map(t=>{
@@ -3449,6 +3462,7 @@ function openPerformerDetail(id){
   const socialLinks = [
     p.fb ? `<a href="${p.fb}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Facebook</a>` : '',
     p.ig ? `<a href="${p.ig}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Instagram</a>` : '',
+    p.youtube ? `<a href="${p.youtube}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">YouTube</a>` : '',
     p.website ? `<a href="${p.website}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Website</a>` : '',
   ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
   document.getElementById('performer-detail-body').innerHTML = `
@@ -4568,7 +4582,7 @@ function initReveal(){
 
 // ── 從 hash 還原頁面 ──
 function restorePageFromHash(){
-  const validPages = ['home','shows','opmic','venues','courses','about','board'];
+  const validPages = ['home','shows','opmic','venues','performers','courses','about','board'];
   const hash = location.hash.split('?')[0].replace('#','');
   const page = validPages.includes(hash) ? hash : 'home';
   // 先切換頁面（不 render 內容）
@@ -4815,7 +4829,7 @@ function showPage(page, skipHistory){
 }
 // 瀏覽器上一頁/下一頁
 window.addEventListener('popstate', e=>{
-  const validPages = ['home','shows','opmic','venues','courses','about','board'];
+  const validPages = ['home','shows','opmic','venues','performers','courses','about','board'];
   const page = e.state?.page || location.hash.replace('#','') || 'home';
   if(validPages.includes(page)) showPage(page, true);
 });
@@ -4956,7 +4970,7 @@ function copyShareLink(){
 function closeModal(id){
   document.getElementById('modal-'+id).classList.remove('open');
   // 關閉演出/課程詳情時清除分享參數
-  if(id==='show-detail'||id==='course-detail'){
+  if(id==='show-detail'||id==='course-detail'||id==='performer-detail'){
     const base = location.hash.split('?')[0];
     history.replaceState(null,'', base);
   }
