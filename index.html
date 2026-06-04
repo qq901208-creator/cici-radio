@@ -803,8 +803,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="feat-card" style="--accent:#f5d558;--icon-bg:#fff9d6" onclick="showPage('shows')"><div class="feat-icon">🎭</div><div class="feat-title"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span><small>Shows</small></div><div class="feat-desc"><span class="zh-text">整合 KKTIX、Accupass 等平台，依日期、場地、類型篩選全台喜劇演出。</span><span class="en-text">Filter shows by date, venue, or type from KKTIX, Accupass, and more.</span></div><div class="feat-arrow"><span class="zh-text">瀏覽演出 →</span><span class="en-text">Browse Shows →</span></div></div>
       <div class="feat-card" style="--accent:#ef6f20;--icon-bg:#fde3cc" onclick="showPage('opmic')"><div class="feat-icon">🎤</div><div class="feat-title"><span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic</span><small>Signup Info</small></div><div class="feat-desc"><span class="zh-text">依星期查詢各場地 Open Mic 報名方式與時間。</span><span class="en-text">Find open mic sign-ups by day across all venues.</span></div><div class="feat-arrow"><span class="zh-text">找報名資訊 →</span><span class="en-text">Find Sign-Ups →</span></div></div>
       <div class="feat-card" style="--accent:#2ecc71;--icon-bg:#d0f0de" onclick="showPage('venues')"><div class="feat-icon">📍</div><div class="feat-title"><span class="zh-text">全台喜劇據點一覽</span><span class="en-text">Venues</span><small>Venues</small></div><div class="feat-desc"><span class="zh-text">呈現全台喜劇據點，包含地址、簡介與官方連結。</span><span class="en-text">Comedy clubs across Taiwan with addresses and links.</span></div><div class="feat-arrow"><span class="zh-text">看場地 →</span><span class="en-text">View Venues →</span></div></div>
-      <div class="feat-card" style="--accent:#f5d558;--icon-bg:#fffbda" onclick="showPage('courses')"><div class="feat-icon">📚</div><div class="feat-title"><span class="zh-text">課程與講座</span><span class="en-text">Courses & Talks</span><small>Courses</small></div><div class="feat-desc"><span class="zh-text">Stand-up 課、即興課、漫才工作坊，想學喜劇從這裡開始。</span><span class="en-text">Stand-up, improv, and mancai workshops — start your comedy journey here.</span></div><div class="feat-arrow"><span class="zh-text">找課程 →</span><span class="en-text">Find Courses →</span></div></div>
       <div class="feat-card" style="--accent:#b39ddb;--icon-bg:#ede7f6" onclick="showPage('performers')"><div class="feat-icon">🎭</div><div class="feat-title"><span class="zh-text">演員資料庫</span><span class="en-text">Performers</span><small>New</small></div><div class="feat-desc"><span class="zh-text">認識台灣現場喜劇演員，查看他們的近期演出與詳細資料。</span><span class="en-text">Meet Taiwan's live comedy performers and browse their upcoming shows.</span></div><div class="feat-arrow"><span class="zh-text">認識演員 →</span><span class="en-text">Meet Performers →</span></div></div>
+      <div class="feat-card" style="--accent:#f5d558;--icon-bg:#fffbda" onclick="showPage('courses')"><div class="feat-icon">📚</div><div class="feat-title"><span class="zh-text">課程與講座</span><span class="en-text">Courses & Talks</span><small>Courses</small></div><div class="feat-desc"><span class="zh-text">Stand-up 課、即興課、漫才工作坊，想學喜劇從這裡開始。</span><span class="en-text">Stand-up, improv, and mancai workshops — start your comedy journey here.</span></div><div class="feat-arrow"><span class="zh-text">找課程 →</span><span class="en-text">Find Courses →</span></div></div>
     </div>
   </section>
 
@@ -1069,12 +1069,49 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <option value="other">其他</option>
       </select>
       <span id="performers-count" style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo)"></span>
+      <button class="edit-add-btn" onclick="openPerformerModal(null)">＋ <span class="zh-text">新增演員</span><span class="en-text">Add Performer</span></button>
     </div>
     <!-- 格狀列表 -->
     <div id="performers-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px"></div>
     <div id="performers-pagination"></div>
   </section>
 </div>
+
+<!-- Performer Edit Modal -->
+<div class="modal-ov" id="modal-performer"><div class="modal" style="max-width:560px">
+  <button class="modal-close" onclick="closeModal('performer')">✕</button>
+  <div class="modal-title" id="modal-performer-title">新增演員</div>
+  <div class="fg">
+    <div class="fg-g"><label class="fl">藝名 <span class="req">*</span></label><input class="fi" type="text" id="p-name" placeholder="演員藝名"></div>
+    <div class="fg-g"><label class="fl">其他常用名稱</label><input class="fi" type="text" id="p-aliases" placeholder="多個名稱用逗號分隔"></div>
+    <div class="fg-g full"><label class="fl">一句話介紹</label><input class="fi" type="text" id="p-tagline" maxlength="50" placeholder="50字以內"></div>
+    <div class="fg-g full"><label class="fl">詳細介紹</label><textarea class="fi" id="p-bio" rows="3" placeholder="演員背景、風格等…" style="resize:vertical"></textarea></div>
+    <div class="fg-g full"><label class="fl">演出類型（複選）</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="p-types-group">
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="standup" style="accent-color:var(--or)"> 站立喜劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="improv" style="accent-color:var(--or)"> 即興</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="mancai" style="accent-color:var(--or)"> 漫才</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="musicom" style="accent-color:var(--or)"> 音樂喜劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="sketch" style="accent-color:var(--or)"> 素描短劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="crosstalk" style="accent-color:var(--or)"> 相聲</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="rakugo" style="accent-color:var(--or)"> 落語</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="other" style="accent-color:var(--or)"> 其他</label>
+      </div>
+    </div>
+    <div class="fg-g"><label class="fl">風格（選填）</label><input class="fi" type="text" id="p-style" placeholder="例：黑色幽默、自嘲風格"></div>
+    <div class="fg-g"><label class="fl">常出沒場地（選填）</label><input class="fi" type="text" id="p-venues" placeholder="例：卡米地、飛客劇樂部"></div>
+    <div class="fg-g"><label class="fl">照片網址（選填）</label><input class="fi" type="url" id="p-photo" placeholder="https://..."></div>
+    <div class="fg-g"><label class="fl">Facebook</label><input class="fi" type="url" id="p-fb" placeholder="https://facebook.com/..."></div>
+    <div class="fg-g"><label class="fl">Instagram</label><input class="fi" type="url" id="p-ig" placeholder="https://instagram.com/..."></div>
+    <div class="fg-g"><label class="fl">其他連結</label><input class="fi" type="url" id="p-website" placeholder="https://..."></div>
+    <div class="fg-g full"><label style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" id="p-featured" style="accent-color:var(--or)"> 設為精選演員（置頂顯示）</label></div>
+  </div>
+  <div class="fa">
+    <button class="fa-del" id="p-del-btn" onclick="deletePerformer()" style="display:none">刪除</button>
+    <button class="fa-cancel" onclick="closeModal('performer')">取消</button>
+    <button class="fa-pub" onclick="savePerformer()">✓ 儲存</button>
+  </div>
+</div></div>
 
 <!-- Performer Detail Modal -->
 <div class="modal-ov" id="modal-performer-detail"><div class="modal" style="max-width:520px">
@@ -3169,6 +3206,84 @@ function restoreShow(id){
     showToast('✅ 已恢復顯示','ok');
   }).catch(()=>showToast('❌ 操作失敗','err'));
 }
+let ePerformerId = null;
+function openPerformerModal(id){
+  if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}
+  ePerformerId = id||null;
+  const p = id ? (window._PERFORMERS||[]).find(x=>x.id===id) : null;
+  document.getElementById('modal-performer-title').textContent = p?'編輯演員':'新增演員';
+  // 清空
+  ['p-name','p-aliases','p-tagline','p-bio','p-style','p-venues','p-photo','p-fb','p-ig','p-website'].forEach(k=>{
+    const el=document.getElementById(k); if(el) el.value='';
+  });
+  document.querySelectorAll('#p-types-group input[type=checkbox]').forEach(cb=>cb.checked=false);
+  document.getElementById('p-featured').checked=false;
+  document.getElementById('p-del-btn').style.display = p?'':'none';
+  // 填入資料
+  if(p){
+    document.getElementById('p-name').value=p.name||'';
+    document.getElementById('p-aliases').value=(p.aliases||[]).join(', ');
+    document.getElementById('p-tagline').value=p.tagline||'';
+    document.getElementById('p-bio').value=p.bio||'';
+    document.getElementById('p-style').value=p.style||'';
+    document.getElementById('p-venues').value=p.venues||'';
+    document.getElementById('p-photo').value=p.photoUrl||'';
+    document.getElementById('p-fb').value=p.fb||'';
+    document.getElementById('p-ig').value=p.ig||'';
+    document.getElementById('p-website').value=p.website||'';
+    document.getElementById('p-featured').checked=!!p.featured;
+    (p.types||[]).forEach(t=>{
+      const cb=document.querySelector(`#p-types-group input[value="${t}"]`);
+      if(cb) cb.checked=true;
+    });
+  }
+  document.getElementById('modal-performer').classList.add('open');
+}
+function savePerformer(){
+  if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}
+  const name = document.getElementById('p-name').value.trim();
+  if(!name){showToast('請填寫藝名','err');return;}
+  const aliasesRaw = document.getElementById('p-aliases').value.trim();
+  const types = [...document.querySelectorAll('#p-types-group input[type=checkbox]:checked')].map(cb=>cb.value);
+  const data = {
+    name,
+    aliases: aliasesRaw ? aliasesRaw.split(',').map(s=>s.trim()).filter(Boolean) : [],
+    tagline: document.getElementById('p-tagline').value.trim(),
+    bio: document.getElementById('p-bio').value.trim(),
+    style: document.getElementById('p-style').value.trim(),
+    venues: document.getElementById('p-venues').value.trim(),
+    photoUrl: document.getElementById('p-photo').value.trim(),
+    fb: document.getElementById('p-fb').value.trim(),
+    ig: document.getElementById('p-ig').value.trim(),
+    website: document.getElementById('p-website').value.trim(),
+    featured: document.getElementById('p-featured').checked,
+    types,
+  };
+  window.FB.save('performers', ePerformerId, data).then(newId=>{
+    const id = ePerformerId||newId;
+    if(ePerformerId){
+      const idx=(window._PERFORMERS||[]).findIndex(x=>x.id===ePerformerId);
+      if(idx>=0) window._PERFORMERS[idx]={...window._PERFORMERS[idx],...data};
+    } else {
+      if(!window._PERFORMERS) window._PERFORMERS=[];
+      window._PERFORMERS.push({id,...data});
+    }
+    closeModal('performer');
+    renderPerformers();
+    showToast('✅ 演員資料已儲存','ok');
+  }).catch(()=>showToast('❌ 儲存失敗','err'));
+}
+function deletePerformer(){
+  if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}
+  if(!ePerformerId||!confirm('確定要刪除此演員資料嗎？')) return;
+  window.FB.del('performers',ePerformerId).then(()=>{
+    window._PERFORMERS=(window._PERFORMERS||[]).filter(x=>x.id!==ePerformerId);
+    closeModal('performer');
+    renderPerformers();
+    showToast('已刪除','ok');
+  }).catch(()=>showToast('❌ 刪除失敗','err'));
+}
+
 function renderPerformers(){
   const grid = document.getElementById('performers-grid');
   const countEl = document.getElementById('performers-count');
@@ -3212,6 +3327,7 @@ function renderPerformers(){
     return;
   }
   const lang = getLang();
+  const isAdmin = isLoggedIn() && editMode;
   grid.innerHTML = paged.map(p=>{
     const types = p.types||[];
     const typeTags = types.slice(0,3).map(t=>{
@@ -3224,6 +3340,9 @@ function renderPerformers(){
     const fallback = `<div class="performer-avatar-fallback" ${p.photoUrl?'style="display:none"':''}>${(p.name||'?')[0]}</div>`;
     return `<div class="performer-card" onclick="openPerformerDetail('${p.id}')" style="position:relative">
       ${p.featured ? `<span style="position:absolute;top:8px;right:8px;font-size:.6rem;font-weight:700;padding:2px 7px;background:var(--or);color:#fff;border-radius:var(--r-pill);font-family:var(--f-bo)">精選</span>` : ''}
+      ${isAdmin ? `<div style="position:absolute;top:8px;left:8px;display:flex;gap:4px;z-index:2">
+        <button onclick="event.stopPropagation();openPerformerModal('${p.id}')" style="padding:3px 8px;font-size:.68rem;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);cursor:pointer;font-family:var(--f-bo)">✏️</button>
+      </div>` : ''}
       ${avatar}${fallback}
       <div class="performer-name">${p.name||''}</div>
       ${p.tagline?`<div class="performer-tagline">${p.tagline}</div>`:''}
@@ -3518,6 +3637,7 @@ function toggleEdit(){
   if(typeof renderFpList==='function') renderFpList();
   if(typeof renderArchivedShows==='function') renderArchivedShows();
   if(typeof renderVenues==='function') renderVenues();
+  if(typeof renderPerformers==='function') renderPerformers();
   showToast(editMode?'✏️ 編輯模式已啟用':'✅ 編輯模式已關閉',editMode?'':'ok');
 }
 
