@@ -1099,8 +1099,40 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </div>
     </div>
     <div class="fg-g"><label class="fl">風格（選填）</label><input class="fi" type="text" id="p-style" placeholder="例：黑色幽默、自嘲風格"></div>
-    <div class="fg-g"><label class="fl">常出沒場地（選填）</label><input class="fi" type="text" id="p-venues" placeholder="例：卡米地、飛客劇樂部"></div>
-    <div class="fg-g"><label class="fl">照片網址（選填）</label><input class="fi" type="url" id="p-photo" placeholder="https://..."></div>
+    <div class="fg-g full"><label class="fl">常出沒場地（選填，複選）</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="p-venues-group">
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="comedy-plus" style="accent-color:var(--or)"> 卡米地＋</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="two-three" style="accent-color:var(--or)"> 23喜劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="fakers" style="accent-color:var(--or)"> 飛客劇樂部</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ponwo" style="accent-color:var(--or)"> 月半窩</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="beitou" style="accent-color:var(--or)"> 北投喜劇（底加書店）</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="laughhouse" style="accent-color:var(--or)"> 捧腹劇場（山崁二手書店）</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ginting" style="accent-color:var(--or)"> 今天藝術廳（樂君亭）</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="smo" style="accent-color:var(--or)"> 思MIC歐（不染酒吧）</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="windcity" style="accent-color:var(--or)"> 風城喜劇（新竹市綠水市民活動中心）</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="tainan" style="accent-color:var(--or)"> 台南喜劇（現場馬拉桑餐酒館）</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="takao" style="accent-color:var(--or)"> 喜劇開港</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="laughhouse" style="accent-color:var(--or)"> 來福好事</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="tainan" style="accent-color:var(--or)"> 府城喜劇（SASADRA cafe）</label>
+      </div>
+    </div>
+    <div class="fg-g full">
+      <label class="fl">照片（Google Drive ID）</label>
+      <div style="display:flex;align-items:center;gap:0;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-md);overflow:hidden;background:#fff;margin-bottom:6px">
+        <span style="padding:9px 11px;background:var(--cr);font-size:.78rem;font-family:var(--f-bo);color:var(--ts);white-space:nowrap;border-right:1.5px solid rgba(45,43,31,.1);flex-shrink:0">https://lh3.googleusercontent.com/d/</span>
+        <input class="fi" type="text" id="p-photo-id" placeholder="貼上 Google Drive 檔案 ID"
+          style="border:none;border-radius:0;flex:1;background:#fff"
+          oninput="syncGdriveInput('p-photo','p-photo-id','p-img-prev','p-img-hint')"
+          onpaste="setTimeout(()=>syncGdriveInput('p-photo','p-photo-id','p-img-prev','p-img-hint'),80)">
+      </div>
+      <input type="hidden" id="p-photo">
+      <div id="p-img-hint" class="img-url-hint"></div>
+      <img id="p-img-prev" class="img-prev-inline" src="" alt="">
+      <div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:4px;line-height:1.6">
+        💡 從 Google Drive 分享連結取出 ID，例如：<br>
+        <span style="color:var(--or);word-break:break-all">https://drive.google.com/file/d/<strong>這段就是ID</strong>/view</span>
+      </div>
+    </div>
     <div class="fg-g"><label class="fl">Facebook</label><input class="fi" type="url" id="p-fb" placeholder="https://facebook.com/..."></div>
     <div class="fg-g"><label class="fl">Instagram</label><input class="fi" type="url" id="p-ig" placeholder="https://instagram.com/..."></div>
     <div class="fg-g"><label class="fl">其他連結</label><input class="fi" type="url" id="p-website" placeholder="https://..."></div>
@@ -3213,10 +3245,15 @@ function openPerformerModal(id){
   const p = id ? (window._PERFORMERS||[]).find(x=>x.id===id) : null;
   document.getElementById('modal-performer-title').textContent = p?'編輯演員':'新增演員';
   // 清空
-  ['p-name','p-aliases','p-tagline','p-bio','p-style','p-venues','p-photo','p-fb','p-ig','p-website'].forEach(k=>{
+  ['p-name','p-aliases','p-tagline','p-bio','p-style','p-photo','p-photo-id','p-fb','p-ig','p-website'].forEach(k=>{
     const el=document.getElementById(k); if(el) el.value='';
   });
   document.querySelectorAll('#p-types-group input[type=checkbox]').forEach(cb=>cb.checked=false);
+  document.querySelectorAll('#p-venues-group input[type=checkbox]').forEach(cb=>cb.checked=false);
+  const imgPrev=document.getElementById('p-img-prev');
+  if(imgPrev){imgPrev.src='';imgPrev.style.display='none';}
+  const imgHint=document.getElementById('p-img-hint');
+  if(imgHint){imgHint.textContent='';imgHint.className='img-url-hint';}
   document.getElementById('p-featured').checked=false;
   document.getElementById('p-del-btn').style.display = p?'':'none';
   // 填入資料
@@ -3226,8 +3263,6 @@ function openPerformerModal(id){
     document.getElementById('p-tagline').value=p.tagline||'';
     document.getElementById('p-bio').value=p.bio||'';
     document.getElementById('p-style').value=p.style||'';
-    document.getElementById('p-venues').value=p.venues||'';
-    document.getElementById('p-photo').value=p.photoUrl||'';
     document.getElementById('p-fb').value=p.fb||'';
     document.getElementById('p-ig').value=p.ig||'';
     document.getElementById('p-website').value=p.website||'';
@@ -3236,6 +3271,16 @@ function openPerformerModal(id){
       const cb=document.querySelector(`#p-types-group input[value="${t}"]`);
       if(cb) cb.checked=true;
     });
+    (p.venueIds||[]).forEach(v=>{
+      const cb=document.querySelector(`#p-venues-group input[value="${v}"]`);
+      if(cb) cb.checked=true;
+    });
+    if(p.photoUrl){
+      document.getElementById('p-photo').value=p.photoUrl;
+      const idMatch=p.photoUrl.match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+      if(idMatch) document.getElementById('p-photo-id').value=idMatch[1];
+      if(p.photoUrl) livePreview('p-img-prev','p-img-hint',p.photoUrl);
+    }
   }
   document.getElementById('modal-performer').classList.add('open');
 }
@@ -3245,13 +3290,14 @@ function savePerformer(){
   if(!name){showToast('請填寫藝名','err');return;}
   const aliasesRaw = document.getElementById('p-aliases').value.trim();
   const types = [...document.querySelectorAll('#p-types-group input[type=checkbox]:checked')].map(cb=>cb.value);
+  const venueIds = [...document.querySelectorAll('#p-venues-group input[type=checkbox]:checked')].map(cb=>cb.value);
   const data = {
     name,
     aliases: aliasesRaw ? aliasesRaw.split(',').map(s=>s.trim()).filter(Boolean) : [],
     tagline: document.getElementById('p-tagline').value.trim(),
     bio: document.getElementById('p-bio').value.trim(),
     style: document.getElementById('p-style').value.trim(),
-    venues: document.getElementById('p-venues').value.trim(),
+    venueIds,
     photoUrl: document.getElementById('p-photo').value.trim(),
     fb: document.getElementById('p-fb').value.trim(),
     ig: document.getElementById('p-ig').value.trim(),
@@ -3407,6 +3453,7 @@ function openPerformerDetail(id){
     ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--tm);margin-bottom:10px">${p.tagline}</p>`:''}
     ${p.bio?`<p style="font-size:.85rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin-bottom:18px">${p.bio}</p>`:''}
     ${p.style?`<div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:4px">風格</div><p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:18px">${p.style}</p>`:''}
+    ${p.venueIds&&p.venueIds.length?`<div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:4px">常出沒場地</div><p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:18px">${p.venueIds.map(v=>getShowVenueLabelById(v)||v).join('、')}</p>`:''}
     ${p.venues?`<div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:4px">常出沒場地</div><p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:18px">${p.venues}</p>`:''}
     <div style="font-size:.78rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>
     ${showsList}
