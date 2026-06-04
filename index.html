@@ -1077,6 +1077,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <!-- 格狀列表 -->
     <div id="performers-grid"></div>
     <div id="performers-pagination"></div>
+    <p style="text-align:right;font-size:.68rem;color:rgba(45,43,31,.28);font-family:var(--f-bo);margin-top:12px"><span id="last-updated-performers"></span></p>
   </section>
 </div>
 
@@ -1352,6 +1353,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <li><a onclick="showPage('shows')"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></a></li>
       <li><a onclick="showPage('opmic')"><span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic</span></a></li>
       <li><a onclick="showPage('venues')"><span class="zh-text">全台喜劇據點</span><span class="en-text">Venues</span></a></li>
+      <li><a onclick="showPage('performers')"><span class="zh-text">演員資料庫</span><span class="en-text">Performers</span></a></li>
       <li><a onclick="showPage('courses')"><span class="zh-text">課程講座</span><span class="en-text">Courses</span></a></li>
     </ul></div>
     <div class="ft-col"><h4><span class="zh-text">關於</span><span class="en-text">About</span></h4><ul>
@@ -2030,7 +2032,7 @@ window._loadAllData = loadAllData;
 // ── Firebase CRUD helpers — exposed immediately ──
 // 頁面對應的 meta key
 const PAGE_META_MAP = {
-  shows: 'shows', mics: 'opmic', venues: 'venues', courses: 'courses', comments: 'board'
+  shows: 'shows', mics: 'opmic', venues: 'venues', courses: 'courses', comments: 'board', performers: 'performers'
 };
 
 window.FB = {
@@ -2360,7 +2362,7 @@ function formatLastUpdated(key) {
     : `最後更新：${mm}/${dd} ${hh}:${min}`;
 }
 function updateLastUpdatedDisplay() {
-  ['shows','opmic','venues','courses'].forEach(key=>{
+  ['shows','opmic','venues','courses','performers'].forEach(key=>{
     const el = document.getElementById('last-updated-'+key);
     if(el) el.textContent = formatLastUpdated(key);
   });
