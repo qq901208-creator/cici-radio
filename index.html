@@ -781,7 +781,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <span class="en-text">Performers</span>
       </a>
     </div>
-    <a href="https://forms.gle/H6c37tkif4USJWs29" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:4px;padding:7px 16px;background:rgba(45,43,31,.07);border-radius:var(--r-pill);font-size:.78rem;font-family:var(--f-zh);color:var(--ts);text-decoration:none;transition:background .15s;position:relative;z-index:1" onmouseover="this.style.background='rgba(45,43,31,.13)'" onmouseout="this.style.background='rgba(45,43,31,.07)'">🎉 <span class="zh-text">網站試營運中，歡迎填寫回饋表單幫我們變得更好 →</span><span class="en-text">We're in beta — fill out our feedback form and help us improve →</span></a>
+    <a href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:4px;padding:7px 16px;background:rgba(45,43,31,.07);border-radius:var(--r-pill);font-size:.78rem;font-family:var(--f-zh);color:var(--ts);text-decoration:none;transition:background .15s;position:relative;z-index:1" onmouseover="this.style.background='rgba(45,43,31,.13)'" onmouseout="this.style.background='rgba(45,43,31,.07)'">🎭 <span class="zh-text">演員資料新增申請表單，歡迎申請加入演員資料庫！→</span><span class="en-text">Performer profile application — apply to join the directory! →</span></a>
     <!-- 數字統計列 -->
     <div class="hero-stats" id="hero-stats">
       <div class="hero-stat"><span class="hero-stat-num" id="stat-shows">—</span><span class="hero-stat-lbl"><span class="zh-text">近一個月演出</span><span class="en-text">Shows (30 days)</span></span></div>
@@ -1050,7 +1050,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <div class="page" id="page-performers">
   <section class="sec" style="background:#f6efcf">
     <div class="sec-label"><span class="zh-text">認識他們</span><span class="en-text">Meet the Comedians</span></div>
-    <h2 class="sec-title"><span class="zh-text">演員資料庫 <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">新功能更新中</span></span><span class="en-text">Performer Directory <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">New</span></span></h2>
+    <h2 class="sec-title"><span class="zh-text">現場喜劇演員資料庫 <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">新功能更新中</span></span><span class="en-text">Performer Directory <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">New</span></span></h2>
     <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem"><span class="zh-text">發現資訊有誤或想把自己的資訊放上頁面嗎？歡迎回報 →</span></a></span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found an error or want to add yourself? Let us know →</a></span></p>
     <p style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-bottom:16px;opacity:.7"><span class="zh-text">本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義❤️‍🔥</span><span class="en-text">Sorted by stroke order / alphabet — the order means nothing ❤️‍🔥</span></p>
     <!-- 篩選列 -->
@@ -1099,6 +1099,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="sketch" style="accent-color:var(--or)"> 素描短劇</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="crosstalk" style="accent-color:var(--or)"> 相聲</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="rakugo" style="accent-color:var(--or)"> 落語</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="english" style="accent-color:var(--or)"> 英文喜劇</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="other" style="accent-color:var(--or)"> 其他</label>
       </div>
     </div>
@@ -1140,7 +1141,21 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g"><label class="fl"><svg width="14" height="14" viewBox="0 0 24 24" fill="#1877f2" style="vertical-align:middle;margin-right:4px"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook</label><input class="fi" type="url" id="p-fb" placeholder="https://facebook.com/..."></div>
     <div class="fg-g"><label class="fl"><svg width="14" height="14" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:4px"><defs><radialGradient id="ig-g" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><path fill="url(#ig-g)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>Instagram</label><input class="fi" type="url" id="p-ig" placeholder="https://instagram.com/..."></div>
     <div class="fg-g"><label class="fl"><svg width="14" height="14" viewBox="0 0 24 24" fill="#ff0000" style="vertical-align:middle;margin-right:4px"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YouTube</label><input class="fi" type="url" id="p-youtube" placeholder="https://youtube.com/@..."></div>
-    <div class="fg-g"><label class="fl">其他連結</label><input class="fi" type="url" id="p-website" placeholder="https://..."></div>
+    <div class="fg-g full"><label class="fl">其他連結（選填）</label>
+      <div id="p-extra-links">
+        <div class="p-extra-link-row" style="display:flex;gap:8px;margin-bottom:8px">
+          <select class="fi" style="width:120px;flex-shrink:0" onchange="this.nextSibling.placeholder=this.value==='podcast'?'https://...':this.value==='newsletter'?'https://...':this.value==='linktree'?'https://linktr.ee/...':'https://...'">
+            <option value="website">網站</option>
+            <option value="podcast">Podcast</option>
+            <option value="newsletter">電子報</option>
+            <option value="linktree">連結樹</option>
+            <option value="other">其他</option>
+          </select>
+          <input class="fi" type="url" placeholder="https://..." style="flex:1">
+        </div>
+      </div>
+      <button type="button" onclick="addExtraLinkRow()" style="font-size:.78rem;color:var(--or);background:none;border:none;cursor:pointer;font-family:var(--f-zh);padding:0">＋ 新增連結</button>
+    </div>
     <div class="fg-g full"><label style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" id="p-featured" style="accent-color:var(--or)"> 設為精選演員（置頂顯示）</label></div>
   </div>
   <div class="fa">
@@ -1781,8 +1796,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <div class="modal-ov" id="modal-report">
   <div class="modal" style="max-width:420px">
     <button class="modal-close" onclick="document.getElementById('modal-report').classList.remove('open')">✕</button>
-    <div class="modal-title">💬 <span class="zh-text">聯絡我們</span><span class="en-text">Contact Us</span></div>
-    <p style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:14px;line-height:1.6"><span class="zh-text">無論是想回報資訊有誤、補充內容、合作洽談，或是單純想打聲招呼，都歡迎透過以下管道找到我們！</span><span class="en-text">Whether you'd like to report an error, suggest content, collaborate, or just say hi — we'd love to hear from you.</span></p>
+    <div class="modal-title">🎭 <span class="zh-text">演員資料新增申請</span><span class="en-text">Performer Profile Application</span></div>
+    <p style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:14px;line-height:1.6"><span class="zh-text">想把自己的演員資料放上嘻嘻哪哩唷嗎？填寫申請表單，或透過以下管道與我們聯繫！</span><span class="en-text">Want to be listed in the performer directory? Fill out the form, or reach us through the channels below!</span></p>
     <a class="report-channel" href="https://www.instagram.com/cici._.radio/" target="_blank" rel="noopener">
       <div class="report-ch-icon" style="background:radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);color:#fff;font-size:.7rem;display:flex;align-items:center;justify-content:center">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -1819,7 +1834,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <span><span class="zh-text">發現資訊有誤或想補充新演出？<br>點這裡填表單告訴我！</span><span class="en-text">Found an error or want to add a show?<br>Fill out the form and let me know!</span></span>
       </div>
     </a>
-    <a class="report-channel" href="https://forms.gle/8TZ7Q97Cs5v6gVvXA" target="_blank" rel="noopener">
+    <a class="report-channel" href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener">
       <div class="report-ch-icon" style="background:#fff;padding:2px;display:flex;align-items:center;justify-content:center">
         <svg viewBox="0 0 48 48" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path d="M30 2H10C7.8 2 6 3.8 6 6v36c0 2.2 1.8 4 4 4h28c2.2 0 4-1.8 4-4V14L30 2z" fill="#7986cb"/><path d="M30 2v12h12L30 2z" fill="#c5cae9"/><path d="M14 22h20v2H14zm0 6h20v2H14zm0 6h12v2H14z" fill="#fff"/></svg>
       </div>
@@ -3263,17 +3278,55 @@ function restoreShow(id){
   }).catch(()=>showToast('❌ 操作失敗','err'));
 }
 let ePerformerId = null;
+function addExtraLinkRow(type='website', url=''){
+  const container = document.getElementById('p-extra-links');
+  if(!container) return;
+  const row = document.createElement('div');
+  row.className = 'p-extra-link-row';
+  row.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;align-items:center';
+  row.innerHTML = `<select class="fi" style="width:120px;flex-shrink:0">
+    <option value="website" ${type==='website'?'selected':''}>網站</option>
+    <option value="podcast" ${type==='podcast'?'selected':''}>Podcast</option>
+    <option value="newsletter" ${type==='newsletter'?'selected':''}>電子報</option>
+    <option value="linktree" ${type==='linktree'?'selected':''}>連結樹</option>
+    <option value="other" ${type==='other'?'selected':''}>其他</option>
+  </select>
+  <input class="fi" type="url" placeholder="https://..." value="${url}" style="flex:1">
+  <button type="button" onclick="this.parentNode.remove()" style="font-size:.9rem;color:var(--ts);background:none;border:none;cursor:pointer;flex-shrink:0">✕</button>`;
+  container.appendChild(row);
+}
+
+function getExtraLinks(){
+  return [...document.querySelectorAll('.p-extra-link-row')].map(row=>{
+    const type = row.querySelector('select')?.value||'website';
+    const url = row.querySelector('input[type=url]')?.value.trim()||'';
+    return url ? {type, url} : null;
+  }).filter(Boolean);
+}
+
+function setExtraLinks(links){
+  const container = document.getElementById('p-extra-links');
+  if(!container) return;
+  container.innerHTML = '';
+  if(links && links.length){
+    links.forEach(l=>addExtraLinkRow(l.type||'website', l.url||''));
+  } else {
+    addExtraLinkRow();
+  }
+}
+
 function openPerformerModal(id){
   if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}
   ePerformerId = id||null;
   const p = id ? (window._PERFORMERS||[]).find(x=>x.id===id) : null;
   document.getElementById('modal-performer-title').textContent = p?'編輯演員':'新增演員';
   // 清空
-  ['p-name','p-aliases','p-tagline','p-bio','p-style','p-photo','p-photo-id','p-fb','p-ig','p-youtube','p-website'].forEach(k=>{
+  ['p-name','p-aliases','p-tagline','p-bio','p-style','p-photo','p-photo-id','p-fb','p-ig','p-youtube'].forEach(k=>{
     const el=document.getElementById(k); if(el) el.value='';
   });
   document.querySelectorAll('#p-types-group input[type=checkbox]').forEach(cb=>cb.checked=false);
   document.querySelectorAll('#p-venues-group input[type=checkbox]').forEach(cb=>cb.checked=false);
+  setExtraLinks([]);
   const imgPrev=document.getElementById('p-img-prev');
   if(imgPrev){imgPrev.src='';imgPrev.style.display='none';}
   const imgHint=document.getElementById('p-img-hint');
@@ -3290,7 +3343,7 @@ function openPerformerModal(id){
     document.getElementById('p-fb').value=p.fb||'';
     document.getElementById('p-ig').value=p.ig||'';
     document.getElementById('p-youtube').value=p.youtube||'';
-    document.getElementById('p-website').value=p.website||'';
+    setExtraLinks(p.extraLinks||[]);
     document.getElementById('p-featured').checked=!!p.featured;
     (p.types||[]).forEach(t=>{
       const cb=document.querySelector(`#p-types-group input[value="${t}"]`);
@@ -3327,7 +3380,7 @@ function savePerformer(){
     fb: document.getElementById('p-fb').value.trim(),
     ig: document.getElementById('p-ig').value.trim(),
     youtube: document.getElementById('p-youtube').value.trim(),
-    website: document.getElementById('p-website').value.trim(),
+    extraLinks: getExtraLinks(),
     featured: document.getElementById('p-featured').checked,
     types,
   };
@@ -3462,11 +3515,11 @@ function openPerformerDetail(id){
     : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">近期暫無演出資訊</div>`;
   const venueDisplay = p.venueIds&&p.venueIds.length ? p.venueIds.map(v=>getShowVenueLabelById(v)||v).join('、') : (p.venues||'');
   const socialLinks = [
-    p.fb ? `<a href="${p.fb}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Facebook</a>` : '',
-    p.ig ? `<a href="${p.ig}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Instagram</a>` : '',
-    p.youtube ? `<a href="${p.youtube}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">YouTube</a>` : '',
-    p.website ? `<a href="${p.website}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Website</a>` : '',
-  ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
+    p.fb ? `<a href="${p.fb}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Facebook</a>` : '',
+    p.ig ? `<a href="${p.ig}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Instagram</a>` : '',
+    p.youtube ? `<a href="${p.youtube}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">YouTube</a>` : '',
+    ...(p.extraLinks||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'連結樹',other:'其他連結'}[l.type]||l.type}</a>`),
+  ].filter(Boolean).join('');
   const heroAvatar = p.photoUrl
     ? `<img src="${p.photoUrl}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(45,43,31,.1);flex-shrink:0">`
     : `<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;font-weight:700;flex-shrink:0">${(p.name||'?')[0]}</div>`;
@@ -3475,11 +3528,11 @@ function openPerformerDetail(id){
       ${heroAvatar}
       <div style="flex:1;min-width:0">
         <div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:6px">${p.name||''}</div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">${typeTags}</div>
-        ${socialLinks?`<div>${socialLinks}</div>`:''}
+        <div style="display:flex;flex-wrap:wrap;gap:5px">${typeTags}</div>
       </div>
     </div>
     ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin-bottom:10px">${p.tagline}</p>`:''}
+    ${socialLinks?`<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${socialLinks}</div>`:''}
     ${venueDisplay?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px">常出沒場地<br><span style="font-weight:600;color:var(--tm)">${venueDisplay}</span></div>`:''}
     ${p.bio?`<p class="sd-desc">${p.bio}</p>`:''}
     ${upcoming.length?`<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>${showsList}</div>`:''}
