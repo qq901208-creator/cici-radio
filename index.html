@@ -681,7 +681,7 @@ body.edit .edit-bar{display:flex!important}
   .fp-inner{width:100%}
   .fp-nr{flex-direction:column;gap:6px}
   .fp-ni{width:100%}
-  .hero{padding:calc(var(--nav) + 4px) 5vw 24px}
+  .hero{padding:calc(var(--nav) + 1px) 5vw 24px}
   .hero::before{width:200px;height:200px;top:0;right:-60px;opacity:.25}
   .hero::after{width:120px;height:120px;bottom:-20px;left:-40px;opacity:.07}
   .hero-logo{width:88px;height:88px;border-radius:18px;border-width:3px;margin-bottom:10px}
@@ -1934,23 +1934,24 @@ window._onSnapshot = onSnapshot;
 
 // ── Load all data from Firestore on startup ──
 async function loadAllData() {
+  const safe = p => p.catch(()=>null);
   try {
     const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, performersSnap, metaSnap, showVenuesSnap, showAreasSnap] = await Promise.all([
-      getDocs(collection(db,'shows')),
-      getDocs(collection(db,'mics')),
-      getDocs(collection(db,'venues')),
-      getDocs(collection(db,'courses')),
-      getDocs(collection(db,'comments')),
-      getDocs(collection(db,'performers')),
-      getDoc(doc(db,'meta','lastUpdated')),
-      getDoc(doc(db,'meta','showVenues')),
-      getDoc(doc(db,'meta','showAreas')),
+      safe(getDocs(collection(db,'shows'))),
+      safe(getDocs(collection(db,'mics'))),
+      safe(getDocs(collection(db,'venues'))),
+      safe(getDocs(collection(db,'courses'))),
+      safe(getDocs(collection(db,'comments'))),
+      safe(getDocs(collection(db,'performers'))),
+      safe(getDoc(doc(db,'meta','lastUpdated'))),
+      safe(getDoc(doc(db,'meta','showVenues'))),
+      safe(getDoc(doc(db,'meta','showAreas'))),
     ]);
-    window._LAST_UPDATED = metaSnap.exists() ? metaSnap.data() : {};
-    window._PERFORMERS = performersSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._LAST_UPDATED = metaSnap?.exists() ? metaSnap.data() : {};
+    window._PERFORMERS = performersSnap ? performersSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
     // 載入自訂場地和地區
-    window._SHOW_VENUES = showVenuesSnap.exists() ? showVenuesSnap.data().items : null;
-    window._SHOW_AREAS  = showAreasSnap.exists()  ? showAreasSnap.data().items  : null;
+    window._SHOW_VENUES = showVenuesSnap?.exists() ? showVenuesSnap.data().items : null;
+    window._SHOW_AREAS  = showAreasSnap?.exists()  ? showAreasSnap.data().items  : null;
     // 從 localStorage 遷移舊資料到 Firebase（一次性）
     if(!window._SHOW_VENUES){
       try{
@@ -1964,18 +1965,18 @@ async function loadAllData() {
         if(ls && ls.length){ window._SHOW_AREAS = ls; window.FB.save('meta','showAreas',{items:ls}).catch(()=>{}); }
       }catch{}
     }
-    window._SHOWS    = showsSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window._MICS     = micsSnap.docs.map(d=>({id:d.id,...d.data()}));
-    const fbVenues   = venuesSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._SHOWS    = showsSnap ? showsSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
+    window._MICS     = micsSnap ? micsSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
+    const fbVenues   = venuesSnap ? venuesSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
     const merged     = window.DEFAULT_VENUES.map(def=>{
       const fb=fbVenues.find(v=>v.id===def.id);
       return fb?{...def,...fb}:def;
     });
     fbVenues.forEach(fb=>{if(!merged.find(v=>v.id===fb.id))merged.push(fb);});
     window._VENUES   = merged.sort((a,b)=>(a._order??999)-(b._order??999));
-    window._COURSES  = coursesSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window._COMMENTS = commentsSnap.docs.map(d=>({id:d.id,...d.data()}))
-      .sort((a,b)=>(b.time||0)-(a.time||0));
+    window._COURSES  = coursesSnap ? coursesSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
+    window._COMMENTS = commentsSnap ? commentsSnap.docs.map(d=>({id:d.id,...d.data()}))
+      .sort((a,b)=>(b.time||0)-(a.time||0)) : [];
     if(!window._SHOWS.length)    window._SHOWS    = window.DEFAULT_SHOWS;
     if(!window._MICS.length)     window._MICS     = window.DEFAULT_MICS;
     if(!window._COURSES.length)  window._COURSES  = window.DEFAULT_COURSES;
