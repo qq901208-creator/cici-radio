@@ -1072,12 +1072,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem"><span class="zh-text">發現資訊有誤或想把自己的資訊放上頁面嗎？歡迎回報 →</span></a></span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found an error or want to add yourself? Let us know →</a></span></p>
     <p style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-bottom:16px;opacity:.7"><span class="zh-text">本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義❤️‍🔥</span><span class="en-text">Sorted by stroke order / alphabet — the order means nothing ❤️‍🔥</span></p>
     <!-- 篩選列 -->
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
-      <input id="performers-search" type="text" placeholder="搜尋演員名稱…" maxlength="30"
-        style="padding:8px 14px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.84rem;font-family:var(--f-zh);outline:none;min-width:180px;background:var(--ww)"
+    <div id="performers-filter-row" style="display:flex;gap:8px;flex-wrap:nowrap;margin-bottom:18px;align-items:center">
+      <input id="performers-search" type="text" placeholder="搜尋演員…" maxlength="30"
+        style="padding:8px 10px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.82rem;font-family:var(--f-zh);outline:none;flex:1;min-width:0;background:var(--ww)"
         oninput="window._performersPage=1;renderPerformers()">
       <select id="performers-type" class="chip-select"
-        style="padding:7px 14px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.82rem;font-family:var(--f-zh);background:var(--ww);outline:none;cursor:pointer"
+        style="padding:7px 10px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.80rem;font-family:var(--f-zh);background:var(--ww);outline:none;cursor:pointer;flex-shrink:0"
         onchange="window._performersPage=1;renderPerformers()">
         <option value="all">所有類型</option>
         <option value="standup">站立喜劇</option>
@@ -3534,10 +3534,10 @@ function openPerformerDetail(id){
     : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">近期暫無演出資訊</div>`;
   const venueDisplay = p.venueIds&&p.venueIds.length ? p.venueIds.map(v=>getShowVenueLabelById(v)||v).join('、') : (p.venues||'');
   const socialLinks = [
-    p.fb ? `<a href="${p.fb}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Facebook</a>` : '',
-    p.ig ? `<a href="${p.ig}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Instagram</a>` : '',
-    p.youtube ? `<a href="${p.youtube}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">YouTube</a>` : '',
-    ...(p.extraLinks||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'連結樹',other:'其他連結'}[l.type]||l.type}</a>`),
+    p.fb ? `<a href="${p.fb}" target="_blank" rel="noopener" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Facebook</a>` : '',
+    p.ig ? `<a href="${p.ig}" target="_blank" rel="noopener" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Instagram</a>` : '',
+    p.youtube ? `<a href="${p.youtube}" target="_blank" rel="noopener" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">YouTube</a>` : '',
+    ...(p.extraLinks||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'連結樹',other:'其他連結'}[l.type]||l.type}</a>`),
   ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
   const heroAvatar = p.photoUrl
     ? `<img src="${p.photoUrl}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(45,43,31,.1);flex-shrink:0">`
