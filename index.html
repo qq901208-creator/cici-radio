@@ -97,7 +97,7 @@ body.ready{visibility:visible}
 
 /* FEAT CARDS */
 .feat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
-@media(max-width:768px){.feat-grid{display:none}}
+@media(max-width:768px){.feat-grid{display:none}#feat-section{display:none}}
 .feat-card{background:var(--ww);border-radius:var(--r-lg);padding:26px 22px;border:2px solid rgba(45,43,31,.07);color:var(--tm);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;gap:11px;position:relative;overflow:hidden;cursor:pointer}
 .feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--accent,var(--y))}
 .feat-card:hover{transform:translateY(-5px);box-shadow:var(--sh)}
@@ -798,7 +798,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
   </section>
 
-  <section class="sec" style="background:var(--cr)">
+  <section class="sec" style="background:var(--cr)" id="feat-section">
     <div class="sec-label"><span class="zh-text">網站功能</span><span class="en-text">Features</span></div>
     <h2 class="sec-title"><span class="zh-text">你在找的都在這</span><span class="en-text">Everything You Need</span></h2>
     <p class="sec-desc"><span class="zh-text">以售票演出為主，由人工整理與更新。若有錯誤或遺漏，歡迎回報！</span><span class="en-text">Focused on ticketed shows, hand-curated and updated. Found an error? Let us know!</span></p>
