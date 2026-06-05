@@ -278,6 +278,7 @@ body.ready{visibility:visible}
 .mic-card-city{font-size:.72rem;color:var(--ts);margin-bottom:8px}
 .mic-card-name{font-size:.88rem;font-weight:700;color:var(--or);font-family:var(--f-zh);margin-bottom:12px;line-height:1.4}
 .mic-card-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.mic-signup-time{color:var(--or);font-weight:700}
 .mic-card-row{display:flex;gap:8px;font-size:.83rem;font-family:var(--f-zh);color:var(--tm);line-height:1.55;align-items:flex-start}
 .mic-card-row .ri{flex-shrink:0;width:1.3em;text-align:center}
 .mic-card-method{font-size:.83rem;font-family:var(--f-zh);color:var(--tm);line-height:1.65;word-break:break-word;padding:10px 12px;background:rgba(45,43,31,.04);border-radius:var(--r-sm);margin-bottom:10px}
@@ -698,6 +699,7 @@ body.edit .edit-bar{display:flex!important}
   .sec{padding-top:30px!important}
   .filter-lbl{display:none}  .opmic-notice{font-size:clamp(.58rem,.55rem + .5vw,.72rem)!important;padding:7px 10px!important;white-space:nowrap;overflow:hidden}
   #page-opmic .sec-desc{margin-bottom:8px!important}
+  .mic-tab-hint-sub{font-size:.72rem;color:rgba(45,43,31,.45)}
   .about-hero{padding:20px 5vw 32px}
   .about-logo{width:72px!important;height:72px!important;border-radius:14px!important;margin-bottom:12px!important}
   .about-h1{font-size:1.6rem!important}
@@ -1020,7 +1022,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="day-tab" data-day="0" onclick="selectMicDay(0,this)"><span class="zh-text">週日</span><span class="en-text">Sun.</span></button>
       <button class="day-tab" data-day="irregular" onclick="selectMicDay('irregular',this)"><span class="zh-text">不定期開放</span><span class="en-text">Irregular</span></button>
     </div>
-    <p class="mic-tab-hint"><span class="zh-text">以上「週一～週日」標籤是 Open Mic 開放報名的星期，不是實際演出日期與時間喔！<br>部分 Open Mic 無固定報名星期，請依主辦公告為主。</span><span class="en-text">The Mon.–Sun. tabs above indicate when Open Mic sign-ups open, not the actual show date or time.<br>Some Open Mics do not have a fixed sign-up day — please refer to the organizer's announcements.</span></p>
+    <p class="mic-tab-hint"><span class="zh-text">以上「週一～週日」標籤是 Open Mic 開放<strong>報名日</strong>，不是實際<strong>演出日期</strong>與時間喔！<br><span class="mic-tab-hint-sub">部分 Open Mic 無固定報名星期，請依主辦公告為主。</span></span><span class="en-text">The Mon.–Sun. tabs above indicate when Open Mic sign-ups open, not the actual show date or time.<br><span class="mic-tab-hint-sub">Some Open Mics do not have a fixed sign-up day — please refer to the organizer's announcements.</span></span></p>
     <!-- Desktop 表格 -->
     <div class="mic-table-wrap" id="mic-table-wrap">
       <table class="mic-table"><thead><tr>
@@ -3598,9 +3600,10 @@ function renderMicCards(rows, isAdmin, lang, isIrregular) {
       ? `<span class="mic-card-badge"><span class="zh-text">今天</span><span class="en-text">Today</span></span>` : '';
 
     // helper: only show row if value is non-empty
-    const row = (icon, zhLbl, enLbl, val) => {
+    const row = (icon, zhLbl, enLbl, val, isSignup=false) => {
       if(!val) return '';
-      return `<div class="mic-card-row"><span class="ri">${icon}</span><span><strong>${lang==='en'?enLbl:zhLbl}：</strong>${val}</span></div>`;
+      const valHtml = isSignup ? `<span class="mic-signup-time">${val}</span>` : val;
+      return `<div class="mic-card-row"><span class="ri">${icon}</span><span><strong>${lang==='en'?enLbl:zhLbl}：</strong>${valHtml}</span></div>`;
     };
 
     const signupBtn = (m.link && m.link !== '#')
@@ -3613,7 +3616,7 @@ function renderMicCards(rows, isAdmin, lang, isIrregular) {
       ${cityLbl ? `<div class="mic-card-city">📍 ${cityLbl}</div>` : ''}
       ${m.name ? `<div class="mic-card-name">${m.name}</div>` : ''}
       <div class="mic-card-rows">
-        ${row('📝','報名時間','Sign-up Opens', signupDisplay)}
+        ${row('📝','報名時間','Sign-up Opens', signupDisplay, true)}
         ${row('🕗','演出時間','Show Time', showTimeDisplay)}
         ${row('🚪','報到時間','Check-in', checkinDisplay)}
         ${row('🎭','演出限制','Time Limit', m.timeLimit||'')}
