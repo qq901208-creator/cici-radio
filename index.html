@@ -906,7 +906,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
         <div class="filter-chips">
         <button class="chip on" data-f="type" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
-        <button class="chip" data-f="type" data-v="opmic"><span class="zh-text">Open Mic 演出</span><span class="en-text">Open Mic Show</span></button>
+        <button class="chip" data-f="type" data-v="opmic"><span class="zh-text">Open Mic</span><span class="en-text">Open Mic</span></button>
         <button class="chip" data-f="type" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
         <button class="chip" data-f="type" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
         <button class="chip" data-f="type" data-v="sketch"><span class="zh-text">素描短劇</span><span class="en-text">Sketch</span></button>
@@ -1460,7 +1460,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g full">
       <label class="fl">表演類型（可複選）<span class="req">*</span></label>
       <div class="type-cbs" id="s-types">
-        <label class="type-cb-lbl"><input type="checkbox" value="opmic" onchange="syncCB(this)"><span class="zh-text">Open Mic 演出</span><span class="en-text">Open Mic Show</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="opmic" onchange="syncCB(this)"><span class="zh-text">Open Mic</span><span class="en-text">Open Mic</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="standup" onchange="syncCB(this)"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="improv" onchange="syncCB(this)"><span class="zh-text">即興</span><span class="en-text">Improv</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="sketch" onchange="syncCB(this)"><span class="zh-text">素描短劇</span><span class="en-text">Sketch</span></label>
@@ -2117,7 +2117,7 @@ document.addEventListener('DOMContentLoaded', ()=>{ loadAllData(); });
 <script>
 // ── TYPE METADATA ──
 const TYPE_META = {
-  opmic:    {bg:'#fff3a0',color:'#5e4200',  label:'Open Mic 演出', labelEn:'Open Mic Show'},
+  opmic:    {bg:'#fff3a0',color:'#5e4200',  label:'Open Mic', labelEn:'Open Mic'},
   standup:  {bg:'#ffd6b3',color:'#7a2e00',  label:'站立喜劇',   labelEn:'Stand-up Comedy'},
   improv:   {bg:'#b8f0d0',color:'#0d5c30',  label:'即興',       labelEn:'Improv'},
   sketch:   {bg:'#ffe0b3',color:'#7a4000',  label:'素描短劇',   labelEn:'Sketch'},
@@ -2768,7 +2768,7 @@ function renderHomeShows() {
       .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0, count);
     g.innerHTML = fil.length
       ? fil.map(showCardHTML).join('')
-      : `<div class="empty-state"><div class="empty-state-icon">🎭</div><div class="empty-state-title"><span class="zh-text">近期資訊整理中，敬請期待！</span><span class="en-text">More comedy events coming soon!</span></div><button class="empty-state-btn" onclick="showPage('opmic')"><span class="zh-text">查看本週 Open Mic 場次</span><span class="en-text">Browse This Week's Open Mic Shows</span></button></div>`;
+      : `<div class="empty-state"><div class="empty-state-icon">🎭</div><div class="empty-state-title"><span class="zh-text">近期資訊整理中，敬請期待！</span><span class="en-text">More comedy events coming soon!</span></div><button class="empty-state-btn" onclick="showPage('opmic')"><span class="zh-text">查看本週 Open Mic 場次</span><span class="en-text">Browse This Week's Open Mics</span></button></div>`;
   };
 
   // 讓瀏覽器先完成 layout 再讀取欄數
