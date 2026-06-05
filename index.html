@@ -1079,7 +1079,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <select id="performers-type" class="chip-select"
         style="padding:7px 10px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.80rem;font-family:var(--f-zh);background:var(--ww);outline:none;cursor:pointer;flex-shrink:0"
         onchange="window._performersPage=1;renderPerformers()">
-        <option value="all">所有類型</option>
+        <option value="all">所有類型 / All Types</option>
         <option value="standup">站立喜劇</option>
         <option value="improv">即興</option>
         <option value="mancai">漫才</option>
@@ -1087,6 +1087,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <option value="sketch">素描短劇</option>
         <option value="crosstalk">相聲</option>
         <option value="rakugo">落語</option>
+        <option value="english">英文喜劇</option>
         <option value="other">其他</option>
       </select>
       <span id="performers-count" style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo)"></span>
@@ -2120,7 +2121,7 @@ document.addEventListener('DOMContentLoaded', ()=>{ loadAllData(); });
 // ── TYPE METADATA ──
 const TYPE_META = {
   opmic:    {bg:'#fff3a0',color:'#5e4200',  label:'售票 Open Mic', labelEn:'Ticketed Open Mic'},
-  standup:  {bg:'#ffd6b3',color:'#7a2e00',  label:'站立喜劇',   labelEn:'Stand-up'},
+  standup:  {bg:'#ffd6b3',color:'#7a2e00',  label:'站立喜劇',   labelEn:'Stand-up Comedy'},
   improv:   {bg:'#b8f0d0',color:'#0d5c30',  label:'即興',       labelEn:'Improv'},
   sketch:   {bg:'#ffe0b3',color:'#7a4000',  label:'素描短劇',   labelEn:'Sketch'},
   mancai:   {bg:'#c8d8ff',color:'#1a2e8c',  label:'漫才',       labelEn:'Mancai'},
@@ -3434,6 +3435,13 @@ function renderPerformers(){
   if(!grid) return;
   const q = (document.getElementById('performers-search')?.value||'').trim().toLowerCase();
   const fType = document.getElementById('performers-type')?.value||'all';
+  const lang = getLang();
+  // 更新篩選選單語言
+  const sel = document.getElementById('performers-type');
+  if(sel) [...sel.options].forEach(opt=>{
+    if(opt.value==='all') opt.text = lang==='en'?'All Types':'所有類型';
+    else if(TYPE_META[opt.value]) opt.text = lang==='en'?(TYPE_META[opt.value].labelEn||opt.value):TYPE_META[opt.value].label;
+  });
 
   // 虛擬資料已移除，等待真實演員資料上架
   const all = window._PERFORMERS && window._PERFORMERS.length > 0 ? window._PERFORMERS : [];
@@ -3540,8 +3548,8 @@ function openPerformerDetail(id){
     ...(p.extraLinks||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'連結樹',other:'其他連結'}[l.type]||l.type}</a>`),
   ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
   const heroAvatar = p.photoUrl
-    ? `<img src="${p.photoUrl}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(45,43,31,.1);flex-shrink:0">`
-    : `<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;font-weight:700;flex-shrink:0">${(p.name||'?')[0]}</div>`;
+    ? `<img src="${p.photoUrl}" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:2px solid rgba(45,43,31,.1);flex-shrink:0">`
+    : `<div style="width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:2.8rem;color:#fff;font-weight:700;flex-shrink:0">${(p.name||'?')[0]}</div>`;
   document.getElementById('performer-detail-body').innerHTML = `
     <div style="display:flex;gap:16px;align-items:center;margin-bottom:16px">
       ${heroAvatar}
@@ -4249,18 +4257,20 @@ const LS_VENUES_KEY = 'cici_show_venues';
 const LS_AREAS_KEY  = 'cici_show_areas';
 
 const DEFAULT_SHOW_VENUES = [
-  {id:'comedy-plus', labelZh:'卡米地＋',                               labelEn:'Comedy Plus'},
-  {id:'two-three',   labelZh:'23喜劇',                                 labelEn:'Two Three Comedy'},
-  {id:'fakers',      labelZh:'飛客劇樂部 - basis coffee.',             labelEn:'Fakers Club - basis coffee.'},
-  {id:'beitou',      labelZh:'北投喜劇 - 山峸二手書店',                labelEn:'Beitou Comedy - Ridge Books'},
-  {id:'ginting',     labelZh:'樂君亭',                                 labelEn:'Gingting Comedy'},
-  {id:'windcity',    labelZh:'站立風城 - 現場馬拉桑餐酒館',           labelEn:"Windy City Stand-up - The Local's Bistro"},
-  {id:'smo',         labelZh:'思MIC歐 - 不染酒吧',                    labelEn:'S.M.O - UNSULLIED COFFEE & COCKTAIL'},
-  {id:'laughhouse',  labelZh:'來福好事 - 群島藝術園區',               labelEn:'Laugh House - Islands Art Park'},
-  {id:'tainan',      labelZh:'府城喜劇 - SASADRA cafe',               labelEn:'Tainan Comedy - SASADRA cafe'},
-  {id:'takao',       labelZh:'喜劇開港',                               labelEn:'Takao Comedy Bay'},
-  {id:'ponwo',       labelZh:'月半窩',                                 labelEn:'Ponwo Cafe'},
-  {id:'other',       labelZh:'其他',                                   labelEn:'Others'},
+  {id:'comedy-plus',       labelZh:'卡米地＋',                               labelEn:'Comedy Plus'},
+  {id:'two-three',         labelZh:'23喜劇',                                 labelEn:'Two Three Comedy'},
+  {id:'fakers',            labelZh:'飛客劇樂部',                             labelEn:'Fakers Club'},
+  {id:'ponwo',             labelZh:'月半窩Cafe',                             labelEn:'Ponwo Cafe'},
+  {id:'beitou',            labelZh:'北投喜劇 - 山峸二手書店',                labelEn:'Beitou Comedy - Ridge Books'},
+  {id:'dikia',             labelZh:'底加書店',                               labelEn:'Titsia Bookstore'},
+  {id:'ginting',           labelZh:'樂君亭',                                 labelEn:'Ginting Comedy'},
+  {id:'smo',               labelZh:'思MIC歐 - 不染酒吧',                    labelEn:'S.M.O - UNSULLIED COFFEE & COCKTAIL'},
+  {id:'windcity',          labelZh:'站立風城 - 新竹市綠水市民活動中心',     labelEn:'Wind City Stand-Up - Lushui Community Center'},
+  {id:'windcity-malasang', labelZh:'站立風城 - 現場馬拉桑餐酒館',           labelEn:"Wind City Stand-Up - The Local's Bistro"},
+  {id:'laughhouse',        labelZh:'來福好事',                               labelEn:'Laugh House'},
+  {id:'tainan',            labelZh:'府城喜劇 - SASADRA cafe',               labelEn:'Tainan Comedy - SASADRA cafe'},
+  {id:'takao',             labelZh:'喜劇開港',                               labelEn:'Takaocomedybay'},
+  {id:'other',             labelZh:'其他',                                   labelEn:'Others'},
 ];
 const DEFAULT_SHOW_AREAS = [
   {id:'taipei',    labelZh:'雙北',  labelEn:'Taipei Area'},
