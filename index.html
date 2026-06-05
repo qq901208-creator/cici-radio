@@ -75,6 +75,7 @@ body.ready{visibility:visible}
 .hero::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:var(--or);opacity:.09;bottom:-60px;left:-80px;pointer-events:none}
 .hero-logo{width:148px;height:148px;border-radius:26px;overflow:hidden;border:4px solid rgba(239,111,32,.28);box-shadow:0 10px 44px rgba(239,111,32,.18);margin-bottom:26px;position:relative;z-index:1;background:var(--ww)}
 .hero-logo img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:768px){.hero-logo{width:88px;height:88px;border-radius:18px;border-width:3px;margin-bottom:16px}}
 .hero-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(239,111,32,.11);border:1.5px solid rgba(239,111,32,.26);color:var(--or);font-size:.74rem;font-weight:600;padding:5px 16px;border-radius:var(--r-pill);margin-bottom:18px;font-family:var(--f-zh);position:relative;z-index:1}
 .hero-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--or);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.6)}}
@@ -96,7 +97,7 @@ body.ready{visibility:visible}
 
 /* FEAT CARDS */
 .feat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
-@media(max-width:768px){.feat-grid{grid-template-columns:repeat(2,1fr);gap:12px}}
+@media(max-width:768px){.feat-grid{display:none}}
 .feat-card{background:var(--ww);border-radius:var(--r-lg);padding:26px 22px;border:2px solid rgba(45,43,31,.07);color:var(--tm);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;gap:11px;position:relative;overflow:hidden;cursor:pointer}
 .feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--accent,var(--y))}
 .feat-card:hover{transform:translateY(-5px);box-shadow:var(--sh)}
@@ -3528,11 +3529,11 @@ function openPerformerDetail(id){
       ${heroAvatar}
       <div style="flex:1;min-width:0">
         <div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:6px">${p.name||''}</div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px">${typeTags}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:${socialLinks?'8px':'0'}">${typeTags}</div>
+        ${socialLinks?`<div style="margin-bottom:4px;overflow-wrap:break-word;word-break:break-word">${socialLinks}</div>`:''}
       </div>
     </div>
     ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin-bottom:10px">${p.tagline}</p>`:''}
-    ${socialLinks?`<div style="margin-bottom:14px;overflow-wrap:break-word;word-break:break-word">${socialLinks}</div>`:''}
     ${venueDisplay?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px;overflow-wrap:break-word">常出沒場地<br><span style="font-weight:600;color:var(--tm)">${venueDisplay}</span></div>`:''}
     ${p.bio?`<p class="sd-desc">${p.bio}</p>`:''}
     ${upcoming.length?`<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>${showsList}</div>`:''}
