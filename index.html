@@ -21,6 +21,9 @@
 <link rel="icon" type="image/jpeg" href="/assets/ciciradio.jpg">
 <link rel="apple-touch-icon" href="/assets/ciciradio.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://firestore.googleapis.com">
+<link rel="dns-prefetch" href="https://www.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -859,7 +862,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         </div>
       </div>
       <div class="podcast-iframe-wrap">
-        <iframe width="100%" height="232" style="border-radius:12px;border:none;display:block;position:relative;z-index:1" src="https://open.spotify.com/embed/show/1NVkhQJcHj91hIdBJ5QAIC?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="嘻嘻哪哩唷 Podcast on Spotify"
+        <iframe id="spotify-iframe" width="100%" height="232" style="border-radius:12px;border:none;display:block;position:relative;z-index:1" data-src="https://open.spotify.com/embed/show/1NVkhQJcHj91hIdBJ5QAIC?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="嘻嘻哪哩唷 Podcast on Spotify"
         onerror="this.style.display='none'"></iframe>
         <div class="podcast-fallback">
           <div style="font-size:2rem;margin-bottom:10px">🎙️</div>
@@ -4907,7 +4910,7 @@ function showPage(page, skipHistory){
   if(page==='venues')renderVenues();
   if(page==='performers')renderPerformers();
   if(page==='courses')renderCourses();
-  if(page==='about')renderAbout();
+  if(page==='about'){renderAbout();const sf=document.getElementById('spotify-iframe');if(sf&&sf.dataset.src&&!sf.src){sf.src=sf.dataset.src;}}
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
   // GA4 虛擬頁面瀏覽追蹤
   const pageTitles = {home:'首頁',shows:'演出資訊',opmic:'Open Mic',venues:'喜劇場地',performers:'演員資料庫',courses:'課程講座',about:'關於本站',board:'留言板'};
