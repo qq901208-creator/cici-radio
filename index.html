@@ -5052,6 +5052,8 @@ function updateFilterChipLabels(){
 }
 window.addEventListener('resize', updateFilterChipLabels);
 document.addEventListener('DOMContentLoaded', updateFilterChipLabels);
+
+function copyShareLink(){
   const url = location.href;
   if(navigator.share){
     // 手機：呼叫系統分享選單
