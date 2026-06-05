@@ -2489,7 +2489,7 @@ function showCardHTML(s) {
           : s.platform==='door'
             ? `<span style="font-size:.74rem;color:var(--or);font-family:var(--f-zh);font-weight:600"><span class="zh-text">現場付費</span><span class="en-text">Door Charge</span></span>`
             : (s.ticketUrl&&s.ticketUrl!=='#')
-              ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">馬上購票</span><span class="en-text">Buy Tickets</span></a>`
+              ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation();if(typeof gtag==='function')gtag('event','click_ticket',{show_title:'${(s.title||'').replace(/'/g,"\\'")}',venue:'${s.venueLabel||s.venue||''}',platform:'${s.platform||''}'})"><span class="zh-text">馬上購票</span><span class="en-text">Buy Tickets</span></a>`
               : `<span></span>`
         }
         <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);display:flex;align-items:center;gap:3px;opacity:.7"><span class="zh-text">詳情</span><span class="en-text">Details</span> ↗</span>
