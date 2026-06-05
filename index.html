@@ -147,7 +147,7 @@ body.ready{visibility:visible}
 /* ── DISCLAIMER ── */
 .sd-disclaimer{font-size:.68rem;color:rgba(45,43,31,.38);text-align:left;margin-top:12px;margin-bottom:4px;line-height:1.85;font-family:var(--f-bo);margin-left:auto;margin-right:auto;padding:0 4px}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.filter-lbl{display:none}
+.filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);width:2.6em;min-width:2.6em;flex-shrink:0;white-space:nowrap}
 .filter-row-indent{display:flex;align-items:flex-start;gap:0}
 .filter-row-indent .filter-lbl{padding-top:5px;margin-right:6px}
 .filter-chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
@@ -252,8 +252,7 @@ body.ready{visibility:visible}
 .cal-ev-dot{width:5px;height:5px;border-radius:50%;background:var(--or)}
 .cal-day.sel{background:var(--or)!important;color:#fff!important;font-weight:700}
 .cal-day.sel .cal-ev-dot{background:rgba(255,255,255,.8)}
-.cal-day.today{background:var(--py);font-weight:700;outline:2px solid var(--or);outline-offset:-2px;position:relative}
-.cal-day.today::after{content:'今';position:absolute;top:1px;right:2px;font-size:.45rem;color:var(--or);font-weight:700;font-family:var(--f-bo);line-height:1}
+.cal-day.today{background:var(--py);font-weight:700;outline:2px solid var(--or);outline-offset:-2px}
 .cal-day.other-month{color:rgba(45,43,31,.18);pointer-events:none}
 .cal-banner{font-size:.8rem;font-weight:700;color:var(--or);font-family:var(--f-bo);margin-bottom:12px;padding:8px 14px;background:rgba(239,111,32,.07);border-radius:var(--r-md);border-left:3px solid var(--or);display:none}
 .cal-banner.show{display:block}
@@ -697,6 +696,7 @@ body.edit .edit-bar{display:flex!important}
   .hero-ctas .btn-ww{padding:9px 8px;font-size:.77rem;white-space:nowrap;flex:0 0 calc(50% - 3px);justify-content:center;overflow:hidden;text-overflow:ellipsis}
   .hero-next{font-size:.8rem;display:block;text-align:center}
   .sec{padding-top:30px!important}
+  .filter-lbl{display:none}
   .opmic-notice{font-size:clamp(.58rem,.55rem + .5vw,.72rem)!important;padding:7px 10px!important;white-space:nowrap;overflow:hidden}
   #page-opmic .sec-desc{margin-bottom:8px!important}
   .about-hero{padding:20px 5vw 32px}
