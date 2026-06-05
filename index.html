@@ -2332,10 +2332,14 @@ function typeLabel(t) {
 // ── VENUE / AREA LABEL HELPERS ──
 function getShowVenueLabelById(id) {
   if(!id) return '';
+  const lang = getLang();
+  // 先查 DEFAULT_SHOW_VENUES（有最新正確名稱）
+  const def = DEFAULT_SHOW_VENUES.find(x=>x.id===id);
+  if(def) return lang==='en' ? (def.labelEn||def.labelZh||id) : (def.labelZh||def.labelEn||id);
+  // 再查使用者自訂場地
   const venues = getShowVenues();
   const v = venues.find(x=>x.id===id);
-  if(!v) return '';
-  const lang = getLang();
+  if(!v) return id;
   return lang==='en' ? (v.labelEn||v.labelZh||v.label||id) : (v.labelZh||v.label||v.labelEn||id);
 }
 function getShowAreaLabelById(id) {
