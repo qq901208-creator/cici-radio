@@ -1166,9 +1166,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 </div></div>
 
 <!-- Performer Detail Modal -->
-<div class="modal-ov" id="modal-performer-detail"><div class="modal" style="max-width:640px">
+<div class="modal-ov" id="modal-performer-detail"><div class="modal" style="max-width:640px;overflow-x:hidden">
   <button class="modal-close" onclick="closeModal('performer-detail')">✕</button>
-  <div id="performer-detail-body"></div>
+  <div id="performer-detail-body" style="overflow-wrap:break-word;word-break:break-word;min-width:0"></div>
 </div></div>
 
 <div class="page" id="page-courses">
@@ -3515,11 +3515,11 @@ function openPerformerDetail(id){
     : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">近期暫無演出資訊</div>`;
   const venueDisplay = p.venueIds&&p.venueIds.length ? p.venueIds.map(v=>getShowVenueLabelById(v)||v).join('、') : (p.venues||'');
   const socialLinks = [
-    p.fb ? `<a href="${p.fb}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Facebook</a>` : '',
-    p.ig ? `<a href="${p.ig}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Instagram</a>` : '',
-    p.youtube ? `<a href="${p.youtube}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">YouTube</a>` : '',
-    ...(p.extraLinks||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'連結樹',other:'其他連結'}[l.type]||l.type}</a>`),
-  ].filter(Boolean).join('');
+    p.fb ? `<a href="${p.fb}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Facebook</a>` : '',
+    p.ig ? `<a href="${p.ig}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">Instagram</a>` : '',
+    p.youtube ? `<a href="${p.youtube}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">YouTube</a>` : '',
+    ...(p.extraLinks||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener" style="color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'連結樹',other:'其他連結'}[l.type]||l.type}</a>`),
+  ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
   const heroAvatar = p.photoUrl
     ? `<img src="${p.photoUrl}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(45,43,31,.1);flex-shrink:0">`
     : `<div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;font-weight:700;flex-shrink:0">${(p.name||'?')[0]}</div>`;
@@ -3532,8 +3532,8 @@ function openPerformerDetail(id){
       </div>
     </div>
     ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin-bottom:10px">${p.tagline}</p>`:''}
-    ${socialLinks?`<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${socialLinks}</div>`:''}
-    ${venueDisplay?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px">常出沒場地<br><span style="font-weight:600;color:var(--tm)">${venueDisplay}</span></div>`:''}
+    ${socialLinks?`<div style="margin-bottom:14px;overflow-wrap:break-word;word-break:break-word">${socialLinks}</div>`:''}
+    ${venueDisplay?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px;overflow-wrap:break-word">常出沒場地<br><span style="font-weight:600;color:var(--tm)">${venueDisplay}</span></div>`:''}
     ${p.bio?`<p class="sd-desc">${p.bio}</p>`:''}
     ${upcoming.length?`<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>${showsList}</div>`:''}
   `;
