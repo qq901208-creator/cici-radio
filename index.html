@@ -3548,7 +3548,7 @@ function openPerformerDetail(id){
       <div style="flex:1;min-width:0">
         <div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:6px">${p.name||''}</div>
         <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:${socialLinks?'8px':'0'}">${typeTags}</div>
-        ${socialLinks?`<div style="margin-bottom:4px;overflow-wrap:break-word;word-break:break-word">${socialLinks}</div>`:''}
+        ${socialLinks?`<div style="margin-bottom:4px;word-break:keep-all">${socialLinks}</div>`:''}
       </div>
     </div>
     ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin-bottom:10px">${p.tagline}</p>`:''}
