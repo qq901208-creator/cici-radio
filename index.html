@@ -147,7 +147,7 @@ body.ready{visibility:visible}
 /* ── DISCLAIMER ── */
 .sd-disclaimer{font-size:.68rem;color:rgba(45,43,31,.38);text-align:left;margin-top:12px;margin-bottom:4px;line-height:1.85;font-family:var(--f-bo);margin-left:auto;margin-right:auto;padding:0 4px}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);width:2.6em;min-width:2.6em;flex-shrink:0;white-space:nowrap}
+.filter-lbl{display:none}
 .filter-row-indent{display:flex;align-items:flex-start;gap:0}
 .filter-row-indent .filter-lbl{padding-top:5px;margin-right:6px}
 .filter-chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
@@ -252,7 +252,8 @@ body.ready{visibility:visible}
 .cal-ev-dot{width:5px;height:5px;border-radius:50%;background:var(--or)}
 .cal-day.sel{background:var(--or)!important;color:#fff!important;font-weight:700}
 .cal-day.sel .cal-ev-dot{background:rgba(255,255,255,.8)}
-.cal-day.today{background:var(--py);font-weight:700}
+.cal-day.today{background:var(--py);font-weight:700;outline:2px solid var(--or);outline-offset:-2px;position:relative}
+.cal-day.today::after{content:'今';position:absolute;top:1px;right:2px;font-size:.45rem;color:var(--or);font-weight:700;font-family:var(--f-bo);line-height:1}
 .cal-day.other-month{color:rgba(45,43,31,.18);pointer-events:none}
 .cal-banner{font-size:.8rem;font-weight:700;color:var(--or);font-family:var(--f-bo);margin-bottom:12px;padding:8px 14px;background:rgba(239,111,32,.07);border-radius:var(--r-md);border-left:3px solid var(--or);display:none}
 .cal-banner.show{display:block}
@@ -905,7 +906,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
         <div class="filter-chips">
-        <button class="chip on" data-f="type" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
+        <button class="chip on" data-f="type" data-v="all"><span class="zh-text">全部類型</span><span class="en-text">All Types</span></button>
         <button class="chip" data-f="type" data-v="opmic"><span class="zh-text">Open Mic</span><span class="en-text">Open Mic</span></button>
         <button class="chip" data-f="type" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
         <button class="chip" data-f="type" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
@@ -927,7 +928,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">場地</span><span class="en-text">Venue</span></span>
         <div class="filter-chips">
-        <button class="chip on" data-f="venue" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
+        <button class="chip on" data-f="venue" data-v="all"><span class="zh-text">全部場地</span><span class="en-text">All Venues</span></button>
         <button class="chip" data-f="venue" data-v="comedy-plus"><span class="zh-text">卡米地＋</span><span class="en-text">Comedy Plus</span></button>
         <button class="chip" data-f="venue" data-v="two-three"><span class="zh-text">23喜劇</span><span class="en-text">two three comedy</span></button>
         <button class="chip" data-f="venue" data-v="fakers"><span class="zh-text">飛客劇樂部 - basis coffee.</span><span class="en-text">Fakers - basis coffee.</span></button>
@@ -945,7 +946,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">地區</span><span class="en-text">Area</span></span>
         <div class="filter-chips">
-        <button class="chip on" data-f="area" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
+        <button class="chip on" data-f="area" data-v="all"><span class="zh-text">全部地區</span><span class="en-text">All Areas</span></button>
         <button class="chip" data-f="area" data-v="taipei"><span class="zh-text">雙北</span><span class="en-text">Taipei and New Taipei City</span></button>
         <button class="chip" data-f="area" data-v="taoyuan"><span class="zh-text">桃園</span><span class="en-text">Taoyuan</span></button>
         <button class="chip" data-f="area" data-v="hsinchu"><span class="zh-text">新竹</span><span class="en-text">Hsinchu</span></button>
@@ -958,7 +959,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">星期</span><span class="en-text">Day</span></span>
         <div class="filter-chips">
-        <button class="chip on" data-f="day" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
+        <button class="chip on" data-f="day" data-v="all"><span class="zh-text">全部星期</span><span class="en-text">All Days</span></button>
         <button class="chip" data-f="day" data-v="1"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
         <button class="chip" data-f="day" data-v="2"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
         <button class="chip" data-f="day" data-v="3"><span class="zh-text">週三</span><span class="en-text">Wed.</span></button>
