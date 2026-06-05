@@ -3479,7 +3479,6 @@ function renderPerformers(){
     const pp=document.getElementById('performers-pagination');if(pp)pp.innerHTML='';
     return;
   }
-  const lang = getLang();
   const isAdmin = isLoggedIn() && editMode;
   grid.innerHTML = paged.map(p=>{
     const types = p.types||[];
