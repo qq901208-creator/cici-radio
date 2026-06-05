@@ -3568,7 +3568,8 @@ function openPerformerDetail(id){
     ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin-bottom:10px">${p.tagline}</p>`:''}
     ${venueDisplay?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px;overflow-wrap:break-word">常出沒場地<br><span style="font-weight:600;color:var(--tm)">${venueDisplay}</span></div>`:''}
     ${p.bio?`<p class="sd-desc">${p.bio}</p>`:''}
-    ${p.photoCredit?`<div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.6;margin-bottom:12px">📷 ${p.photoCredit}</div>`:''}`<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>${showsList}</div>`:''}
+    ${p.photoCredit?`<div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.6;margin-bottom:12px">📷 ${p.photoCredit}</div>`:''}
+    ${upcoming.length?`<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>${showsList}</div>`:''}
   `;
   document.getElementById('modal-performer-detail').classList.add('open');
 }
