@@ -696,8 +696,7 @@ body.edit .edit-bar{display:flex!important}
   .hero-ctas .btn-ww{padding:9px 8px;font-size:.77rem;white-space:nowrap;flex:0 0 calc(50% - 3px);justify-content:center;overflow:hidden;text-overflow:ellipsis}
   .hero-next{font-size:.8rem;display:block;text-align:center}
   .sec{padding-top:30px!important}
-  .filter-lbl{display:none}
-  .opmic-notice{font-size:clamp(.58rem,.55rem + .5vw,.72rem)!important;padding:7px 10px!important;white-space:nowrap;overflow:hidden}
+  .filter-lbl{display:none}  .opmic-notice{font-size:clamp(.58rem,.55rem + .5vw,.72rem)!important;padding:7px 10px!important;white-space:nowrap;overflow:hidden}
   #page-opmic .sec-desc{margin-bottom:8px!important}
   .about-hero{padding:20px 5vw 32px}
   .about-logo{width:72px!important;height:72px!important;border-radius:14px!important;margin-bottom:12px!important}
@@ -906,7 +905,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
         <div class="filter-chips">
-        <button class="chip on" data-f="type" data-v="all"><span class="zh-text">全部類型</span><span class="en-text">All Types</span></button>
+        <button class="chip on" data-f="type" data-v="all"><span class="zh-text">全部<span class="mob-text">類型</span></span><span class="en-text">All<span class="mob-text"> Types</span></span></button>
         <button class="chip" data-f="type" data-v="opmic"><span class="zh-text">Open Mic</span><span class="en-text">Open Mic</span></button>
         <button class="chip" data-f="type" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
         <button class="chip" data-f="type" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
@@ -928,7 +927,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">場地</span><span class="en-text">Venue</span></span>
         <div class="filter-chips">
-        <button class="chip on" data-f="venue" data-v="all"><span class="zh-text">全部場地</span><span class="en-text">All Venues</span></button>
+        <button class="chip on" data-f="venue" data-v="all"><span class="zh-text">全部<span class="mob-text">場地</span></span><span class="en-text">All<span class="mob-text"> Venues</span></span></button>
         <button class="chip" data-f="venue" data-v="comedy-plus"><span class="zh-text">卡米地＋</span><span class="en-text">Comedy Plus</span></button>
         <button class="chip" data-f="venue" data-v="two-three"><span class="zh-text">23喜劇</span><span class="en-text">two three comedy</span></button>
         <button class="chip" data-f="venue" data-v="fakers"><span class="zh-text">飛客劇樂部 - basis coffee.</span><span class="en-text">Fakers - basis coffee.</span></button>
@@ -946,7 +945,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">地區</span><span class="en-text">Area</span></span>
         <div class="filter-chips">
-        <button class="chip on" data-f="area" data-v="all"><span class="zh-text">全部地區</span><span class="en-text">All Areas</span></button>
+        <button class="chip on" data-f="area" data-v="all"><span class="zh-text">全部<span class="mob-text">地區</span></span><span class="en-text">All<span class="mob-text"> Areas</span></span></button>
         <button class="chip" data-f="area" data-v="taipei"><span class="zh-text">雙北</span><span class="en-text">Taipei and New Taipei City</span></button>
         <button class="chip" data-f="area" data-v="taoyuan"><span class="zh-text">桃園</span><span class="en-text">Taoyuan</span></button>
         <button class="chip" data-f="area" data-v="hsinchu"><span class="zh-text">新竹</span><span class="en-text">Hsinchu</span></button>
@@ -959,7 +958,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="filter-row-indent">
         <span class="filter-lbl"><span class="zh-text">星期</span><span class="en-text">Day</span></span>
         <div class="filter-chips">
-        <button class="chip on" data-f="day" data-v="all"><span class="zh-text">全部星期</span><span class="en-text">All Days</span></button>
+        <button class="chip on" data-f="day" data-v="all"><span class="zh-text">全部<span class="mob-text">星期</span></span><span class="en-text">All<span class="mob-text"> Days</span></span></button>
         <button class="chip" data-f="day" data-v="1"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
         <button class="chip" data-f="day" data-v="2"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
         <button class="chip" data-f="day" data-v="3"><span class="zh-text">週三</span><span class="en-text">Wed.</span></button>
@@ -1082,7 +1081,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <select id="performers-type" class="chip-select"
         style="padding:7px 10px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.80rem;font-family:var(--f-zh);background:var(--ww);outline:none;cursor:pointer;flex-shrink:0"
         onchange="window._performersPage=1;renderPerformers()">
-        <option value="all">所有類型 / All Types</option>
+        <option value="all">所有類型 / All</option>
         <option value="standup">站立喜劇</option>
         <option value="improv">即興</option>
         <option value="mancai">漫才</option>
@@ -3443,7 +3442,7 @@ function renderPerformers(){
   // 更新篩選選單語言
   const sel = document.getElementById('performers-type');
   if(sel) [...sel.options].forEach(opt=>{
-    if(opt.value==='all') opt.text = lang==='en'?'All Types':'所有類型';
+    if(opt.value==='all') opt.text = lang==='en'?'All':'所有類型';
     else if(TYPE_META[opt.value]) opt.text = lang==='en'?(TYPE_META[opt.value].labelEn||opt.value):TYPE_META[opt.value].label;
   });
 
@@ -5034,7 +5033,25 @@ function toggleTicketUrl(val){
   if(row) row.style.display = val==='door' ? 'none' : '';
 }
 
-function copyShareLink(){
+function updateFilterChipLabels(){
+  const isMobile = window.innerWidth <= 768;
+  const map = {
+    type:  {zh:'全部', en:'All Types'},
+    venue: {zh:'全部', en:'All Venues'},
+    area:  {zh:'全部', en:'All Areas'},
+    day:   {zh:'全部', en:'All Days'},
+  };
+  document.querySelectorAll('.chip[data-v="all"][data-f]').forEach(btn=>{
+    const f = btn.dataset.f;
+    if(!map[f]) return;
+    const zhEl = btn.querySelector('.zh-text');
+    const enEl = btn.querySelector('.en-text');
+    if(zhEl) zhEl.textContent = isMobile ? map[f].zh : '全部';
+    if(enEl) enEl.textContent = isMobile ? map[f].en : 'All';
+  });
+}
+window.addEventListener('resize', updateFilterChipLabels);
+document.addEventListener('DOMContentLoaded', updateFilterChipLabels);
   const url = location.href;
   if(navigator.share){
     // 手機：呼叫系統分享選單
