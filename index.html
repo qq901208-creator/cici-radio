@@ -374,7 +374,7 @@ body.ready{visibility:visible}
 
 /* FOOTER */
 footer{background:var(--sd);padding:60px 5vw 28px}
-.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;margin-bottom:44px}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:44px;margin-bottom:44px}
 .ft-name{font-family:var(--f-zh);font-size:1.05rem;font-weight:900;color:var(--y);margin-bottom:5px}
 .ft-en{font-family:var(--f-di);font-size:.7rem;color:var(--or);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
 .ft-brand p{font-size:.83rem;color:rgba(255,255,255,.4);line-height:1.7;font-family:var(--f-zh);max-width:240px;margin-bottom:20px}
@@ -654,6 +654,8 @@ body.edit .edit-bar{display:flex!important}
 @media(max-width:900px){.ft-grid{grid-template-columns:1fr 1fr;gap:30px}}
 @media(max-width:768px){
   .ft-grid{grid-template-columns:1fr}
+  .ft-col ul{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px}
+  .ft-disc{font-size:.62rem!important;line-height:1.5}
   .fg{grid-template-columns:1fr}
   .modal-ov{align-items:center;padding:16px!important}
   .modal{padding:20px 16px 24px;height:80vh;overflow-y:auto;border-radius:var(--r-xl)!important;width:100%!important;max-width:100%!important;box-sizing:border-box}
@@ -1394,12 +1396,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="ft-col"><h4><span class="zh-text">關於</span><span class="en-text">About</span></h4><ul>
       <li><a onclick="showPage('about')"><span class="zh-text">關於我們</span><span class="en-text">About Us</span></a></li>
       <li><a onclick="document.getElementById('modal-report').classList.add('open')" style="cursor:pointer"><span class="zh-text">聯絡我們</span><span class="en-text">Contact</span></a></li>
-    </ul></div>
-    <div class="ft-col"><h4><span class="zh-text">社群</span><span class="en-text">Social</span></h4><ul>
-      <li><a href="https://www.facebook.com/profile.php?id=100083411285720" target="_blank">Facebook</a></li>
-      <li><a href="https://www.instagram.com/cici._.radio/" target="_blank">Instagram</a></li>
-      <li><a href="https://linktr.ee/cici._.radio" target="_blank">Podcast / Linktree</a></li>
-      <li><a href="mailto:ciciradio3@gmail.com">ciciradio3@gmail.com</a></li>
     </ul></div>
   </div>
   <div class="ft-bottom">
