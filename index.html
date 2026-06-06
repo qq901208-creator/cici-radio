@@ -1951,18 +1951,26 @@ window._onSnapshot = onSnapshot;
 
 // ── Load all data from Firestore on startup ──
 async function loadAllData() {
-  const safe = p => p.catch(()=>null);
+  // 加 timeout 保護：超過 8 秒就放棄這個請求
+  const withTimeout = (p, ms=8000) => Promise.race([p, new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),ms))]);
+  // 最多重試 2 次
+  const retry = async (fn, times=2) => {
+    for(let i=0;i<=times;i++){
+      try{ return await fn(); }catch(e){ if(i===times) return null; await new Promise(r=>setTimeout(r,1000)); }
+    }
+  };
+  const safe = (p) => retry(()=>withTimeout(p));
   try {
     const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, performersSnap, metaSnap, showVenuesSnap, showAreasSnap] = await Promise.all([
-      safe(getDocs(collection(db,'shows'))),
-      safe(getDocs(collection(db,'mics'))),
-      safe(getDocs(collection(db,'venues'))),
-      safe(getDocs(collection(db,'courses'))),
-      safe(getDocs(collection(db,'comments'))),
-      safe(getDocs(collection(db,'performers'))),
-      safe(getDoc(doc(db,'meta','lastUpdated'))),
-      safe(getDoc(doc(db,'meta','showVenues'))),
-      safe(getDoc(doc(db,'meta','showAreas'))),
+      retry(()=>withTimeout(getDocs(collection(db,'shows')))),
+      retry(()=>withTimeout(getDocs(collection(db,'mics')))),
+      retry(()=>withTimeout(getDocs(collection(db,'venues')))),
+      retry(()=>withTimeout(getDocs(collection(db,'courses')))),
+      retry(()=>withTimeout(getDocs(collection(db,'comments')))),
+      retry(()=>withTimeout(getDocs(collection(db,'performers')))),
+      retry(()=>withTimeout(getDoc(doc(db,'meta','lastUpdated')))),
+      retry(()=>withTimeout(getDoc(doc(db,'meta','showVenues')))),
+      retry(()=>withTimeout(getDoc(doc(db,'meta','showAreas')))),
     ]);
     window._LAST_UPDATED = metaSnap?.exists() ? metaSnap.data() : {};
     window._PERFORMERS = performersSnap ? performersSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
