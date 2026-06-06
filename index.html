@@ -3561,12 +3561,13 @@ function openPerformerDetail(id){
     </div>`).join('')
     : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">近期暫無演出資訊</div>`;
   const venueDisplay = p.venueIds&&p.venueIds.length ? p.venueIds.map(v=>getShowVenueLabelById(v)||v).join('、') : (p.venues||'');
+  const safeUrl = u => u ? u.replace(/&amp;/g,'&') : '';
   const socialLinks = [
-    p.fb ? `<a href="${p.fb}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap" onclick="window.open(this.href,'_blank');return false;">Facebook</a>` : '',
-    p.ig ? `<a href="${p.ig}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap" onclick="window.open(this.href,'_blank');return false;">Instagram</a>` : '',
-    p.threads ? `<a href="${p.threads}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap" onclick="window.open(this.href,'_blank');return false;">Threads</a>` : '',
-    p.youtube ? `<a href="${p.youtube}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap" onclick="window.open(this.href,'_blank');return false;">YouTube</a>` : '',
-    ...(p.extraLinks||[]).map(l=>`<a href="${l.url}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap" onclick="window.open(this.href,'_blank');return false;">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'連結樹',other:'其他連結'}[l.type]||l.type}</a>`),
+    p.fb ? `<a href="${safeUrl(p.fb)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap" onclick="window.open(this.href,'_blank');return false;">Facebook</a>` : '',
+    p.ig ? `<a href="${safeUrl(p.ig)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap" onclick="window.open(this.href,'_blank');return false;">Instagram</a>` : '',
+    p.threads ? `<a href="${safeUrl(p.threads)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap" onclick="window.open(this.href,'_blank');return false;">Threads</a>` : '',
+    p.youtube ? `<a href="${safeUrl(p.youtube)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap" onclick="window.open(this.href,'_blank');return false;">YouTube</a>` : '',
+    ...(p.extraLinks||[]).map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap" onclick="window.open(this.href,'_blank');return false;">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'連結樹',other:'其他連結'}[l.type]||l.type}</a>`),
   ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
   const heroAvatar = p.photoUrl
     ? `<img src="${p.photoUrl}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:2px solid rgba(45,43,31,.1);flex-shrink:0">`
