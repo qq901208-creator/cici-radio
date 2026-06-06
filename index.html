@@ -2025,22 +2025,14 @@ async function loadAllData() {
     }catch(e){}
     if(typeof updFbBadge==='function') try{ updFbBadge(); }catch(e){}
     if(typeof updateLastUpdatedDisplay==='function') try{updateLastUpdatedDisplay();}catch(e){}
-    // 資料載完後立即嘗試開分享連結 Modal
+    // 分享連結：URL 帶有 ?show= / ?course= / ?performer= 時自動打開對應 Modal
     try{
       const hashStr = location.hash || '';
       const qStr = hashStr.includes('?') ? hashStr.split('?')[1] : location.search.replace('?','');
       const params = new URLSearchParams(qStr);
-      const sid = params.get('show'); if(sid && typeof openShowDetail==='function') openShowDetail(sid);
-      const cid = params.get('course'); if(cid && typeof openCourseDetail==='function') openCourseDetail(cid);
-      const pid = params.get('performer'); if(pid && typeof openPerformerDetail==='function') openPerformerDetail(pid);
-    }catch(e){}
-    // 分享連結：若 URL 帶有 ?show=ID 或 ?course=ID，自動打開對應詳情
-    try{
-      const hashStr = location.hash || '';
-      const qStr = hashStr.includes('?') ? hashStr.split('?')[1] : location.search.replace('?','');
-      const params = new URLSearchParams(qStr);
-      const shareShowId = params.get('show');
-      const shareCourseId = params.get('course');
+      const shareShowId      = params.get('show');
+      const shareCourseId    = params.get('course');
+      const sharePerformerId = params.get('performer');
       if(shareShowId && typeof openShowDetail==='function'){
         const tryOpenShow = (attempts) => {
           const found = (window._SHOWS||[]).find(x=>x.id===shareShowId);
@@ -2057,12 +2049,15 @@ async function loadAllData() {
         };
         setTimeout(()=>tryOpenCourse(20), 300);
       }
-      const sharePerformerId = params.get('performer');
       if(sharePerformerId && typeof openPerformerDetail==='function'){
         const tryOpenPerformer = (attempts) => {
           const found = (window._PERFORMERS||[]).find(x=>x.id===sharePerformerId);
-          if(found){ openPerformerDetail(sharePerformerId); }
-          else if(attempts > 0){ setTimeout(()=>tryOpenPerformer(attempts-1), 500); }
+          if(found){
+            // 確保先切到 performers 頁面，再開 modal
+            const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
+            if(activePage !== 'performers' && typeof showPage==='function') showPage('performers');
+            setTimeout(()=>openPerformerDetail(sharePerformerId), 80);
+          } else if(attempts > 0){ setTimeout(()=>tryOpenPerformer(attempts-1), 500); }
         };
         setTimeout(()=>tryOpenPerformer(20), 300);
       }
@@ -2520,9 +2515,9 @@ function showCardHTML(s) {
 function openShowDetail(id) {
   const allShows = window._SHOWS || SHOWS || [];
   const s = allShows.find(x=>x.id===id); if (!s) return;
-  // 若在首頁，先切到演出資訊頁再開 Modal
+  // 若不在演出資訊頁，先切換過去再開 Modal
   const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
-  if(activePage === 'home') showPage('shows');
+  if(activePage !== 'shows' && typeof showPage==='function') showPage('shows');
   // 更新 URL，方便分享
   history.replaceState(null,'', location.hash.split('?')[0] + '?show=' + id);
   const types = s.types || (s.type ? [s.type] : []);
