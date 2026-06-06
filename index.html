@@ -2025,6 +2025,15 @@ async function loadAllData() {
     }catch(e){}
     if(typeof updFbBadge==='function') try{ updFbBadge(); }catch(e){}
     if(typeof updateLastUpdatedDisplay==='function') try{updateLastUpdatedDisplay();}catch(e){}
+    // 資料載完後立即嘗試開分享連結 Modal
+    try{
+      const hashStr = location.hash || '';
+      const qStr = hashStr.includes('?') ? hashStr.split('?')[1] : location.search.replace('?','');
+      const params = new URLSearchParams(qStr);
+      const sid = params.get('show'); if(sid && typeof openShowDetail==='function') openShowDetail(sid);
+      const cid = params.get('course'); if(cid && typeof openCourseDetail==='function') openCourseDetail(cid);
+      const pid = params.get('performer'); if(pid && typeof openPerformerDetail==='function') openPerformerDetail(pid);
+    }catch(e){}
     // 分享連結：若 URL 帶有 ?show=ID 或 ?course=ID，自動打開對應詳情
     try{
       const hashStr = location.hash || '';
@@ -2036,26 +2045,26 @@ async function loadAllData() {
         const tryOpenShow = (attempts) => {
           const found = (window._SHOWS||[]).find(x=>x.id===shareShowId);
           if(found){ openShowDetail(shareShowId); }
-          else if(attempts > 0){ setTimeout(()=>tryOpenShow(attempts-1), 300); }
+          else if(attempts > 0){ setTimeout(()=>tryOpenShow(attempts-1), 500); }
         };
-        setTimeout(()=>tryOpenShow(10), 200);
+        setTimeout(()=>tryOpenShow(20), 300);
       }
       if(shareCourseId && typeof openCourseDetail==='function'){
         const tryOpenCourse = (attempts) => {
           const found = (window._COURSES||[]).find(x=>x.id===shareCourseId);
           if(found){ openCourseDetail(shareCourseId); }
-          else if(attempts > 0){ setTimeout(()=>tryOpenCourse(attempts-1), 300); }
+          else if(attempts > 0){ setTimeout(()=>tryOpenCourse(attempts-1), 500); }
         };
-        setTimeout(()=>tryOpenCourse(10), 200);
+        setTimeout(()=>tryOpenCourse(20), 300);
       }
       const sharePerformerId = params.get('performer');
       if(sharePerformerId && typeof openPerformerDetail==='function'){
         const tryOpenPerformer = (attempts) => {
           const found = (window._PERFORMERS||[]).find(x=>x.id===sharePerformerId);
           if(found){ openPerformerDetail(sharePerformerId); }
-          else if(attempts > 0){ setTimeout(()=>tryOpenPerformer(attempts-1), 300); }
+          else if(attempts > 0){ setTimeout(()=>tryOpenPerformer(attempts-1), 500); }
         };
-        setTimeout(()=>tryOpenPerformer(10), 200);
+        setTimeout(()=>tryOpenPerformer(20), 300);
       }
     }catch(e){}
   };
