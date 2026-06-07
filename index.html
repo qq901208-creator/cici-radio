@@ -1133,6 +1133,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="other" style="accent-color:var(--or)"> 其他</label>
       </div>
     </div>
+    <div class="fg-g full"><label class="fl">所屬團體／搭檔名稱（選填）</label><input class="fi" type="text" id="p-troupe" placeholder="例：面白大丈夫、OO即興劇團（請填正式名稱）"></div>
+    <div class="fg-g full"><label class="fl">團體／搭檔社群連結（選填，可多個）</label>
+      <div id="p-troupe-links"></div>
+      <button type="button" onclick="addTroupeLinkRow()" style="font-size:.78rem;color:var(--or);background:none;border:none;cursor:pointer;font-family:var(--f-zh);padding:0">＋ 新增連結</button>
+    </div>
     <div class="fg-g"><label class="fl">風格（選填）</label><input class="fi" type="text" id="p-style" placeholder="例：黑色幽默、自嘲風格"></div>
     <div class="fg-g full"><label class="fl">常出沒場地（選填，複選）</label>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="p-venues-group">
@@ -3317,6 +3322,33 @@ function restoreShow(id){
   }).catch(()=>showToast('❌ 操作失敗','err'));
 }
 let ePerformerId = null;
+function addTroupeLinkRow(label='', url=''){
+  const container = document.getElementById('p-troupe-links');
+  if(!container) return;
+  const row = document.createElement('div');
+  row.className = 'p-troupe-link-row';
+  row.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;align-items:center';
+  row.innerHTML = `<input class="fi" type="text" placeholder="平台名稱（例：IG）" value="${label}" style="width:110px;flex-shrink:0">
+  <input class="fi" type="url" placeholder="https://..." value="${url}" style="flex:1">
+  <button type="button" onclick="this.parentNode.remove()" style="font-size:.9rem;color:var(--ts);background:none;border:none;cursor:pointer;flex-shrink:0">✕</button>`;
+  container.appendChild(row);
+}
+function getTroupeLinks(){
+  return [...document.querySelectorAll('.p-troupe-link-row')].map(row=>{
+    const inputs = row.querySelectorAll('input');
+    const label = inputs[0]?.value.trim()||'';
+    const url = inputs[1]?.value.trim()||'';
+    return url ? {label, url} : null;
+  }).filter(Boolean);
+}
+function setTroupeLinks(links){
+  const container = document.getElementById('p-troupe-links');
+  if(!container) return;
+  container.innerHTML = '';
+  if(links && links.length){
+    links.forEach(l=>addTroupeLinkRow(l.label||'', l.url||''));
+  }
+}
 function addExtraLinkRow(type='website', url=''){
   const container = document.getElementById('p-extra-links');
   if(!container) return;
@@ -3360,12 +3392,13 @@ function openPerformerModal(id){
   const p = id ? (window._PERFORMERS||[]).find(x=>x.id===id) : null;
   document.getElementById('modal-performer-title').textContent = p?'編輯演員':'新增演員';
   // 清空
-  ['p-name','p-aliases','p-tagline','p-bio','p-style','p-photo','p-photo-id','p-photo-credit','p-fb','p-ig','p-threads','p-youtube'].forEach(k=>{
+  ['p-name','p-aliases','p-tagline','p-bio','p-style','p-troupe','p-photo','p-photo-id','p-photo-credit','p-fb','p-ig','p-threads','p-youtube'].forEach(k=>{
     const el=document.getElementById(k); if(el) el.value='';
   });
   document.querySelectorAll('#p-types-group input[type=checkbox]').forEach(cb=>cb.checked=false);
   document.querySelectorAll('#p-venues-group input[type=checkbox]').forEach(cb=>cb.checked=false);
   setExtraLinks([]);
+  setTroupeLinks([]);
   const imgPrev=document.getElementById('p-img-prev');
   if(imgPrev){imgPrev.src='';imgPrev.style.display='none';}
   const imgHint=document.getElementById('p-img-hint');
@@ -3379,6 +3412,8 @@ function openPerformerModal(id){
     document.getElementById('p-tagline').value=p.tagline||'';
     document.getElementById('p-bio').value=p.bio||'';
     document.getElementById('p-style').value=p.style||'';
+    document.getElementById('p-troupe').value=p.troupe||'';
+    setTroupeLinks(p.troupeLinks||[]);
     document.getElementById('p-fb').value=p.fb||'';
     document.getElementById('p-ig').value=p.ig||'';
     document.getElementById('p-threads').value=p.threads||'';
@@ -3416,6 +3451,8 @@ function savePerformer(){
     tagline: document.getElementById('p-tagline').value.trim(),
     bio: document.getElementById('p-bio').value.trim(),
     style: document.getElementById('p-style').value.trim(),
+    troupe: document.getElementById('p-troupe').value.trim(),
+    troupeLinks: getTroupeLinks(),
     venueIds,
     photoUrl: document.getElementById('p-photo').value.trim(),
     fb: document.getElementById('p-fb').value.trim(),
@@ -3520,6 +3557,7 @@ function renderPerformers(){
       </div>` : ''}
       ${avatar}${fallback}
       <div class="performer-name">${p.name||''}</div>
+      ${p.troupe?`<div style="font-size:.72rem;color:var(--ts);font-family:var(--f-zh);margin-top:2px;margin-bottom:2px;opacity:.8">${p.troupe}</div>`:''}
       ${p.tagline?`<div class="performer-tagline">${p.tagline}</div>`:''}
       <div class="performer-types">${typeTags}</div>
     </div>`;
@@ -3579,6 +3617,10 @@ function openPerformerDetail(id){
       ${heroAvatar}
       <div style="flex:1;min-width:0">
         <div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:6px">${p.name||''}</div>
+        ${p.troupe?(()=>{
+          const links = p.troupeLinks&&p.troupeLinks.length ? p.troupeLinks.map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener" style="color:var(--or);font-weight:700;text-decoration:none;font-size:.75rem">${l.label||l.url} ↗</a>`).join(' · ') : '';
+          return `<div style="font-size:.78rem;font-family:var(--f-zh);color:var(--ts);margin-bottom:6px"><span style="font-weight:600">${p.troupe}</span>${links?' · '+links:''}</div>`;
+        })():''}
         <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:${socialLinks?'8px':'0'}">${typeTags}</div>
         ${socialLinks?`<div style="margin-bottom:4px;word-break:keep-all">${socialLinks}</div>`:''}
       </div>
