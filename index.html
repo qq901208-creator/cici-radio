@@ -2808,13 +2808,22 @@ function courseCardHTML(c) {
   const imgEl = c.image ? `<img src="${c.image}" alt="" onerror="this.style.display='none'">` : '';
   const lbl = getLang()==='en' ? m.labelEn : m.label;
   const expiredOverlay = isExpired(c.date, c.time) ? `style="opacity:.55"` : '';
+  // 卡片日期：多堂課只顯示「首日 ～ 尾日」
+  function courseCardDateRange(dateStr) {
+    if(!dateStr) return '';
+    const parts = dateStr.split(',').map(s=>s.trim()).filter(Boolean);
+    if(parts.length <= 2) return dateStr;
+    const sorted = parts.slice().sort();
+    return sorted[0] + ' ～ ' + sorted[sorted.length-1];
+  }
+  const cardDate = c.dateDisplay || courseCardDateRange(c.date);
   return `<div class="course-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')" ${expiredOverlay} style="display:flex;flex-direction:column">
     <div class="cc-img" style="background:${m.bg}">${imgEl}${c.image?'':` <span style="font-size:2.4rem;position:relative;z-index:1">${emj[c.type]||'📚'}</span>`}<span class="cc-cat" style="background:${m.tag};color:${m.tagC}">${lbl}</span></div>
     <div class="cc-body" style="flex:1;display:flex;flex-direction:column;gap:5px">
       <div class="cc-title">${c.title}</div>
       <div class="cc-meta">
         <div style="display:flex;flex-direction:column;gap:3px">
-          <span>📅 ${c.dateDisplay||c.date}${c.time?` · ${c.time}`:''}</span>
+          <span>📅 ${cardDate}${c.time?` · ${c.time}`:''}</span>
           ${(c.date2||c.time2)?`<span style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-top:3px;padding-top:4px;border-top:1px solid rgba(45,43,31,.08)"><span class="zh-text">第二階段</span><span class="en-text">Phase 2</span></span><span style="color:var(--tm)">📅 ${c.date2||''}${c.time2?` · ${c.time2}`:''}</span>`:'' }
         </div>
         <span>📍 ${c.location||''}</span>
@@ -2885,12 +2894,14 @@ function openCourseDetail(id){
       ${c.fee?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top">${lang==='en'?'Fee':'費用'}</td><td style="padding:7px 0;font-weight:700;color:var(--or)">${c.fee}</td></tr>`:''}
     </table>
     <div style="margin-top:10px">
-      <button onclick="copyShareLink()" style="padding:5px 14px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.76rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">分享課程資訊</span><span class="en-text">Share</span></button>
     </div>
     ${c.description?`<p style="margin:14px 0;font-size:.88rem;line-height:1.75;color:var(--tm);font-family:var(--f-zh);white-space:pre-line">${c.description}</p>`:''}
     ${c.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em">${prodLbl}</div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${c.production}</p></div>`:''}
     ${c.imgSrc?`<div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:14px;margin-bottom:12px">${c.imgSrc}</div>`:''}
-    ${(c.url&&c.url!=='#')?`<a href="${c.url}" target="_blank" rel="noopener" class="btn-or" style="display:inline-block;text-decoration:none;margin-top:6px">${lang==='en'?'Sign Up ↗':'立即報名 ↗'}</a>`:''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.08)">
+      <button onclick="copyShareLink()" style="padding:12px 0;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.82rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">分享課程</span><span class="en-text">Share</span></button>
+      ${(c.url&&c.url!=='#')?`<a href="${c.url}" target="_blank" rel="noopener" class="btn-or" style="display:flex;align-items:center;justify-content:center;text-decoration:none;padding:12px 0;border-radius:var(--r-pill)">${lang==='en'?'Sign Up ↗':'立即報名 ↗'}</a>`:`<span></span>`}
+    </div>
   `;
   document.getElementById('modal-course-detail').classList.add('open');
 }
