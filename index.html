@@ -2816,7 +2816,7 @@ function courseCardHTML(c) {
     const sorted = parts.slice().sort();
     return sorted[0] + ' ～ ' + sorted[sorted.length-1];
   }
-  const cardDate = c.dateDisplay || courseCardDateRange(c.date);
+  const cardDate = courseCardDateRange(c.dateDisplay || c.date);
   return `<div class="course-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')" ${expiredOverlay} style="display:flex;flex-direction:column">
     <div class="cc-img" style="background:${m.bg}">${imgEl}${c.image?'':` <span style="font-size:2.4rem;position:relative;z-index:1">${emj[c.type]||'📚'}</span>`}<span class="cc-cat" style="background:${m.tag};color:${m.tagC}">${lbl}</span></div>
     <div class="cc-body" style="flex:1;display:flex;flex-direction:column;gap:5px">
