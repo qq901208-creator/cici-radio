@@ -1248,6 +1248,27 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="about-card"><h3>📖 <span class="zh-text">成立背景</span><span class="en-text">Our Origin</span></h3><p class="editable" contenteditable="false"><span class="zh-text">2022 年，六位就讀世新大學廣播電視電影學系的大學生，因爲對台灣現場喜劇有著滿腔的熱情！共同催生了「嘻嘻哪哩唷」這個品牌/頻道，製作了以採訪喜劇演員為題的同名 Podcast 節目。<br><br>隔年，我們開始了漫長的「台灣現場喜劇時間表」Google 試算表製作，整理了所有這個網站包含、又不完全包含的眾多喜劇內容。在我們一度停更的空窗期中，喜劇演員 Pete 也大力協助，一人扛起了資訊更新的重要工作。<br><br>2025 年 4 月份發生的憾事，讓成員鼻猴、Kooky、Yumi 決定重拾嘻嘻哪哩唷的經營，為了讓全台喜劇演出的資訊更方便查閱，鼻猴決定將「台灣現場喜劇時間表」的精神繼承下去，透過 AI 學習網站架設，也因此誕生了現在你所看到的「嘻嘻哪哩唷｜台灣喜劇演出資訊站」。</span><span class="en-text">In 2022, six students from the Department of Radio, Television and Film at Shih Hsin University, driven by an overflowing passion for live comedy in Taiwan, came together to create the brand and channel "Cici Radio" — producing a podcast of the same name featuring interviews with comedians.<br><br>The following year, we began the long journey of maintaining a "Taiwan Live Comedy Schedule" Google Spreadsheet, compiling a wide range of comedy content — some of which is reflected on this site, and some that isn't. During a period when we went on hiatus, comedian Pete stepped up and single-handedly kept the information updated.<br><br>Following a heartbreaking event in April 2025, members Bíhóu, Kooky, and Yumi decided to revive Cici Radio. To make Taiwan's comedy show information more accessible, Bíhóu resolved to carry on the spirit of the spreadsheet — learning web development with the help of AI — and so was born the site you're looking at now: Cici Radio | Taiwan Comedy Show Guide.</span></p></div>
     <div class="about-card"><h3>🎯 <span class="zh-text">我們的目標</span><span class="en-text">Our Mission</span></h3><p class="editable" contenteditable="false"><span class="zh-text">1. 讓觀眾能更輕鬆地找到想看的現場喜劇演出！<br>2. 希望剛開始跑現場的新人們和想學習喜劇的夥伴們不孤單，有資料可循！<br>3. 讓所有喜劇演員們知道：「嘻嘻哪哩唷永遠瞎挺你們喔 &lt;3」（票錢不夠！網站來湊！）<br><br>所以我說...這個網站是不是很方便？（快說有！！！）</span><span class="en-text">1. Help audiences find the live comedy shows they want to see, easily and quickly!<br>2. So that newcomers just starting out in live comedy — and those who want to learn — never feel alone, and always have somewhere to look!<br>3. To let every comedian know: "Cici Radio will always have your back &lt;3" (Can't afford a ticket? Let the website make up for it!)<br><br>So tell me... isn't this website just super convenient? (Say YES!!!)</span></p></div>
     <div class="about-card"><h3>📡 <span class="zh-text">關於本站</span><span class="en-text">About This Site</span></h3><p class="editable" contenteditable="false"><span class="zh-text">本站以推廣台灣現場喜劇文化、整理演出資訊為出發點，目前不涉及商業營利行為。<br>網站資訊皆由人類（鼻猴本人）手動整理與更新。若有錯誤、遺漏，或想補充演出資訊，歡迎透過「聯絡我們」告訴我！</span><span class="en-text">This site is dedicated to promoting live comedy culture in Taiwan and curating show information — with no commercial involvement.<br>All content is manually updated by a human (Bíhóu, in person). If you spot any errors, missing info, or shows you'd like to add, feel free to reach out via "Contact Us"!</span></p></div>
+
+    <!-- 網站統計區塊 -->
+    <div class="about-card" id="about-stats-card">
+      <h3>📊 <span class="zh-text">網站成績單</span><span class="en-text">By the Numbers</span></h3>
+      <p style="font-size:.8rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:18px"><span class="zh-text">自 2026/5/22 網站上線以來，嘻嘻哪哩唷收錄的資料 ↓</span><span class="en-text">Since launch on 2026/5/22 ↓</span></p>
+      <!-- 總計數字 -->
+      <div id="about-stats-nums" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px"></div>
+      <!-- 每月演出長條圖 -->
+      <div style="margin-bottom:24px">
+        <div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:10px letter-spacing:.05em"><span class="zh-text">每月演出場數</span><span class="en-text">Shows per Month</span></div>
+        <div id="about-monthly-chart" style="display:flex;align-items:flex-end;gap:6px;height:100px"></div>
+      </div>
+      <!-- 演出類型圓餅圖 -->
+      <div>
+        <div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:12px;letter-spacing:.05em"><span class="zh-text">演出類型佔比</span><span class="en-text">Show Types</span></div>
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+          <canvas id="about-pie-chart" width="140" height="140" style="flex-shrink:0"></canvas>
+          <div id="about-pie-legend" style="display:flex;flex-direction:column;gap:5px;font-size:.75rem;font-family:var(--f-zh)"></div>
+        </div>
+      </div>
+    </div>
     <!-- 版權聲明區塊 -->
     <div class="about-card" style="border:1.5px solid rgba(45,43,31,.2);background:rgba(45,43,31,.04)">
       <h3 style="font-size:.9rem;letter-spacing:.03em">📋 <span class="zh-text">內容使用與版權聲明</span><span class="en-text">Content & Copyright Notice</span></h3>
@@ -2775,6 +2796,90 @@ function renderHeroStats(){
     nextEl.innerHTML = label;
     nextEl.style.display = 'block';
     nextEl.onclick = () => { showPage('shows'); setTimeout(()=>openShowDetail(next.id), 100); };
+  }
+}
+
+function renderAboutStats(){
+  const shows = (window._SHOWS||[]).filter(s=>(s.status||'published')!=='hidden');
+  const performers = window._PERFORMERS||[];
+  const venues = window._VENUES||[];
+  const courses = (window._COURSES||[]).filter(c=>(c.status||'published')!=='hidden');
+  const lang = getLang();
+
+  // 總計數字
+  const numsEl = document.getElementById('about-stats-nums');
+  if(!numsEl) return;
+  const LAUNCH = new Date('2026-05-22T00:00');
+  const totalShows = shows.filter(s=>{ const d=new Date((s.date||'').split(',')[0].trim()+'T00:00'); return d>=LAUNCH; }).length;
+  const statItems = [
+    {n: totalShows,       label: lang==='en'?'Shows Listed':'收錄演出場數', emoji:'🎭'},
+    {n: performers.length,label: lang==='en'?'Performers':'演員資料庫人數', emoji:'🎤'},
+    {n: venues.length,    label: lang==='en'?'Venues':'喜劇據點', emoji:'📍'},
+    {n: courses.length,   label: lang==='en'?'Courses':'課程講座', emoji:'📚'},
+  ];
+  numsEl.innerHTML = statItems.map(({n,label,emoji})=>`
+    <div style="background:var(--cr);border-radius:var(--r-md);padding:14px 16px;text-align:center">
+      <div style="font-size:1.6rem;font-weight:900;font-family:var(--f-bo);color:var(--or)">${n}</div>
+      <div style="font-size:.72rem;color:var(--ts);font-family:var(--f-zh);margin-top:3px">${emoji} ${label}</div>
+    </div>`).join('');
+
+  // 每月演出長條圖
+  const monthlyEl = document.getElementById('about-monthly-chart');
+  if(monthlyEl){
+    const monthly = {};
+    shows.forEach(s=>{
+      const d = new Date((s.date||'').split(',')[0].trim()+'T00:00');
+      if(isNaN(d)||d<LAUNCH) return;
+      const key = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}`;
+      monthly[key] = (monthly[key]||0)+1;
+    });
+    const keys = Object.keys(monthly).sort();
+    const max = Math.max(...Object.values(monthly), 1);
+    monthlyEl.innerHTML = keys.map(k=>{
+      const pct = Math.round((monthly[k]/max)*100);
+      const [y,m] = k.split('/');
+      const label = `${parseInt(m)}月`;
+      return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:30px">
+        <div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo)">${monthly[k]}</div>
+        <div style="width:100%;background:var(--or);border-radius:4px 4px 0 0;height:${pct}px;min-height:4px;transition:height .4s"></div>
+        <div style="font-size:.65rem;color:var(--ts);font-family:var(--f-zh);white-space:nowrap">${label}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // 演出類型圓餅圖
+  const canvas = document.getElementById('about-pie-chart');
+  const legendEl = document.getElementById('about-pie-legend');
+  if(canvas && legendEl){
+    const typeCounts = {};
+    shows.forEach(s=>{
+      const types = s.types||(s.type?[s.type]:[]);
+      types.forEach(t=>{ if(t) typeCounts[t]=(typeCounts[t]||0)+1; });
+    });
+    const sorted = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]);
+    const total = sorted.reduce((a,[,v])=>a+v,0)||1;
+    const COLORS = ['#ef6f20','#f5d558','#6ab04c','#7b68ee','#e84393','#00cec9','#fd79a8','#fdcb6e','#a29bfe','#55efc4','#636e72','#b2bec3'];
+    const ctx = canvas.getContext('2d');
+    let startAngle = -Math.PI/2;
+    sorted.forEach(([type,count],i)=>{
+      const slice = (count/total)*2*Math.PI;
+      ctx.beginPath();
+      ctx.moveTo(70,70);
+      ctx.arc(70,70,65,startAngle,startAngle+slice);
+      ctx.closePath();
+      ctx.fillStyle = COLORS[i%COLORS.length];
+      ctx.fill();
+      startAngle += slice;
+    });
+    legendEl.innerHTML = sorted.slice(0,8).map(([type,count],i)=>{
+      const m = TYPE_META[type]||TYPE_META.other;
+      const lbl = lang==='en'?(m.labelEn||m.label):m.label;
+      const pct = Math.round((count/total)*100);
+      return `<div style="display:flex;align-items:center;gap:6px">
+        <span style="width:10px;height:10px;border-radius:50%;background:${COLORS[i%COLORS.length]};flex-shrink:0"></span>
+        <span style="color:var(--ts)">${lbl} <span style="font-weight:700;color:var(--tm)">${pct}%</span></span>
+      </div>`;
+    }).join('');
   }
 }
 
@@ -5004,7 +5109,7 @@ function showPage(page, skipHistory){
   if(page==='venues')renderVenues();
   if(page==='performers')renderPerformers();
   if(page==='courses')renderCourses();
-  if(page==='about'){renderAbout();const sf=document.getElementById('spotify-iframe');if(sf&&sf.dataset.src&&!sf.src){sf.src=sf.dataset.src;}}
+  if(page==='about'){renderAbout();if(window._dataReady)renderAboutStats();const sf=document.getElementById('spotify-iframe');if(sf&&sf.dataset.src&&!sf.src){sf.src=sf.dataset.src;}}
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
   // GA4 虛擬頁面瀏覽追蹤
   const pageTitles = {home:'首頁',shows:'演出資訊',opmic:'Open Mic',venues:'喜劇場地',performers:'演員資料庫',courses:'課程講座',about:'關於本站',board:'留言板'};
@@ -5031,6 +5136,7 @@ function setLang(l){
   if(cur==='shows')renderShows();
   if(cur==='courses')renderCourses();
   if(cur==='performers')renderPerformers();
+  if(cur==='about' && window._dataReady) renderAboutStats();
   if(cur==='opmic' && window._dataReady) renderMicTable();
   if(window._dataReady) updateLastUpdatedDisplay();
 }
