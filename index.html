@@ -3058,7 +3058,7 @@ function showVenueDetail(id) {
     return (vNameZh && hay.includes(vNameZh)) || (vNameEn && hay.includes(vNameEn));
   }).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
   if(venueShows.length){
-    const showsHtml = venueShows.map(s=>`<div onclick="closeModal('venue-detail');openShowDetail('${s.id}')" style="padding:8px 12px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px" onmouseover="this.style.background='var(--py)'" onmouseout="this.style.background='var(--cr)'">
+    const showsHtml = venueShows.map(s=>`<div onclick="openShowDetail('${s.id}')" style="padding:8px 12px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px" onmouseover="this.style.background='var(--py)'" onmouseout="this.style.background='var(--cr)'">
       <div><div style="font-size:.82rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)">${s.title}</div><div style="font-size:.72rem;color:var(--ts);font-family:var(--f-zh);margin-top:2px">📅 ${s.date}${s.time?' · '+s.time:''}</div></div>
       <span style="font-size:.68rem;color:var(--or);font-family:var(--f-bo);white-space:nowrap">查看 →</span>
     </div>`).join('');
