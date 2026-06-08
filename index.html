@@ -1234,6 +1234,19 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div id="courses-pagination" class="pagination"></div>
     <p style="text-align:right;font-size:.68rem;color:rgba(45,43,31,.28);font-family:var(--f-bo);margin-top:12px"><span id="last-updated-courses"></span></p>
     <button class="edit-add-btn" onclick="openCourseModal(null)">＋ <span class="zh-text">新增課程</span><span class="en-text">Add Course</span></button>
+
+    <!-- 過期課程列表 -->
+    <div id="expired-courses-panel" style="margin-top:40px;padding-top:28px;border-top:2px dashed rgba(45,43,31,.15)">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+        <h3 style="font-size:1rem;font-weight:700;font-family:var(--f-zh);margin:0">🗂 <span class="zh-text">過去課程紀錄</span><span class="en-text">Past Courses</span></h3>
+        <input id="expired-courses-search" type="text" placeholder="搜尋課程名稱或主辦…" maxlength="40"
+          style="flex:1;min-width:160px;max-width:260px;padding:6px 12px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.18);font-size:.8rem;background:var(--ww);font-family:var(--f-zh)"
+          oninput="window._expiredCoursesPage=1;renderExpiredCourses()">
+        <span id="expired-courses-count" style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo)"></span>
+      </div>
+      <div id="expired-courses-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div id="expired-courses-pagination"></div>
+    </div>
   </section>
 </div>
 
@@ -2803,8 +2816,7 @@ function renderAboutStats(){
   const shows = (window._SHOWS||[]).filter(s=>(s.status||'published')!=='hidden');
   const performers = window._PERFORMERS||[];
   const venues = window._VENUES||[];
-  const courses = (window._COURSES||[]).filter(c=>(c.status||'published')!=='hidden');
-  const lang = getLang();
+  const courses = (window._COURSES||[]).filter(c=>(c.status||'published')!=='hidden');  const lang = getLang();
 
   // 總計數字
   const numsEl = document.getElementById('about-stats-nums');
@@ -2877,7 +2889,7 @@ function renderAboutStats(){
       const pct = Math.round((count/total)*100);
       return `<div style="display:flex;align-items:center;gap:6px">
         <span style="width:10px;height:10px;border-radius:50%;background:${COLORS[i%COLORS.length]};flex-shrink:0"></span>
-        <span style="color:var(--ts)">${lbl} <span style="font-weight:700;color:var(--tm)">${pct}%</span></span>
+        <span style="color:var(--ts)">${lbl} <span style="font-weight:700;color:var(--tm)">${count}場 ${pct}%</span></span>
       </div>`;
     }).join('');
   }
@@ -2973,6 +2985,64 @@ function renderCourses() {
     : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">目前沒有課程資訊</div>`;
 
   renderPagination('courses-pagination', coursesPage, totalPages, 'goCoursesPage');
+  renderExpiredCourses();
+}
+
+function renderExpiredCourses(){
+  const list = document.getElementById('expired-courses-list');
+  const countEl = document.getElementById('expired-courses-count');
+  const panel = document.getElementById('expired-courses-panel');
+  if(!list||!panel) return;
+  if(!isLoggedIn()||!editMode){ panel.style.display='none'; return; }
+  panel.style.display='block';
+  const courses = window._COURSES||[];
+  const q = (document.getElementById('expired-courses-search')?.value||'').trim().toLowerCase();
+  let expired = courses.filter(c=>{
+    if((c.status||'published')==='hidden') return false;
+    return isExpired(c.date, c.time);
+  });
+  if(q) expired = expired.filter(c=>
+    (c.title||'').toLowerCase().includes(q)||
+    (c.organizer||'').toLowerCase().includes(q)||
+    (c.location||'').toLowerCase().includes(q)
+  );
+  expired.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(countEl) countEl.textContent = `共 ${expired.length} 筆`;
+  if(!expired.length){
+    list.innerHTML=`<div style="text-align:center;padding:24px;color:var(--ts);font-family:var(--f-zh);font-size:.88rem">沒有過期課程紀錄</div>`;
+    const pp=document.getElementById('expired-courses-pagination'); if(pp) pp.innerHTML='';
+    return;
+  }
+  const perPage = 15;
+  const isSearching = q.length > 0;
+  if(!window._expiredCoursesPage) window._expiredCoursesPage = 1;
+  const totalPages = isSearching ? 1 : Math.max(1, Math.ceil(expired.length/perPage));
+  if(window._expiredCoursesPage > totalPages) window._expiredCoursesPage = totalPages;
+  const paged = isSearching ? expired : expired.slice((window._expiredCoursesPage-1)*perPage, window._expiredCoursesPage*perPage);
+  const lang = getLang();
+  list.innerHTML = paged.map(c=>{
+    const m = COURSE_META[c.type]||COURSE_META.other;
+    const lbl = lang==='en' ? m.labelEn : m.label;
+    const cardDate = courseCardDateRange(c.dateDisplay||c.date);
+    return `<div onclick="openCourseDetail('${c.id}')" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--ww);border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.09);flex-wrap:wrap;cursor:pointer;opacity:.7" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.7'">
+      <span style="font-size:.7rem;font-weight:700;padding:2px 8px;background:${m.bg};color:${m.tag};border-radius:var(--r-pill);white-space:nowrap">${lbl}</span>
+      <div style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo);white-space:nowrap;min-width:90px">${cardDate||'—'}</div>
+      <div style="font-weight:700;font-family:var(--f-zh);font-size:.88rem;flex:1;min-width:120px">${c.title||'—'}</div>
+      <div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh)">${c.organizer||c.location||''}</div>
+      ${isLoggedIn()&&editMode?`<button onclick="event.stopPropagation();openCourseModal('${c.id}')" style="padding:4px 12px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;color:var(--ts);font-size:.74rem;cursor:pointer">✏️</button>`:''}
+    </div>`;
+  }).join('');
+  const pp = document.getElementById('expired-courses-pagination');
+  if(pp){
+    if(totalPages<=1||isSearching){ pp.innerHTML=''; }
+    else{
+      const btns=[];
+      for(let i=1;i<=totalPages;i++){
+        btns.push(`<button onclick="window._expiredCoursesPage=${i};renderExpiredCourses()" style="padding:4px 10px;border-radius:var(--r-pill);border:1.5px solid ${i===window._expiredCoursesPage?'var(--or)':'rgba(45,43,31,.2)'};background:${i===window._expiredCoursesPage?'var(--or)':'transparent'};color:${i===window._expiredCoursesPage?'#fff':'var(--ts)'};font-size:.76rem;cursor:pointer;font-family:var(--f-bo)">${i}</button>`);
+      }
+      pp.innerHTML=`<div style="display:flex;justify-content:center;gap:5px;padding:12px 0;flex-wrap:wrap">${btns.join('')}</div>`;
+    }
+  }
 }
 
 function openCourseDetail(id){
