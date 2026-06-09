@@ -1469,6 +1469,47 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
 <!-- ═══ MODALS ═══ -->
 
+<!-- Story Card Modal -->
+<div class="modal-ov" id="modal-story-card"><div class="modal" style="max-width:360px">
+  <button class="modal-close" onclick="closeModal('story-card')">✕</button>
+  <div class="modal-title" style="font-size:.95rem"><span class="zh-text">📱 生成限動圖</span><span class="en-text">Story Card</span></div>
+  <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:14px;line-height:1.6"><span class="zh-text">點「下載圖片」儲存到手機，再貼到 IG 限動。</span><span class="en-text">Tap "Save Image" then share to IG Stories.</span></p>
+  <div id="story-card-preview" style="width:100%;border-radius:12px;background:#1a1000;overflow:hidden;border:1px solid #333;position:relative">
+    <div id="sc-poster-area" style="display:none"><img id="sc-poster-img" style="width:100%;height:auto;display:block;opacity:0.85" src="" alt=""></div>
+    <div id="sc-overlay" style="display:none;height:30px;background:linear-gradient(to bottom,transparent,#1a1000);margin-top:-30px;position:relative"></div>
+    <div style="padding:14px 16px">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
+        <img src="https://cici-radio.vercel.app/assets/ciciradio.jpg" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1px solid rgba(239,111,32,0.5)" alt="logo">
+        <span style="font-size:9px;color:rgba(255,255,255,0.55);font-weight:600;letter-spacing:0.06em;font-family:var(--f-bo)">嘻嘻哪哩唷</span>
+      </div>
+      <div id="sc-type" style="display:inline-block;background:#ef6f20;color:#fff;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:0.06em;margin-bottom:7px;font-family:var(--f-bo)"></div>
+      <div id="sc-title" style="font-size:15px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:10px;font-family:var(--f-zh)"></div>
+      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">日期</span><span id="sc-date" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
+      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">時間</span><span id="sc-time" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
+      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">場地</span><span id="sc-venue" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
+      <div id="sc-performer-row" style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">表演者</span><span id="sc-performer" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.08);margin:8px 0"></div>
+      <div style="display:flex"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">票價</span><span id="sc-price" style="font-size:11px;font-weight:700;color:#ef6f20;flex:1;font-family:var(--f-zh)"></span></div>
+      <div style="border-top:1px solid rgba(255,255,255,0.08);margin-top:10px;padding-top:8px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:8px;color:rgba(255,255,255,0.35);letter-spacing:0.06em;font-family:var(--f-bo)">在嘻嘻哪哩唷查看演出資訊</span>
+        <span style="font-size:9px;color:#ef6f20;font-weight:700;font-family:var(--f-bo)">cici-radio.vercel.app</span>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:14px;padding:10px 12px;background:rgba(45,43,31,.04);border-radius:var(--r-md);border:1px solid rgba(45,43,31,.08)">
+    <label style="display:flex;align-items:center;gap:8px;font-size:.78rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;margin-bottom:6px">
+      <input type="checkbox" id="sc-show-poster" style="accent-color:var(--or)" onchange="toggleStoryPoster(this.checked)">
+      顯示演出海報（圖片版權屬主辦單位所有）
+    </label>
+    <div id="sc-poster-row" style="display:none">
+      <input id="sc-poster-url" type="text" placeholder="貼入海報圖片網址…" style="width:100%;padding:6px 10px;border-radius:var(--r-md);border:1px solid rgba(45,43,31,.15);font-size:.78rem;font-family:var(--f-zh);outline:none;box-sizing:border-box" oninput="updateStoryPoster(this.value)">
+    </div>
+  </div>
+  <button onclick="downloadStoryCard()" style="width:100%;margin-top:14px;padding:11px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.88rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" id="sc-download-btn">⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span></button>
+  <div id="sc-img-result" style="display:none;margin-top:14px"></div>
+  <p style="font-size:.7rem;color:var(--ts);font-family:var(--f-zh);margin-top:8px;text-align:center;opacity:.7"><span class="zh-text">生成後長按圖片儲存到相片，再貼到 IG 限動</span><span class="en-text">Long-press the image to save, then post to IG Stories</span></p>
+</div></div>
+
 <!-- Show Detail Modal (read-only, opened on card click) -->
 <div class="modal-ov" id="modal-show-detail" style="z-index:510"><div class="modal" style="max-width:640px">
   <button class="modal-close" onclick="closeModal('show-detail')">✕</button>
@@ -1794,45 +1835,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 </div></div>
 
 <!-- Story Card Modal -->
-<div class="modal-ov" id="modal-story-card"><div class="modal" style="max-width:360px">
-  <button class="modal-close" onclick="closeModal('story-card')">✕</button>
-  <div class="modal-title" style="font-size:.95rem"><span class="zh-text">📱 生成限動圖</span><span class="en-text">Story Card</span></div>
-  <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:14px;line-height:1.6"><span class="zh-text">點「下載圖片」儲存到手機，再貼到 IG 限動。</span><span class="en-text">Tap "Save Image" then share to IG Stories.</span></p>
-  <div id="story-card-preview" style="width:100%;border-radius:12px;background:#1a1000;overflow:hidden;border:1px solid #333;position:relative">
-    <div id="sc-poster-area" style="display:none"><img id="sc-poster-img" style="width:100%;height:auto;display:block;opacity:0.85" src="" alt=""></div>
-    <div id="sc-overlay" style="display:none;height:30px;background:linear-gradient(to bottom,transparent,#1a1000);margin-top:-30px;position:relative"></div>
-    <div style="padding:14px 16px">
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
-        <img src="https://cici-radio.vercel.app/assets/ciciradio.jpg" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1px solid rgba(239,111,32,0.5)" alt="logo">
-        <span style="font-size:9px;color:rgba(255,255,255,0.55);font-weight:600;letter-spacing:0.06em;font-family:var(--f-bo)">嘻嘻哪哩唷</span>
-      </div>
-      <div id="sc-type" style="display:inline-block;background:#ef6f20;color:#fff;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:0.06em;margin-bottom:7px;font-family:var(--f-bo)"></div>
-      <div id="sc-title" style="font-size:15px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:10px;font-family:var(--f-zh)"></div>
-      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">日期</span><span id="sc-date" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
-      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">時間</span><span id="sc-time" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
-      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">場地</span><span id="sc-venue" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
-      <div id="sc-performer-row" style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">表演者</span><span id="sc-performer" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
-      <div style="height:1px;background:rgba(255,255,255,0.08);margin:8px 0"></div>
-      <div style="display:flex"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">票價</span><span id="sc-price" style="font-size:11px;font-weight:700;color:#ef6f20;flex:1;font-family:var(--f-zh)"></span></div>
-      <div style="border-top:1px solid rgba(255,255,255,0.08);margin-top:10px;padding-top:8px;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:8px;color:rgba(255,255,255,0.35);letter-spacing:0.06em;font-family:var(--f-bo)">在嘻嘻哪哩唷查看演出資訊</span>
-        <span style="font-size:9px;color:#ef6f20;font-weight:700;font-family:var(--f-bo)">cici-radio.vercel.app</span>
-      </div>
-    </div>
-  </div>
-  <div style="margin-top:14px;padding:10px 12px;background:rgba(45,43,31,.04);border-radius:var(--r-md);border:1px solid rgba(45,43,31,.08)">
-    <label style="display:flex;align-items:center;gap:8px;font-size:.78rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;margin-bottom:6px">
-      <input type="checkbox" id="sc-show-poster" style="accent-color:var(--or)" onchange="toggleStoryPoster(this.checked)">
-      顯示演出海報（圖片版權屬主辦單位所有）
-    </label>
-    <div id="sc-poster-row" style="display:none">
-      <input id="sc-poster-url" type="text" placeholder="貼入海報圖片網址…" style="width:100%;padding:6px 10px;border-radius:var(--r-md);border:1px solid rgba(45,43,31,.15);font-size:.78rem;font-family:var(--f-zh);outline:none;box-sizing:border-box" oninput="updateStoryPoster(this.value)">
-    </div>
-  </div>
-  <button onclick="downloadStoryCard()" style="width:100%;margin-top:14px;padding:11px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.88rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" id="sc-download-btn">⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span></button>
-  <div id="sc-img-result" style="display:none;margin-top:14px"></div>
-  <p style="font-size:.7rem;color:var(--ts);font-family:var(--f-zh);margin-top:8px;text-align:center;opacity:.7"><span class="zh-text">生成後長按圖片儲存到相片，再貼到 IG 限動</span><span class="en-text">Long-press the image to save, then post to IG Stories</span></p>
-</div></div>
 
 <!-- Venue Detail Modal -->
 <div class="modal-ov" id="modal-venue-detail"><div class="modal" style="max-width:480px">
@@ -2817,7 +2819,7 @@ function renderAboutStats(){
   const shows = (window._SHOWS||[]).filter(s=>(s.status||'published')!=='hidden');
   const performers = window._PERFORMERS||[];
   const venues = window._VENUES||[];
-  const courses = (window._COURSES||[]).filter(c=>(c.status||'published')!=='hidden');  const lang = getLang();
+  const courses = window._COURSES||[];  const lang = getLang();
 
   // 總計數字
   const numsEl = document.getElementById('about-stats-nums');
@@ -2889,7 +2891,7 @@ function renderAboutStats(){
       ctx.fill();
       startAngle += slice;
     });
-    legendEl.innerHTML = sorted.slice(0,8).map(([type,count],i)=>{
+    const legendItems = sorted.slice(0,8).map(([type,count],i)=>{
       const m = TYPE_META[type]||TYPE_META.other;
       const lbl = lang==='en'?(m.labelEn||m.label):m.label;
       const pct = String(Math.round((count/total)*100)).padStart(2,' ');
@@ -2898,7 +2900,16 @@ function renderAboutStats(){
         <span style="color:var(--ts);min-width:60px">${lbl}</span>
         <span style="font-weight:700;color:var(--tm);font-family:var(--f-bo);white-space:nowrap"><span style="display:inline-block;min-width:28px;text-align:right">${pct}%</span> <span style="font-weight:400;color:var(--ts)">(${count}場)</span></span>
       </div>`;
-    }).join('');
+    });
+    const col1 = legendItems.slice(0,4).join('');
+    const col2 = legendItems.slice(4).join('');
+    legendEl.style.cssText = 'display:flex;flex-direction:column;gap:5px;font-size:.75rem;font-family:var(--f-zh);flex:1';
+    legendEl.innerHTML = col2
+      ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 20px;width:100%">
+          <div style="display:flex;flex-direction:column;gap:5px">${col1}</div>
+          <div style="display:flex;flex-direction:column;gap:5px">${col2}</div>
+        </div>`
+      : `<div style="display:flex;flex-direction:column;gap:5px">${col1}</div>`;
   }
 }
 
