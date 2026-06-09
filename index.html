@@ -1470,7 +1470,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <!-- ═══ MODALS ═══ -->
 
 <!-- Story Card Modal -->
-<div class="modal-ov" id="modal-story-card"><div class="modal" style="max-width:360px">
+<div class="modal-ov" id="modal-story-card" style="z-index:520"><div class="modal" style="max-width:360px">
   <button class="modal-close" onclick="closeModal('story-card')">✕</button>
   <div class="modal-title" style="font-size:.95rem"><span class="zh-text">📱 生成限動圖</span><span class="en-text">Story Card</span></div>
   <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:14px;line-height:1.6"><span class="zh-text">點「下載圖片」儲存到手機，再貼到 IG 限動。</span><span class="en-text">Tap "Save Image" then share to IG Stories.</span></p>
@@ -5300,6 +5300,9 @@ function openStoryCard(id){
   // 如果演出有圖片，自動填入但不顯示（讓使用者自己勾選）
   if(s.image) document.getElementById('sc-poster-url').value = s.image;
   document.getElementById('modal-story-card').classList.add('open');
+  // 讓 story-card 蓋在 show-detail 上面
+  const showDetailOv = document.getElementById('modal-show-detail');
+  if(showDetailOv) showDetailOv.style.zIndex = '505';
 }
 function toggleStoryPoster(show){
   document.getElementById('sc-poster-row').style.display = show ? 'block' : 'none';
@@ -5370,6 +5373,11 @@ function copyShareLink(){
 
 function closeModal(id){
   document.getElementById('modal-'+id).classList.remove('open');
+  // 關閉 story-card 時恢復 show-detail 的 z-index
+  if(id==='story-card'){
+    const showDetailOv = document.getElementById('modal-show-detail');
+    if(showDetailOv) showDetailOv.style.zIndex = '510';
+  }
   // 關閉演出/課程詳情時清除分享參數
   if(id==='show-detail'||id==='course-detail'||id==='performer-detail'){
     const base = location.hash.split('?')[0];
