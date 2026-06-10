@@ -315,13 +315,13 @@ body.ready{visibility:visible}
 .venue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:14px}
 .venue-card{background:var(--ww);border-radius:var(--r-md);padding:17px 15px;border:1.5px solid rgba(45,43,31,.08);color:var(--tm);transition:all .17s;display:flex;flex-direction:column;gap:9px;cursor:pointer;position:relative;overflow:hidden}
 .venue-card:hover{border-color:var(--or);transform:translateY(-3px);box-shadow:0 8px 22px rgba(45,43,31,.1)}
-.performer-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-lg);padding:18px 14px;text-align:center;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s}
+.performer-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-lg);padding:18px 14px;text-align:center;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;display:flex;flex-direction:column;align-items:center}
 #performers-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
 .performer-card:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--or)}
 .performer-avatar{width:84px;height:84px;border-radius:50%;object-fit:cover;margin:0 auto 10px;display:block;background:var(--py);border:2px solid rgba(45,43,31,.08)}
 .performer-avatar-fallback{width:84px;height:84px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;font-weight:700;font-family:var(--f-zh)}
 .performer-name{font-size:.92rem;font-weight:700;font-family:var(--f-zh);color:var(--tm);margin-bottom:4px}
-.performer-tagline{font-size:.72rem;color:var(--ts);font-family:var(--f-zh);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.performer-tagline{font-size:.72rem;color:var(--ts);font-family:var(--f-zh);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1;margin-bottom:8px}
 .performer-types{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-top:7px}
 .performer-type-tag{font-size:.62rem;padding:2px 7px;border-radius:var(--r-pill);font-weight:600;font-family:var(--f-bo)}
 @media(max-width:768px){#performers-grid{grid-template-columns:repeat(2,1fr);gap:12px}.performer-avatar,.performer-avatar-fallback{width:60px;height:60px}}
@@ -3780,7 +3780,7 @@ function renderPerformers(){
       </div>` : ''}
       ${avatar}${fallback}
       <div class="performer-name">${p.name||''}</div>
-      ${p.tagline?`<div class="performer-tagline">${p.tagline}</div>`:''}
+      ${p.tagline?`<div class="performer-tagline">${p.tagline}</div>`:'<div style="flex:1"></div>'}
       <div class="performer-types">${typeTags}</div>
     </div>`;
   }).join('');
