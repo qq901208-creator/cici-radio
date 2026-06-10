@@ -315,8 +315,8 @@ body.ready{visibility:visible}
 .venue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:14px}
 .venue-card{background:var(--ww);border-radius:var(--r-md);padding:17px 15px;border:1.5px solid rgba(45,43,31,.08);color:var(--tm);transition:all .17s;display:flex;flex-direction:column;gap:9px;cursor:pointer;position:relative;overflow:hidden}
 .venue-card:hover{border-color:var(--or);transform:translateY(-3px);box-shadow:0 8px 22px rgba(45,43,31,.1)}
-.performer-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-lg);padding:18px 14px;text-align:center;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;display:flex;flex-direction:column;align-items:center;min-height:210px}
-#performers-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.performer-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-lg);padding:18px 14px;text-align:center;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;display:flex;flex-direction:column;align-items:center}
+#performers-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;align-items:stretch}
 .performer-card:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--or)}
 .performer-avatar{width:84px;height:84px;border-radius:50%;object-fit:cover;margin:0 auto 10px;display:block;background:var(--py);border:2px solid rgba(45,43,31,.08)}
 .performer-avatar-fallback{width:84px;height:84px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;font-weight:700;font-family:var(--f-zh)}
@@ -324,7 +324,7 @@ body.ready{visibility:visible}
 .performer-tagline{font-size:.72rem;color:var(--ts);font-family:var(--f-zh);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:0}
 .performer-types{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-top:7px}
 .performer-type-tag{font-size:.62rem;padding:2px 7px;border-radius:var(--r-pill);font-weight:600;font-family:var(--f-bo)}
-@media(max-width:768px){#performers-grid{grid-template-columns:repeat(2,1fr);gap:12px}.performer-avatar,.performer-avatar-fallback{width:60px;height:60px}}
+@media(max-width:768px){#performers-grid{grid-template-columns:repeat(2,1fr);gap:12px;align-items:stretch}.performer-avatar,.performer-avatar-fallback{width:60px;height:60px}}
 @media(max-width:600px){#about-stats-nums{grid-template-columns:repeat(2,1fr)!important}}
 .venue-logo{width:50px;height:50px;min-width:50px;min-height:50px;max-width:50px;max-height:50px;border-radius:10px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;border:1px solid rgba(45,43,31,.08)}
 .venue-logo img{width:100%;height:100%;object-fit:contain;display:block}
@@ -1197,7 +1197,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </div>
       <button type="button" onclick="addExtraLinkRow()" style="font-size:.78rem;color:var(--or);background:none;border:none;cursor:pointer;font-family:var(--f-zh);padding:0">＋ 新增連結</button>
     </div>
-    <div class="fg-g full"><label style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" id="p-featured" style="accent-color:var(--or)"> 設為精選演員（置頂顯示）</label></div>
+    <div class="fg-g full"><label style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" id="p-featured" style="accent-color:var(--or)"> 標記「近期專場」（置頂顯示）</label></div>
   </div>
   <div class="fa">
     <button class="fa-del" id="p-del-btn" onclick="deletePerformer()" style="display:none">刪除</button>
@@ -3774,14 +3774,16 @@ function renderPerformers(){
       : '';
     const fallback = `<div class="performer-avatar-fallback" id="pf-${p.id}" ${p.photoUrl?'style="display:none"':''}>${(p.name||'?')[0]}</div>`;
     return `<div class="performer-card" onclick="openPerformerDetail('${p.id}')" style="position:relative">
-      ${p.featured ? `<span style="position:absolute;top:8px;right:8px;font-size:.6rem;font-weight:700;padding:2px 7px;background:var(--or);color:#fff;border-radius:var(--r-pill);font-family:var(--f-bo)">精選</span>` : ''}
+      ${p.featured ? `<span style="position:absolute;top:8px;right:8px;font-size:.6rem;font-weight:700;padding:2px 7px;background:var(--or);color:#fff;border-radius:var(--r-pill);font-family:var(--f-bo)">🎭 近期專場</span>` : ''}
       ${isAdmin ? `<div style="position:absolute;top:8px;left:8px;display:flex;gap:4px;z-index:2">
         <button onclick="event.stopPropagation();openPerformerModal('${p.id}')" style="padding:3px 8px;font-size:.68rem;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);cursor:pointer;font-family:var(--f-bo)">✏️</button>
       </div>` : ''}
       ${avatar}${fallback}
       <div class="performer-name">${p.name||''}</div>
-      ${p.tagline?`<div class="performer-tagline">${p.tagline}</div>`:'<div style="flex:1"></div>'}
-      <div class="performer-types" style="margin-top:auto;padding-top:10px">${typeTags}</div>
+      ${p.tagline?`<div class="performer-tagline">${p.tagline}</div>`:''}
+      <div style="flex:1"></div>
+      <div class="performer-types">${typeTags}</div>
+      <div style="flex:1"></div>
     </div>`;
   }).join('');
 
