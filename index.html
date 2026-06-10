@@ -1998,8 +1998,9 @@ window._orderBy = orderBy;
 window._onSnapshot = onSnapshot;
 
 // ── Load all data from Firestore on startup ──
-async function loadAllData() {
+async function loadAllData(retryCount = 0) {
   const safe = p => p.catch(()=>null);
+  const MAX_RETRIES = 3;
   try {
     const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, performersSnap, metaSnap, showVenuesSnap, showAreasSnap] = await Promise.all([
       safe(getDocs(collection(db,'shows'))),
@@ -2048,6 +2049,11 @@ async function loadAllData() {
     if(!window._COMMENTS.length) window._COMMENTS = window.DEFAULT_COMMENTS;
   } catch(e) {
     console.warn('Firestore load failed:', e);
+    if(retryCount < MAX_RETRIES) {
+      console.log(`重試中... (${retryCount + 1}/${MAX_RETRIES})`);
+      setTimeout(() => loadAllData(retryCount + 1), 3000);
+      return;
+    }
     window._SHOWS    = window.DEFAULT_SHOWS;
     window._MICS     = window.DEFAULT_MICS;
     window._VENUES   = window.DEFAULT_VENUES.slice();
@@ -3855,6 +3861,9 @@ function openPerformerDetail(id){
     ${p.bio?`<p class="sd-desc">${p.bio}</p>`:''}
     ${p.photoCredit?`<div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.6;margin-bottom:12px">📷 ${p.photoCredit}</div>`:''}
     ${upcoming.length?`<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>${showsList}</div>`:''}
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(45,43,31,.08)">
+      <button onclick="copyShareLink()" style="padding:10px 0;width:100%;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.82rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">分享演員資訊</span><span class="en-text">Share</span></button>
+    </div>
   `;
   document.getElementById('modal-performer-detail').classList.add('open');
 }
