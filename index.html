@@ -4341,7 +4341,7 @@ function openCourseModal(id){
   const imgHint=document.getElementById('c-img-hint');if(imgHint){imgHint.textContent='';imgHint.className='img-url-hint';}
   if(c){
     document.getElementById('c-title').value=c.title||'';
-    document.getElementById('c-date').value=c.date||'';
+    document.getElementById('c-date').value=c.dateDisplay||c.date||'';
     // 解析時間
     const timeStr=c.time||'';
     const timeParts=timeStr.split('–');
