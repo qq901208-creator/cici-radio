@@ -326,6 +326,8 @@ body.ready{visibility:visible}
 .performer-type-tag{font-size:.62rem;padding:2px 7px;border-radius:var(--r-pill);font-weight:600;font-family:var(--f-bo)}
 @media(max-width:768px){#performers-grid{grid-template-columns:repeat(2,1fr);gap:12px;align-items:stretch}.performer-avatar,.performer-avatar-fallback{width:60px;height:60px}}
 @media(max-width:600px){#about-stats-nums{grid-template-columns:repeat(2,1fr)!important}}
+.pf-troupe-mobile{display:none}
+@media(max-width:540px){.pf-troupe-desktop{display:none!important}.pf-troupe-mobile{display:block}}
 .venue-logo{width:50px;height:50px;min-width:50px;min-height:50px;max-width:50px;max-height:50px;border-radius:10px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;border:1px solid rgba(45,43,31,.08)}
 .venue-logo img{width:100%;height:100%;object-fit:contain;display:block}
 .venue-name{font-size:.86rem;font-weight:700;font-family:var(--f-zh);line-height:1.32}
@@ -3848,7 +3850,7 @@ function openPerformerDetail(id){
       <div style="flex:1;min-width:0">
         <div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:6px">${p.name||''}</div>
         <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:${socialLinks?'8px':'0'}">${typeTags}</div>
-        ${socialLinks?`<div style="margin-bottom:${p.troupe?'10px':'4px'};word-break:keep-all">${socialLinks}</div>`:''}
+        ${socialLinks?`<div style="word-break:keep-all">${socialLinks}</div>`:''}
         ${p.troupe?(()=>{
           const troupeNames = p.troupe.split(/[、,，]/).map(s=>s.trim()).filter(Boolean);
           const links = p.troupeLinks||[];
@@ -3856,17 +3858,31 @@ function openPerformerDetail(id){
             const rowLinks = links.filter(l=>(l.label||'').includes(name)||(troupeNames.length===1));
             const linkHtml = rowLinks.length
               ? rowLinks.map(l=>{
-                  // 去除連結 label 裡的團體名稱，只留平台名稱
                   const cleanLabel = (l.label||l.url).replace(name,'').replace(/^[\s·\-　]+|[\s·\-　]+$/g,'').trim()||l.label||l.url;
                   return `<a href="${safeUrl(l.url)}" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:none;font-size:.73rem;white-space:nowrap">${cleanLabel}</a>`;
                 }).join(' · ')
               : '';
             return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px"><span style="font-weight:600;color:var(--tm);font-size:.78rem">${name}</span>${linkHtml?'<span style="color:var(--ts);opacity:.4">·</span>'+linkHtml:''}</div>`;
           }).join('');
-          return `<div style="padding-top:8px;border-top:1px solid rgba(45,43,31,.08)"><div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);letter-spacing:.05em;margin-bottom:5px">所屬團體</div>${troupeRows}</div>`;
+          return `<div class="pf-troupe-desktop" style="padding-top:8px;border-top:1px solid rgba(45,43,31,.08);margin-top:8px"><div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);letter-spacing:.05em;margin-bottom:5px">所屬團體</div>${troupeRows}</div>`;
         })():''}
       </div>
     </div>
+    ${p.troupe?(()=>{
+      const troupeNames = p.troupe.split(/[、,，]/).map(s=>s.trim()).filter(Boolean);
+      const links = p.troupeLinks||[];
+      const troupeRows = troupeNames.map((name,i)=>{
+        const rowLinks = links.filter(l=>(l.label||'').includes(name)||(troupeNames.length===1));
+        const linkHtml = rowLinks.length
+          ? rowLinks.map(l=>{
+              const cleanLabel = (l.label||l.url).replace(name,'').replace(/^[\s·\-　]+|[\s·\-　]+$/g,'').trim()||l.label||l.url;
+              return `<a href="${safeUrl(l.url)}" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:none;font-size:.73rem;white-space:nowrap">${cleanLabel}</a>`;
+            }).join(' · ')
+          : '';
+        return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px"><span style="font-weight:600;color:var(--tm);font-size:.78rem">${name}</span>${linkHtml?'<span style="color:var(--ts);opacity:.4">·</span>'+linkHtml:''}</div>`;
+      }).join('');
+      return `<div class="pf-troupe-mobile" style="padding:8px 0 12px;border-bottom:1px solid rgba(45,43,31,.08);margin-bottom:12px"><div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);letter-spacing:.05em;margin-bottom:5px">所屬團體</div>${troupeRows}</div>`;
+    })():''}
     ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin-bottom:10px">${p.tagline}</p>`:''}
     ${venueDisplay?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px;overflow-wrap:break-word">常出沒場地<br><span style="font-weight:600;color:var(--tm)">${venueDisplay}</span></div>`:''}
     ${p.style?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px">風格<br><span style="font-weight:600;color:var(--tm)">${p.style}</span></div>`:''}
