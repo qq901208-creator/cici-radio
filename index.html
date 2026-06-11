@@ -3852,11 +3852,14 @@ function openPerformerDetail(id){
         ${p.troupe?(()=>{
           const troupeNames = p.troupe.split(/[、,，]/).map(s=>s.trim()).filter(Boolean);
           const links = p.troupeLinks||[];
-          // 每個團體名稱一行，後面接對應的連結
           const troupeRows = troupeNames.map((name,i)=>{
             const rowLinks = links.filter(l=>(l.label||'').includes(name)||(troupeNames.length===1));
             const linkHtml = rowLinks.length
-              ? rowLinks.map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:none;font-size:.73rem;white-space:nowrap">${l.label||l.url}</a>`).join(' · ')
+              ? rowLinks.map(l=>{
+                  // 去除連結 label 裡的團體名稱，只留平台名稱
+                  const cleanLabel = (l.label||l.url).replace(name,'').replace(/^[\s·\-　]+|[\s·\-　]+$/g,'').trim()||l.label||l.url;
+                  return `<a href="${safeUrl(l.url)}" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:none;font-size:.73rem;white-space:nowrap">${cleanLabel}</a>`;
+                }).join(' · ')
               : '';
             return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px"><span style="font-weight:600;color:var(--tm);font-size:.78rem">${name}</span>${linkHtml?'<span style="color:var(--ts);opacity:.4">·</span>'+linkHtml:''}</div>`;
           }).join('');
