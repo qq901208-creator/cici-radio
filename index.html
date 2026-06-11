@@ -1379,7 +1379,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <div class="fp-nr">
             <input type="text" class="fp-ni" id="fpNI" placeholder="暱稱 / Nickname" oninput="updAv()" maxlength="20">
           </div>
-          <textarea class="fp-ta" id="fpTA" placeholder="留言… / Comment…" oninput="updCC()" maxlength="300" rows="4"></textarea>
+          <textarea class="fp-ta" id="fpTA" placeholder="留言… / Comment…" oninput="updCC()" maxlength="300" rows="4" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();}"></textarea>
           <!-- 防灌水問答 -->
           <div style="margin-top:10px;padding:10px 14px;background:var(--py);border-radius:var(--r-md);border:1.5px solid rgba(239,111,32,.2)">
             <label style="font-size:.78rem;font-weight:700;color:var(--tm);font-family:var(--f-zh);display:block;margin-bottom:6px">🎭 <span class="zh-text">快速驗證：本站的品牌名稱叫做？（中文或英文擇一回答）</span><span class="en-text">Quick check: What is the name of this platform? (Chinese or English both accepted)</span></label>
@@ -1397,7 +1397,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           </div>
           <div class="fp-cf" style="margin-top:10px">
             <div style="display:flex;align-items:center;gap:8px">
-              <div class="fp-emoji-row"><button class="fp-eb" onclick="insE('😂')">😂</button><button class="fp-eb" onclick="insE('👍')">👍</button><button class="fp-eb" onclick="insE('🎭')">🎭</button><button class="fp-eb" onclick="insE('🔥')">🔥</button></div>
+              <div class="fp-emoji-row"><button type="button" class="fp-eb" onclick="insE('😂')">😂</button><button type="button" class="fp-eb" onclick="insE('👍')">👍</button><button type="button" class="fp-eb" onclick="insE('🎭')">🎭</button><button type="button" class="fp-eb" onclick="insE('🔥')">🔥</button></div>
               <span class="fp-cc" id="fpCC">0/300</span>
             </div>
             <button class="fp-sb" onclick="submitComment()"><span class="zh-text">送出留言</span><span class="en-text">Post</span></button>
