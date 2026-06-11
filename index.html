@@ -5046,7 +5046,7 @@ function renderStars(v){const el=document.getElementById('starBtns');if(!el)retu
 function setStar(n){selRating=n;renderStars(n);}
 function updAv(){const n=document.getElementById('fpNI').value.trim();const i=n?n[0].toUpperCase():'?';document.getElementById('fpAvI').textContent=i;document.getElementById('fpAv').style.background=n?`hsl(${n.charCodeAt(0)*13%360},55%,82%)`:'var(--py)';}
 function updCC(){const l=document.getElementById('fpTA').value.length;const el=document.getElementById('fpCC');el.textContent=l+'/300';el.style.color=l>260?'#e74c3c':'';}
-function insE(e){const ta=document.getElementById('fpTA'),p=ta.selectionStart;ta.value=ta.value.slice(0,p)+e+ta.value.slice(p);ta.selectionStart=ta.selectionEnd=p+e.length;ta.focus();updCC();}
+function insE(e){const ta=document.getElementById('fpTA'),p=ta.selectionStart;ta.value=ta.value.slice(0,p)+e+ta.value.slice(p);ta.selectionStart=ta.selectionEnd=p+e.length;ta.focus();ta.dispatchEvent(new Event('input'));}
 function relTime(ts){const d=(Date.now()-ts)/1000;if(d<60)return'剛剛';if(d<3600)return Math.floor(d/60)+'分鐘前';if(d<86400)return Math.floor(d/3600)+'小時前';return Math.floor(d/86400)+'天前';}
 function renderFpList(){
   const list=document.getElementById('fpList');
