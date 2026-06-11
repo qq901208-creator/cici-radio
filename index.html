@@ -3850,8 +3850,17 @@ function openPerformerDetail(id){
         <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:${socialLinks?'8px':'0'}">${typeTags}</div>
         ${socialLinks?`<div style="margin-bottom:${p.troupe?'10px':'4px'};word-break:keep-all">${socialLinks}</div>`:''}
         ${p.troupe?(()=>{
-          const links = p.troupeLinks&&p.troupeLinks.length ? p.troupeLinks.map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener" style="color:var(--or);font-weight:700;text-decoration:none;font-size:.75rem">${l.label||l.url} ↗</a>`).join(' · ') : '';
-          return `<div style="padding-top:8px;border-top:1px solid rgba(45,43,31,.08)"><div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);letter-spacing:.05em;margin-bottom:3px">所屬團體</div><div style="font-size:.78rem;font-family:var(--f-zh);color:var(--ts)"><span style="font-weight:600;color:var(--tm)">${p.troupe}</span>${links?'<span style="margin:0 5px;color:var(--ts)">·</span>'+links:''}</div></div>`;
+          const troupeNames = p.troupe.split(/[、,，]/).map(s=>s.trim()).filter(Boolean);
+          const links = p.troupeLinks||[];
+          // 每個團體名稱一行，後面接對應的連結
+          const troupeRows = troupeNames.map((name,i)=>{
+            const rowLinks = links.filter(l=>(l.label||'').includes(name)||(troupeNames.length===1));
+            const linkHtml = rowLinks.length
+              ? rowLinks.map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:none;font-size:.73rem;white-space:nowrap">${l.label||l.url}</a>`).join(' · ')
+              : '';
+            return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px"><span style="font-weight:600;color:var(--tm);font-size:.78rem">${name}</span>${linkHtml?'<span style="color:var(--ts);opacity:.4">·</span>'+linkHtml:''}</div>`;
+          }).join('');
+          return `<div style="padding-top:8px;border-top:1px solid rgba(45,43,31,.08)"><div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);letter-spacing:.05em;margin-bottom:5px">所屬團體</div>${troupeRows}</div>`;
         })():''}
       </div>
     </div>
