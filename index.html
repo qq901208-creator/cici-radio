@@ -2531,7 +2531,8 @@ function showCardHTML(s) {
     : '';
   const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
   const expiredTag = isExpired(s.date, s.time) ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">已過期</span>` : '';
-  const expiredOverlay = isExpired(s.date, s.time) ? `style="opacity:.55"` : '';
+  const hiddenTag = (s.status==='hidden') ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#ffcccc;color:#cc0000;border-radius:var(--r-pill);margin-left:4px">已隱藏</span>` : '';
+  const expiredOverlay = isExpired(s.date, s.time) ? `style="opacity:.55"` : (s.status==='hidden' ? `style="opacity:.45"` : '');
   return `<div class="show-card" data-id="${s.id}" onclick="openShowDetail('${s.id}')" ${expiredOverlay}>
     <div class="sc-img-col">
       <div class="sc-img" style="background:${gradientForTypes(types)}">
@@ -2543,7 +2544,7 @@ function showCardHTML(s) {
     </div>
     <div class="sc-body">
       <div class="sc-types sc-types-mobile">${typeTags}</div>
-      <div class="sc-date">📅 ${s.date} (${dow}) ${s.time||''}${soldTag}${expiredTag}</div>
+      <div class="sc-date">📅 ${s.date} (${dow}) ${s.time||''}${soldTag}${expiredTag}${hiddenTag}</div>
       <div class="sc-title">${s.title}</div>
       <div class="sc-meta">📍 ${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</div>
       ${s.performer?`<div class="sc-meta">🎙 ${s.performer}</div>`:''}
@@ -2696,7 +2697,7 @@ function renderShows() {
   const shows = window._SHOWS || SHOWS || [];
   const fil = shows.filter(s => {
     const st = s.status || 'published';
-    if (st === 'hidden') return false;
+    if (st === 'hidden' && !adminMode) return false;
     if (!adminMode && st === 'pending') return false;
     if (!adminMode && isExpired(s.date, s.time)) return false;
     if (adminMode && hideExpiredShows && isExpired(s.date, s.time)) return false;
