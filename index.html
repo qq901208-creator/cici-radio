@@ -2698,6 +2698,7 @@ function renderShows() {
   const fil = shows.filter(s => {
     const st = s.status || 'published';
     if (st === 'hidden' && !adminMode) return false;
+    if (st === 'hidden' && adminMode && isExpired(s.date, s.time)) return false;
     if (!adminMode && st === 'pending') return false;
     if (!adminMode && isExpired(s.date, s.time)) return false;
     if (adminMode && hideExpiredShows && isExpired(s.date, s.time)) return false;
