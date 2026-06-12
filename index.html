@@ -2722,7 +2722,16 @@ function renderShows() {
       if (!hay.includes(q)) return false;
     }
     return true;
-  }).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
+  }).sort((a,b)=>{
+    // 管理員模式：隱藏的演出置頂
+    if(adminMode){
+      const aHidden = (a.status||'published')==='hidden';
+      const bHidden = (b.status||'published')==='hidden';
+      if(aHidden && !bHidden) return -1;
+      if(!aHidden && bHidden) return 1;
+    }
+    return showSortKey(a).localeCompare(showSortKey(b));
+  });
 
   // 篩選條件改變時重置到第一頁
   const perPage = calcPerPage('shows-grid', 10);
