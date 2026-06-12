@@ -2691,7 +2691,7 @@ function goCoursesPage(p){
 
 function renderShows() {
   const grid = document.getElementById('shows-grid'); if (!grid) return;
-  const adminMode = isLoggedIn();
+  const adminMode = isLoggedIn() && editMode;
   const q = (document.getElementById('shows-search')?.value||'').trim().toLowerCase();
   const shows = window._SHOWS || SHOWS || [];
   const fil = shows.filter(s => {
@@ -2988,7 +2988,7 @@ function courseCardHTML(c) {
 }
 function renderCourses() {
   const g=document.getElementById('courses-grid'); if(!g)return;
-  const adminMode=isLoggedIn();
+  const adminMode=isLoggedIn()&&editMode;
   const courses = window._COURSES || COURSES || [];
   const fil=courses.filter(c=>{
     const st=c.status||'published';
@@ -4165,6 +4165,9 @@ function openShowModal(id){
   document.getElementById('modal-show').classList.add('open');
 }
 function saveShow(status){
+  // 以狀態下拉選單的值為準，按鈕的 status 參數只作為預設值
+  const statusEl = document.getElementById('s-status');
+  const finalStatus = statusEl ? statusEl.value : (status || 'published');
   const title=document.getElementById('s-title').value.trim();
   if(!title){showToast('請填入演出名稱','err');return;}
   const types=Array.from(document.querySelectorAll('#s-types input:checked')).map(cb=>cb.value);
@@ -4195,7 +4198,7 @@ function saveShow(status){
     imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',
     description:document.getElementById('s-desc').value,
     production:document.getElementById('s-production')?.value?.trim()||'',
-    status,soldOut:document.getElementById('s-soldout').value==='1',
+    status:finalStatus,soldOut:document.getElementById('s-soldout').value==='1',
   };
   window.FB.save('shows', eShowId||null, item).then(newId=>{
     if(eShowId){const i=SHOWS.findIndex(x=>x.id===eShowId);if(i>=0)SHOWS[i]={id:eShowId,...item};}
@@ -4203,7 +4206,7 @@ function saveShow(status){
     window._SHOWS = SHOWS;
     closeModal('show');renderShows();renderHomeShows();renderHeroStats();
     if(document.getElementById('view-cal').style.display!=='none')renderCalendar();
-    showToast(status==='published'?'✅ 演出已發布':'📝 草稿已儲存','ok');
+    showToast(finalStatus==='published'?'✅ 演出已發布':finalStatus==='pending'?'⏳ 已設為待確認':'📝 草稿已儲存','ok');
   }).catch(e=>{console.error(e);showToast('❌ 儲存失敗，請再試一次','err');});
 }
 function delShow(id){if(!confirm('確定刪除這場演出？'))return;window.FB.del('shows',id).then(()=>{SHOWS=SHOWS.filter(x=>x.id!==id);renderShows();renderHomeShows();if(document.getElementById('view-cal').style.display!=='none')renderCalendar();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
