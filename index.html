@@ -2699,9 +2699,10 @@ function renderShows() {
     const st = s.status || 'published';
     if (st === 'hidden' && !adminMode) return false;
     if (st === 'hidden' && adminMode && isExpired(s.date, s.time)) return false;
+    if (st === 'hidden' && adminMode && !isExpired(s.date, s.time)) return true;
     if (!adminMode && st === 'pending') return false;
     if (!adminMode && isExpired(s.date, s.time)) return false;
-    if (adminMode && hideExpiredShows && isExpired(s.date, s.time)) return false;
+    if (adminMode && hideExpiredShows && isExpired(s.date, s.time) && st !== 'pending') return false;
     const types = s.types||(s.type?[s.type]:[]);
     if (fType!=='all' && !types.includes(fType)) return false;
     if (!venueMatchesFilter(s, fVenue)) return false;
