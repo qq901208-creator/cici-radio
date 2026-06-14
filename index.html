@@ -1104,12 +1104,15 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <option value="other">其他</option>
       </select>
       <span id="performers-count" style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo)"></span>
-      <button class="edit-add-btn" onclick="openPerformerModal(null)">＋ <span class="zh-text">新增演員</span><span class="en-text">Add Performer</span></button>
+      <button onclick="resetPerformersFilter()" style="padding:6px 12px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.15);background:transparent;font-size:.78rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;white-space:nowrap" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.15)';this.style.color='var(--ts)'">✕ 重置</button>
     </div>
     <!-- 格狀列表 -->
     <div id="performers-grid"></div>
     <div id="performers-pagination"></div>
     <p style="text-align:right;font-size:.68rem;color:rgba(45,43,31,.28);font-family:var(--f-bo);margin-top:12px"><span id="last-updated-performers"></span></p>
+    <div class="edit-only" style="text-align:center;margin-top:16px">
+      <button class="edit-add-btn" onclick="openPerformerModal(null)">＋ <span class="zh-text">新增演員</span><span class="en-text">Add Performer</span></button>
+    </div>
   </section>
 </div>
 
@@ -3787,6 +3790,16 @@ function deletePerformer(){
     renderPerformers();
     showToast('已刪除','ok');
   }).catch(()=>showToast('❌ 刪除失敗','err'));
+}
+
+function resetPerformersFilter(){
+  const search = document.getElementById('performers-search');
+  const type = document.getElementById('performers-type');
+  if(search) search.value = '';
+  if(type) type.value = 'all';
+  window._performersPage = 1;
+  renderPerformers();
+  showToast('✅ 已重置篩選條件','ok');
 }
 
 function renderPerformers(){
