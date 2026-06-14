@@ -1527,7 +1527,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
     <!-- 演出名稱（海報下、資訊卡上） -->
     <div style="padding:1.5% 4% 0;flex-shrink:0;position:relative;z-index:1;text-align:center">
-      <div id="sc-new-title" style="font-weight:900;color:rgba(45,43,31,0.9);line-height:1.3;letter-spacing:0.01em"></div>
+      <div id="sc-new-title" style="font-weight:900;color:rgba(45,43,31,0.9);line-height:1.3;letter-spacing:0.01em;background:rgba(245,213,88,0.35);border-radius:2%;padding:1.5% 3%;display:inline-block;width:100%;box-sizing:border-box"></div>
     </div>
 
     <!-- 資訊卡 -->
@@ -1552,7 +1552,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <!-- 購票預留區 / Threads 品牌文字區 -->
     <div id="sc-ticket-zone" style="margin:0 4% 2%;height:5.5%;background:rgba(239,111,32,0.05);border:1.5px dashed rgba(239,111,32,0.2);border-radius:3%;flex-shrink:0;position:relative;z-index:1"></div>
     <div id="sc-brand-zone" style="display:none;margin:0 4% 2%;flex-shrink:0;position:relative;z-index:1;background:rgba(239,111,32,0.08);border-radius:3%;padding:1.8% 3%;align-items:center;justify-content:center;gap:2%">
-      <span style="font-size:.6em">🎭</span>
       <span style="font-size:.58em;color:rgba(45,43,31,0.55);font-family:var(--f-zh);letter-spacing:0.03em">到 <span style="font-weight:700;color:var(--or)">嘻嘻哪哩唷</span>，查看更多演出資訊</span>
     </div>
 
@@ -5448,7 +5447,9 @@ function openStoryCard(id){
     titleEl.innerHTML = title
       .replace(/｜/g, '｜<wbr>')
       .replace(/\|/g, '|<wbr>')
-      .replace(/-/g, '-<wbr>');
+      .replace(/-/g, '-<wbr>')
+      .replace(/《/g, '<wbr>《')
+      .replace(/【/g, '<wbr>【');
   }
 
   // 類型標籤（橘底白字，・分隔）
