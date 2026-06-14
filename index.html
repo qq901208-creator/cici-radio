@@ -5490,7 +5490,14 @@ function openStoryCard(id){
     const range = min === max ? `NT$ ${min.toLocaleString()}` : `NT$ ${min.toLocaleString()}～NT$ ${max.toLocaleString()}`;
     return note ? `${range}${note}` : range;
   }
-  document.getElementById('sc-new-price').textContent = s.soldOut ? `${parseStoryPrice(s.price)} 已完售` : parseStoryPrice(s.price);
+  const isEnglishShow = (s.types||[]).includes('english') || s.type === 'english';
+  const soldOutLabel = isEnglishShow ? 'Sold Out' : '已完售';
+  document.getElementById('sc-new-price').textContent = s.soldOut ? parseStoryPrice(s.price) : parseStoryPrice(s.price);
+  if(s.soldOut){
+    document.getElementById('sc-new-price').style.color = 'rgba(45,43,31,0.4)';
+    document.getElementById('sc-new-price').style.textDecoration = 'line-through';
+    document.getElementById('sc-new-price').insertAdjacentHTML('afterend',`<span style="font-size:.52em;font-weight:700;color:#cc3300;margin-left:0.4em;background:rgba(204,51,0,0.1);padding:1px 6px;border-radius:4px">${soldOutLabel}</span>`);
+  }
   document.getElementById('sc-new-performers').textContent = s.performer||'';
 
   // 海報
