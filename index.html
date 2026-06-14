@@ -5496,7 +5496,7 @@ function openStoryCard(id){
   if(s.soldOut){
     document.getElementById('sc-new-price').style.color = 'rgba(45,43,31,0.4)';
     document.getElementById('sc-new-price').style.textDecoration = 'line-through';
-    document.getElementById('sc-new-price').insertAdjacentHTML('afterend',`<span style="font-size:.52em;font-weight:700;color:#cc3300;margin-left:0.4em;background:rgba(204,51,0,0.1);padding:1px 6px;border-radius:4px">${soldOutLabel}</span>`);
+    document.getElementById('sc-new-price').insertAdjacentHTML('afterend',`<span style="font-size:.52em;font-weight:700;color:var(--or);margin-left:0.4em;background:rgba(239,111,32,0.12);padding:1px 6px;border-radius:4px">${soldOutLabel}</span>`);
   }
   document.getElementById('sc-new-performers').textContent = s.performer||'';
 
