@@ -1529,19 +1529,19 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
     <!-- 資訊卡 -->
     <div style="margin:1.5% 4%;background:rgba(255,255,255,0.65);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.9);border-radius:4%;padding:2% 3%;flex-shrink:0;position:relative;z-index:1;box-shadow:0 1px 8px rgba(45,43,31,0.08);font-family:'Noto Sans TC','PingFang TC',sans-serif">
-      <div id="sc-new-performers" style="font-size:.62em;color:rgba(45,43,31,0.6);line-height:1.5;letter-spacing:0.02em;padding-bottom:1%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:1%"></div>
+      <div id="sc-new-performers" style="font-size:.72em;color:rgba(45,43,31,0.6);line-height:1.5;letter-spacing:0.02em;padding-bottom:1%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:1%"></div>
       <div style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;padding:1.4% 0">
           <span style="font-size:.62em;flex-shrink:0;width:1.6em;text-align:center;line-height:1;display:flex;align-items:center;justify-content:center">📅</span>
-          <span id="sc-new-date" style="font-size:.62em;font-weight:500;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0;line-height:1.3;font-family:'DM Sans','Helvetica Neue',sans-serif"></span>
+          <span id="sc-new-date" style="font-size:.72em;font-weight:500;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0;line-height:1.3;font-family:'DM Sans','Helvetica Neue',sans-serif"></span>
         </div>
         <div style="display:flex;align-items:center;padding:1.4% 0;border-top:1px solid rgba(45,43,31,0.06)">
           <span style="font-size:.62em;flex-shrink:0;width:1.6em;text-align:center;line-height:1;display:flex;align-items:center;justify-content:center">📍</span>
-          <span id="sc-new-venue" style="font-size:.62em;font-weight:500;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0;line-height:1.3"></span>
+          <span id="sc-new-venue" style="font-size:.72em;font-weight:500;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0;line-height:1.3"></span>
         </div>
         <div style="display:flex;align-items:center;padding:1.4% 0;border-top:1px solid rgba(45,43,31,0.06)">
           <span style="font-size:.62em;flex-shrink:0;width:1.6em;text-align:center;line-height:1;display:flex;align-items:center;justify-content:center">🎟</span>
-          <span id="sc-new-price" style="font-size:.62em;font-weight:500;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0;line-height:1.3;font-family:'DM Sans','Helvetica Neue',sans-serif"></span>
+          <span id="sc-new-price" style="font-size:.72em;font-weight:500;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0;line-height:1.3;font-family:'DM Sans','Helvetica Neue',sans-serif"></span>
         </div>
       </div>
     </div>
@@ -5357,7 +5357,7 @@ function switchStoryTab(tab){
     if(ticketZone) ticketZone.style.display = 'none';
     if(brandZone) brandZone.style.display = 'flex';
     if(igSafeTop) igSafeTop.style.display = 'block';
-    if(igSafeBottom) igSafeBottom.style.display = 'none';
+    if(igSafeBottom) igSafeBottom.style.display = 'block';
   }
   // 重置生成結果
   const imgResult = document.getElementById('sc-new-img-result');
@@ -5440,7 +5440,7 @@ function openStoryCard(id){
   const titleEl = document.getElementById('sc-new-title');
   if(titleEl){
     const title = s.title||'';
-    const fontSize = title.length <= 8 ? '1.2em' : title.length <= 16 ? '1em' : title.length <= 24 ? '.85em' : '.72em';
+    const fontSize = title.length <= 8 ? '1.4em' : title.length <= 16 ? '1.15em' : title.length <= 24 ? '.95em' : '.8em';
     titleEl.style.fontSize = fontSize;
     titleEl.style.whiteSpace = 'normal';
     titleEl.style.wordBreak = 'keep-all';
@@ -5484,7 +5484,7 @@ function openStoryCard(id){
     if(!nums.length) return priceStr;
     const min = Math.min(...nums);
     const max = Math.max(...nums);
-    const range = min === max ? `NT$ ${min.toLocaleString()}` : `NT$ ${min.toLocaleString()}～NT$ ${max.toLocaleString()}`;
+    const range = min === max ? `NT$  ${min.toLocaleString()}` : `NT$  ${min.toLocaleString()} ～ NT$  ${max.toLocaleString()}`;
     return note ? `${range}${note}` : range;
   }
   const isEnglishShow = (s.types||[]).includes('english') || s.type === 'english';
