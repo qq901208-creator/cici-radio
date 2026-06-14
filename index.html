@@ -5435,13 +5435,20 @@ function openStoryCard(id){
   const dowZh = ['日','一','二','三','四','五','六'][d.getDay()];
   const dow = `週${dowZh}`;
 
-  // 演出名稱（自動縮放）
+  // 演出名稱（自動縮放，在｜或-處自然換行）
   const titleEl = document.getElementById('sc-new-title');
   if(titleEl){
     const title = s.title||'';
     const fontSize = title.length <= 8 ? '1em' : title.length <= 16 ? '.85em' : title.length <= 24 ? '.72em' : '.6em';
-    titleEl.textContent = title;
     titleEl.style.fontSize = fontSize;
+    titleEl.style.whiteSpace = 'normal';
+    titleEl.style.wordBreak = 'keep-all';
+    titleEl.style.overflowWrap = 'anywhere';
+    // 在分隔符後加零寬空格，讓瀏覽器在滿行時優先在這裡換行
+    titleEl.innerHTML = title
+      .replace(/｜/g, '｜<wbr>')
+      .replace(/\|/g, '|<wbr>')
+      .replace(/-/g, '-<wbr>');
   }
 
   // 類型標籤（橘底白字，・分隔）
