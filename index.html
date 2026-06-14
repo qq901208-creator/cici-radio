@@ -1477,7 +1477,13 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <div class="modal-ov" id="modal-story-card" style="z-index:520"><div class="modal" style="max-width:360px">
   <button class="modal-close" onclick="closeModal('story-card')">✕</button>
   <div class="modal-title" style="font-size:.95rem"><span class="zh-text">📱 生成限動圖</span><span class="en-text">Story Card</span></div>
-  <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px;line-height:1.6"><span class="zh-text">貼入海報圖片連結後點「生成圖片」，長按儲存到手機。</span><span class="en-text">Paste poster URL then generate.</span></p>
+  <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:10px;line-height:1.6"><span class="zh-text">貼入海報圖片連結後點「生成圖片」，長按儲存到手機。</span><span class="en-text">Paste poster URL then generate.</span></p>
+
+  <!-- 版本切換 -->
+  <div style="display:flex;gap:6px;margin-bottom:12px">
+    <button id="sc-tab-ig" onclick="switchStoryTab('ig')" style="flex:1;padding:7px;border-radius:var(--r-pill);border:1.5px solid var(--or);background:var(--or);color:#fff;font-size:.78rem;font-family:var(--f-zh);font-weight:700;cursor:pointer">📱 IG 限動</button>
+    <button id="sc-tab-threads" onclick="switchStoryTab('threads')" style="flex:1;padding:7px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;color:var(--ts);font-size:.78rem;font-family:var(--f-zh);font-weight:700;cursor:pointer">🧵 Threads</button>
+  </div>
 
   <!-- 海報連結輸入 -->
   <div style="margin-bottom:8px">
@@ -1506,7 +1512,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div style="height:8.7%;border-bottom:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
 
     <!-- 演員標注預留區 -->
-    <div style="height:11.3%;flex-shrink:0;position:relative;z-index:1"></div>
+    <div id="sc-actor-zone" style="height:11.3%;flex-shrink:0;position:relative;z-index:1"></div>
 
     <!-- 海報區：固定高度，contain 不裁切 -->
     <div style="flex:1;overflow:hidden;position:relative;margin:0 4%;border-radius:3%;z-index:1;min-height:0;box-shadow:0 2px 12px rgba(45,43,31,0.15);background:transparent;display:flex;align-items:center;justify-content:center">
@@ -1533,8 +1539,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </div>
     </div>
 
-    <!-- 購票預留區 -->
-    <div style="margin:0 4% 2.5%;height:6%;background:rgba(239,111,32,0.05);border:1.5px dashed rgba(239,111,32,0.2);border-radius:3%;flex-shrink:0;position:relative;z-index:1"></div>
+    <!-- 購票預留區 / Threads 品牌文字區 -->
+    <div id="sc-ticket-zone" style="margin:0 4% 2.5%;height:6%;background:rgba(239,111,32,0.05);border:1.5px dashed rgba(239,111,32,0.2);border-radius:3%;flex-shrink:0;position:relative;z-index:1"></div>
+    <div id="sc-brand-zone" style="display:none;margin:0 4% 2.5%;flex-shrink:0;position:relative;z-index:1;background:rgba(239,111,32,0.08);border-radius:3%;padding:2% 3%;display:flex;align-items:center;justify-content:center;gap:2%">
+      <span style="font-size:.6em">🎭</span>
+      <span style="font-size:.58em;color:rgba(45,43,31,0.55);font-family:var(--f-zh);letter-spacing:0.03em">到 <span style="font-weight:700;color:var(--or)">嘻嘻哪哩唷</span>，查看更多演出資訊</span>
+    </div>
 
     <!-- IG 下方安全區 -->
     <div style="height:8.7%;border-top:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
@@ -5314,6 +5324,33 @@ function setLang(l){
   if(window._dataReady) updateLastUpdatedDisplay();
 }
 
+function switchStoryTab(tab){
+  window._storyTab = tab;
+  const igBtn = document.getElementById('sc-tab-ig');
+  const thrBtn = document.getElementById('sc-tab-threads');
+  const actorZone = document.getElementById('sc-actor-zone');
+  const ticketZone = document.getElementById('sc-ticket-zone');
+  const brandZone = document.getElementById('sc-brand-zone');
+  if(tab === 'ig'){
+    igBtn.style.background = 'var(--or)'; igBtn.style.color = '#fff'; igBtn.style.borderColor = 'var(--or)';
+    thrBtn.style.background = 'transparent'; thrBtn.style.color = 'var(--ts)'; thrBtn.style.borderColor = 'rgba(45,43,31,.2)';
+    if(actorZone) actorZone.style.display = 'block';
+    if(ticketZone) ticketZone.style.display = 'block';
+    if(brandZone) brandZone.style.display = 'none';
+  } else {
+    thrBtn.style.background = 'var(--or)'; thrBtn.style.color = '#fff'; thrBtn.style.borderColor = 'var(--or)';
+    igBtn.style.background = 'transparent'; igBtn.style.color = 'var(--ts)'; igBtn.style.borderColor = 'rgba(45,43,31,.2)';
+    if(actorZone) actorZone.style.display = 'none';
+    if(ticketZone) ticketZone.style.display = 'none';
+    if(brandZone) brandZone.style.display = 'flex';
+  }
+  // 重置生成結果
+  const imgResult = document.getElementById('sc-new-img-result');
+  if(imgResult){ imgResult.style.display='none'; imgResult.innerHTML=''; }
+  const btn = document.getElementById('sc-new-download-btn');
+  if(btn) btn.innerHTML = '⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span>';
+}
+
 function updateNewStoryPreview(){
   const url = (document.getElementById('sc-poster-url')?.value||'').trim();
   const img = document.getElementById('sc-new-poster');
@@ -5418,6 +5455,7 @@ function openStoryCard(id){
   if(btn) btn.innerHTML = '⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span>';
 
   document.getElementById('modal-story-card').classList.add('open');
+  switchStoryTab('ig');
   const showDetailOv = document.getElementById('modal-show-detail');
   if(showDetailOv) showDetailOv.style.zIndex = '505';
 }
