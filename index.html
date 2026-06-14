@@ -2572,7 +2572,7 @@ function showCardHTML(s) {
   const lang = getLang();
   const dowZh = ['日','一','二','三','四','五','六'][d.getDay()];
   const dowEn = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'][d.getDay()];
-  const dow = lang==='en' ? dowEn : `週${dowZh}`;
+  const dow = lang==='en' ? dowEn : `${dowZh}`;
   const types = s.types || (s.type ? [s.type] : ['opmic']);
   const typeTags = types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color}">${typeLabel(t)}</span>`;}).join('');
   // Image: show poster if URL available, fallback to emoji
@@ -2637,7 +2637,7 @@ function openShowDetail(id, skipPageSwitch) {
   const lang = getLang();
   const dowZh2 = ['日','一','二','三','四','五','六'][d.getDay()];
   const dowEn2 = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'][d.getDay()];
-  const dow = lang==='en' ? dowEn2 : `週${dowZh2}`;
+  const dow = lang==='en' ? dowEn2 : `${dowZh2}`;
   const imgEl = s.image
     ? `<img src="${s.image}" alt="${s.title}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
     : '';
@@ -5437,7 +5437,7 @@ function openStoryCard(id){
   const lang = getLang();
   const d = new Date(s.date+'T00:00');
   const dowZh = ['日','一','二','三','四','五','六'][d.getDay()];
-  const dow = `週${dowZh}`;
+  const dow = `${dowZh}`;
 
   // 演出名稱（自動縮放，在｜或-處自然換行）
   const titleEl = document.getElementById('sc-new-title');
