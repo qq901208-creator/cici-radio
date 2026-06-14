@@ -1509,45 +1509,56 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div style="position:absolute;bottom:8px;right:10px;color:rgba(239,111,32,0.3);font-size:12px;line-height:1.4;z-index:2;text-align:right;user-select:none"><span style="font-size:6px;opacity:.7">· ·</span><br>✦</div>
 
     <!-- IG 上方安全區 -->
-    <div style="height:8.7%;border-bottom:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
+    <div id="sc-ig-safe-top" style="height:7%;border-bottom:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
 
     <!-- 演員標注預留區 -->
-    <div id="sc-actor-zone" style="height:11.3%;flex-shrink:0;position:relative;z-index:1"></div>
+    <div id="sc-actor-zone" style="height:9%;flex-shrink:0;position:relative;z-index:1"></div>
 
-    <!-- 海報區：固定高度，contain 不裁切 -->
+    <!-- 演出名稱 -->
+    <div style="padding:0 4%;flex-shrink:0;position:relative;z-index:1;margin-bottom:1%">
+      <div id="sc-new-title" style="font-weight:900;color:rgba(45,43,31,0.9);line-height:1.3;letter-spacing:0.01em;text-align:center"></div>
+    </div>
+
+    <!-- 類型標籤 + 海報（標籤壓在海報上緣） -->
+    <div style="position:relative;margin:0 4%;flex-shrink:0;z-index:2">
+      <!-- 類型標籤 -->
+      <div id="sc-new-types" style="position:absolute;top:-10px;left:8px;z-index:3;display:flex;flex-wrap:wrap;gap:4px"></div>
+    </div>
+
+    <!-- 海報區 -->
     <div style="flex:1;overflow:hidden;position:relative;margin:0 4%;border-radius:3%;z-index:1;min-height:0;box-shadow:0 2px 12px rgba(45,43,31,0.15);background:transparent;display:flex;align-items:center;justify-content:center">
       <img id="sc-new-poster" src="" alt="" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:none">
       <div id="sc-new-poster-placeholder" style="width:100%;height:100%;background:linear-gradient(160deg,#f5d558 0%,#ef6f20 100%);display:flex;align-items:center;justify-content:center;font-size:32px">🎭</div>
     </div>
 
     <!-- 資訊卡 -->
-    <div style="margin:2.5% 4%;background:rgba(255,255,255,0.65);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.9);border-radius:4%;padding:2.5% 3.5%;flex-shrink:0;position:relative;z-index:1;box-shadow:0 1px 8px rgba(45,43,31,0.08)">
-      <div id="sc-new-performers" style="font-size:.65em;color:rgba(45,43,31,0.6);line-height:1.6;letter-spacing:0.02em;padding-bottom:2%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:2%"></div>
-      <div style="display:flex;flex-direction:column;gap:0">
-        <div style="display:flex;align-items:center;gap:2%;padding:1.5% 0">
-          <span style="font-size:.7em;flex-shrink:0;width:3%;text-align:center">📅</span>
-          <span id="sc-new-date" style="font-size:.7em;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
+    <div style="margin:2% 4%;background:rgba(255,255,255,0.65);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.9);border-radius:4%;padding:2% 3%;flex-shrink:0;position:relative;z-index:1;box-shadow:0 1px 8px rgba(45,43,31,0.08)">
+      <div id="sc-new-performers" style="font-size:.6em;color:rgba(45,43,31,0.6);line-height:1.6;letter-spacing:0.02em;padding-bottom:1.5%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:1.5%"></div>
+      <div style="display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;padding:1.2% 0">
+          <span style="font-size:.68em;flex-shrink:0;width:1.6em;text-align:center;line-height:1">📅</span>
+          <span id="sc-new-date" style="font-size:.68em;font-weight:700;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0.01em;font-feature-settings:'tnum'"></span>
         </div>
-        <div style="display:flex;align-items:center;gap:2%;padding:1.5% 0;border-top:1px solid rgba(45,43,31,0.06)">
-          <span style="font-size:.7em;flex-shrink:0;width:3%;text-align:center">📍</span>
-          <span id="sc-new-venue" style="font-size:.7em;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
+        <div style="display:flex;align-items:center;padding:1.2% 0;border-top:1px solid rgba(45,43,31,0.06)">
+          <span style="font-size:.68em;flex-shrink:0;width:1.6em;text-align:center;line-height:1">📍</span>
+          <span id="sc-new-venue" style="font-size:.68em;font-weight:700;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0.01em"></span>
         </div>
-        <div style="display:flex;align-items:center;gap:2%;padding:1.5% 0;border-top:1px solid rgba(45,43,31,0.06)">
-          <span style="font-size:.7em;flex-shrink:0;width:3%;text-align:center">🎟</span>
-          <span id="sc-new-price" style="font-size:.7em;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
+        <div style="display:flex;align-items:center;padding:1.2% 0;border-top:1px solid rgba(45,43,31,0.06)">
+          <span style="font-size:.68em;flex-shrink:0;width:1.6em;text-align:center;line-height:1">🎟</span>
+          <span id="sc-new-price" style="font-size:.68em;font-weight:700;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0.01em;font-feature-settings:'tnum'"></span>
         </div>
       </div>
     </div>
 
     <!-- 購票預留區 / Threads 品牌文字區 -->
-    <div id="sc-ticket-zone" style="margin:0 4% 2.5%;height:6%;background:rgba(239,111,32,0.05);border:1.5px dashed rgba(239,111,32,0.2);border-radius:3%;flex-shrink:0;position:relative;z-index:1"></div>
-    <div id="sc-brand-zone" style="display:none;margin:0 4% 2.5%;flex-shrink:0;position:relative;z-index:1;background:rgba(239,111,32,0.08);border-radius:3%;padding:2% 3%;display:flex;align-items:center;justify-content:center;gap:2%">
+    <div id="sc-ticket-zone" style="margin:0 4% 2%;height:5.5%;background:rgba(239,111,32,0.05);border:1.5px dashed rgba(239,111,32,0.2);border-radius:3%;flex-shrink:0;position:relative;z-index:1"></div>
+    <div id="sc-brand-zone" style="display:none;margin:0 4% 2%;flex-shrink:0;position:relative;z-index:1;background:rgba(239,111,32,0.08);border-radius:3%;padding:1.8% 3%;align-items:center;justify-content:center;gap:2%">
       <span style="font-size:.6em">🎭</span>
       <span style="font-size:.58em;color:rgba(45,43,31,0.55);font-family:var(--f-zh);letter-spacing:0.03em">到 <span style="font-weight:700;color:var(--or)">嘻嘻哪哩唷</span>，查看更多演出資訊</span>
     </div>
 
     <!-- IG 下方安全區 -->
-    <div style="height:8.7%;border-top:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
+    <div id="sc-ig-safe-bottom" style="height:7%;border-top:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
   </div>
 
   <button onclick="downloadNewStoryCard()" style="width:100%;padding:11px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.88rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" id="sc-new-download-btn">⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span></button>
@@ -5331,18 +5342,24 @@ function switchStoryTab(tab){
   const actorZone = document.getElementById('sc-actor-zone');
   const ticketZone = document.getElementById('sc-ticket-zone');
   const brandZone = document.getElementById('sc-brand-zone');
+  const igSafeTop = document.getElementById('sc-ig-safe-top');
+  const igSafeBottom = document.getElementById('sc-ig-safe-bottom');
   if(tab === 'ig'){
     igBtn.style.background = 'var(--or)'; igBtn.style.color = '#fff'; igBtn.style.borderColor = 'var(--or)';
     thrBtn.style.background = 'transparent'; thrBtn.style.color = 'var(--ts)'; thrBtn.style.borderColor = 'rgba(45,43,31,.2)';
     if(actorZone) actorZone.style.display = 'block';
     if(ticketZone) ticketZone.style.display = 'block';
     if(brandZone) brandZone.style.display = 'none';
+    if(igSafeTop) igSafeTop.style.display = 'block';
+    if(igSafeBottom) igSafeBottom.style.display = 'block';
   } else {
     thrBtn.style.background = 'var(--or)'; thrBtn.style.color = '#fff'; thrBtn.style.borderColor = 'var(--or)';
     igBtn.style.background = 'transparent'; igBtn.style.color = 'var(--ts)'; igBtn.style.borderColor = 'rgba(45,43,31,.2)';
     if(actorZone) actorZone.style.display = 'none';
     if(ticketZone) ticketZone.style.display = 'none';
     if(brandZone) brandZone.style.display = 'flex';
+    if(igSafeTop) igSafeTop.style.display = 'none';
+    if(igSafeBottom) igSafeBottom.style.display = 'none';
   }
   // 重置生成結果
   const imgResult = document.getElementById('sc-new-img-result');
@@ -5418,6 +5435,25 @@ function openStoryCard(id){
   const d = new Date(s.date+'T00:00');
   const dowZh = ['日','一','二','三','四','五','六'][d.getDay()];
   const dow = `週${dowZh}`;
+
+  // 演出名稱（自動縮放）
+  const titleEl = document.getElementById('sc-new-title');
+  if(titleEl){
+    const title = s.title||'';
+    const fontSize = title.length <= 8 ? '1em' : title.length <= 16 ? '.85em' : title.length <= 24 ? '.72em' : '.6em';
+    titleEl.textContent = title;
+    titleEl.style.fontSize = fontSize;
+  }
+
+  // 類型標籤
+  const typesEl = document.getElementById('sc-new-types');
+  if(typesEl){
+    const types = s.types||(s.type?[s.type]:[]);
+    typesEl.innerHTML = types.map(t=>{
+      const m = TYPE_META[t]||TYPE_META.other;
+      return `<span style="background:${m.bg};color:${m.color};font-size:.52em;font-weight:700;padding:2px 8px;border-radius:100px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.1)">${m.label}</span>`;
+    }).join('');
+  }
 
   // 填入資料
   const dateStr = `${s.date.replace(/-/g,'/')}（${dow}）${s.time ? ' ' + s.time : ''}`;
