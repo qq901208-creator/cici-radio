@@ -1189,11 +1189,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g full"><label class="fl">其他連結（選填）</label>
       <div id="p-extra-links">
         <div class="p-extra-link-row" style="display:flex;gap:8px;margin-bottom:8px">
-          <select class="fi" style="width:120px;flex-shrink:0" onchange="this.nextSibling.placeholder=this.value==='podcast'?'https://...':this.value==='newsletter'?'https://...':this.value==='linktree'?'https://linktr.ee/...':'https://...'">
+          <select class="fi" style="width:120px;flex-shrink:0" onchange="this.nextSibling.placeholder=this.value==='podcast'?'https://...':this.value==='newsletter'?'https://...':this.value==='linktree'?'https://linktr.ee/...':this.value==='portaly'?'https://portaly.cc/...':'https://...'">
             <option value="website">網站</option>
             <option value="podcast">Podcast</option>
             <option value="newsletter">電子報</option>
-            <option value="linktree">連結樹</option>
+            <option value="linktree">Linktree</option>
+            <option value="portaly">Portaly</option>
             <option value="other">其他</option>
           </select>
           <input class="fi" type="url" placeholder="https://..." style="flex:1">
@@ -3653,7 +3654,8 @@ function addExtraLinkRow(type='website', url=''){
     <option value="website" ${type==='website'?'selected':''}>網站</option>
     <option value="podcast" ${type==='podcast'?'selected':''}>Podcast</option>
     <option value="newsletter" ${type==='newsletter'?'selected':''}>電子報</option>
-    <option value="linktree" ${type==='linktree'?'selected':''}>連結樹</option>
+    <option value="linktree" ${type==='linktree'?'selected':''}>Linktree</option>
+    <option value="portaly" ${type==='portaly'?'selected':''}>Portaly</option>
     <option value="other" ${type==='other'?'selected':''}>其他</option>
   </select>
   <input class="fi" type="url" placeholder="https://..." value="${url}" style="flex:1">
