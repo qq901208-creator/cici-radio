@@ -1487,7 +1487,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   </div>
   <label style="display:flex;align-items:center;gap:8px;font-size:.75rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;margin-bottom:12px">
     <input type="checkbox" id="sc-copyright-check" style="accent-color:var(--or)">
-    圖片版權屬主辦單位所有，本人已獲授權使用
+    注意！圖片版權屬主辦單位所有
   </label>
 
   <!-- 預覽卡片 -->
@@ -1508,27 +1508,27 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <!-- 演員標注預留區 -->
     <div style="height:11.3%;flex-shrink:0;position:relative;z-index:1"></div>
 
-    <!-- 海報區 -->
-    <div style="flex:1;overflow:hidden;position:relative;margin:0 4%;border-radius:3%;z-index:1;min-height:0;box-shadow:0 2px 12px rgba(45,43,31,0.15)">
-      <img id="sc-new-poster" src="" alt="" style="width:100%;height:100%;object-fit:contain;object-position:center;display:none;background:transparent">
+    <!-- 海報區：固定高度，contain 不裁切 -->
+    <div style="flex:1;overflow:hidden;position:relative;margin:0 4%;border-radius:3%;z-index:1;min-height:0;box-shadow:0 2px 12px rgba(45,43,31,0.15);background:transparent;display:flex;align-items:center;justify-content:center">
+      <img id="sc-new-poster" src="" alt="" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:none">
       <div id="sc-new-poster-placeholder" style="width:100%;height:100%;background:linear-gradient(160deg,#f5d558 0%,#ef6f20 100%);display:flex;align-items:center;justify-content:center;font-size:32px">🎭</div>
     </div>
 
     <!-- 資訊卡 -->
     <div style="margin:2.5% 4%;background:rgba(255,255,255,0.65);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.9);border-radius:4%;padding:2.5% 3.5%;flex-shrink:0;position:relative;z-index:1;box-shadow:0 1px 8px rgba(45,43,31,0.08)">
-      <div id="sc-new-performers" style="font-size:1.6vw;color:rgba(45,43,31,0.6);line-height:1.6;letter-spacing:0.02em;padding-bottom:2%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:2%"></div>
+      <div id="sc-new-performers" style="font-size:.65em;color:rgba(45,43,31,0.6);line-height:1.6;letter-spacing:0.02em;padding-bottom:2%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:2%"></div>
       <div style="display:flex;flex-direction:column;gap:0">
         <div style="display:flex;align-items:center;gap:2%;padding:1.5% 0">
-          <span style="font-size:2vw;flex-shrink:0;width:3%;text-align:center">📅</span>
-          <span id="sc-new-date" style="font-size:1.9vw;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
+          <span style="font-size:.7em;flex-shrink:0;width:3%;text-align:center">📅</span>
+          <span id="sc-new-date" style="font-size:.7em;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
         </div>
         <div style="display:flex;align-items:center;gap:2%;padding:1.5% 0;border-top:1px solid rgba(45,43,31,0.06)">
-          <span style="font-size:2vw;flex-shrink:0;width:3%;text-align:center">📍</span>
-          <span id="sc-new-venue" style="font-size:1.9vw;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
+          <span style="font-size:.7em;flex-shrink:0;width:3%;text-align:center">📍</span>
+          <span id="sc-new-venue" style="font-size:.7em;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
         </div>
         <div style="display:flex;align-items:center;gap:2%;padding:1.5% 0;border-top:1px solid rgba(45,43,31,0.06)">
-          <span style="font-size:2vw;flex-shrink:0;width:3%;text-align:center">🎟</span>
-          <span id="sc-new-price" style="font-size:1.9vw;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
+          <span style="font-size:.7em;flex-shrink:0;width:3%;text-align:center">🎟</span>
+          <span id="sc-new-price" style="font-size:.7em;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
         </div>
       </div>
     </div>
