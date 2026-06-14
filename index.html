@@ -1502,33 +1502,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <!-- 背景漸層裝飾 -->
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 10% 0%,rgba(245,213,88,0.3) 0%,transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(239,111,32,0.15) 0%,transparent 55%);pointer-events:none;z-index:0"></div>
 
-    <!-- 幾何線條裝飾：四角細框 -->
-    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2" xmlns="http://www.w3.org/2000/svg">
-      <!-- 左上角 -->
-      <line x1="8" y1="28" x2="8" y2="8" stroke="rgba(239,111,32,0.25)" stroke-width="1.2"/>
-      <line x1="8" y1="8" x2="28" y2="8" stroke="rgba(239,111,32,0.25)" stroke-width="1.2"/>
-      <!-- 右上角 -->
-      <line x1="calc(100% - 8px)" y1="28" x2="calc(100% - 8px)" y2="8" stroke="rgba(239,111,32,0.25)" stroke-width="1.2"/>
-      <line x1="calc(100% - 8px)" y1="8" x2="calc(100% - 28px)" y2="8" stroke="rgba(239,111,32,0.25)" stroke-width="1.2"/>
-      <!-- 左下角 -->
-      <line x1="8" y1="calc(100% - 28px)" x2="8" y2="calc(100% - 8px)" stroke="rgba(239,111,32,0.25)" stroke-width="1.2"/>
-      <line x1="8" y1="calc(100% - 8px)" x2="28" y2="calc(100% - 8px)" stroke="rgba(239,111,32,0.25)" stroke-width="1.2"/>
-      <!-- 右下角 -->
-      <line x1="calc(100% - 8px)" y1="calc(100% - 28px)" x2="calc(100% - 8px)" y2="calc(100% - 8px)" stroke="rgba(239,111,32,0.25)" stroke-width="1.2"/>
-      <line x1="calc(100% - 8px)" y1="calc(100% - 8px)" x2="calc(100% - 28px)" y2="calc(100% - 8px)" stroke="rgba(239,111,32,0.25)" stroke-width="1.2"/>
-    </svg>
-
     <!-- 角落星星裝飾 -->
     <div style="position:absolute;top:10px;left:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
     <div style="position:absolute;top:10px;right:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
     <div style="position:absolute;bottom:10px;left:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
     <div style="position:absolute;bottom:10px;right:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
-
-    <!-- Logo 小圖 右下角 -->
-    <div style="position:absolute;bottom:12px;right:12px;z-index:4;display:flex;align-items:center;gap:3px;opacity:0.5">
-      <img src="https://cici-radio.vercel.app/assets/ciciradio.jpg" style="width:16px;height:16px;border-radius:50%;object-fit:cover" alt="logo">
-      <span style="font-size:7px;color:rgba(45,43,31,0.7);font-family:var(--f-bo);font-weight:700;letter-spacing:0.04em">嘻嘻哪哩唷</span>
-    </div>
 
     <!-- IG 上方安全區 -->
     <div id="sc-ig-safe-top" style="height:7%;border-bottom:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
@@ -1551,6 +1529,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
     <!-- 資訊卡 -->
     <div style="margin:1.5% 4%;background:rgba(255,255,255,0.65);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.9);border-radius:4%;padding:2% 3%;flex-shrink:0;position:relative;z-index:1;box-shadow:0 1px 8px rgba(45,43,31,0.08);font-family:'Noto Sans TC','PingFang TC',sans-serif">
+      <!-- Logo 壓在右下角 -->
+      <img src="https://cici-radio.vercel.app/assets/ciciradio.jpg" style="position:absolute;bottom:6px;right:8px;width:20px;height:20px;border-radius:50%;object-fit:cover;opacity:0.4" alt="logo">
       <div id="sc-new-performers" style="font-size:.67em;color:rgba(45,43,31,0.6);line-height:1.5;letter-spacing:0.02em;padding-bottom:1%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:1%"></div>
       <div style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;padding:1.4% 0">
