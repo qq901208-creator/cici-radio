@@ -5492,11 +5492,17 @@ function openStoryCard(id){
   }
   const isEnglishShow = (s.types||[]).includes('english') || s.type === 'english';
   const soldOutLabel = isEnglishShow ? 'Sold Out' : '已完售';
-  document.getElementById('sc-new-price').textContent = s.soldOut ? parseStoryPrice(s.price) : parseStoryPrice(s.price);
+  const priceEl = document.getElementById('sc-new-price');
+  // 清除上次的已完售標籤
+  const oldTag = priceEl.nextElementSibling;
+  if(oldTag && oldTag.tagName === 'SPAN') oldTag.remove();
+  priceEl.style.textDecoration = '';
+  priceEl.style.color = 'rgba(45,43,31,0.88)';
+  priceEl.textContent = parseStoryPrice(s.price);
   if(s.soldOut){
-    document.getElementById('sc-new-price').style.color = 'rgba(45,43,31,0.4)';
-    document.getElementById('sc-new-price').style.textDecoration = 'line-through';
-    document.getElementById('sc-new-price').insertAdjacentHTML('afterend',`<span style="font-size:.52em;font-weight:700;color:var(--or);margin-left:0.4em;background:rgba(239,111,32,0.12);padding:1px 6px;border-radius:4px">${soldOutLabel}</span>`);
+    priceEl.style.color = 'rgba(45,43,31,0.4)';
+    priceEl.style.textDecoration = 'line-through';
+    priceEl.insertAdjacentHTML('afterend',`<span style="font-size:.52em;font-weight:700;color:var(--or);margin-left:0.4em;background:rgba(239,111,32,0.12);padding:1px 6px;border-radius:4px">${soldOutLabel}</span>`);
   }
   document.getElementById('sc-new-performers').textContent = s.performer||'';
 
