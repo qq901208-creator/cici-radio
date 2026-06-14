@@ -1477,41 +1477,68 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <div class="modal-ov" id="modal-story-card" style="z-index:520"><div class="modal" style="max-width:360px">
   <button class="modal-close" onclick="closeModal('story-card')">✕</button>
   <div class="modal-title" style="font-size:.95rem"><span class="zh-text">📱 生成限動圖</span><span class="en-text">Story Card</span></div>
-  <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:14px;line-height:1.6"><span class="zh-text">點「下載圖片」儲存到手機，再貼到 IG 限動。</span><span class="en-text">Tap "Save Image" then share to IG Stories.</span></p>
-  <div id="story-card-preview" style="width:100%;border-radius:12px;background:#1a1000;overflow:hidden;border:1px solid #333;position:relative">
-    <div id="sc-poster-area" style="display:none"><img id="sc-poster-img" style="width:100%;height:auto;display:block;opacity:0.85" src="" alt=""></div>
-    <div id="sc-overlay" style="display:none;height:30px;background:linear-gradient(to bottom,transparent,#1a1000);margin-top:-30px;position:relative"></div>
-    <div style="padding:14px 16px">
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
-        <img src="https://cici-radio.vercel.app/assets/ciciradio.jpg" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1px solid rgba(239,111,32,0.5)" alt="logo">
-        <span style="font-size:9px;color:rgba(255,255,255,0.55);font-weight:600;letter-spacing:0.06em;font-family:var(--f-bo)">嘻嘻哪哩唷</span>
-      </div>
-      <div id="sc-type" style="display:inline-block;background:#ef6f20;color:#fff;font-size:8px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:0.06em;margin-bottom:7px;font-family:var(--f-bo)"></div>
-      <div id="sc-title" style="font-size:15px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:10px;font-family:var(--f-zh)"></div>
-      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">日期</span><span id="sc-date" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
-      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">時間</span><span id="sc-time" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
-      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">場地</span><span id="sc-venue" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
-      <div id="sc-performer-row" style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">表演者</span><span id="sc-performer" style="font-size:10px;color:rgba(255,255,255,0.85);flex:1;font-family:var(--f-zh)"></span></div>
-      <div style="height:1px;background:rgba(255,255,255,0.08);margin:8px 0"></div>
-      <div style="display:flex"><span style="font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;min-width:44px;padding-top:1px;font-family:var(--f-bo)">票價</span><span id="sc-price" style="font-size:11px;font-weight:700;color:#ef6f20;flex:1;font-family:var(--f-zh)"></span></div>
-      <div style="border-top:1px solid rgba(255,255,255,0.08);margin-top:10px;padding-top:8px;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:8px;color:rgba(255,255,255,0.35);letter-spacing:0.06em;font-family:var(--f-bo)">在嘻嘻哪哩唷查看演出資訊</span>
-        <span style="font-size:9px;color:#ef6f20;font-weight:700;font-family:var(--f-bo)">cici-radio.vercel.app</span>
+  <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px;line-height:1.6"><span class="zh-text">貼入海報圖片連結後點「生成圖片」，長按儲存到手機。</span><span class="en-text">Paste poster URL then generate.</span></p>
+
+  <!-- 海報連結輸入 -->
+  <div style="margin-bottom:12px">
+    <input id="sc-poster-url" type="text" placeholder="貼入海報圖片連結（選填）…"
+      style="width:100%;padding:8px 12px;border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.15);font-size:.8rem;font-family:var(--f-zh);outline:none;box-sizing:border-box;background:var(--ww)"
+      oninput="updateNewStoryPreview()">
+  </div>
+
+  <!-- 預覽卡片 -->
+  <div id="new-story-preview" style="width:100%;aspect-ratio:9/16;background:#ebecd7;border-radius:16px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 4px 20px rgba(0,0,0,0.15);margin-bottom:12px">
+
+    <!-- 背景漸層裝飾 -->
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 10% 0%,rgba(245,213,88,0.3) 0%,transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(239,111,32,0.15) 0%,transparent 55%);pointer-events:none;z-index:0"></div>
+
+    <!-- 角落裝飾 -->
+    <div style="position:absolute;top:8px;left:10px;color:rgba(239,111,32,0.3);font-size:12px;line-height:1.4;z-index:2;user-select:none">✦<br><span style="font-size:6px;opacity:.7">· ·</span></div>
+    <div style="position:absolute;top:8px;right:10px;color:rgba(239,111,32,0.3);font-size:12px;line-height:1.4;z-index:2;text-align:right;user-select:none"><span style="font-size:6px;opacity:.7">· ·</span><br>✦</div>
+    <div style="position:absolute;bottom:8px;left:10px;color:rgba(239,111,32,0.3);font-size:12px;line-height:1.4;z-index:2;user-select:none">✦<br><span style="font-size:6px;opacity:.7">· ·</span></div>
+    <div style="position:absolute;bottom:8px;right:10px;color:rgba(239,111,32,0.3);font-size:12px;line-height:1.4;z-index:2;text-align:right;user-select:none"><span style="font-size:6px;opacity:.7">· ·</span><br>✦</div>
+
+    <!-- IG 上方安全區 -->
+    <div style="height:8.7%;border-bottom:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
+
+    <!-- 演員標注預留區 -->
+    <div style="height:11.3%;flex-shrink:0;position:relative;z-index:1"></div>
+
+    <!-- 海報區 -->
+    <div style="flex:1;overflow:hidden;position:relative;margin:0 4%;border-radius:3%;z-index:1;min-height:0;box-shadow:0 2px 12px rgba(45,43,31,0.15)">
+      <img id="sc-new-poster" src="" alt="" style="width:100%;height:100%;object-fit:contain;object-position:center;display:none;background:transparent">
+      <div id="sc-new-poster-placeholder" style="width:100%;height:100%;background:linear-gradient(160deg,#f5d558 0%,#ef6f20 100%);display:flex;align-items:center;justify-content:center;font-size:32px">🎭</div>
+    </div>
+
+    <!-- 資訊卡 -->
+    <div style="margin:2.5% 4%;background:rgba(255,255,255,0.65);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.9);border-radius:4%;padding:2.5% 3.5%;flex-shrink:0;position:relative;z-index:1;box-shadow:0 1px 8px rgba(45,43,31,0.08)">
+      <div id="sc-new-performers" style="font-size:1.6vw;color:rgba(45,43,31,0.6);line-height:1.6;letter-spacing:0.02em;padding-bottom:2%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:2%"></div>
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;align-items:center;gap:2%;padding:1.5% 0">
+          <span style="font-size:2vw;flex-shrink:0;width:3%;text-align:center">📅</span>
+          <span id="sc-new-date" style="font-size:1.9vw;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:2%;padding:1.5% 0;border-top:1px solid rgba(45,43,31,0.06)">
+          <span style="font-size:2vw;flex-shrink:0;width:3%;text-align:center">📍</span>
+          <span id="sc-new-venue" style="font-size:1.9vw;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:2%;padding:1.5% 0;border-top:1px solid rgba(45,43,31,0.06)">
+          <span style="font-size:2vw;flex-shrink:0;width:3%;text-align:center">🎟</span>
+          <span id="sc-new-price" style="font-size:1.9vw;font-weight:700;color:rgba(45,43,31,0.88);letter-spacing:0.02em"></span>
+        </div>
       </div>
     </div>
+
+    <!-- 購票預留區 -->
+    <div style="margin:0 4% 2.5%;height:6%;background:rgba(239,111,32,0.05);border:1.5px dashed rgba(239,111,32,0.2);border-radius:3%;flex-shrink:0;position:relative;z-index:1"></div>
+
+    <!-- IG 下方安全區 -->
+    <div style="height:8.7%;border-top:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
   </div>
-  <div style="margin-top:14px;padding:10px 12px;background:rgba(45,43,31,.04);border-radius:var(--r-md);border:1px solid rgba(45,43,31,.08)">
-    <label style="display:flex;align-items:center;gap:8px;font-size:.78rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;margin-bottom:6px">
-      <input type="checkbox" id="sc-show-poster" style="accent-color:var(--or)" onchange="toggleStoryPoster(this.checked)">
-      顯示演出海報（圖片版權屬主辦單位所有）
-    </label>
-    <div id="sc-poster-row" style="display:none">
-      <input id="sc-poster-url" type="text" placeholder="貼入海報圖片網址…" style="width:100%;padding:6px 10px;border-radius:var(--r-md);border:1px solid rgba(45,43,31,.15);font-size:.78rem;font-family:var(--f-zh);outline:none;box-sizing:border-box" oninput="updateStoryPoster(this.value)">
-    </div>
-  </div>
-  <button onclick="downloadStoryCard()" style="width:100%;margin-top:14px;padding:11px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.88rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" id="sc-download-btn">⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span></button>
-  <div id="sc-img-result" style="display:none;margin-top:14px"></div>
-  <p style="font-size:.7rem;color:var(--ts);font-family:var(--f-zh);margin-top:8px;text-align:center;opacity:.7"><span class="zh-text">生成後長按圖片儲存到相片，再貼到 IG 限動</span><span class="en-text">Long-press the image to save, then post to IG Stories</span></p>
+
+  <button onclick="downloadNewStoryCard()" style="width:100%;padding:11px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.88rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" id="sc-new-download-btn">⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span></button>
+  <div id="sc-new-img-result" style="display:none;margin-top:12px"></div>
+  <p style="font-size:.7rem;color:var(--ts);font-family:var(--f-zh);margin-top:8px;text-align:center;opacity:.7"><span class="zh-text">生成後長按圖片儲存到相片，再貼到 IG 限動</span><span class="en-text">Long-press to save, then post to IG Stories</span></p>
 </div></div>
 
 <!-- Show Detail Modal (read-only, opened on card click) -->
@@ -5283,79 +5310,107 @@ function setLang(l){
   if(window._dataReady) updateLastUpdatedDisplay();
 }
 
-function downloadStoryCard(){
-  const btn = document.getElementById('sc-download-btn');
-  const el = document.getElementById('story-card-preview');
+function updateNewStoryPreview(){
+  const url = (document.getElementById('sc-poster-url')?.value||'').trim();
+  const img = document.getElementById('sc-new-poster');
+  const ph = document.getElementById('sc-new-poster-placeholder');
+  if(url && img){
+    img.src = url;
+    img.style.display = 'block';
+    if(ph) ph.style.display = 'none';
+    img.onerror = ()=>{ img.style.display='none'; if(ph) ph.style.display='flex'; };
+  } else {
+    if(img) img.style.display = 'none';
+    if(ph) ph.style.display = 'flex';
+  }
+}
+
+function downloadNewStoryCard(){
+  const btn = document.getElementById('sc-new-download-btn');
+  const el = document.getElementById('new-story-preview');
   if(!el) return;
   const origText = btn.innerHTML;
   btn.innerHTML = '⏳ 生成中…';
   btn.disabled = true;
+  const run = () => {
+    window.html2canvas(el, {
+      scale: 1080 / el.offsetWidth,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ebecd7',
+      logging: false,
+    }).then(canvas => {
+      const dataUrl = canvas.toDataURL('image/png');
+      const imgWrap = document.getElementById('sc-new-img-result');
+      if(imgWrap){
+        imgWrap.innerHTML = `
+          <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);text-align:center;margin-bottom:8px;font-weight:700">📲 長按圖片 → 儲存到相片</p>
+          <img src="${dataUrl}" style="width:100%;border-radius:12px;display:block" alt="story card">
+        `;
+        imgWrap.style.display = 'block';
+        imgWrap.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+      btn.innerHTML = '🔄 重新生成';
+      btn.disabled = false;
+    }).catch(()=>{
+      btn.innerHTML = origText;
+      btn.disabled = false;
+      showToast('❌ 生成失敗，請重試','err');
+    });
+  };
   if(!window.html2canvas){
     const s = document.createElement('script');
     s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-    s.onload = () => runHtml2Canvas(el, btn, origText);
-    s.onerror = () => { btn.innerHTML = origText; btn.disabled = false; showToast('❌ 載入失敗，請重試','err'); };
+    s.onload = run;
+    s.onerror = () => { btn.innerHTML = origText; btn.disabled = false; showToast('❌ 載入失敗','err'); };
     document.head.appendChild(s);
-  } else {
-    runHtml2Canvas(el, btn, origText);
-  }
-}
-function runHtml2Canvas(el, btn, origText){
-  window.html2canvas(el, { scale:3, useCORS:true, backgroundColor:'#1a1000' }).then(canvas=>{
-    const dataUrl = canvas.toDataURL('image/png');
-    // 顯示圖片讓使用者長按儲存
-    const imgWrap = document.getElementById('sc-img-result');
-    if(imgWrap){
-      imgWrap.innerHTML = `
-        <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);text-align:center;margin-bottom:8px;font-weight:700">📲 長按圖片 → 儲存到相片</p>
-        <img src="${dataUrl}" style="width:100%;border-radius:12px;display:block" alt="story card">
-      `;
-      imgWrap.style.display = 'block';
-      imgWrap.scrollIntoView({behavior:'smooth', block:'center'});
-    }
-    btn.innerHTML = '🔄 重新生成';
-    btn.disabled = false;
-  }).catch(()=>{
-    btn.innerHTML = origText;
-    btn.disabled = false;
-    showToast('❌ 生成失敗，請重試','err');
-  });
+  } else { run(); }
 }
 
 function openStoryCard(id){
   const s = (window._SHOWS||SHOWS||[]).find(x=>x.id===id);
   if(!s) return;
-  const types = s.types||(s.type?[s.type]:[]);
   const lang = getLang();
   const d = new Date(s.date+'T00:00');
   const dowZh = ['日','一','二','三','四','五','六'][d.getDay()];
-  const dowEn = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'][d.getDay()];
-  const dow = lang==='en' ? dowEn : `週${dowZh}`;
+  const dow = `週${dowZh}`;
+
   // 填入資料
-  document.getElementById('sc-type').textContent = types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return lang==='en'?m.labelEn:m.label;}).join(' · ');
-  document.getElementById('sc-title').textContent = s.title||'';
-  document.getElementById('sc-date').textContent = `${s.date}（${dow}）`;
-  document.getElementById('sc-time').textContent = s.time||'—';
-  document.getElementById('sc-venue').textContent = getShowVenueLabelById(s.venue)||s.venueLabel||s.venue||'—';
-  const performerEl = document.getElementById('sc-performer');
-  const performerRow = document.getElementById('sc-performer-row');
-  if(s.performer){ performerEl.textContent=s.performer; performerRow.style.display='flex'; }
-  else { performerRow.style.display='none'; }
-  document.getElementById('sc-price').textContent = s.soldOut ? `${s.price||'—'}　已完售` : (s.price||'—');
-  // 重置
-  document.getElementById('sc-show-poster').checked = false;
-  document.getElementById('sc-poster-row').style.display = 'none';
-  document.getElementById('sc-poster-area').style.display = 'none';
-  document.getElementById('sc-overlay').style.display = 'none';
-  document.getElementById('sc-poster-url').value = '';
-  const imgResult = document.getElementById('sc-img-result');
+  const dateStr = `${s.date.replace(/-/g,'/')}（${dow}）${s.time ? ' ' + s.time : ''}`;
+  document.getElementById('sc-new-date').textContent = dateStr;
+  document.getElementById('sc-new-venue').textContent = getShowVenueLabelById(s.venue)||s.venueLabel||s.venue||'—';
+  // 票價：過濾特定票種，顯示剩餘票價區間，括號備註保留一次
+  function parseStoryPrice(priceStr){
+    if(!priceStr) return '—';
+    const EXCLUDE = ['早鳥','身心障礙','陪同','殘障','公益','愛心'];
+    const parts = priceStr.split(/[\/\n｜|]/).map(s=>s.trim()).filter(Boolean);
+    const regular = parts.filter(p=>!EXCLUDE.some(kw=>p.includes(kw)));
+    const target = regular.length ? regular : parts;
+    const nums = target.flatMap(p=>[...p.matchAll(/\$\s*(\d+)/g)].map(m=>parseInt(m[1])));
+    // 抓第一個括號備註
+    const noteMatch = priceStr.match(/（[^）]+）|\([^\)]+\)/);
+    const note = noteMatch ? noteMatch[0] : '';
+    if(!nums.length) return priceStr;
+    const min = Math.min(...nums);
+    const max = Math.max(...nums);
+    const range = min === max ? `NT$ ${min}` : `NT$ ${min}～NT$ ${max}`;
+    return note ? `${range}${note}` : range;
+  }
+  document.getElementById('sc-new-price').textContent = s.soldOut ? `${parseStoryPrice(s.price)} 已完售` : parseStoryPrice(s.price);
+  document.getElementById('sc-new-performers').textContent = s.performer||'';
+
+  // 海報
+  const posterUrl = s.image||'';
+  document.getElementById('sc-poster-url').value = posterUrl;
+  updateNewStoryPreview();
+
+  // 重置結果
+  const imgResult = document.getElementById('sc-new-img-result');
   if(imgResult){ imgResult.style.display='none'; imgResult.innerHTML=''; }
-  const btn = document.getElementById('sc-download-btn');
+  const btn = document.getElementById('sc-new-download-btn');
   if(btn) btn.innerHTML = '⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span>';
-  // 如果演出有圖片，自動填入但不顯示（讓使用者自己勾選）
-  if(s.image) document.getElementById('sc-poster-url').value = s.image;
+
   document.getElementById('modal-story-card').classList.add('open');
-  // 讓 story-card 蓋在 show-detail 上面
   const showDetailOv = document.getElementById('modal-show-detail');
   if(showDetailOv) showDetailOv.style.zIndex = '505';
 }
