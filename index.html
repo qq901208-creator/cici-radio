@@ -1502,6 +1502,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
     <!-- 背景漸層裝飾 -->
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 10% 0%,rgba(245,213,88,0.3) 0%,transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(239,111,32,0.15) 0%,transparent 55%);pointer-events:none;z-index:0"></div>
+    <!-- 玻璃光澤：輕微稜鏡光線 -->
+    <div style="position:absolute;top:-10%;left:-10%;width:60%;height:50%;background:linear-gradient(135deg,rgba(255,255,255,0.12) 0%,rgba(255,220,180,0.06) 40%,transparent 70%);pointer-events:none;z-index:0;transform:rotate(-10deg)"></div>
 
     <!-- 角落星星裝飾 -->
     <div style="position:absolute;top:10px;left:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
@@ -1516,9 +1518,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div id="sc-actor-zone" style="height:13%;flex-shrink:0;position:relative;z-index:1"></div>
 
     <!-- 海報區（含類型標籤疊在圖片上緣） -->
-    <div style="flex:1;overflow:hidden;position:relative;margin:0 4%;border-radius:3%;z-index:1;min-height:0;box-shadow:0 2px 12px rgba(45,43,31,0.15);background:transparent;display:flex;align-items:center;justify-content:center">
-      <img id="sc-new-poster" src="" alt="" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:none">
-      <div id="sc-new-poster-placeholder" style="width:100%;height:100%;background:linear-gradient(160deg,#f5d558 0%,#ef6f20 100%);display:flex;align-items:center;justify-content:center;font-size:32px">🎭</div>
+    <div style="flex:1;position:relative;margin:0 4%;z-index:1;min-height:0">
+      <div style="width:100%;height:100%;overflow:hidden;border-radius:3%;box-shadow:0 2px 12px rgba(45,43,31,0.15);background:transparent;display:flex;align-items:center;justify-content:center">
+        <img id="sc-new-poster" src="" alt="" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:none">
+        <div id="sc-new-poster-placeholder" style="width:100%;height:100%;background:linear-gradient(160deg,#f5d558 0%,#ef6f20 100%);display:flex;align-items:center;justify-content:center;font-size:32px">🎭</div>
+      </div>
       <!-- 類型標籤：絕對定位在圖片左上角 -->
       <div id="sc-new-types" style="position:absolute;top:8px;left:8px;z-index:3;display:flex;flex-wrap:wrap;gap:4px"></div>
     </div>
@@ -5344,6 +5348,7 @@ function switchStoryTab(tab){
   const igSafeTop = document.getElementById('sc-ig-safe-top');
   const igSafeBottom = document.getElementById('sc-ig-safe-bottom');
   const preview = document.getElementById('new-story-preview');
+  const typesEl = document.getElementById('sc-new-types');
   if(tab === 'ig'){
     igBtn.style.background = 'var(--or)'; igBtn.style.color = '#fff'; igBtn.style.borderColor = 'var(--or)';
     thrBtn.style.background = 'transparent'; thrBtn.style.color = 'var(--ts)'; thrBtn.style.borderColor = 'rgba(45,43,31,.2)';
@@ -5353,6 +5358,8 @@ function switchStoryTab(tab){
     if(brandZone) brandZone.style.display = 'none';
     if(igSafeTop) igSafeTop.style.display = 'block';
     if(igSafeBottom) igSafeBottom.style.display = 'block';
+    // IG：標籤回到海報內部左上角
+    if(typesEl){ typesEl.style.position='absolute'; typesEl.style.top='8px'; typesEl.style.left='8px'; typesEl.style.transform=''; }
   } else {
     thrBtn.style.background = 'var(--or)'; thrBtn.style.color = '#fff'; thrBtn.style.borderColor = 'var(--or)';
     igBtn.style.background = 'transparent'; igBtn.style.color = 'var(--ts)'; igBtn.style.borderColor = 'rgba(45,43,31,.2)';
@@ -5362,6 +5369,8 @@ function switchStoryTab(tab){
     if(brandZone) brandZone.style.display = 'flex';
     if(igSafeTop) igSafeTop.style.display = 'block';
     if(igSafeBottom) igSafeBottom.style.display = 'block';
+    // Threads：標籤移到海報上緣，一半壓在海報上一半在外面
+    if(typesEl){ typesEl.style.position='absolute'; typesEl.style.top='-12px'; typesEl.style.left='8px'; typesEl.style.transform=''; }
   }
   // 重置生成結果
   const imgResult = document.getElementById('sc-new-img-result');
