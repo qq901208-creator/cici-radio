@@ -5326,7 +5326,12 @@ function showPage(page, skipHistory){
   const pageTitle = (pageTitles[page]||page) + ' | 嘻嘻哪哩唷';
   document.title = pageTitle;
   if(typeof gtag==='function'){
-    gtag('config','G-N8SY933TK6',{page_title: pageTitle, page_location: location.href});
+    const virtualPath = '/' + (page === 'home' ? '' : page);
+    gtag('event','page_view',{
+      page_title: pageTitle,
+      page_location: location.origin + virtualPath,
+      page_path: virtualPath,
+    });
   }
 }
 // 瀏覽器上一頁/下一頁
