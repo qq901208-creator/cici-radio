@@ -5371,6 +5371,7 @@ function switchStoryTab(tab){
     igBtn.style.background = 'var(--or)'; igBtn.style.color = '#fff'; igBtn.style.borderColor = 'var(--or)';
     thrBtn.style.background = 'transparent'; thrBtn.style.color = 'var(--ts)'; thrBtn.style.borderColor = 'rgba(45,43,31,.2)';
     if(preview) preview.style.aspectRatio = '9/16';
+    if(preview) preview.style.fontSize = '';
     if(actorZone) actorZone.style.display = 'block';
     if(ticketZone) ticketZone.style.display = 'block';
     if(brandZone) brandZone.style.display = 'none';
@@ -5382,6 +5383,7 @@ function switchStoryTab(tab){
     thrBtn.style.background = 'var(--or)'; thrBtn.style.color = '#fff'; thrBtn.style.borderColor = 'var(--or)';
     igBtn.style.background = 'transparent'; igBtn.style.color = 'var(--ts)'; igBtn.style.borderColor = 'rgba(45,43,31,.2)';
     if(preview) preview.style.aspectRatio = '4/5';
+    if(preview) preview.style.fontSize = '80%';
     if(actorZone) actorZone.style.display = 'none';
     if(ticketZone) ticketZone.style.display = 'none';
     if(brandZone) brandZone.style.display = 'flex';
@@ -5405,6 +5407,21 @@ function updateNewStoryPreview(){
     img.src = url;
     img.style.display = 'block';
     if(ph) ph.style.display = 'none';
+    img.onload = ()=>{
+      // 橫式海報用 cover，直式用 contain
+      if(img.naturalWidth > img.naturalHeight){
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        img.style.objectPosition = 'center';
+      } else {
+        img.style.width = 'auto';
+        img.style.height = 'auto';
+        img.style.maxWidth = '100%';
+        img.style.maxHeight = '100%';
+        img.style.objectFit = 'contain';
+      }
+    };
     img.onerror = ()=>{ img.style.display='none'; if(ph) ph.style.display='flex'; };
   } else {
     if(img) img.style.display = 'none';
