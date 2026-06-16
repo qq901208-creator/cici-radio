@@ -1165,6 +1165,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="tainan" style="accent-color:var(--or)"> 府城喜劇 - SASADRA cafe</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="seety" style="accent-color:var(--or)"> Seety新城視展演空間</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="takao" style="accent-color:var(--or)"> 喜劇開港</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="goldens" style="accent-color:var(--or)"> 劍潭金手套 Golden's Bar</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="touring" style="accent-color:var(--or)"> 各地文化局場館、劇場巡迴</label>
       </div>
     </div>
@@ -1533,14 +1534,14 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
     <!-- 演出名稱（海報下、資訊卡上） -->
     <div style="padding:1.5% 4% 0;flex-shrink:0;position:relative;z-index:1">
-      <div id="sc-new-title" style="font-weight:900;color:rgba(45,43,31,0.92);line-height:1.4;letter-spacing:0.01em;background:rgba(255,255,255,0.25);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.45);border-radius:3%;padding:2% 3%;text-align:center;font-family:'Noto Sans TC','PingFang TC',sans-serif"></div>
+      <div id="sc-new-title" style="font-weight:900;color:rgba(45,43,31,0.92);line-height:1.4;letter-spacing:0;background:rgba(255,255,255,0.25);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.45);border-radius:3%;padding:2% 3%;text-align:center;font-family:'Noto Sans TC','PingFang TC',sans-serif"></div>
     </div>
 
     <!-- 資訊卡 -->
     <div style="margin:1.5% 4%;background:rgba(255,255,255,0.65);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.9);border-radius:4%;padding:2% 3%;flex-shrink:0;position:relative;z-index:1;box-shadow:0 1px 8px rgba(45,43,31,0.08);font-family:'Noto Sans TC','PingFang TC',sans-serif">
       <!-- Logo 壓在右下角 -->
       <img src="https://cici-radio.vercel.app/assets/ciciradio.jpg" style="position:absolute;bottom:6px;right:8px;width:20px;height:20px;border-radius:50%;object-fit:cover;opacity:0.7" alt="logo">
-      <div id="sc-new-performers" style="font-size:.67em;color:rgba(45,43,31,0.6);line-height:1.5;letter-spacing:0.02em;padding-bottom:1%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:1%"></div>
+      <div id="sc-new-performers" style="font-size:.67em;color:rgba(45,43,31,0.6);line-height:1.5;letter-spacing:0;padding-bottom:1%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:1%"></div>
       <div style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;padding:1.4% 0">
           <span style="font-size:.62em;flex-shrink:0;width:1.6em;text-align:center;line-height:1;display:flex;align-items:center;justify-content:center">📅</span>
@@ -2545,9 +2546,10 @@ const VENUE_GROUPS = {
   'tainan':      ['府城喜劇', 'tainan comedy', 'sasadra'],
   'takao':       ['喜劇開港', 'takao comedy', '鸚鵡螺'],
   'ponwo':       ['月半窩', 'ponwo', 'ponwo cafe'],
+  'goldens':     ['金手套', '劍潭', "golden's bar", 'goldens'],
 };
 // 「其他」篩選時要排除的已知場地 ID
-const KNOWN_VENUE_IDS = ['comedy-plus','two-three','fakers','beitou','ginting','windcity','smo','laughhouse','tainan','takao','ponwo'];
+const KNOWN_VENUE_IDS = ['comedy-plus','two-three','fakers','beitou','ginting','windcity','smo','laughhouse','tainan','takao','ponwo','goldens'];
 
 function venueMatchesFilter(s, fVenue) {
   if (fVenue === 'all') return true;
@@ -3975,7 +3977,7 @@ function openPerformerDetail(id){
     ${p.photoCredit?`<div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.6;margin-bottom:12px">📷 ${p.photoCredit}</div>`:''}
     ${upcoming.length?`<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>${showsList}</div>`:''}
     <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(45,43,31,.08)">
-      <button onclick="copyShareLink()" style="padding:10px 0;width:100%;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.82rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">分享演員資訊</span><span class="en-text">Share</span></button>
+      <button onclick="copyShareLink(location.href)" style="padding:10px 0;width:100%;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.82rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">分享演員資訊</span><span class="en-text">Share</span></button>
     </div>
   `;
   document.getElementById('modal-performer-detail').classList.add('open');
@@ -4690,6 +4692,7 @@ const DEFAULT_SHOW_VENUES = [
   {id:'tainan',            labelZh:'府城喜劇 - SASADRA cafe',               labelEn:'Tainan Comedy - SASADRA cafe'},
   {id:'seety',             labelZh:'Seety新城視展演空間',                    labelEn:'Seety Tainan'},
   {id:'takao',             labelZh:'喜劇開港',                               labelEn:'Takaocomedybay'},
+  {id:'goldens',           labelZh:'劍潭金手套',                                 labelEn:"Golden's Bar"},
   {id:'touring',           labelZh:'各地文化局場館、劇場巡迴',               labelEn:'Touring Venues'},
   {id:'other',             labelZh:'其他',                                   labelEn:'Others'},
 ];
@@ -5432,6 +5435,11 @@ function downloadNewStoryCard(){
   btn.innerHTML = '⏳ 生成中…';
   btn.disabled = true;
   const run = () => {
+    // 強制所有文字間距為 0，確保 html2canvas 渲染一致
+    el.querySelectorAll('*').forEach(node=>{
+      node.style.letterSpacing = '0';
+      node.style.wordSpacing = '0';
+    });
     const isThreads = window._storyTab === 'threads';
     const targetWidth = isThreads ? 1080 : 1080;
     const scaleRatio = targetWidth / el.getBoundingClientRect().width;
@@ -5608,24 +5616,26 @@ function updateFilterChipLabels(){
 window.addEventListener('resize', updateFilterChipLabels);
 document.addEventListener('DOMContentLoaded', updateFilterChipLabels);
 
-function copyShareLink(){
-  const url = location.href;
-  if(navigator.share){
-    // 手機：呼叫系統分享選單
-    navigator.share({ url }).catch(()=>{});
-  } else {
-    // 桌機：複製到剪貼簿
+function copyShareLink(url){
+  url = url || location.href;
+  const doCopy = () => {
+    const el = document.createElement('input');
+    el.value = url;
+    el.style.position = 'fixed';
+    el.style.opacity = '0';
+    document.body.appendChild(el);
+    el.focus();
+    el.select();
+    try { document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(el);
+    showToast(getLang()==='en'?'✅ Link copied!':'✅ 連結已複製','ok');
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(url).then(()=>{
       showToast(getLang()==='en'?'✅ Link copied!':'✅ 連結已複製','ok');
-    }).catch(()=>{
-      const el=document.createElement('input');
-      el.value=url;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-      showToast(getLang()==='en'?'✅ Link copied!':'✅ 連結已複製','ok');
-    });
+    }).catch(()=>{ doCopy(); });
+  } else {
+    doCopy();
   }
 }
 
