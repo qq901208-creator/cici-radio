@@ -5371,14 +5371,14 @@ function switchStoryTab(tab){
     igBtn.style.background = 'var(--or)'; igBtn.style.color = '#fff'; igBtn.style.borderColor = 'var(--or)';
     thrBtn.style.background = 'transparent'; thrBtn.style.color = 'var(--ts)'; thrBtn.style.borderColor = 'rgba(45,43,31,.2)';
     if(preview) preview.style.aspectRatio = '9/16';
-    if(preview) preview.style.fontSize = '93%';
+    if(preview) preview.style.fontSize = '87%';
     if(actorZone) actorZone.style.display = 'block';
     if(ticketZone) ticketZone.style.display = 'block';
     if(brandZone) brandZone.style.display = 'none';
     if(igSafeTop) igSafeTop.style.display = 'block';
     if(igSafeBottom) igSafeBottom.style.display = 'block';
-    // IG：標籤回到海報內部左上角
-    if(typesEl){ typesEl.style.position='absolute'; typesEl.style.top='8px'; typesEl.style.left='8px'; typesEl.style.transform=''; }
+    // IG：標籤也壓在海報上緣一半
+    if(typesEl){ typesEl.style.position='absolute'; typesEl.style.top='-12px'; typesEl.style.left='8px'; typesEl.style.transform=''; }
   } else {
     thrBtn.style.background = 'var(--or)'; thrBtn.style.color = '#fff'; thrBtn.style.borderColor = 'var(--or)';
     igBtn.style.background = 'transparent'; igBtn.style.color = 'var(--ts)'; igBtn.style.borderColor = 'rgba(45,43,31,.2)';
