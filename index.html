@@ -715,11 +715,11 @@ body.edit .edit-bar{display:flex!important}
   .member-photo{width:54px;height:54px;font-size:1.2rem}
   .member-name{font-size:.76rem}
   .member-role{font-size:.62rem}
-  .hero-stats{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px;padding-bottom:2px;scrollbar-width:none;justify-content:flex-start}
+  .hero-stats{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:4px;padding-bottom:2px;scrollbar-width:none;justify-content:flex-start}
   .hero-stats::-webkit-scrollbar{display:none}
-  .hero-stat{padding:7px 8px;min-width:0;flex:1;flex-shrink:0}
-  .hero-stat-num{font-size:1.1rem}
-  .hero-stat-lbl{font-size:.6rem;white-space:nowrap}
+  .hero-stat{padding:6px 6px;min-width:0;flex:1;flex-shrink:0}
+  .hero-stat-num{font-size:1rem}
+  .hero-stat-lbl{font-size:.55rem;white-space:nowrap}
   .sec{padding:44px 4vw}
 }
 .hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:8px 6px;border:none;background:transparent;margin-left:6px;flex-shrink:0}
@@ -814,6 +814,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="hero-stats" id="hero-stats">
       <div class="hero-stat"><span class="hero-stat-num" id="stat-shows">—</span><span class="hero-stat-lbl"><span class="zh-text">近一個月演出</span><span class="en-text">Shows (30 days)</span></span></div>
       <div class="hero-stat"><span class="hero-stat-num" id="stat-venues">—</span><span class="hero-stat-lbl"><span class="zh-text">喜劇據點</span><span class="en-text">Venues</span></span></div>
+      <div class="hero-stat"><span class="hero-stat-num" id="stat-performers">—</span><span class="hero-stat-lbl"><span class="zh-text">喜劇演員</span><span class="en-text">Performers</span></span></div>
       <div class="hero-stat"><span class="hero-stat-num" id="stat-mics">—</span><span class="hero-stat-lbl"><span class="zh-text">每月 Open Mic</span><span class="en-text">Monthly Open Mics</span></span></div>
       <div class="hero-stat"><span class="hero-stat-num" id="stat-courses">—</span><span class="hero-stat-lbl"><span class="zh-text">本年度課程</span><span class="en-text">Courses This Year</span></span></div>
     </div>
@@ -2868,6 +2869,8 @@ function renderHeroStats(){
   };
   setNum('stat-shows', upcomingShows);
   setNum('stat-venues', venueCount);
+  const performerCount = (window._PERFORMERS||[]).filter(p=>(p.status||'published')!=='hidden').length;
+  setNum('stat-performers', performerCount);
   setNum('stat-mics', micCount);
   setNum('stat-courses', yearCourses);
 
