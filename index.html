@@ -3920,7 +3920,7 @@ function openPerformerDetail(id){
   const names = [p.name||'',...(p.aliases||[])].map(n=>n.toLowerCase().trim()).filter(Boolean);
   const upcoming = allShows.filter(s=>{
     const perfList = (s.performer||'').split(/[、,，｜|\n]/).map(x=>x.trim().replace(/（[^）]*）|\([^)]*\)/g,'').trim().toLowerCase()).filter(Boolean);
-    return names.some(n=>perfList.some(item=>item===n||item.startsWith(n+' ')||item.endsWith(' '+n))) && !isExpired(s.date,s.time) && s.status!=='hidden';
+    return names.some(n=>perfList.some(item=>item===n)) && !isExpired(s.date,s.time) && s.status!=='hidden';
   }).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
   const showsList = upcoming.length
     ? upcoming.map(s=>`<div onclick="openShowDetail('${s.id}', true)" style="padding:8px 12px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px" onmouseover="this.style.background='var(--py)'" onmouseout="this.style.background='var(--cr)'">
