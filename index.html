@@ -3919,13 +3919,8 @@ function openPerformerDetail(id){
   const allShows = window._SHOWS||[];
   const names = [p.name||'',...(p.aliases||[])].map(n=>n.toLowerCase().trim()).filter(Boolean);
   const upcoming = allShows.filter(s=>{
-    const perf = (s.performer||'').toLowerCase();
-    return names.some(n=>{
-      // 用詞邊界比對，避免「Sam」匹配到「Sam Yarbs」裡的 Sam
-      const escaped = n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-      const re = new RegExp('(?:^|[,、\\s｜|（(])' + escaped + '(?=[,、\\s｜|）)$]|$)', 'i');
-      return re.test(perf) || perf === n;
-    }) && !isExpired(s.date,s.time) && s.status!=='hidden';
+    const perfList = (s.performer||'').split(/[、,，｜|\n]/).map(x=>x.trim().replace(/（[^）]*）|\([^)]*\)/g,'').trim().toLowerCase()).filter(Boolean);
+    return names.some(n=>perfList.some(item=>item===n||item.startsWith(n+' ')||item.endsWith(' '+n))) && !isExpired(s.date,s.time) && s.status!=='hidden';
   }).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
   const showsList = upcoming.length
     ? upcoming.map(s=>`<div onclick="openShowDetail('${s.id}', true)" style="padding:8px 12px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px" onmouseover="this.style.background='var(--py)'" onmouseout="this.style.background='var(--cr)'">
