@@ -5205,9 +5205,9 @@ function renderFpList(){
     <div class="fp-itxt">${linkify(c.text)}</div>
     ${c.reply?`<div class="fp-reply"><img class="fp-reply-logo" src="https://cici-radio.vercel.app/assets/ciciradio.jpg" alt="logo" onerror="this.style.display='none'"><div class="fp-reply-body"><div class="fp-reply-name">嘻嘻哪哩唷 官方回覆</div><div class="fp-reply-text">${linkify(c.reply)}</div></div></div>`:''}
     <div class="fp-if">
-      <button class="fp-rb ${c.myReactions?.includes('like')?'on':''}" onclick="react('${c.id}','like')">👍 ${c.reactions.like}</button>
-      <button class="fp-rb ${c.myReactions?.includes('fire')?'on':''}" onclick="react('${c.id}','fire')">🔥 ${c.reactions.fire}</button>
-      <button class="fp-rb ${c.myReactions?.includes('haha')?'on':''}" onclick="react('${c.id}','haha')">😂 ${c.reactions.haha}</button>
+      <button class="fp-rb ${(()=>{try{const r=JSON.parse(localStorage.getItem('cici_reactions')||'{}');return (r[c.id]||[]).includes('like');}catch(e){return false;}})()? 'on':''}" onclick="react('${c.id}','like')">👍 ${c.reactions.like}</button>
+      <button class="fp-rb ${(()=>{try{const r=JSON.parse(localStorage.getItem('cici_reactions')||'{}');return (r[c.id]||[]).includes('fire');}catch(e){return false;}})()? 'on':''}" onclick="react('${c.id}','fire')">🔥 ${c.reactions.fire}</button>
+      <button class="fp-rb ${(()=>{try{const r=JSON.parse(localStorage.getItem('cici_reactions')||'{}');return (r[c.id]||[]).includes('haha');}catch(e){return false;}})()? 'on':''}" onclick="react('${c.id}','haha')">😂 ${c.reactions.haha}</button>
     </div>
     ${isAdmin?`<div class="fp-admin-btns"><button class="fp-ab fp-pin-btn" onclick="pinC('${c.id}')">${c.pinned?'取消精選':'📌 精選'}</button><button class="fp-ab fp-del-btn" onclick="delC('${c.id}')">刪除</button><button class="fp-ab fp-hide-btn" onclick="hideC('${c.id}')">${c.hidden?'顯示':'隱藏'}</button></div>
     <div class="fp-ra"><input class="fp-ri" id="ri-${c.id}" placeholder="官方回覆…" value="${(c.reply||'').replace(/"/g,'&quot;')}" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendReply('${c.id}')}"><button class="fp-rs" onclick="sendReply('${c.id}')">${c.reply?'更新回覆':'回覆'}</button>${c.reply?`<button class="fp-ab fp-del-btn" style="margin-left:4px" onclick="delReply('${c.id}')">刪除回覆</button>`:''}</div>`:''}
@@ -5301,7 +5301,27 @@ function submitComment(){
     }).catch(()=>{});
   }).catch(()=>showToast('❌ 送出失敗','err'));
 }
-function react(id,t){const c=COMMENTS.find(x=>x.id===id);if(!c)return;if(!c.myReactions)c.myReactions=[];const i=c.myReactions.indexOf(t);if(i>=0){c.myReactions.splice(i,1);c.reactions[t]--;}else{c.myReactions.push(t);c.reactions[t]++;}window.FB.save('comments',id,c).then(()=>renderFpList());}
+function react(id,t){
+  const c=COMMENTS.find(x=>x.id===id);
+  if(!c)return;
+  // 用 localStorage 記錄這個瀏覽器點過哪些反應
+  const storageKey = 'cici_reactions';
+  let myReacts = {};
+  try { myReacts = JSON.parse(localStorage.getItem(storageKey)||'{}'); } catch(e){}
+  if(!myReacts[id]) myReacts[id]=[];
+  const i=myReacts[id].indexOf(t);
+  if(!c.reactions)c.reactions={like:0,fire:0,haha:0};
+  if(i>=0){
+    myReacts[id].splice(i,1);
+    c.reactions[t]=Math.max(0,(c.reactions[t]||0)-1);
+  }else{
+    myReacts[id].push(t);
+    c.reactions[t]=(c.reactions[t]||0)+1;
+  }
+  try { localStorage.setItem(storageKey, JSON.stringify(myReacts)); } catch(e){}
+  c.myReactions=myReacts[id];
+  window.FB.save('comments',id,c).then(()=>renderFpList());
+}
 function pinC(id){if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.pinned=!c.pinned;window.FB.save('comments',id,c).then(()=>{renderFpList();renderHomeComments();showToast(c.pinned?'📌 已設為精選':'已取消精選','ok');});}
 function delC(id){if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}if(!confirm('確定刪除？'))return;window.FB.del('comments',id).then(()=>{COMMENTS=COMMENTS.filter(x=>x.id!==id);renderFpList();renderHomeComments();showToast('已刪除','ok');});}
 function hideC(id){if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.hidden=!c.hidden;window.FB.save('comments',id,c).then(()=>{renderFpList();showToast(c.hidden?'已隱藏':'已顯示','ok');});}
