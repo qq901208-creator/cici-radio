@@ -5490,9 +5490,47 @@ function renderThreadsPreview(){
 }
 
 function restoreIgPreview(){
-  // 切回 IG 時重新觸發 openStoryCard 填資料
   const s = window._currentStoryShow;
-  if(s) openStoryCard(s.id);
+  if(!s) return;
+  // 重新填資料到現有的 IG 版 HTML 元素
+  const d = new Date(s.date+'T00:00');
+  const dow = ['日','一','二','三','四','五','六'][d.getDay()];
+  const dateEl = document.getElementById('sc-new-date');
+  const venueEl = document.getElementById('sc-new-venue');
+  const perfEl = document.getElementById('sc-new-performers');
+  const titleEl = document.getElementById('sc-new-title');
+  if(dateEl) dateEl.textContent = `${s.date.replace(/-/g,'/')}（${dow}）${s.time?' '+s.time:''}`;
+  if(venueEl) venueEl.textContent = getShowVenueLabelById(s.venue)||s.venueLabel||s.venue||'—';
+  if(perfEl) perfEl.textContent = s.performer||'';
+  if(titleEl){
+    const title = s.title||'';
+    const fontSize = title.length<=8?'1.3em':title.length<=16?'1.05em':title.length<=24?'.85em':'.7em';
+    titleEl.style.fontSize = fontSize;
+    titleEl.style.whiteSpace = 'normal';
+    titleEl.style.wordBreak = 'keep-all';
+    titleEl.style.overflowWrap = 'anywhere';
+    titleEl.innerHTML = title.replace(/｜/g,'｜<wbr>').replace(/\|/g,'|<wbr>').replace(/-/g,'-<wbr>').replace(/《/g,'<wbr>《').replace(/【/g,'<wbr>【');
+  }
+  // 票價
+  const priceEl = document.getElementById('sc-new-price');
+  if(priceEl){
+    const oldTag = priceEl.nextElementSibling;
+    if(oldTag && oldTag.tagName==='SPAN') oldTag.remove();
+    priceEl.style.textDecoration='';
+    priceEl.style.color='rgba(45,43,31,0.88)';
+    priceEl.textContent = window._parseStoryPrice ? window._parseStoryPrice(s.price) : (s.price||'—');
+  }
+  // 海報
+  const img = document.getElementById('sc-new-poster');
+  const ph = document.getElementById('sc-new-poster-placeholder');
+  const url = (document.getElementById('sc-poster-url')?.value||'').trim();
+  if(url && img){
+    img.src = url; img.style.display='block';
+    if(ph) ph.style.display='none';
+  } else {
+    if(img) img.style.display='none';
+    if(ph) ph.style.display='flex';
+  }
 }
 
 function updateNewStoryPreview(){
