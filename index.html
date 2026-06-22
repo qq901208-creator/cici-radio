@@ -5561,7 +5561,7 @@ function updateNewStoryPreview(){
 function downloadNewStoryCard(){
   const btn = document.getElementById('sc-new-download-btn');
   const el = document.getElementById('new-story-preview');
-  if(!el) return;
+  if(!el || !btn) return;
   const origText = btn.innerHTML;
   btn.innerHTML = '⏳ 生成中…';
   btn.disabled = true;
@@ -5605,10 +5605,10 @@ function downloadNewStoryCard(){
   if(!window.html2canvas){
     const s = document.createElement('script');
     s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-    s.onload = run;
+    s.onload = ()=>setTimeout(run, 300);
     s.onerror = () => { btn.innerHTML = origText; btn.disabled = false; showToast('❌ 載入失敗','err'); };
     document.head.appendChild(s);
-  } else { run(); }
+  } else { setTimeout(run, 100); }
 }
 
 function openStoryCard(id){
