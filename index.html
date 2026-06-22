@@ -5569,13 +5569,14 @@ function downloadNewStoryCard(){
       node.style.wordSpacing = '0';
     });
     const isThreads = window._storyTab === 'threads';
-    const targetWidth = isThreads ? 1080 : 1080;
-    const scaleRatio = targetWidth / el.getBoundingClientRect().width;
+    const bgColor = isThreads ? '#1a1000' : '#ebecd7';
+    const elWidth = el.getBoundingClientRect().width || el.offsetWidth || 320;
+    const scaleRatio = 1080 / elWidth;
     window.html2canvas(el, {
       scale: scaleRatio,
       useCORS: true,
       allowTaint: true,
-      backgroundColor: '#ebecd7',
+      backgroundColor: bgColor,
       logging: false,
       width: el.offsetWidth,
       height: el.offsetHeight,
