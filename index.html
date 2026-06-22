@@ -5445,8 +5445,8 @@ function renderThreadsPreview(){
       <img src="https://cici-radio.vercel.app/assets/ciciradio.jpg" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(239,111,32,0.5)" crossorigin="anonymous">
       <span style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:700;letter-spacing:0.04em;font-family:var(--f-bo)">嘻嘻哪哩唷</span>
     </div>
-    ${typeLabels ? `<div style="padding:8px 16px 0"><span style="background:#ef6f20;color:#fff;font-size:9px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.04em">${typeLabels}</span></div>` : ''}
-    <div style="padding:0 16px;display:flex;align-items:center;justify-content:center">
+    ${typeLabels ? `<div style="position:relative;padding:0 16px;margin-bottom:-12px;z-index:2"><span style="background:#ef6f20;color:#fff;font-size:9px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.04em;box-shadow:0 2px 6px rgba(0,0,0,0.3)">${typeLabels}</span></div>` : ''}
+    <div style="padding:${typeLabels?'12px':'0'} 16px 0;display:flex;align-items:center;justify-content:center">
       ${posterHtml}
     </div>
     <div style="padding:10px 16px">
