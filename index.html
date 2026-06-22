@@ -5796,6 +5796,11 @@ document.querySelectorAll('.modal-ov').forEach(o=>{
   o.addEventListener('click', e=>{
     if(e.target === o && READ_ONLY_MODALS.includes(o.id)){
       o.classList.remove('open');
+      // story-card 關閉時恢復 show-detail z-index
+      if(o.id === 'modal-story-card'){
+        const showDetailOv = document.getElementById('modal-show-detail');
+        if(showDetailOv) showDetailOv.style.zIndex = '510';
+      }
     }
   });
   // 防止 modal 內部拖曳到背景誤觸關閉
