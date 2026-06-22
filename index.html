@@ -5398,43 +5398,99 @@ function switchStoryTab(tab){
   window._storyTab = tab;
   const igBtn = document.getElementById('sc-tab-ig');
   const thrBtn = document.getElementById('sc-tab-threads');
-  const actorZone = document.getElementById('sc-actor-zone');
-  const ticketZone = document.getElementById('sc-ticket-zone');
-  const brandZone = document.getElementById('sc-brand-zone');
-  const igSafeTop = document.getElementById('sc-ig-safe-top');
-  const igSafeBottom = document.getElementById('sc-ig-safe-bottom');
   const preview = document.getElementById('new-story-preview');
-  const typesEl = document.getElementById('sc-new-types');
+
   if(tab === 'ig'){
     igBtn.style.background = 'var(--or)'; igBtn.style.color = '#fff'; igBtn.style.borderColor = 'var(--or)';
     thrBtn.style.background = 'transparent'; thrBtn.style.color = 'var(--ts)'; thrBtn.style.borderColor = 'rgba(45,43,31,.2)';
-    if(preview) preview.style.aspectRatio = '9/16';
-    if(preview) preview.style.fontSize = '87%';
-    if(actorZone) actorZone.style.display = 'block';
-    if(ticketZone) ticketZone.style.display = 'block';
-    if(brandZone) brandZone.style.display = 'none';
-    if(igSafeTop) igSafeTop.style.display = 'block';
-    if(igSafeBottom) igSafeBottom.style.display = 'block';
-    // IG：標籤也壓在海報上緣一半
-    if(typesEl){ typesEl.style.position='absolute'; typesEl.style.top='-12px'; typesEl.style.left='8px'; typesEl.style.transform=''; }
+    if(preview){
+      preview.style.aspectRatio = '9/16';
+      preview.style.fontSize = '87%';
+      preview.style.background = '#ebecd7';
+      restoreIgPreview();
+    }
   } else {
     thrBtn.style.background = 'var(--or)'; thrBtn.style.color = '#fff'; thrBtn.style.borderColor = 'var(--or)';
     igBtn.style.background = 'transparent'; igBtn.style.color = 'var(--ts)'; igBtn.style.borderColor = 'rgba(45,43,31,.2)';
-    if(preview) preview.style.aspectRatio = '4/5';
-    if(preview) preview.style.fontSize = '80%';
-    if(actorZone) actorZone.style.display = 'none';
-    if(ticketZone) ticketZone.style.display = 'none';
-    if(brandZone) brandZone.style.display = 'flex';
-    if(igSafeTop) igSafeTop.style.display = 'block';
-    if(igSafeBottom) igSafeBottom.style.display = 'block';
-    // Threads：標籤移到海報上緣，一半壓在海報上一半在外面
-    if(typesEl){ typesEl.style.position='absolute'; typesEl.style.top='-12px'; typesEl.style.left='8px'; typesEl.style.transform=''; }
+    if(preview){
+      preview.style.aspectRatio = '4/5';
+      preview.style.fontSize = '100%';
+      preview.style.background = '#1a1000';
+      renderThreadsPreview();
+    }
   }
   // 重置生成結果
   const imgResult = document.getElementById('sc-new-img-result');
   if(imgResult){ imgResult.style.display='none'; imgResult.innerHTML=''; }
   const btn = document.getElementById('sc-new-download-btn');
   if(btn) btn.innerHTML = '⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span>';
+}
+
+function renderThreadsPreview(){
+  const preview = document.getElementById('new-story-preview');
+  if(!preview) return;
+  const s = window._currentStoryShow;
+  if(!s) return;
+  const types = s.types||(s.type?[s.type]:[]);
+  const typeLabels = types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return m.label;}).join('・');
+  const posterUrl = (document.getElementById('sc-poster-url')?.value||'').trim();
+  const posterHtml = posterUrl
+    ? `<img src="${posterUrl}" style="width:100%;max-height:100%;object-fit:contain;display:block" crossorigin="anonymous" onerror="this.style.display='none'">`
+    : `<div style="width:100%;padding:20% 0;background:linear-gradient(160deg,#2a2000,#1a1000);display:flex;align-items:center;justify-content:center;font-size:40px">🎭</div>`;
+
+  preview.innerHTML = `
+    <div style="padding:14px 16px 0;display:flex;align-items:center;gap:8px">
+      <img src="https://cici-radio.vercel.app/assets/ciciradio.jpg" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(239,111,32,0.5)" crossorigin="anonymous">
+      <span style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:700;letter-spacing:0.04em;font-family:var(--f-bo)">嘻嘻哪哩唷</span>
+    </div>
+    ${typeLabels ? `<div style="padding:8px 16px 0"><span style="background:#ef6f20;color:#fff;font-size:9px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.04em">${typeLabels}</span></div>` : ''}
+    <div style="padding:0 16px;overflow:hidden;flex:1;display:flex;align-items:center;justify-content:center">
+      ${posterHtml}
+    </div>
+    <div style="padding:10px 16px">
+      <div style="font-size:15px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:10px;font-family:var(--f-zh)">${s.title||''}</div>
+      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);min-width:44px;padding-top:1px;font-family:var(--f-bo)">日期</span><span style="font-size:10px;color:rgba(255,255,255,0.85);font-family:var(--f-zh)">${s.date||''} （${['日','一','二','三','四','五','六'][new Date(s.date+'T00:00').getDay()]}） ${s.time||''}</span></div>
+      <div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);min-width:44px;padding-top:1px;font-family:var(--f-bo)">場地</span><span style="font-size:10px;color:rgba(255,255,255,0.85);font-family:var(--f-zh)">${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue||'—'}</span></div>
+      ${s.performer?`<div style="display:flex;margin-bottom:5px"><span style="font-size:8px;color:rgba(255,255,255,0.35);min-width:44px;padding-top:1px;font-family:var(--f-bo)">表演者</span><span style="font-size:10px;color:rgba(255,255,255,0.85);font-family:var(--f-zh)">${s.performer}</span></div>`:''}
+      <div style="height:1px;background:rgba(255,255,255,0.08);margin:8px 0"></div>
+      <div id="sc-thr-price" style="font-size:12px;font-weight:700;color:#ef6f20;font-family:var(--f-zh)"></div>
+    </div>
+    <div style="padding:8px 16px 12px;display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:0.04em;font-family:var(--f-bo)">在嘻嘻哪哩唷查看演出資訊</span>
+      <span style="font-size:9px;color:#ef6f20;font-weight:700;font-family:var(--f-bo)">cici-radio.vercel.app</span>
+    </div>
+  `;
+
+  // 填票價
+  const priceEl = document.getElementById('sc-thr-price');
+  if(priceEl && s.price){
+    function parseStoryPriceThr(priceStr){
+      if(!priceStr) return '—';
+      const EXCLUDE=['早鳥','身心障礙','陪同','殘障','公益','愛心'];
+      const parts=priceStr.split(/[\/\n｜|]/).map(x=>x.trim()).filter(Boolean);
+      const regular=parts.filter(p=>!EXCLUDE.some(kw=>p.includes(kw)));
+      const target=regular.length?regular:parts;
+      const nums=target.flatMap(p=>[...p.matchAll(/\$\s*([\d,]+)/g)].map(m=>parseInt(m[1].replace(/,/g,''))));
+      const noteMatch=priceStr.match(/（[^）]+）|\([^\)]+\)/);
+      const note=noteMatch?noteMatch[0]:'';
+      if(!nums.length)return priceStr;
+      const min=Math.min(...nums),max=Math.max(...nums);
+      const range=min===max?`NT$  ${min.toLocaleString()}`:`NT$  ${min.toLocaleString()} ～ NT$  ${max.toLocaleString()}`;
+      return note?`${range}${note}`:range;
+    }
+    priceEl.textContent = parseStoryPriceThr(s.price);
+    if(s.soldOut){
+      priceEl.style.textDecoration='line-through';
+      priceEl.style.opacity='0.5';
+      priceEl.insertAdjacentHTML('afterend',`<span style="font-size:9px;font-weight:700;color:#ef6f20;margin-left:6px">${(s.types||[]).includes('english')?'Sold Out':'已完售'}</span>`);
+    }
+  }
+}
+
+function restoreIgPreview(){
+  // 切回 IG 時重新觸發 openStoryCard 填資料
+  const s = window._currentStoryShow;
+  if(s) openStoryCard(s.id);
 }
 
 function updateNewStoryPreview(){
@@ -5514,6 +5570,7 @@ function downloadNewStoryCard(){
 function openStoryCard(id){
   const s = (window._SHOWS||SHOWS||[]).find(x=>x.id===id);
   if(!s) return;
+  window._currentStoryShow = s;
   const lang = getLang();
   const d = new Date(s.date+'T00:00');
   const dowZh = ['日','一','二','三','四','五','六'][d.getDay()];
