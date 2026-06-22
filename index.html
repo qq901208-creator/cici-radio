@@ -5698,7 +5698,12 @@ function openStoryCard(id){
   const btn = document.getElementById('sc-new-download-btn');
   if(btn) btn.innerHTML = '⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span>';
 
-  document.getElementById('modal-story-card').classList.add('open');
+  const storyModal = document.getElementById('modal-story-card');
+  storyModal.classList.remove('open');
+  storyModal.style.zIndex = '520';
+  setTimeout(()=>{
+    storyModal.classList.add('open');
+  }, 50);
   switchStoryTab('ig');
   const showDetailOv = document.getElementById('modal-show-detail');
   if(showDetailOv) showDetailOv.style.zIndex = '505';
