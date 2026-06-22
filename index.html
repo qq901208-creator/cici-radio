@@ -5405,6 +5405,7 @@ function switchStoryTab(tab){
     thrBtn.style.background = 'transparent'; thrBtn.style.color = 'var(--ts)'; thrBtn.style.borderColor = 'rgba(45,43,31,.2)';
     if(preview){
       preview.style.aspectRatio = '9/16';
+      preview.style.height = '';
       preview.style.fontSize = '87%';
       preview.style.background = '#ebecd7';
       restoreIgPreview();
@@ -5413,7 +5414,8 @@ function switchStoryTab(tab){
     thrBtn.style.background = 'var(--or)'; thrBtn.style.color = '#fff'; thrBtn.style.borderColor = 'var(--or)';
     igBtn.style.background = 'transparent'; igBtn.style.color = 'var(--ts)'; igBtn.style.borderColor = 'rgba(45,43,31,.2)';
     if(preview){
-      preview.style.aspectRatio = '4/5';
+      preview.style.aspectRatio = '';
+      preview.style.height = 'auto';
       preview.style.fontSize = '100%';
       preview.style.background = '#1a1000';
       renderThreadsPreview();
