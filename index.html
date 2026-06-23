@@ -3931,7 +3931,7 @@ function openPerformerDetail(id){
   const all = window._PERFORMERS_DISPLAY || window._PERFORMERS || [];
   const p = all.find(x=>x.id===id);
   if(!p) return;
-  history.replaceState(null,'', location.hash.split('?')[0] + '?performer=' + id);
+  history.pushState({ performerId: id }, '', `/performer/${id}`);
   const lang = getLang();
   const types = p.types||[];
   const typeTags = types.map(t=>{
@@ -5805,11 +5805,42 @@ function copyShareLink(url){
 
 function closeModal(id){
   document.getElementById('modal-'+id).classList.remove('open');
-  if(id==='show-detail'||id==='course-detail'||id==='performer-detail'){
+  if(id==='show-detail'||id==='course-detail'){
     const base = location.hash.split('?')[0];
     history.replaceState(null,'', base);
   }
+  if(id==='performer-detail'){
+    history.pushState(null,'', '/#performers');
+  }
 }
+// ── 演員分享連結路由（新格式 /performer/ID，舊格式 #performers?performer=ID）──
+function initPerformerRouting(){
+  const pathMatch = location.pathname.match(/\/performer\/(.+)/);
+  const hashMatch = location.hash.match(/[?&]performer=([^&]+)/);
+  const id = pathMatch?.[1] || hashMatch?.[1];
+  if(id){
+    showPage('performers');
+    const tryOpen = (n=0) => {
+      const all = window._PERFORMERS || [];
+      if(all.find(x=>x.id===id)){
+        openPerformerDetail(id);
+        document.getElementById('modal-performer-detail').classList.add('open');
+      } else if(n < 20){
+        setTimeout(()=>tryOpen(n+1), 300);
+      }
+    };
+    tryOpen();
+  }
+}
+window.addEventListener('popstate', e=>{
+  if(e.state?.performerId){
+    openPerformerDetail(e.state.performerId);
+    document.getElementById('modal-performer-detail').classList.add('open');
+  } else {
+    document.getElementById('modal-performer-detail').classList.remove('open');
+  }
+});
+
 // 只有閱讀類 modal 允許點背景關閉，編輯類（show/mic/course/venue）不允許
 const READ_ONLY_MODALS = ['modal-show-detail','modal-course-detail','modal-venue-detail','modal-report','modal-copyright','modal-venue-manager','modal-guidelines','modal-story-card','modal-performer-detail'];
 document.querySelectorAll('.modal-ov').forEach(o=>{
@@ -5831,6 +5862,7 @@ function showToast(msg,type=''){
 
 document.addEventListener('DOMContentLoaded',()=>{
   updFbBadge();
+  initPerformerRouting();
 });
 </script>
 
