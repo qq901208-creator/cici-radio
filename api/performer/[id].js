@@ -41,8 +41,9 @@ export default async function handler(req, res) {
     // 讀取失敗就用預設值
   }
 
-  // 如果是明確的瀏覽器就重導向，其他都當爬蟲處理（比較保守的策略）
-  const isBrowser = /mozilla.*gecko|webkit.*chrome.*safari|webkit.*safari/i.test(ua) && !/bot|crawler|spider|preview|fetch|curl|wget|python/i.test(ua);
+  // 如果是明確的瀏覽器就重導向，其他都當爬蟲處理
+  const ua = req.headers['user-agent'] || '';
+  const isBrowser = /mozilla.*gecko|webkit.*chrome.*safari|webkit.*safari/i.test(ua) && !/bot|crawler|spider|preview|fetch|curl|wget|python|line|whatsapp|telegram|slack|discord/i.test(ua);
 
   if (isBrowser) {
     // 一般用戶：重導向到 SPA，讓 JS 處理
