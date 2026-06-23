@@ -2191,6 +2191,11 @@ async function loadAllData(retryCount = 0) {
         setTimeout(()=>tryOpenPerformer(20), 300);
       }
     }catch(e){}
+    // 新格式路由：/performer/:id 和 /show/:id
+    try{
+      if(typeof initPerformerRouting==='function') initPerformerRouting();
+      if(typeof initShowRouting==='function') initShowRouting();
+    }catch(e){}
   };
   // 等 window.load 確保所有 JS 函數都就緒後才 render，解決手機時序問題
   if(document.readyState === 'complete'){
@@ -5896,40 +5901,22 @@ function closeModal(id){
 }
 function initShowRouting(){
   const pathMatch = location.pathname.match(/\/show\/(.+)/);
-  const hashMatch = location.hash.match(/[?&]show=([^&]+)/);
-  const id = pathMatch?.[1] || hashMatch?.[1];
-  if(id){
-    const tryOpen = (n=0) => {
-      const all = window._SHOWS || [];
-      if(all.find(x=>x.id===id)){
-        openShowDetail(id);
-      } else if(n < 20){
-        setTimeout(()=>tryOpen(n+1), 300);
-      }
-    };
-    tryOpen();
-  }
+  const id = pathMatch?.[1];
+  if(!id) return;
+  const s = (window._SHOWS||[]).find(x=>x.id===id);
+  if(s) openShowDetail(id);
 }
 
 // ── 演員分享連結路由（新格式 /performer/ID，舊格式 #performers?performer=ID）──
 function initPerformerRouting(){
   const pathMatch = location.pathname.match(/\/performer\/(.+)/);
-  const hashMatch = location.hash.match(/[?&]performer=([^&]+)/);
-  const id = pathMatch?.[1] || hashMatch?.[1];
-  if(id){
-    showPage('performers');
-    const tryOpen = (n=0) => {
-      const all = window._PERFORMERS || [];
-      const p = all.find(x=>x.id===id);
-      if(p){
-        openPerformerDetail(id);
-        document.getElementById('modal-performer-detail').classList.add('open');
-      } else if(n < 20){
-        setTimeout(()=>tryOpen(n+1), 300);
-      }
-      // 找不到就不開 modal，不顯示空白
-    };
-    tryOpen();
+  const id = pathMatch?.[1];
+  if(!id) return;
+  showPage('performers');
+  const p = (window._PERFORMERS||[]).find(x=>x.id===id);
+  if(p){
+    openPerformerDetail(id);
+    document.getElementById('modal-performer-detail').classList.add('open');
   }
 }
 window.addEventListener('popstate', e=>{
@@ -5971,8 +5958,6 @@ function showToast(msg,type=''){
 
 document.addEventListener('DOMContentLoaded',()=>{
   updFbBadge();
-  initPerformerRouting();
-  initShowRouting();
 });
 </script>
 
