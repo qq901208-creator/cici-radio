@@ -4006,7 +4006,10 @@ function openPerformerDetail(id){
     <div style="display:flex;gap:16px;align-items:center;margin-bottom:16px">
       ${heroAvatar}
       <div style="flex:1;min-width:0">
-        <div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:6px">${p.name||''}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);flex:1">${p.name||''}</div>
+          <button onclick="sharePerformer('${p.id}')" style="flex-shrink:0;padding:3px 9px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.15);background:transparent;font-size:.68rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:3px;white-space:nowrap" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.15)';this.style.color='var(--ts)'">📤 分享</button>
+        </div>
         <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:${socialLinks?'8px':'0'}">${typeTags}</div>
         ${socialLinks?`<div style="word-break:keep-all">${socialLinks}</div>`:''}
         ${p.troupe?(()=>{
@@ -4041,10 +4044,7 @@ function openPerformerDetail(id){
       }).join('');
       return `<div class="pf-troupe-mobile" style="padding:8px 0 12px;border-bottom:1px solid rgba(45,43,31,.08);margin-bottom:12px"><div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);letter-spacing:.05em;margin-bottom:5px">所屬團體</div>${troupeRows}</div>`;
     })():''}
-    ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin-bottom:6px">${p.tagline}</p>`:''}
-    <div style="text-align:right;margin-bottom:10px">
-      <button onclick="sharePerformer('${p.id}')" style="padding:4px 10px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.15);background:transparent;font-size:.72rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:4px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.15)';this.style.color='var(--ts)'">📤 分享</button>
-    </div>
+    ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin-bottom:10px">${p.tagline}</p>`:''}
     ${venueDisplay?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px;overflow-wrap:break-word">常出沒場地<br><span style="font-weight:600;color:var(--tm)">${venueDisplay}</span></div>`:''}
     ${p.style?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px">風格<br><span style="font-weight:600;color:var(--tm)">${p.style}</span></div>`:''}
     ${p.bio?`<p class="sd-desc">${p.bio}</p>`:''}
