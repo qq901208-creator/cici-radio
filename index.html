@@ -668,6 +668,21 @@ body.edit .edit-bar{display:flex!important}
 #page-courses::before{content:'';position:absolute;top:0;left:0;right:0;height:280px;background:radial-gradient(ellipse at 70% 0%,rgba(239,111,32,.06) 0%,transparent 70%);pointer-events:none}
 #page-about::before{content:'';position:absolute;top:0;left:0;right:0;height:280px;background:radial-gradient(ellipse at 30% 0%,rgba(245,213,88,.08) 0%,transparent 70%);pointer-events:none}
 .page{position:relative}
+/* 桌機版首頁左右分欄 */
+@media(min-width:900px){
+  .hero{padding:0;display:grid;grid-template-columns:1fr auto;align-items:center;min-height:calc(100vh - var(--nav));text-align:left}
+  .hero-left{padding:60px 6vw;display:contents}
+  .hero-logo{grid-column:2;grid-row:1/8;margin-bottom:0;width:220px;height:220px;border-radius:32px;align-self:center;margin-right:6vw}
+  .hero-tag{grid-column:1;margin-bottom:12px}
+  .hero-h1{grid-column:1;font-size:clamp(2.8rem,4vw,4rem);margin-bottom:8px}
+  .hero-sub{grid-column:1;margin-bottom:12px}
+  .hero-desc{grid-column:1;margin-bottom:20px;text-align:left}
+  .hero-ctas{grid-column:1;justify-content:flex-start;flex-wrap:wrap}
+  .hero-stats{grid-column:1;margin-top:24px;justify-content:flex-start;overflow-x:visible;flex-wrap:wrap;gap:8px}
+  .hero-next{grid-column:1;text-align:left}
+  .scroll-hint{display:none}
+  .hero>a[href="https://forms.gle/vUC6DU83kGpdJyUF9"]{grid-column:1}
+}
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .45s ease,transform .45s ease}
 .reveal.revealed{opacity:1;transform:translateY(0)}
 
@@ -791,8 +806,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
 <!-- HOME -->
 <div class="page" id="page-home">
-  <section class="hero">
-    <div class="hero-logo"><img src="/assets/ciciradio.jpg" alt="嘻嘻哪哩唷"></div>
+  <section class="hero" style="padding:80px 5vw 76px">
+    <div class="hero-logo" style="grid-column:2;grid-row:1/9"><img src="/assets/ciciradio.jpg" alt="嘻嘻哪哩唷"></div>
     <div class="hero-tag">
       <span class="zh-text">台灣現場喜劇演出資訊整理</span>
       <span class="en-text">Taiwan Comedy Show Guide</span>
