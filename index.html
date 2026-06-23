@@ -643,7 +643,7 @@ body.edit .edit-bar{display:flex!important}
 @keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 /* 頁面切換淡入 */
-.page.active{animation:fadeIn .3s ease both}
+.page.active{animation:fadeUp .25s ease both}
 
 /* Hero 各元素依序進場 */
 .hero-tag{animation:fadeUp .5s .05s ease both}
@@ -657,8 +657,9 @@ body.edit .edit-bar{display:flex!important}
 .reveal.revealed{opacity:1;transform:translateY(0)}
 
 /* 卡片 hover 提升感 */
-.show-card,.course-card,.venue-card{transition:transform .2s ease,box-shadow .2s ease}
+.show-card,.course-card,.venue-card{transition:transform .2s ease,box-shadow .2s ease;animation:cardIn .35s ease both}
 .show-card:hover,.course-card:hover,.venue-card:hover{transform:translateY(-4px);box-shadow:0 10px 32px rgba(0,0,0,.14)}
+.performer-card{animation:cardIn .35s ease both}
 @media(max-width:900px){.ft-grid{grid-template-columns:1fr 1fr;gap:30px}}
 @media(max-width:768px){
   .ft-grid{grid-template-columns:1fr}
