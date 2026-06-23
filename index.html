@@ -3920,10 +3920,14 @@ function openPerformerDetail(id){
     return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color};padding:3px 10px;font-size:.72rem">${lang==='en'?(m.labelEn||m.label):m.label}</span>`;
   }).join(' ');
   const allShows = window._SHOWS||[];
-  const names = [p.name||'',...(p.aliases||[])].map(n=>n.toLowerCase().trim()).filter(Boolean);
+  const names = [p.name||'',...(p.aliases||[])].map(n=>n.toLowerCase().trim().replace(/（[^）]*）|\([^)]*\)/g,'').trim()).filter(Boolean);
   const upcoming = allShows.filter(s=>{
-    const perfList = (s.performer||'').split(/[、,，｜|\n]/).map(x=>x.trim().replace(/（[^）]*）|\([^)]*\)/g,'').trim().toLowerCase()).filter(Boolean);
-    return names.some(n=>perfList.some(item=>item===n)) && !isExpired(s.date,s.time) && s.status!=='hidden';
+    // 先去括號備註，再用分隔符切開，避免括號內的、被誤切
+    const perfClean = (s.performer||'').replace(/（[^）]*）|\([^)]*\)/g,'');
+    const perfList = perfClean.split(/[、,，｜|\n]/).map(x=>x.trim().toLowerCase()).filter(Boolean);
+    // 別稱也先去括號再比對
+    const namesClean = names.map(n=>n.replace(/（[^）]*）|\([^)]*\)/g,'').trim()).filter(Boolean);
+    return namesClean.some(n=>perfList.some(item=>item===n)) && !isExpired(s.date,s.time) && s.status!=='hidden';
   }).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
   const showsList = upcoming.length
     ? upcoming.map(s=>`<div onclick="openShowDetail('${s.id}', true)" style="padding:8px 12px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px" onmouseover="this.style.background='var(--py)'" onmouseout="this.style.background='var(--cr)'">
