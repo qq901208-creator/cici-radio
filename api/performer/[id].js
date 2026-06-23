@@ -41,11 +41,10 @@ export default async function handler(req, res) {
     // 讀取失敗就用預設值
   }
 
-  // 判斷是否是爬蟲（爬蟲不執行 JS，一般用戶重導向到 SPA）
-  const ua = req.headers['user-agent'] || '';
-  const isCrawler = /facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|line-podcast|vkshare|googlebot|bingbot|yandex|duckduckbot|sogou|ia_archiver|facebot|outbrain|pinterest|applebot|curl|wget|python-requests/i.test(ua);
+  // 如果是明確的瀏覽器就重導向，其他都當爬蟲處理（比較保守的策略）
+  const isBrowser = /mozilla.*gecko|webkit.*chrome.*safari|webkit.*safari/i.test(ua) && !/bot|crawler|spider|preview|fetch|curl|wget|python/i.test(ua);
 
-  if (!isCrawler) {
+  if (isBrowser) {
     // 一般用戶：重導向到 SPA，讓 JS 處理
     res.writeHead(302, { Location: `${siteUrl}/#performers?performer=${id}` });
     res.end();
