@@ -2652,7 +2652,7 @@ function openShowDetail(id, skipPageSwitch) {
   const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
   if(!skipPageSwitch && activePage !== 'shows' && typeof showPage==='function') showPage('shows');
   // 更新 URL，方便分享
-  history.replaceState(null,'', location.hash.split('?')[0] + '?show=' + id);
+  history.pushState({ showId: id }, '', `/show/${id}`);
   const types = s.types || (s.type ? [s.type] : []);
   const typeTags = types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color};padding:3px 10px;font-size:.72rem">${typeLabel(t)}</span>`;}).join(' ');
   const d = new Date(s.date+'T00:00');
@@ -2680,7 +2680,7 @@ function openShowDetail(id, skipPageSwitch) {
     </table>
     <div style="margin-top:10px">
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-      <button onclick="copyShareLink()" style="padding:5px 14px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.76rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">分享演出資訊</span><span class="en-text">Share</span></button>
+      <button onclick="shareShow('${s.id}')" style="padding:5px 14px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.76rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">📤 <span class="zh-text">分享演出資訊</span><span class="en-text">Share</span></button>
       <button onclick="openStoryCard('${s.id}')" style="padding:5px 14px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.76rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">📱 <span class="zh-text">生成限動圖</span><span class="en-text">Story Card</span></button>
     </div>
     </div>
@@ -5805,6 +5805,28 @@ function updateFilterChipLabels(){
 window.addEventListener('resize', updateFilterChipLabels);
 document.addEventListener('DOMContentLoaded', updateFilterChipLabels);
 
+function shareShow(id){
+  const url = `https://cici-radio.vercel.app/show/${id}`;
+  const all = window._SHOWS || [];
+  const s = all.find(x=>x.id===id);
+  const title = s ? `${s.title} | 嘻嘻哪哩唷` : '嘻嘻哪哩唷';
+  const text = s ? `${s.date} · ${s.venueLabel||s.venue||''}` : '';
+  if(navigator.share){
+    navigator.share({ title, text, url }).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(url).then(()=>{
+      showToast('✅ 連結已複製','ok');
+    }).catch(()=>{
+      const el = document.createElement('input');
+      el.value = url; el.style.position='fixed'; el.style.opacity='0';
+      document.body.appendChild(el); el.focus(); el.select();
+      try{ document.execCommand('copy'); }catch(e){}
+      document.body.removeChild(el);
+      showToast('✅ 連結已複製','ok');
+    });
+  }
+}
+
 function sharePerformer(id){
   const url = `https://cici-radio.vercel.app/performer/${id}`;
   const all = window._PERFORMERS || [];
@@ -5854,7 +5876,7 @@ function closeModal(id){
   document.getElementById('modal-'+id).classList.remove('open');
   if(id==='show-detail'||id==='course-detail'){
     const base = location.hash.split('?')[0];
-    history.replaceState(null,'', base);
+    history.replaceState(null,'', base || '/#shows');
   }
   if(id==='performer-detail'){
     history.pushState(null,'', '/#performers');
@@ -5871,6 +5893,23 @@ function closeModal(id){
     resetMeta('og:url','https://cici-radio.vercel.app/');
   }
 }
+function initShowRouting(){
+  const pathMatch = location.pathname.match(/\/show\/(.+)/);
+  const hashMatch = location.hash.match(/[?&]show=([^&]+)/);
+  const id = pathMatch?.[1] || hashMatch?.[1];
+  if(id){
+    const tryOpen = (n=0) => {
+      const all = window._SHOWS || [];
+      if(all.find(x=>x.id===id)){
+        openShowDetail(id);
+      } else if(n < 20){
+        setTimeout(()=>tryOpen(n+1), 300);
+      }
+    };
+    tryOpen();
+  }
+}
+
 // ── 演員分享連結路由（新格式 /performer/ID，舊格式 #performers?performer=ID）──
 function initPerformerRouting(){
   const pathMatch = location.pathname.match(/\/performer\/(.+)/);
@@ -5893,7 +5932,12 @@ function initPerformerRouting(){
   }
 }
 window.addEventListener('popstate', e=>{
-  if(e.state?.performerId){
+  if(e.state?.showId){
+    const all = window._SHOWS || [];
+    if(all.find(x=>x.id===e.state.showId)){
+      openShowDetail(e.state.showId);
+    }
+  } else if(e.state?.performerId){
     const all = window._PERFORMERS || [];
     if(all.find(x=>x.id===e.state.performerId)){
       openPerformerDetail(e.state.performerId);
@@ -5901,6 +5945,7 @@ window.addEventListener('popstate', e=>{
     }
   } else {
     document.getElementById('modal-performer-detail').classList.remove('open');
+    document.getElementById('modal-show-detail').classList.remove('open');
   }
 });
 
@@ -5926,6 +5971,7 @@ function showToast(msg,type=''){
 document.addEventListener('DOMContentLoaded',()=>{
   updFbBadge();
   initPerformerRouting();
+  initShowRouting();
 });
 </script>
 
