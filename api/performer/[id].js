@@ -65,13 +65,15 @@ export default async function handler(req, res) {
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(desc)}">
   <meta property="og:image" content="${escapeHtml(img)}">
+  <meta property="og:image:width" content="630">
+  <meta property="og:image:height" content="630">
   <meta property="og:url" content="${escapeHtml(performerUrl)}">
   <meta property="og:type" content="profile">
   <meta property="og:site_name" content="嘻嘻哪哩唷">
   <meta property="og:locale" content="zh_TW">
 
   <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="${escapeHtml(title)}">
   <meta name="twitter:description" content="${escapeHtml(desc)}">
   <meta name="twitter:image" content="${escapeHtml(img)}">
