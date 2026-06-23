@@ -3932,6 +3932,28 @@ function openPerformerDetail(id){
   const p = all.find(x=>x.id===id);
   if(!p) return;
   history.pushState({ performerId: id }, '', `/performer/${id}`);
+
+  // 動態更新 OG meta tags
+  const setMeta = (prop, content, isName=false) => {
+    const sel = isName ? `meta[name="${prop}"]` : `meta[property="${prop}"]`;
+    let el = document.querySelector(sel);
+    if(!el){ el = document.createElement('meta'); el.setAttribute(isName?'name':'property', prop); document.head.appendChild(el); }
+    el.setAttribute('content', content);
+  };
+  const title = `${p.name||''} | 嘻嘻哪哩唷`;
+  const desc = p.tagline || p.bio?.slice(0,80) || '台灣喜劇演員';
+  const img = p.photoUrl || 'https://cici-radio.vercel.app/assets/ciciradio.jpg';
+  const url = `https://cici-radio.vercel.app/performer/${id}`;
+  document.title = title;
+  setMeta('og:title', title);
+  setMeta('og:description', desc);
+  setMeta('og:image', img);
+  setMeta('og:url', url);
+  setMeta('og:type', 'profile');
+  setMeta('twitter:title', title, true);
+  setMeta('twitter:description', desc, true);
+  setMeta('twitter:image', img, true);
+  setMeta('twitter:card', 'summary_large_image', true);
   const lang = getLang();
   const types = p.types||[];
   const typeTags = types.map(t=>{
@@ -5811,6 +5833,17 @@ function closeModal(id){
   }
   if(id==='performer-detail'){
     history.pushState(null,'', '/#performers');
+    // 恢復預設 OG
+    document.title = '嘻嘻哪哩唷 Cici Radio';
+    const resetMeta = (prop, content, isName=false) => {
+      const sel = isName ? `meta[name="${prop}"]` : `meta[property="${prop}"]`;
+      const el = document.querySelector(sel);
+      if(el) el.setAttribute('content', content);
+    };
+    resetMeta('og:title','嘻嘻哪哩唷 Cici Radio | 台灣喜劇資訊平台');
+    resetMeta('og:description','嘻嘻哪哩唷 Cici Radio 是台灣最完整的喜劇演出資訊平台');
+    resetMeta('og:image','https://cici-radio.vercel.app/assets/ciciradio.jpg');
+    resetMeta('og:url','https://cici-radio.vercel.app/');
   }
 }
 // ── 演員分享連結路由（新格式 /performer/ID，舊格式 #performers?performer=ID）──
@@ -5822,20 +5855,25 @@ function initPerformerRouting(){
     showPage('performers');
     const tryOpen = (n=0) => {
       const all = window._PERFORMERS || [];
-      if(all.find(x=>x.id===id)){
+      const p = all.find(x=>x.id===id);
+      if(p){
         openPerformerDetail(id);
         document.getElementById('modal-performer-detail').classList.add('open');
       } else if(n < 20){
         setTimeout(()=>tryOpen(n+1), 300);
       }
+      // 找不到就不開 modal，不顯示空白
     };
     tryOpen();
   }
 }
 window.addEventListener('popstate', e=>{
   if(e.state?.performerId){
-    openPerformerDetail(e.state.performerId);
-    document.getElementById('modal-performer-detail').classList.add('open');
+    const all = window._PERFORMERS || [];
+    if(all.find(x=>x.id===e.state.performerId)){
+      openPerformerDetail(e.state.performerId);
+      document.getElementById('modal-performer-detail').classList.add('open');
+    }
   } else {
     document.getElementById('modal-performer-detail').classList.remove('open');
   }
