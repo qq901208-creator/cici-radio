@@ -3851,7 +3851,20 @@ function renderPerformers(){
   fil.sort((a,b)=>{
     if(a.featured && !b.featured) return -1;
     if(!a.featured && b.featured) return 1;
-    return (a.name||'').localeCompare(b.name||'','zh-TW');
+    // 取個人名字（｜前方）和團體名稱（｜後方）
+    const parseName = name => {
+      const parts = (name||'').split('｜');
+      return { personal: parts[0].trim(), group: parts.length > 1 ? parts[parts.length-1].trim() : '' };
+    };
+    const na = parseName(a.name), nb = parseName(b.name);
+    // 同團體的排在一起，先比較團體名稱，再比較個人名字
+    if(na.group && nb.group && na.group === nb.group){
+      return na.personal.localeCompare(nb.personal,'zh-TW');
+    }
+    // 不同團體或無團體，按個人名字排
+    const sortKeyA = na.group || na.personal;
+    const sortKeyB = nb.group || nb.personal;
+    return sortKeyA.localeCompare(sortKeyB,'zh-TW');
   });
   if(countEl) countEl.textContent = `共 ${fil.length} 位`;
 
