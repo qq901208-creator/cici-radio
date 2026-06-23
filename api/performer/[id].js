@@ -41,11 +41,11 @@ export default async function handler(req, res) {
     // 讀取失敗就用預設值
   }
 
-  // 如果是明確的瀏覽器就重導向，其他都當爬蟲處理
+  // 如果是明確的爬蟲才回傳 OG HTML，其他都重導向
   const ua = req.headers['user-agent'] || '';
-  const isBrowser = /mozilla.*gecko|webkit.*chrome.*safari|webkit.*safari/i.test(ua) && !/bot|crawler|spider|preview|fetch|curl|wget|python|line|whatsapp|telegram|slack|discord/i.test(ua);
+  const isCrawler = /facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|googlebot|bingbot|yandex|duckduckbot|applebot|linespider/i.test(ua);
 
-  if (isBrowser) {
+  if (!isCrawler) {
     // 一般用戶：重導向到 SPA，讓 JS 處理
     res.writeHead(302, { Location: `${siteUrl}/#performers?performer=${id}` });
     res.end();
@@ -78,8 +78,8 @@ export default async function handler(req, res) {
   <meta name="twitter:description" content="${escapeHtml(desc)}">
   <meta name="twitter:image" content="${escapeHtml(img)}">
 
-  <!-- 爬蟲看完就重導向 -->
-  <meta http-equiv="refresh" content="0;url=${escapeHtml(performerUrl)}">
+  <!-- 爬蟲看完後用 JS 跳轉（不用 meta refresh 避免無限循環） -->
+  <script>window.location.replace("${escapeHtml(siteUrl)}/#performers?performer=${id}");</script>
 </head>
 <body>
   <p>正在載入 ${escapeHtml(title)}...</p>
