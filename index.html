@@ -1483,7 +1483,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <!-- ═══ MODALS ═══ -->
 
 <!-- Story Card Modal -->
-<div class="modal-ov" id="modal-story-card" style="z-index:520"><div class="modal" style="max-width:360px">
+<div class="modal-ov" id="modal-story-card" style="z-index:600"><div class="modal" style="max-width:360px">
   <button class="modal-close" onclick="closeModal('story-card')">✕</button>
   <div class="modal-title" style="font-size:.95rem"><span class="zh-text">📱 生成限動圖</span><span class="en-text">Story Card</span></div>
   <p style="font-size:.75rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:10px;line-height:1.6"><span class="zh-text">貼入海報圖片連結後點「生成圖片」，長按儲存到手機。</span><span class="en-text">Paste poster URL then generate.</span></p>
@@ -5705,17 +5705,15 @@ function openStoryCard(id){
   const imgResult = document.getElementById('sc-new-img-result');
   if(imgResult){ imgResult.style.display='none'; imgResult.innerHTML=''; }
   const btn = document.getElementById('sc-new-download-btn');
-  if(btn) btn.innerHTML = '⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span>';
+  if(btn){ btn.innerHTML = '⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span>'; btn.disabled = false; }
 
   const storyModal = document.getElementById('modal-story-card');
   storyModal.classList.remove('open');
-  storyModal.style.zIndex = '520';
+  storyModal.style.zIndex = '600';
   setTimeout(()=>{
     storyModal.classList.add('open');
   }, 50);
   switchStoryTab('ig');
-  const showDetailOv = document.getElementById('modal-show-detail');
-  if(showDetailOv) showDetailOv.style.zIndex = '505';
 }
 function toggleStoryPoster(show){
   document.getElementById('sc-poster-row').style.display = show ? 'block' : 'none';
@@ -5788,12 +5786,6 @@ function copyShareLink(url){
 
 function closeModal(id){
   document.getElementById('modal-'+id).classList.remove('open');
-  // 關閉 story-card 時恢復 show-detail 的 z-index
-  if(id==='story-card'){
-    const showDetailOv = document.getElementById('modal-show-detail');
-    if(showDetailOv) showDetailOv.style.zIndex = '510';
-  }
-  // 關閉演出/課程詳情時清除分享參數
   if(id==='show-detail'||id==='course-detail'||id==='performer-detail'){
     const base = location.hash.split('?')[0];
     history.replaceState(null,'', base);
@@ -5805,11 +5797,6 @@ document.querySelectorAll('.modal-ov').forEach(o=>{
   o.addEventListener('click', e=>{
     if(e.target === o && READ_ONLY_MODALS.includes(o.id)){
       o.classList.remove('open');
-      // story-card 關閉時恢復 show-detail z-index
-      if(o.id === 'modal-story-card'){
-        const showDetailOv = document.getElementById('modal-show-detail');
-        if(showDetailOv) showDetailOv.style.zIndex = '510';
-      }
     }
   });
   // 防止 modal 內部拖曳到背景誤觸關閉
