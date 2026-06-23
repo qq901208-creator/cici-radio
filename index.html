@@ -77,8 +77,6 @@ body.ready{visibility:visible}
 .hero{background:var(--py);padding:80px 5vw 76px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:var(--y);opacity:.38;top:-200px;right:-150px;pointer-events:none}
 .hero::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:var(--or);opacity:.09;bottom:-60px;left:-80px;pointer-events:none}
-.hero-orb1,.hero-orb2{display:none}
-.hero-noise{display:none}
 .hero-logo{width:148px;height:148px;border-radius:26px;overflow:hidden;border:4px solid rgba(239,111,32,.28);box-shadow:0 10px 44px rgba(239,111,32,.18);margin-bottom:26px;position:relative;z-index:1;background:var(--ww)}
 .hero-logo img{width:100%;height:100%;object-fit:cover;display:block}
 @media(max-width:768px){.desktop-only{display:none!important}}
@@ -672,19 +670,18 @@ body.edit .edit-bar{display:flex!important}
 .page{position:relative}
 /* 桌機版首頁左右分欄 */
 @media(min-width:900px){
-  .hero{padding:0 8vw;display:grid;grid-template-columns:1fr 420px;align-items:center;min-height:calc(100vh - var(--nav));text-align:left;gap:40px}
-  .hero-left{padding:60px 0;display:contents}
-  .hero-logo{grid-column:2;grid-row:1/9;margin-bottom:0;width:220px;height:220px;border-radius:32px;align-self:center;justify-self:center}
-  .hero-tag{grid-column:1;margin-bottom:14px;padding-left:0;justify-self:start}
-  .hero-h1{grid-column:1;font-size:clamp(2.8rem,4.5vw,4.2rem);margin-bottom:10px}
-  .hero-sub{grid-column:1;margin-bottom:14px}
-  .hero-desc{grid-column:1;margin-bottom:24px;text-align:left;max-width:480px}
+  .hero{padding:0;display:grid;grid-template-columns:1fr auto;align-items:center;min-height:calc(100vh - var(--nav));text-align:left}
+  .hero-left{padding:60px 6vw;display:contents}
+  .hero-logo{grid-column:2;grid-row:1/8;margin-bottom:0;width:220px;height:220px;border-radius:32px;align-self:center;margin-right:6vw}
+  .hero-tag{grid-column:1;margin-bottom:12px}
+  .hero-h1{grid-column:1;font-size:clamp(2.8rem,4vw,4rem);margin-bottom:8px}
+  .hero-sub{grid-column:1;margin-bottom:12px}
+  .hero-desc{grid-column:1;margin-bottom:20px;text-align:left}
   .hero-ctas{grid-column:1;justify-content:flex-start;flex-wrap:wrap}
-  .hero-stats{grid-column:1;margin-top:28px;justify-content:flex-start;overflow-x:visible;flex-wrap:wrap;gap:10px}
+  .hero-stats{grid-column:1;margin-top:24px;justify-content:flex-start;overflow-x:visible;flex-wrap:wrap;gap:8px}
   .hero-next{grid-column:1;text-align:left}
   .scroll-hint{display:none}
   .hero>a[href="https://forms.gle/vUC6DU83kGpdJyUF9"]{grid-column:1}
-  .hero-noise,.hero-orb1,.hero-orb2{grid-column:1/3}
 }
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .45s ease,transform .45s ease}
 .reveal.revealed{opacity:1;transform:translateY(0)}
@@ -810,11 +807,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <!-- HOME -->
 <div class="page" id="page-home">
   <section class="hero" style="padding:80px 5vw 76px">
-    <div class="hero-noise"></div>
-    <div class="hero-orb1"></div>
-    <div class="hero-orb2"></div>
     <div class="hero-logo" style="grid-column:2;grid-row:1/9"><img src="/assets/ciciradio.jpg" alt="嘻嘻哪哩唷"></div>
-    <div class="hero-tag" style="align-self:flex-start;width:fit-content">
+    <div class="hero-tag" style="width:fit-content">
       <span class="zh-text">台灣現場喜劇演出資訊整理</span>
       <span class="en-text">Taiwan Comedy Show Guide</span>
     </div>
