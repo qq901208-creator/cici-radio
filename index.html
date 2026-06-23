@@ -5884,7 +5884,7 @@ const READ_ONLY_MODALS = ['modal-show-detail','modal-course-detail','modal-venue
 document.querySelectorAll('.modal-ov').forEach(o=>{
   o.addEventListener('click', e=>{
     if(e.target === o && READ_ONLY_MODALS.includes(o.id)){
-      o.classList.remove('open');
+      closeModal(o.id.replace('modal-',''));
     }
   });
   // 防止 modal 內部拖曳到背景誤觸關閉
