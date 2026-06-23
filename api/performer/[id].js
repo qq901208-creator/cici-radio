@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       const photoUrl = fields.photoUrl?.stringValue || '';
 
       if (name) {
-        title = `${name} | 嘻嘻哪哩唷`;
+        title = `${name} | 嘻嘻哪哩唷 台灣喜劇演出資訊站`;
         desc = tagline || bio?.slice(0, 100) || defaultDesc;
         img = photoUrl || defaultImg;
       }
