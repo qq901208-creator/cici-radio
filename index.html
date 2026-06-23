@@ -4035,14 +4035,17 @@ function openPerformerDetail(id){
       }).join('');
       return `<div class="pf-troupe-mobile" style="padding:8px 0 12px;border-bottom:1px solid rgba(45,43,31,.08);margin-bottom:12px"><div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);letter-spacing:.05em;margin-bottom:5px">所屬團體</div>${troupeRows}</div>`;
     })():''}
-    ${p.tagline?`<p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin-bottom:10px">${p.tagline}</p>`:''}
+    ${p.tagline?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <p style="font-size:.9rem;font-weight:600;font-family:var(--f-zh);color:var(--ts);margin:0;flex:1">${p.tagline}</p>
+      <button onclick="sharePerformer('${p.id}')" style="flex-shrink:0;padding:5px 10px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.15);background:transparent;font-size:.72rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.15)';this.style.color='var(--ts)'">📤 分享</button>
+    </div>`:`<div style="margin-bottom:10px;text-align:right"><button onclick="sharePerformer('${p.id}')" style="padding:5px 10px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.15);background:transparent;font-size:.72rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:4px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.15)';this.style.color='var(--ts)'">📤 分享</button></div>`}
     ${venueDisplay?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px;overflow-wrap:break-word">常出沒場地<br><span style="font-weight:600;color:var(--tm)">${venueDisplay}</span></div>`:''}
     ${p.style?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:12px">風格<br><span style="font-weight:600;color:var(--tm)">${p.style}</span></div>`:''}
     ${p.bio?`<p class="sd-desc">${p.bio}</p>`:''}
     ${p.photoCredit?`<div style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.6;margin-bottom:12px">📷 ${p.photoCredit}</div>`:''}
     ${upcoming.length?`<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>${showsList}</div>`:''}
     <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(45,43,31,.08)">
-      <button onclick="copyShareLink(location.href)" style="padding:10px 0;width:100%;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.82rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">🔗 <span class="zh-text">分享演員資訊</span><span class="en-text">Share</span></button>
+      <button onclick="sharePerformer('${p.id}')" style="padding:10px 0;width:100%;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.82rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">📤 <span class="zh-text">分享演員資訊</span><span class="en-text">Share</span></button>
     </div>
   `;
   document.getElementById('modal-performer-detail').classList.add('open');
@@ -5801,6 +5804,28 @@ function updateFilterChipLabels(){
 }
 window.addEventListener('resize', updateFilterChipLabels);
 document.addEventListener('DOMContentLoaded', updateFilterChipLabels);
+
+function sharePerformer(id){
+  const url = `https://cici-radio.vercel.app/performer/${id}`;
+  const all = window._PERFORMERS || [];
+  const p = all.find(x=>x.id===id);
+  const title = p ? `${p.name} | 嘻嘻哪哩唷` : '嘻嘻哪哩唷';
+  const text = p?.tagline || '';
+  if(navigator.share){
+    navigator.share({ title, text, url }).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(url).then(()=>{
+      showToast('✅ 連結已複製','ok');
+    }).catch(()=>{
+      const el = document.createElement('input');
+      el.value = url; el.style.position='fixed'; el.style.opacity='0';
+      document.body.appendChild(el); el.focus(); el.select();
+      try{ document.execCommand('copy'); }catch(e){}
+      document.body.removeChild(el);
+      showToast('✅ 連結已複製','ok');
+    });
+  }
+}
 
 function copyShareLink(url){
   url = url || location.href;
