@@ -919,6 +919,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="type" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
         <button class="chip" data-f="type" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
         <button class="chip" data-f="type" data-v="sketch"><span class="zh-text">素描短劇</span><span class="en-text">Sketch</span></button>
+        <button class="chip" data-f="type" data-v="konto"><span class="zh-text">短劇 コント</span><span class="en-text">Konto</span></button>
         <button class="chip" data-f="type" data-v="mancai"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></button>
         <button class="chip" data-f="type" data-v="crosstalk"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></button>
         <button class="chip" data-f="type" data-v="rakugo"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></button>
@@ -1096,6 +1097,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <option value="mancai">漫才</option>
         <option value="musicom">音樂喜劇</option>
         <option value="sketch">素描短劇</option>
+        <option value="konto">短劇 コント</option>
         <option value="crosstalk">相聲</option>
         <option value="rakugo">落語</option>
         <option value="ogiri">大喜利</option>
@@ -1133,6 +1135,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="mancai" style="accent-color:var(--or)"> 漫才</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="musicom" style="accent-color:var(--or)"> 音樂喜劇</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="sketch" style="accent-color:var(--or)"> 素描短劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="konto" style="accent-color:var(--or)"> 短劇 コント</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="crosstalk" style="accent-color:var(--or)"> 相聲</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="rakugo" style="accent-color:var(--or)"> 落語</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ogiri" style="accent-color:var(--or)"> 大喜利</label>
@@ -1627,6 +1630,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <label class="type-cb-lbl"><input type="checkbox" value="standup" onchange="syncCB(this)"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="improv" onchange="syncCB(this)"><span class="zh-text">即興</span><span class="en-text">Improv</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="sketch" onchange="syncCB(this)"><span class="zh-text">素描短劇</span><span class="en-text">Sketch</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="konto" onchange="syncCB(this)"><span class="zh-text">短劇 コント</span><span class="en-text">Konto</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="mancai" onchange="syncCB(this)"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="crosstalk" onchange="syncCB(this)"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="rakugo" onchange="syncCB(this)"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></label>
@@ -1852,6 +1856,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <option value="standup">站立喜劇 Stand-up</option>
         <option value="improv">即興 Improv</option>
         <option value="sketch">短劇 Sketch</option>
+        <option value="konto">短劇 コント Konto</option>
         <option value="mancai">漫才 Mancai</option>
         <option value="crosstalk">相聲 Crosstalk</option>
         <option value="rakugo">落語 Rakugo</option>
@@ -2255,6 +2260,7 @@ const TYPE_META = {
   standup:  {bg:'#ffd6b3',color:'#7a2e00',  label:'站立喜劇',   labelEn:'Stand-up Comedy'},
   improv:   {bg:'#b8f0d0',color:'#0d5c30',  label:'即興',       labelEn:'Improv'},
   sketch:   {bg:'#ffe0b3',color:'#7a4000',  label:'素描短劇',   labelEn:'Sketch'},
+  konto:    {bg:'#fce8d0',color:'#6e2800',  label:'短劇 コント', labelEn:'Konto'},
   mancai:   {bg:'#c8d8ff',color:'#1a2e8c',  label:'漫才',       labelEn:'Mancai'},
   crosstalk:{bg:'#ffd6e8',color:'#8c0038',  label:'相聲',       labelEn:'Crosstalk'},
   rakugo:   {bg:'#e8d5f5',color:'#4a1a6e',  label:'落語',       labelEn:'Rakugo'},
