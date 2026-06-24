@@ -808,7 +808,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <div class="page" id="page-home">
   <section class="hero" style="padding:80px 5vw 76px">
     <div class="hero-logo" style="grid-column:2;grid-row:1/9"><img src="/assets/ciciradio.jpg" alt="嘻嘻哪哩唷"></div>
-    <div class="hero-tag" style="width:fit-content">
+    <div class="hero-tag">
       <span class="zh-text">台灣現場喜劇演出資訊整理</span>
       <span class="en-text">Taiwan Comedy Show Guide</span>
     </div>
@@ -841,7 +841,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <span class="en-text">Performers</span>
       </a>
     </div>
-    <a href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener" style="display:inline-flex;width:fit-content;align-items:center;gap:6px;margin-top:4px;padding:7px 16px;background:rgba(45,43,31,.07);border-radius:var(--r-pill);font-size:.78rem;font-family:var(--f-zh);color:var(--ts);text-decoration:none;transition:background .15s;position:relative;z-index:1" onmouseover="this.style.background='rgba(45,43,31,.13)'" onmouseout="this.style.background='rgba(45,43,31,.07)'">🎭 <span class="zh-text">演員資料新增申請表單，歡迎填寫加入喔！</span><span class="en-text">Performer profile application — apply to join the directory!</span></a>
+    <a href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:4px;padding:7px 16px;background:rgba(45,43,31,.07);border-radius:var(--r-pill);font-size:.78rem;font-family:var(--f-zh);color:var(--ts);text-decoration:none;transition:background .15s;position:relative;z-index:1" onmouseover="this.style.background='rgba(45,43,31,.13)'" onmouseout="this.style.background='rgba(45,43,31,.07)'">🎭 <span class="zh-text">演員資料新增申請表單，歡迎填寫加入喔！</span><span class="en-text">Performer profile application — apply to join the directory!</span></a>
     <!-- 數字統計列 -->
     <div class="hero-stats" id="hero-stats">
       <div class="hero-stat"><span class="hero-stat-num" id="stat-shows">—</span><span class="hero-stat-lbl"><span class="zh-text">近一個月演出</span><span class="en-text">Shows (30 days)</span></span></div>
@@ -1112,7 +1112,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <div class="page" id="page-performers">
   <section class="sec" style="background:#f6efcf">
     <div class="sec-label"><span class="zh-text">認識他們</span><span class="en-text">Meet the Comedians</span></div>
-    <h2 class="sec-title"><span class="zh-text">現場喜劇演員資料庫 <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">新功能更新中</span></span><span class="en-text">Performer Directory <span style="font-size:.6em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo)">New</span></span></h2>
+    <h2 class="sec-title"><span class="zh-text">現場喜劇演員資料庫 <span style="font-size:.5em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo);white-space:nowrap;display:inline-block">新功能更新中</span></span><span class="en-text">Performer Directory <span style="font-size:.5em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo);white-space:nowrap;display:inline-block">New</span></span></h2>
     <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem"><span class="zh-text">發現資訊錯誤或想放上自己的資料嗎？歡迎填寫表單！</span></a></span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found an error or want to add yourself? Let us know →</a></span></p>
     <p style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-bottom:16px;margin-top:4px;opacity:.7"><span class="zh-text">本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義❤️‍🔥</span><span class="en-text">Sorted by stroke order / alphabet — the order means nothing ❤️‍🔥</span></p>
     <!-- 篩選列 -->
@@ -4030,7 +4030,7 @@ function openPerformerDetail(id){
     p.showVideo3 ? `<a href="${safeUrl(p.showVideo3)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap"><span class="zh-text">專場影片 3</span><span class="en-text">Special Show 3</span></a>` : '',
     ...(p.extraLinks||[]).map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'Linktree',portaly:'Portaly',other:'其他連結'}[l.type]||l.type}</a>`),
   ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
-  const shareBtn = `<span style="color:var(--ts);margin:0 6px">·</span><button onclick="sharePerformer('${p.id}')" style="padding:3px 9px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.15);background:transparent;font-size:.75rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:3px;vertical-align:middle" class="desktop-only" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.15)';this.style.color='var(--ts)'">↗ 分享</button>`;
+  const shareBtn = `<span class="desktop-only" style="color:var(--ts);margin:0 6px">·</span><button onclick="sharePerformer('${p.id}')" style="padding:3px 9px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.15);background:transparent;font-size:.75rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:3px;vertical-align:middle" class="desktop-only" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.15)';this.style.color='var(--ts)'">↗ 分享</button>`;
   const heroAvatar = p.photoUrl
     ? `<img src="${p.photoUrl}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:2px solid rgba(45,43,31,.1);flex-shrink:0">`
     : `<div style="width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:3.2rem;color:#fff;font-weight:700;flex-shrink:0">${(p.name||'?')[0]}</div>`;
