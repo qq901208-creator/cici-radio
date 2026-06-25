@@ -852,6 +852,12 @@ body.edit .edit-bar{display:flex!important}
   .hero-stats-bar{flex-wrap:wrap;gap:8px;padding:14px 16px;margin:0 4vw;border-radius:var(--r-xl);box-shadow:0 4px 16px rgba(45,43,31,.06)}
   .hst-item{flex:0 0 calc(50% - 8px);border-right:none;padding:0;gap:6px}
   .hst-cta{flex:0 0 100%;justify-content:center;padding:10px 20px}
+  .hst-num{font-size:.95rem}
+  .hst-lbl{font-size:.62rem}
+  .hst-icon{width:26px;height:26px;font-size:.72rem}
+  /* 手機版最近演出：用演出卡片，桌機用條列 */
+  #home-upcoming-list .shows-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:0}
+  #home-upcoming-list .show-card{flex-direction:row;border-radius:var(--r-lg)!important;border:1.5px solid rgba(45,43,31,.09)!important;box-shadow:none!important;align-items:stretch}
   /* home-mid mobile：強制單欄全寬 */
   .home-mid{display:block!important;padding:12px 4vw 24px;width:100%;box-sizing:border-box}
   .home-quick-nav{width:100%;box-sizing:border-box;margin-bottom:10px}
@@ -3338,6 +3344,11 @@ function renderHomeUpcoming() {
   const el = document.getElementById('home-upcoming-list');
   if (!el) return;
   const shows = window._SHOWS || SHOWS || [];
+  const lang = getLang();
+  const isMobile = window.innerWidth <= 768;
+
+  const DOW_ZH = ['日','一','二','三','四','五','六'];
+  const DOW_EN = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 
   const upcoming = shows
     .filter(s => (s.status || 'published') === 'published' && !isExpired(s.date, s.time))
@@ -3352,12 +3363,43 @@ function renderHomeUpcoming() {
     return;
   }
 
-  el.innerHTML = `<div class="shows-grid">${upcoming.map(showCardHTML).join('')}</div>`;
-  // 首頁點擊卡片不切換到演出頁
-  el.querySelectorAll('.show-card').forEach(card => {
-    const id = card.dataset.id;
-    if(id) card.onclick = (e) => { e.stopPropagation(); openShowDetail(id, true); };
-  });
+  if (isMobile) {
+    // 手機：用演出頁卡片
+    el.innerHTML = `<div class="shows-grid">${upcoming.map(showCardHTML).join('')}</div>`;
+    el.querySelectorAll('.show-card').forEach(card => {
+      const id = card.dataset.id;
+      if(id) card.onclick = (e) => { e.stopPropagation(); openShowDetail(id, true); };
+    });
+  } else {
+    // 桌機：條列
+    el.innerHTML = upcoming.map(s => {
+      const rawDate = String(s.date || '').split(',')[0].trim().replace(/\//g, '-');
+      const d = new Date(rawDate + 'T00:00');
+      const isValidDate = !isNaN(d);
+      const mm = isValidDate ? String(d.getMonth() + 1).padStart(2, '0') : '--';
+      const dd = isValidDate ? String(d.getDate()).padStart(2, '0') : '--';
+      const dow = isValidDate ? (lang === 'en' ? DOW_EN[d.getDay()] : DOW_ZH[d.getDay()]) : '';
+      const types = Array.isArray(s.types) ? s.types : (s.type ? [s.type] : ['other']);
+      const firstType = types[0] || 'other';
+      const meta = TYPE_META[firstType] || TYPE_META.other;
+      const tagLabel = lang === 'en' ? meta.labelEn : meta.label;
+      const emojiMap = {opmic:'🎤',standup:'🎭',improv:'🎪',sketch:'🎬',mancai:'🥢',musicom:'🎵',english:'🌏'};
+      const thumbEmoji = emojiMap[firstType] || '🎭';
+      const venue = getShowVenueLabelById(s.venue) || s.venue || '';
+      const time = s.time || '';
+      return `<div class="home-show-row" onclick="openShowDetail('${s.id}', true)" style="cursor:pointer">
+        <div class="home-show-date-block"><div class="md">${mm}/${dd}</div><div class="wd">${dow}</div></div>
+        <div class="home-show-thumb">${(s.image && s.image.trim())
+          ? `<img src="${s.image.trim()}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
+          : `<span style="font-size:1.4rem">${thumbEmoji}</span>`}</div>
+        <div class="home-show-info">
+          <div class="home-show-title">${s.title || ''}</div>
+          <div class="home-show-meta">${time ? '⏰ ' + time + ' &nbsp;' : ''}${venue ? '📍 ' + venue : ''}</div>
+        </div>
+        <div class="home-show-tag" style="background:${meta.bg};color:${meta.color}">${tagLabel}</div>
+      </div>`;
+    }).join('');
+  }
 }
 
 // ── COURSES ──
