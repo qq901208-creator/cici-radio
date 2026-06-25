@@ -62,7 +62,7 @@ body.ready{visibility:visible}
 .s-dot{width:6px;height:6px;border-radius:50%;background:#2ecc71}
 
 /* PAGES */
-.page{display:none;padding-top:var(--nav);min-height:100vh}
+.page{display:none;padding-top:var(--nav);min-height:100vh;overflow-x:hidden}
 .page.active{display:block}
 
 /* SECTION */
@@ -74,30 +74,127 @@ body.ready{visibility:visible}
 #page-opmic .sec-desc{max-width:780px}
 
 /* HERO */
-.hero{background:var(--py);padding:80px 5vw 76px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:var(--y);opacity:.38;top:-200px;right:-150px;pointer-events:none}
-.hero::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:var(--or);opacity:.09;bottom:-60px;left:-80px;pointer-events:none}
-.hero-logo{width:148px;height:148px;border-radius:26px;overflow:hidden;border:4px solid rgba(239,111,32,.28);box-shadow:0 10px 44px rgba(239,111,32,.18);margin-bottom:26px;position:relative;z-index:1;background:var(--ww)}
-.hero-logo img{width:100%;height:100%;object-fit:cover;display:block}
-@media(max-width:768px){.desktop-only{display:none!important}}
-.hero-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(239,111,32,.11);border:1.5px solid rgba(239,111,32,.26);color:var(--or);font-size:.74rem;font-weight:600;padding:5px 16px;border-radius:var(--r-pill);margin-bottom:18px;font-family:var(--f-zh);position:relative;z-index:1}
-.hero-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--or);animation:pulse 2s infinite}
+.hero{background:var(--py);padding:20px 6vw 18px;display:block;position:relative;overflow:hidden}
+.hero::before{display:none}
+.hero::after{display:none}
+/* 右側幾何裝飾 SVG */
+.hero-deco{position:absolute;top:0;right:0;bottom:0;width:55%;pointer-events:none;z-index:0;opacity:1}
+.hero-left{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+.hero-right{display:none}
+.hero-logo{display:none}
+.hero-tag{display:none}
+.hero-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--or);animation:pulse 2s infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.6)}}
-.hero-h1{font-family:var(--f-zh);font-weight:900;font-size:clamp(2.4rem,6.5vw,4.6rem);color:var(--sd);line-height:1.08;letter-spacing:-.03em;margin-bottom:8px;position:relative;z-index:1}
+.hero-h1{font-family:var(--f-zh);font-weight:900;font-size:clamp(2.6rem,4.2vw,3.8rem);color:var(--sd);line-height:1.04;letter-spacing:-.03em;margin-bottom:10px}
 .hero-h1 .hl{color:var(--or);position:relative;display:inline-block}
-.hero-h1 .hl::after{content:'';position:absolute;bottom:3px;left:0;right:0;height:7px;background:var(--y);border-radius:3px;z-index:-1}
-.hero-sub{font-family:var(--f-di);font-size:clamp(.85rem,2vw,1.1rem);color:var(--ts);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;position:relative;z-index:1}
-.hero-desc{max-width:500px;font-size:.97rem;color:var(--ts);line-height:1.78;margin-bottom:40px;font-family:var(--f-zh);position:relative;z-index:1}
-.btn-or{padding:12px 26px;background:var(--or);color:#fff;font-weight:700;font-size:.9rem;border:none;border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh);display:inline-flex;align-items:center;gap:7px;box-shadow:0 4px 18px rgba(239,111,32,.32)}
+.hero-h1 .hl::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:5px;background:var(--y);border-radius:3px;z-index:-1}
+.hero-sub{display:none}
+.hero-platform{font-family:var(--f-zh);font-size:1.1rem;color:var(--sd);font-weight:800;margin-bottom:6px;letter-spacing:.01em}
+.hero-desc{font-size:.95rem;color:var(--ts);line-height:1.8;margin-bottom:16px;font-family:var(--f-zh);opacity:.85}
+.hero-ctas{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hero-browse-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:var(--or);color:#fff;font-weight:700;font-size:.82rem;border:none;border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh);box-shadow:0 4px 14px rgba(239,111,32,.28)}
+.hero-browse-btn:hover{background:#d45c10;transform:translateY(-2px)}
+.hero-quick-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;background:#fff;color:var(--sd);font-weight:600;font-size:.82rem;border:2px solid rgba(45,43,31,.13);border-radius:var(--r-pill);cursor:pointer;font-family:var(--f-zh);transition:all .15s}
+.hero-quick-btn:hover{border-color:var(--or);color:var(--or)}
+.hero-quick-btn svg{width:13px;height:13px;flex-shrink:0}
+.hero-next{font-size:.72rem;font-family:var(--f-zh);color:var(--ts);margin-top:8px;cursor:pointer;opacity:.85}
+.hero-next:hover{opacity:1;color:var(--or)}
+.hero-next strong{color:var(--or);font-weight:700}
+.hero-mic-wrap{display:none}
+.hero-speech-bubble{display:none}
+/* STATS BAR */
+.hero-stats-bar{background:#fff;border-radius:var(--r-xl);padding:10px 20px;display:flex;align-items:center;gap:0;box-shadow:0 4px 16px rgba(45,43,31,.07);margin:10px 5vw 0}
+.hst-item{flex:1;display:flex;align-items:center;gap:8px;padding:0 12px;border-right:1.5px solid rgba(45,43,31,.08)}
+.hst-item:first-child{padding-left:4px}
+.hst-item:last-child{border-right:none}
+.hst-icon{width:32px;height:32px;border-radius:50%;background:var(--py);display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0}
+.hst-num{font-size:1.3rem;font-weight:900;font-family:var(--f-bo);color:var(--sd);line-height:1}
+.hst-lbl{font-size:.6rem;color:var(--ts);font-family:var(--f-zh);margin-top:1px}
+.hst-cta{flex:0 0 auto;margin-left:10px;display:flex;align-items:center;gap:7px;padding:7px 12px;background:var(--py);border-radius:10px;text-decoration:none;cursor:pointer;border:none;transition:background .15s}
+.hst-cta:hover{background:var(--y)}
+.hst-cta-icon{font-size:1rem;flex-shrink:0}
+.hst-cta-txt{font-family:var(--f-zh);font-size:.62rem;font-weight:600;color:var(--or);line-height:1.3}
+.hst-cta-arr{font-size:.85rem;color:var(--or);font-weight:700;flex-shrink:0}
+/* HOME MID — 快速前往 + 最近演出 */
+.home-mid{display:grid;grid-template-columns:1fr 1.75fr;gap:10px;padding:10px 5vw 12px}
+.home-quick-nav{background:#fff;border-radius:var(--r-xl);padding:12px 14px;box-shadow:0 4px 16px rgba(45,43,31,.06)}
+.home-quick-nav h3{font-family:var(--f-zh);font-weight:900;font-size:.84rem;color:var(--sd);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.home-quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.home-quick-card{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;transition:background .15s,transform .15s;border:none;font-family:var(--f-zh)}
+.home-quick-card:hover{background:var(--py);transform:translateY(-2px)}
+.qc-icon{width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:.9rem;box-shadow:0 2px 6px rgba(45,43,31,.08)}
+.qc-title{font-size:.7rem;font-weight:700;color:var(--sd);text-align:center}
+.qc-sub{font-size:.58rem;color:var(--ts)}
+.home-upcoming{background:#fff;border-radius:var(--r-xl);padding:12px 14px;box-shadow:0 4px 16px rgba(45,43,31,.06);display:flex;flex-direction:column}
+.home-upcoming-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.home-upcoming-header h3{font-family:var(--f-zh);font-weight:900;font-size:.84rem;color:var(--sd)}
+.home-upcoming-more{font-size:.68rem;color:var(--or);font-weight:600;cursor:pointer;text-decoration:none;font-family:var(--f-zh)}
+.home-show-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(45,43,31,.06);cursor:pointer;border-radius:6px;transition:background .1s}
+.home-show-row:last-child{border-bottom:none;padding-bottom:0}
+.home-show-row:hover{background:rgba(45,43,31,.025);margin:0 -6px;padding:5px 6px}
+.home-show-date-block{width:40px;flex-shrink:0;background:var(--py);border-radius:7px;padding:4px 2px;text-align:center}
+.home-show-date-block .md{font-size:.66rem;font-weight:900;font-family:var(--f-bo);color:var(--or);line-height:1}
+.home-show-date-block .wd{font-size:.5rem;font-weight:700;font-family:var(--f-bo);color:var(--ts);text-transform:uppercase;margin-top:1px}
+.home-show-thumb{width:72px;aspect-ratio:4/3;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--py);display:flex;align-items:center;justify-content:center;font-size:1.4rem;position:relative}
+.home-show-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#fff}
+.home-show-info{flex:1;min-width:0}
+.home-show-title{font-size:.76rem;font-weight:700;color:var(--sd);font-family:var(--f-zh);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-show-meta{font-size:.62rem;color:var(--ts);font-family:var(--f-zh);margin-top:1px}
+.home-show-tag{flex-shrink:0;font-size:.58rem;font-weight:700;padding:2px 6px;border-radius:var(--r-pill);font-family:var(--f-zh);white-space:nowrap}
+/* btn-or/btn-ww */
+.btn-or{padding:11px 24px;background:var(--or);color:#fff;font-weight:700;font-size:.88rem;border:none;border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh);display:inline-flex;align-items:center;gap:7px;box-shadow:0 4px 16px rgba(239,111,32,.30)}
 .btn-or:hover{background:#d45c10;transform:translateY(-2px)}
-.btn-ww{padding:11px 24px;background:var(--ww);color:var(--sd);font-weight:600;font-size:.9rem;border:2px solid rgba(45,43,31,.14);border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh)}
+.btn-ww{padding:10px 22px;background:var(--ww);color:var(--sd);font-weight:600;font-size:.88rem;border:2px solid rgba(45,43,31,.14);border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh)}
 .btn-ww:hover{border-color:var(--or);color:var(--or);transform:translateY(-2px)}
-.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
-/* 桌機顯示完整文字，手機顯示縮短文字 */
 .mob-text{display:none}
 .desk-text{display:inline}
-.scroll-hint{margin-top:52px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--ts);font-size:.7rem;font-family:var(--f-bo);animation:bob 2s infinite;opacity:.55;position:relative;z-index:1}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+.scroll-hint{display:none}
+/* HOME PODCAST */
+.home-podcast-sec{background:var(--py);padding:40px 5vw 44px}
+.home-podcast-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;max-width:1100px;margin:0 auto}
+.home-pod-eyebrow{font-family:var(--f-zh);font-size:.78rem;font-weight:700;color:var(--ts);letter-spacing:.04em;margin-bottom:10px}
+.home-pod-title{font-family:var(--f-zh);font-weight:900;font-size:1.55rem;color:var(--sd);line-height:1.25;margin-bottom:14px}
+.home-pod-desc{font-family:var(--f-zh);font-size:.88rem;color:var(--ts);line-height:1.75;margin-bottom:22px}
+.home-pod-btns{display:flex;gap:8px;flex-wrap:wrap}
+.home-pod-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r-pill);font-size:.8rem;font-weight:700;font-family:var(--f-bo);text-decoration:none;transition:all .15s;border:none;cursor:pointer}
+.home-pod-btn--spotify{background:#1db954;color:#fff}
+.home-pod-btn--spotify:hover{background:#17a349;transform:translateY(-2px)}
+.home-pod-btn--apple{background:#9933cc;color:#fff}
+.home-pod-btn--apple:hover{background:#7a28a8;transform:translateY(-2px)}
+.home-pod-btn--soundon{background:#ff6b35;color:#fff}
+.home-pod-btn--soundon:hover{background:#e05520;transform:translateY(-2px)}
+.home-podcast-player{border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(45,43,31,.12)}
+@media(max-width:860px){
+  .home-podcast-inner{grid-template-columns:1fr;gap:24px}
+  .home-podcast-player{display:none}
+}
+/* HOME BOARD */
+.home-board-sec{background:#fff;padding:40px 5vw 44px}
+.home-board-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;max-width:1100px;margin-left:auto;margin-right:auto}
+.home-board-more-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 18px;background:var(--py);border-radius:var(--r-pill);font-size:.8rem;font-weight:700;font-family:var(--f-zh);color:var(--or);border:none;cursor:pointer;transition:background .15s;white-space:nowrap}
+.home-board-more-btn:hover{background:var(--y)}
+.home-board-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;max-width:1100px;margin:0 auto 24px}
+.home-board-grid .fp-item{background:var(--cr);border-radius:var(--r-lg)!important;padding:16px 18px;border-bottom:none!important;display:flex;flex-direction:column;height:100%}
+.home-board-cta{text-align:center;max-width:1100px;margin:0 auto}
+/* BOARD comment card (used in home grid too) */
+.fp-card{background:var(--cr);border-radius:var(--r-lg);padding:18px 20px;display:flex;flex-direction:column;gap:10px;border:1.5px solid rgba(45,43,31,.06)}
+.fp-card-header{display:flex;align-items:center;gap:10px}
+.fp-card-av{width:38px;height:38px;border-radius:50%;background:var(--py);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;font-weight:700;font-family:var(--f-bo);color:var(--or)}
+.fp-card-name{font-family:var(--f-zh);font-size:.84rem;font-weight:700;color:var(--sd)}
+.fp-card-date{font-size:.68rem;color:var(--ts)}
+.fp-card-stars{color:#f5a623;font-size:.88rem;letter-spacing:1px}
+.fp-card-body{font-family:var(--f-zh);font-size:.84rem;color:var(--tm);line-height:1.68}
+/* 最新消息跑馬燈 */
+.home-ticker{display:flex;align-items:center;gap:0;background:var(--or);padding:9px 5vw;overflow:hidden}
+.home-ticker-label{display:flex;align-items:center;gap:6px;font-family:var(--f-zh);font-size:.78rem;font-weight:700;color:#fff;white-space:nowrap;padding-right:16px;border-right:1.5px solid rgba(255,255,255,.3);margin-right:16px;flex-shrink:0}
+.home-ticker-track-wrap{flex:1;overflow:hidden;position:relative}
+.home-ticker-track{display:flex;gap:0;white-space:nowrap;animation:ticker-scroll 28s linear infinite}
+.home-ticker-track:hover{animation-play-state:paused}
+.home-ticker-item{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-zh);font-size:.78rem;color:#fff;font-weight:500;padding-right:48px;cursor:pointer}
+.home-ticker-item:hover{text-decoration:underline;text-underline-offset:2px}
+.home-ticker-sep{color:rgba(255,255,255,.5);padding-right:48px;font-size:.8rem}
+.home-ticker-loading{font-family:var(--f-zh);font-size:.78rem;color:rgba(255,255,255,.7)}
+@keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* FEAT CARDS */
 .feat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
@@ -121,7 +218,83 @@ body.ready{visibility:visible}
 
 /* SHOWS */
 .filter-section{margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
-/* ── INFO BANNER ── */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);width:2.6em;min-width:2.6em;flex-shrink:0;white-space:nowrap}
+.filter-row-indent{display:flex;align-items:flex-start;gap:0}
+.filter-row-indent .filter-lbl{padding-top:5px;margin-right:6px}
+.filter-chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.chip{padding:5px 14px;font-size:.76rem;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.14);background:#fff;color:var(--ts);cursor:pointer;font-family:var(--f-zh);transition:all .14s;white-space:nowrap;font-weight:500}
+.chip:hover{border-color:var(--sd);color:var(--sd)}
+.chip.on{background:var(--sd);color:#fff;border-color:var(--sd);font-weight:700}
+/* 類型 chip 各自顏色（active 時）— 對齊 TYPE_META */
+.chip[data-v="opmic"].on{background:#5e4200;border-color:#5e4200;color:#fff3a0}
+.chip[data-v="standup"].on{background:#7a2e00;border-color:#7a2e00;color:#ffd6b3}
+.chip[data-v="improv"].on{background:#0d5c30;border-color:#0d5c30;color:#b8f0d0}
+.chip[data-v="sketch"].on{background:#7a4000;border-color:#7a4000;color:#ffe0b3}
+.chip[data-v="konto"].on{background:#6e2800;border-color:#6e2800;color:#fce8d0}
+.chip[data-v="mancai"].on{background:#1a2e8c;border-color:#1a2e8c;color:#c8d8ff}
+.chip[data-v="crosstalk"].on{background:#8c0038;border-color:#8c0038;color:#ffd6e8}
+.chip[data-v="rakugo"].on{background:#4a1a6e;border-color:#4a1a6e;color:#e8d5f5}
+.chip[data-v="musicom"].on{background:#6e0062;border-color:#6e0062;color:#f5d0f0}
+.chip[data-v="mixed"].on{background:#2a3ba0;border-color:#2a3ba0;color:#dce8ff}
+.chip[data-v="special"].on{background:#1a5c1a;border-color:#1a5c1a;color:#d4f5d4}
+.chip[data-v="english"].on{background:#0a4878;border-color:#0a4878;color:#d4eeff}
+.chip[data-v="ogiri"].on{background:#0a4a5e;border-color:#0a4a5e;color:#d0f0f8}
+.chip[data-v="gameshow"].on{background:#5e4a00;border-color:#5e4a00;color:#fff0b3}
+.chip[data-v="podcast"].on{background:#0a3860;border-color:#0a3860;color:#c8e8ff}
+.chip[data-v="spevent"].on{background:#3a1e8c;border-color:#3a1e8c;color:#ddd8f8}
+.chip[data-v="other"].on{background:#444;border-color:#444;color:#e8e8e8}
+/* 非 active 時的淡色底 — 對齊 TYPE_META 卡片標籤顏色 */
+.chip[data-v="opmic"]{border-color:#c8b840;color:#5e4200;background:#fff3a0}
+.chip[data-v="standup"]{border-color:#e09060;color:#7a2e00;background:#ffd6b3}
+.chip[data-v="improv"]{border-color:#70c890;color:#0d5c30;background:#b8f0d0}
+.chip[data-v="sketch"]{border-color:#e0a060;color:#7a4000;background:#ffe0b3}
+.chip[data-v="konto"]{border-color:#d0a878;color:#6e2800;background:#fce8d0}
+.chip[data-v="mancai"]{border-color:#8098d8;color:#1a2e8c;background:#c8d8ff}
+.chip[data-v="crosstalk"]{border-color:#e890b0;color:#8c0038;background:#ffd6e8}
+.chip[data-v="rakugo"]{border-color:#c898e8;color:#4a1a6e;background:#e8d5f5}
+.chip[data-v="musicom"]{border-color:#e090d0;color:#6e0062;background:#f5d0f0}
+.chip[data-v="mixed"]{border-color:#9098c8;color:#2a3ba0;background:#dce8ff}
+.chip[data-v="special"]{border-color:#80c880;color:#1a5c1a;background:#d4f5d4}
+.chip[data-v="english"]{border-color:#80b8e0;color:#0a4878;background:#d4eeff}
+.chip[data-v="ogiri"]{border-color:#80c8d8;color:#0a4a5e;background:#d0f0f8}
+.chip[data-v="gameshow"]{border-color:#c8b050;color:#5e4a00;background:#fff0b3}
+.chip[data-v="podcast"]{border-color:#6898c8;color:#0a3860;background:#c8e8ff}
+.chip[data-v="spevent"]{border-color:#9888d0;color:#3a1e8c;background:#ddd8f8}
+.chip[data-v="other"]{border-color:#b8b8b8;color:#444;background:#e8e8e8}
+.view-toggle{display:flex;gap:6px}
+.view-btn{height:34px;padding:0 16px;border-radius:var(--r-pill);font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s;display:inline-flex;align-items:center}
+.view-btn.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
+.filter-dropdowns{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:10px}
+.filter-dropdown-wrap{display:flex;flex-direction:column;gap:3px}
+.filter-dropdown-lbl{font-size:.66rem;font-weight:600;color:var(--ts);font-family:var(--f-zh);padding-left:4px}
+.filter-dropdown{appearance:none;-webkit-appearance:none;padding:7px 30px 7px 12px;font-size:.78rem;font-family:var(--f-zh);color:var(--sd);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232d2b1f' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;border:1.5px solid rgba(45,43,31,.16);border-radius:var(--r-pill);cursor:pointer;outline:none;transition:border-color .14s;min-width:120px}
+.filter-dropdown:focus,.filter-dropdown:hover{border-color:var(--or)}
+.filter-dropdown.active{border-color:var(--or);background-color:#fff7ed;color:var(--or);font-weight:600}
+.shows-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(276px,1fr));gap:18px;margin-bottom:28px}
+.show-card{background:#fff;border:none;border-radius:var(--r-lg);overflow:hidden;transition:transform .2s,box-shadow .2s;color:var(--tm);display:flex;flex-direction:column;position:relative;cursor:pointer;box-shadow:0 2px 10px rgba(45,43,31,.08)}
+.show-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(45,43,31,.14)}
+.sc-img-col{display:contents}
+.sc-img{width:100%;height:160px;display:block;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--py),var(--y))}
+.sc-img img.sc-poster{width:100%;height:160px;object-fit:contain;display:block;position:relative;z-index:2;background:#fff}
+.sc-img img.sc-poster[src=""]{display:none!important}
+.sc-img .sc-emoji{font-size:2.6rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0}
+.sc-img .sc-types{position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-wrap:wrap;z-index:3;max-width:calc(100% - 16px)}
+.sc-types-desktop{display:flex}
+.sc-types-mobile{display:none;flex-wrap:wrap;gap:4px;margin-bottom:3px}
+.sc-type-tag{font-size:.63rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);font-family:var(--f-zh)}
+.sc-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.sc-date{font-size:.74rem;color:var(--or);font-weight:600;font-family:var(--f-bo)}
+.sc-title{font-size:.94rem;font-weight:700;font-family:var(--f-zh);line-height:1.36}
+.sc-meta{font-size:.77rem;color:var(--ts);font-family:var(--f-zh)}
+.sc-price{font-size:.78rem;font-weight:600;color:var(--or)}
+.sc-ticket{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;font-weight:700;color:#fff;background:var(--or);font-family:var(--f-zh);text-decoration:none;padding:6px 14px;border-radius:var(--r-pill);transition:all .14s;align-self:flex-start}
+.sc-ticket:hover{background:#d45c10}
+.sc-imgsrc{font-size:.62rem;color:rgba(45,43,31,.3);padding:3px 16px 9px;font-family:var(--f-bo)}
+.sc-imgsrc-mobile{display:none}
+.sc-imgsrc-desktop{display:block;padding:0 16px 9px;font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo);margin-top:4px;text-align:right}
+.cc-imgsrc-mobile{display:none}
+.cc-imgsrc-desktop{display:block}
 .info-banner{display:flex;align-items:center;gap:10px;padding:9px 16px;background:rgba(245,213,88,.15);border:1px solid rgba(239,111,32,.22);border-radius:var(--r-md);font-size:.8rem;font-family:var(--f-zh);color:var(--ts);margin-bottom:16px;cursor:pointer;transition:background .15s,border-color .15s;user-select:none}
 .info-banner:hover{background:rgba(245,213,88,.28);border-color:rgba(239,111,32,.45)}
 .info-banner span{flex:1;line-height:1.5}
@@ -142,61 +315,6 @@ body.ready{visibility:visible}
 .podcast-platform-btn{display:block;padding:9px 18px;border-radius:var(--r-pill);font-size:.82rem;font-weight:700;font-family:var(--f-bo);text-decoration:none;text-align:center;transition:opacity .15s}
 .podcast-platform-btn:hover{opacity:.85}
 @media(max-width:768px){.podcast-card{grid-template-columns:1fr;padding:20px 16px;gap:18px}.podcast-title{font-size:1rem}}
-/* ── EMPTY STATE ── */
-.empty-state{grid-column:1/-1;text-align:center;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:14px}
-.empty-state-icon{font-size:2.8rem;line-height:1}
-.empty-state-title{font-size:.96rem;font-weight:700;color:var(--tm);font-family:var(--f-zh)}
-.empty-state-btn{padding:10px 22px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.84rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;transition:background .15s;text-decoration:none;display:inline-block}
-.empty-state-btn:hover{background:#d45c10}
-/* ── DISCLAIMER ── */
-.sd-disclaimer{font-size:.68rem;color:rgba(45,43,31,.38);text-align:left;margin-top:12px;margin-bottom:4px;line-height:1.85;font-family:var(--f-bo);margin-left:auto;margin-right:auto;padding:0 4px}
-.filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.filter-lbl{font-size:.72rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);width:2.6em;min-width:2.6em;flex-shrink:0;white-space:nowrap}
-.filter-row-indent{display:flex;align-items:flex-start;gap:0}
-.filter-row-indent .filter-lbl{padding-top:5px;margin-right:6px}
-.filter-chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
-.chip{padding:5px 12px;font-size:.76rem;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);cursor:pointer;font-family:var(--f-zh);transition:all .14s;white-space:nowrap}
-.chip:hover,.chip.on{background:var(--sd);color:var(--y);border-color:var(--sd);font-weight:700}
-.shows-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(276px,1fr));gap:18px;margin-bottom:28px}
-.show-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-lg);overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;color:var(--tm);display:flex;flex-direction:column;position:relative;cursor:pointer}
-.show-card:hover{transform:translateY(-4px);box-shadow:var(--sh);border-color:var(--or)}
-.sc-img{width:100%;height:160px;display:block;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--py),var(--y))}
-.sc-img img.sc-poster{width:100%;height:160px;object-fit:contain;display:block;position:relative;z-index:2;background:var(--ww)}
-.sc-img img.sc-poster[src=""]{display:none!important}
-.sc-img .sc-emoji{font-size:2.6rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0}
-.sc-img .sc-types{position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-wrap:wrap;z-index:3;max-width:calc(100% - 16px)}
-/* desktop: tags overlay on image; mobile row hidden */
-.sc-types-desktop{display:flex}
-.sc-types-mobile{display:none;flex-wrap:wrap;gap:4px;margin-bottom:3px}
-.sc-type-tag{font-size:.63rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);font-family:var(--f-zh)}
-.sc-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
-.sc-date{font-size:.74rem;color:var(--or);font-weight:600;font-family:var(--f-bo)}
-.sc-title{font-size:.94rem;font-weight:700;font-family:var(--f-zh);line-height:1.36}
-.sc-meta{font-size:.77rem;color:var(--ts);font-family:var(--f-zh)}
-.sc-price{font-size:.78rem;font-weight:600;color:var(--or)}
-.sc-ticket{margin-top:auto;display:inline-flex;align-items:center;gap:5px;font-size:.75rem;font-weight:600;color:var(--or);font-family:var(--f-bo);text-decoration:none;padding:6px 12px;border:1.5px solid rgba(239,111,32,.28);border-radius:var(--r-pill);transition:all .14s;align-self:flex-start}
-.sc-ticket:hover{background:rgba(239,111,32,.07)}
-.sc-img-col{display:contents} /* 桌機：等同不存在，sc-img 直接參與 flex column */
-.sc-imgsrc{font-size:.62rem;color:rgba(45,43,31,.3);padding:3px 16px 9px;font-family:var(--f-bo)}
-/* 桌機：只顯示 desktop 版（在 sc-body 底部），隱藏 mobile 版（在 sc-img-col） */
-.sc-imgsrc-mobile{display:none}
-.sc-imgsrc-desktop{display:block;padding:0 16px 9px;font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo);margin-top:4px;text-align:right}
-/* 桌機課程：只顯示 desktop 版（cc-foot 下方），隱藏 mobile 版（cc-body 內） */
-.cc-imgsrc-mobile{display:none}
-.cc-imgsrc-desktop{display:block}
-.view-toggle{display:flex;gap:6px;margin-bottom:18px}
-.view-btn{padding:6px 16px;border-radius:var(--r-pill);font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s}
-.view-btn.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
-
-/* HERO STATS */
-.hero-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0 8px}
-.hero-stat{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);border-radius:var(--r-md);padding:10px 18px;min-width:80px;backdrop-filter:blur(4px)}
-.hero-stat-num{font-size:1.6rem;font-weight:900;font-family:var(--f-bo);color:var(--sd);line-height:1}
-.hero-stat-lbl{font-size:.68rem;font-weight:700;color:var(--ts);font-family:var(--f-zh);margin-top:3px;white-space:nowrap}
-.hero-next{font-size:.8rem;font-family:var(--f-zh);color:var(--ts);text-align:center;margin-bottom:6px;cursor:pointer;opacity:.85}
-.hero-next:hover{opacity:1;color:var(--or)}
-.hero-next strong{color:var(--or);font-weight:700}
-@media(max-width:768px){.hero-stat{padding:8px 12px;min-width:68px}.hero-stat-num{font-size:1.3rem}}
 /* 手機版橫向滑動 */
 @media(max-width:768px){
   html{font-size:16.5px}
@@ -207,6 +325,17 @@ body.ready{visibility:visible}
   .filter-chips .chip{flex-shrink:0}
   .filter-row::-webkit-scrollbar{display:none}
   .filter-row .chip{flex-shrink:0}
+  /* 手機版 chip：適中大小，最右截斷引導滑動 */
+  .chip{padding:5px 11px;font-size:.72rem;border-width:1.5px}
+  .filter-chips{flex-wrap:nowrap;padding-right:32px}
+  /* 手機版下拉：三個同一行，字夠大 */
+  .filter-dropdowns{flex-wrap:nowrap;gap:6px;margin-top:8px}
+  .filter-dropdown-wrap{flex:1;min-width:0}
+  .filter-dropdown-wrap:last-child{flex:1}
+  .filter-dropdown-lbl{display:none}
+  .filter-dropdown{width:100%;min-width:0;padding:8px 22px 8px 10px;font-size:.82rem}
+  /* 手機版首頁全寬 */
+  .home-podcast-inner,.home-board-header,.home-board-grid,.home-board-cta{max-width:100%}
 
   /* 手機版演出列表 */
   .shows-grid{grid-template-columns:1fr;gap:10px;background:transparent;border-radius:0;border:none;overflow:visible}
@@ -668,20 +797,8 @@ body.edit .edit-bar{display:flex!important}
 #page-courses::before{content:'';position:absolute;top:0;left:0;right:0;height:280px;background:radial-gradient(ellipse at 70% 0%,rgba(239,111,32,.06) 0%,transparent 70%);pointer-events:none}
 #page-about::before{content:'';position:absolute;top:0;left:0;right:0;height:280px;background:radial-gradient(ellipse at 30% 0%,rgba(245,213,88,.08) 0%,transparent 70%);pointer-events:none}
 .page{position:relative}
-/* 桌機版首頁左右分欄 */
 @media(min-width:900px){
-  .hero{padding:0;display:grid;grid-template-columns:1fr auto;align-items:center;min-height:calc(100vh - var(--nav));text-align:left}
-  .hero-left{padding:60px 6vw;display:contents}
-  .hero-logo{grid-column:2;grid-row:1/8;margin-bottom:0;width:220px;height:220px;border-radius:32px;align-self:center;margin-right:6vw}
-  .hero-tag{grid-column:1;margin-bottom:12px}
-  .hero-h1{grid-column:1;font-size:clamp(2.8rem,4vw,4rem);margin-bottom:8px}
-  .hero-sub{grid-column:1;margin-bottom:12px}
-  .hero-desc{grid-column:1;margin-bottom:20px;text-align:left}
-  .hero-ctas{grid-column:1;justify-content:flex-start;flex-wrap:wrap}
-  .hero-stats{grid-column:1;margin-top:24px;justify-content:flex-start;overflow-x:visible;flex-wrap:wrap;gap:8px}
-  .hero-next{grid-column:1;text-align:left}
   .scroll-hint{display:none}
-  .hero>a[href="https://forms.gle/vUC6DU83kGpdJyUF9"]{grid-column:1}
 }
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .45s ease,transform .45s ease}
 .reveal.revealed{opacity:1;transform:translateY(0)}
@@ -722,17 +839,26 @@ body.edit .edit-bar{display:flex!important}
   .fp-inner{width:100%}
   .fp-nr{flex-direction:column;gap:6px}
   .fp-ni{width:100%}
-  .hero{padding:20px 5vw 20px}
-  .hero::before{width:200px;height:200px;top:0;right:-60px;opacity:.25}
-  .hero::after{width:120px;height:120px;bottom:-20px;left:-40px;opacity:.07}
-  .hero-logo{width:80px;height:80px;border-radius:16px;border-width:3px;margin-bottom:20px}
+  /* hero mobile: 單欄 */
+  .hero{display:block;padding:20px 5vw 18px;overflow:hidden}
+  .hero-deco{display:none}
+  .hero-right{display:none}
   .hero-tag{margin-bottom:8px;font-size:.7rem;padding:4px 12px}
-  .hero-h1{font-size:1.95rem;margin-bottom:4px}
-  .hero-sub{margin-bottom:6px;font-size:.75rem}
-  .hero-desc{margin-bottom:18px;font-size:.84rem;line-height:1.55}
-  .hero-ctas{flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:8px}
-  .hero-ctas .btn-or,
-  .hero-ctas .btn-ww{padding:9px 8px;font-size:.77rem;white-space:nowrap;flex:0 0 calc(50% - 3px);justify-content:center;overflow:hidden;text-overflow:ellipsis}
+  .hero-h1{font-size:1.95rem;margin-bottom:8px}
+  .hero-desc{margin-bottom:20px;font-size:.86rem}
+  .hero-ctas{gap:8px}
+  .hero-next{font-size:.78rem}
+  /* stats bar mobile */
+  .hero-stats-bar{flex-wrap:wrap;gap:12px;padding:16px 18px;margin:0;border-radius:0;box-shadow:none}
+  .hst-item{flex:0 0 calc(50% - 20px);border-right:none;padding:0}
+  .hst-cta{flex:0 0 100%;justify-content:center}
+  /* home-mid mobile：強制單欄全寬 */
+  .home-mid{grid-template-columns:1fr!important;padding:12px 4vw 24px;width:100%;box-sizing:border-box}
+  .home-quick-nav,.home-upcoming{width:100%;box-sizing:border-box}
+  /* podcast + board 全寬 */
+  .home-podcast-sec,.home-board-sec{width:100%;box-sizing:border-box;overflow:hidden}
+  .home-podcast-inner{grid-template-columns:1fr!important;max-width:100%}
+  .home-board-header,.home-board-grid,.home-board-cta{max-width:100%}
   .hero-next{font-size:.8rem;display:block;text-align:center}
   .sec{padding-top:30px!important}
   .filter-lbl{display:none}  .opmic-notice{font-size:clamp(.58rem,.55rem + .5vw,.72rem)!important;padding:7px 10px!important;white-space:nowrap;overflow:hidden}
@@ -806,118 +932,249 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
 <!-- HOME -->
 <div class="page" id="page-home">
-  <section class="hero" style="padding:80px 5vw 76px">
-    <div class="hero-logo" style="grid-column:2;grid-row:1/9"><img src="/assets/ciciradio.jpg" alt="嘻嘻哪哩唷"></div>
-    <div class="hero-tag">
-      <span class="zh-text">台灣現場喜劇演出資訊整理</span>
-      <span class="en-text">Taiwan Comedy Show Guide</span>
-    </div>
-    <h1 class="hero-h1">
-      <span class="zh-text">嘻嘻，<span class="hl">喜劇</span>在哪裡？</span>
-      <span class="en-text">Find Your <span class="hl">Comedy</span> Night</span>
-    </h1>
-    <p class="hero-sub">CICI._.RADIO</p>
-    <!-- 隱藏的 SEO 文字，Google 爬得到但使用者看不到 -->
-    <div style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none" aria-hidden="true">提供全台 Stand-up Comedy 站立喜劇、Open Mic 歐噴麥、漫才、即興劇、短劇與喜劇專場資訊，整理現場喜劇演出、Open Mic 報名、喜劇場地、課程講座等內容，快速找到最新現場喜劇演出資訊。</div>
-    <p class="hero-desc editable" contenteditable="false">
-      <span class="zh-text">今晚想來點喜劇嗎？<br>嘻嘻哪哩唷整理了全台現場喜劇演出資訊，<br>讓你不再找不到今晚該去哪～</span>
-      <span class="en-text">Feeling like some comedy tonight?<br>Cici Radio curates ticketed comedy show listings from across Taiwan,<br>so you'll always know where to go!</span>
-    </p>
-    <div class="hero-ctas">
-      <a href="#" class="btn-or" onclick="showPage('shows');return false">📅
-        <span class="zh-text"><span class="desk-text">演出資訊一覽</span><span class="mob-text">演出一覽</span></span>
-        <span class="en-text">Browse Shows</span>
-      </a>
-      <a href="#" class="btn-ww" onclick="showPage('opmic');return false">🎤
-        <span class="zh-text"><span class="desk-text">Open Mic 報名資訊</span><span class="mob-text">Open Mic 報名</span></span>
-        <span class="en-text">Open Mic Info</span>
-      </a>
-      <a href="#" class="btn-ww" onclick="showPage('venues');return false">📍
-        <span class="zh-text"><span class="desk-text">全台喜劇據點</span><span class="mob-text">喜劇據點</span></span>
-        <span class="en-text">Comedy Venues</span>
-      </a>
-      <a href="#" class="btn-ww" onclick="showPage('performers');return false">🎭
-        <span class="zh-text">認識演員</span>
-        <span class="en-text">Performers</span>
-      </a>
-    </div>
-    <a href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:4px;padding:7px 16px;background:rgba(45,43,31,.07);border-radius:var(--r-pill);font-size:.78rem;font-family:var(--f-zh);color:var(--ts);text-decoration:none;transition:background .15s;position:relative;z-index:1" onmouseover="this.style.background='rgba(45,43,31,.13)'" onmouseout="this.style.background='rgba(45,43,31,.07)'">🎭 <span class="zh-text">演員資料新增申請表單，歡迎填寫加入喔！</span><span class="en-text">Performer profile application — apply to join the directory!</span></a>
-    <!-- 數字統計列 -->
-    <div class="hero-stats" id="hero-stats">
-      <div class="hero-stat"><span class="hero-stat-num" id="stat-shows">—</span><span class="hero-stat-lbl"><span class="zh-text">近一個月演出</span><span class="en-text">Shows (30 days)</span></span></div>
-      <div class="hero-stat"><span class="hero-stat-num" id="stat-venues">—</span><span class="hero-stat-lbl"><span class="zh-text">喜劇據點</span><span class="en-text">Venues</span></span></div>
-      <div class="hero-stat"><span class="hero-stat-num" id="stat-performers">—</span><span class="hero-stat-lbl"><span class="zh-text">喜劇演員</span><span class="en-text">Performers</span></span></div>
-      <div class="hero-stat"><span class="hero-stat-num" id="stat-mics">—</span><span class="hero-stat-lbl"><span class="zh-text">每月 Open Mic</span><span class="en-text">Monthly Open Mics</span></span></div>
-      <div class="hero-stat"><span class="hero-stat-num" id="stat-courses">—</span><span class="hero-stat-lbl"><span class="zh-text">本年度課程</span><span class="en-text">Courses This Year</span></span></div>
-    </div>
-    <!-- 最近一場演出預告 -->
-    <div id="hero-next-show" class="hero-next" style="display:none"></div>
-    <div class="scroll-hint">
-      <span class="zh-text">往下滾動</span><span class="en-text">Scroll</span>
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-    </div>
-  </section>
 
-  <section class="sec" style="background:var(--cr)" id="feat-section">
-    <div class="sec-label"><span class="zh-text">網站功能</span><span class="en-text">Features</span></div>
-    <h2 class="sec-title"><span class="zh-text">你在找的都在這</span><span class="en-text">Everything You Need</span></h2>
-    <p class="sec-desc"><span class="zh-text">由人工整理與更新。若有錯誤或遺漏，歡迎回報！</span><span class="en-text">Hand-curated and updated. Found an error? Let us know!</span></p>
-    <div class="feat-grid">
-      <div class="feat-card" style="--accent:#f5d558;--icon-bg:#fff9d6" onclick="showPage('shows')"><div class="feat-icon">🎭</div><div class="feat-title"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span><small>Shows</small></div><div class="feat-desc"><span class="zh-text">整合 KKTIX、Accupass 等平台，依日期、場地、類型篩選全台喜劇演出。</span><span class="en-text">Filter shows by date, venue, or type from KKTIX, Accupass, and more.</span></div><div class="feat-arrow"><span class="zh-text">瀏覽演出 →</span><span class="en-text">Browse Shows →</span></div></div>
-      <div class="feat-card" style="--accent:#ef6f20;--icon-bg:#fde3cc" onclick="showPage('opmic')"><div class="feat-icon">🎤</div><div class="feat-title"><span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic</span><small>Signup Info</small></div><div class="feat-desc"><span class="zh-text">依星期查詢各場地 Open Mic 報名方式與時間。</span><span class="en-text">Find open mic sign-ups by day across all venues.</span></div><div class="feat-arrow"><span class="zh-text">找報名資訊 →</span><span class="en-text">Find Sign-Ups →</span></div></div>
-      <div class="feat-card" style="--accent:#2ecc71;--icon-bg:#d0f0de" onclick="showPage('venues')"><div class="feat-icon">📍</div><div class="feat-title"><span class="zh-text">全台喜劇據點一覽</span><span class="en-text">Venues</span><small>Venues</small></div><div class="feat-desc"><span class="zh-text">呈現全台喜劇據點，包含地址、簡介與官方連結。</span><span class="en-text">Comedy clubs across Taiwan with addresses and links.</span></div><div class="feat-arrow"><span class="zh-text">看場地 →</span><span class="en-text">View Venues →</span></div></div>
-      <div class="feat-card" style="--accent:#b39ddb;--icon-bg:#ede7f6" onclick="showPage('performers')"><div class="feat-icon">🎭</div><div class="feat-title"><span class="zh-text">演員資料庫</span><span class="en-text">Performers</span><small>Performer Directory</small></div><div class="feat-desc"><span class="zh-text">認識台灣現場喜劇演員，查看他們的近期演出與詳細資料。</span><span class="en-text">Meet Taiwan's live comedy performers and browse their upcoming shows.</span></div><div class="feat-arrow"><span class="zh-text">認識演員 →</span><span class="en-text">Meet Performers →</span></div></div>
-      <div class="feat-card" style="--accent:#f5d558;--icon-bg:#fffbda" onclick="showPage('courses')"><div class="feat-icon">📚</div><div class="feat-title"><span class="zh-text">課程與講座</span><span class="en-text">Courses & Talks</span><small>Courses</small></div><div class="feat-desc"><span class="zh-text">Stand-up 課、即興課、漫才工作坊，想學喜劇從這裡開始。</span><span class="en-text">Stand-up, improv, and mancai workshops — start your comedy journey here.</span></div><div class="feat-arrow"><span class="zh-text">找課程 →</span><span class="en-text">Find Courses →</span></div></div>
+  <!-- HERO -->
+  <section class="hero">
+    <!-- 背景裝飾 -->
+    <svg class="hero-deco" viewBox="0 0 600 300" preserveAspectRatio="xMaxYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- 右側大橢圓 -->
+      <ellipse cx="530" cy="150" rx="210" ry="170" fill="#f5d558" opacity="0.2"/>
+      <!-- 四角星 ✦ -->
+      <path d="M370 90 L373 100 L383 103 L373 106 L370 116 L367 106 L357 103 L367 100 Z" fill="#ef6f20" opacity="0.3"/>
+      <path d="M530 55 L532 61 L538 63 L532 65 L530 71 L528 65 L522 63 L528 61 Z" fill="#f5d558" opacity="0.7"/>
+      <!-- 小圓點 -->
+      <circle cx="470" cy="38"  r="4" fill="#ef6f20" opacity="0.22"/>
+      <circle cx="570" cy="105" r="5" fill="#f5d558" opacity="0.4"/>
+      <circle cx="420" cy="210" r="3.5" fill="#ef6f20" opacity="0.18"/>
+    </svg>
+    <div class="hero-left">
+      <h1 class="hero-h1">
+        <span class="zh-text">嘻嘻，<br><span class="hl">喜劇</span>在哪裡？</span>
+        <span class="en-text">Find Your<br><span class="hl">Comedy</span> Night</span>
+      </h1>
+      <!-- 隱藏 SEO 文字 -->
+      <div style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none" aria-hidden="true">提供全台 Stand-up Comedy 站立喜劇、Open Mic 歐噴麥、漫才、即興劇、短劇與喜劇專場資訊，整理現場喜劇演出、Open Mic 報名、喜劇場地、課程講座等內容，快速找到最新現場喜劇演出資訊。</div>
+      <p class="hero-platform">
+        <span class="zh-text">全台現場喜劇資訊整理平台</span>
+        <span class="en-text">Taiwan's live comedy event guide</span>
+      </p>
+      <p class="hero-desc">
+        <span class="zh-text">今晚想來點喜劇嗎？<br>嘻嘻哪哩唷整理了全台現場喜劇演出資訊，<br>讓你不再找不到今晚該去哪～</span>
+        <span class="en-text">Feeling like some comedy tonight?<br>Cici Radio curates live comedy listings from across Taiwan,<br>so you'll always know where to go!</span>
+      </p>
+      <div class="hero-ctas">
+        <a href="#" class="hero-browse-btn" onclick="showPage('shows');return false">
+          📅 <span class="zh-text">查看演出資訊 →</span><span class="en-text">Browse Shows →</span>
+        </a>
+      </div>
+      <div id="hero-next-show" class="hero-next" style="display:none"></div>
     </div>
-  </section>
-
-  <section class="sec" style="background:#f6efcf">
-    <div class="sec-label"><span class="zh-text">近期演出</span><span class="en-text">Recent Shows</span></div>
-    <h2 class="sec-title"><span class="zh-text">最新演出資訊</span><span class="en-text">Latest Shows</span></h2>
-    <div class="shows-grid" id="home-shows-grid"></div>
-    <div style="text-align:center"><button class="btn-or" onclick="showPage('shows')"><span class="zh-text">查看全部演出 →</span><span class="en-text">All Shows →</span></button></div>
-  </section>
-
-  <section class="sec" style="background:var(--py)">
-    <div class="sec-label"><span class="zh-text">Podcast</span><span class="en-text">Podcast</span></div>
-    <h2 class="sec-title"><span class="zh-text">看喜劇，也聽聽喜劇與我們的故事</span><span class="en-text">Comedy shows — and the stories behind them</span></h2>
-    <div class="podcast-card">
-      <div class="podcast-card-left">
-        <div class="podcast-title">
-          <span class="zh-text">嘻嘻哪哩唷 Podcast</span>
-          <span class="en-text">Cici Radio Podcast</span>
+    <!-- 右欄：麥克風 SVG -->
+    <div class="hero-right">
+      <div class="hero-mic-wrap">
+        <div class="hero-speech-bubble">
+          <span class="zh-text">一起支持<br>現場喜劇！</span>
+          <span class="en-text">Support live<br>comedy!</span>
         </div>
-        <p class="podcast-desc">
-          <span class="zh-text">因為對台灣現場喜劇的熱情，我們開啟了 Podcast 之路。<br>這裡有我們和喜劇的日常故事，也有我們對喜劇圈的真心話！<br>希望可以陪伴你們度過每一天～</span>
-          <span class="en-text">Our passion for live comedy in Taiwan sparked this podcast journey.<br>Here you'll find our everyday stories with comedy, and our honest takes on the scene.<br>We hope to be a part of your every day!</span>
+<svg viewBox="0 0 420 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 背景裝飾大圓 -->
+          <circle cx="255" cy="275" r="128" fill="#f0c840" opacity="0.22"/>
+          <circle cx="208" cy="325" r="78" fill="#f5d558" opacity="0.18"/>
+          <!-- 星星裝飾 -->
+          <path d="M88 145 L91.5 156 L103 156 L93.5 163 L97 174 L88 167 L79 174 L82.5 163 L73 156 L84.5 156 Z" fill="#e8b830" opacity="0.55"/>
+          <path d="M345 192 L347.5 199 L355 199 L349 203.5 L351.5 210.5 L345 206 L338.5 210.5 L341 203.5 L335 199 L342.5 199 Z" fill="#e8b830" opacity="0.4"/>
+          <circle cx="328" cy="152" r="5" fill="#ef6f20" opacity="0.35"/>
+          <circle cx="98" cy="238" r="6" fill="#ef6f20" opacity="0.3"/>
+          <circle cx="342" cy="238" r="4" fill="#f5d558" opacity="0.5"/>
+          <!-- 菱形小裝飾 -->
+          <path d="M355 115 L360 125 L355 135 L350 125 Z" fill="#ef6f20" opacity="0.28"/>
+          <!-- ===== 麥克風 ===== -->
+          <!-- 頭部最外層（陰影感） -->
+          <ellipse cx="220" cy="152" rx="80" ry="88" fill="#c05515"/>
+          <!-- 頭部中層 -->
+          <ellipse cx="220" cy="145" rx="76" ry="83" fill="#d96820"/>
+          <!-- 頭部主色 -->
+          <ellipse cx="220" cy="140" rx="72" ry="78" fill="#f08040"/>
+          <!-- 格紋橫線（深色，像圖片那樣深格紋） -->
+          <line x1="152" y1="90"  x2="288" y2="90"  stroke="#c05515" stroke-width="1.4" opacity="0.7"/>
+          <line x1="148" y1="109" x2="292" y2="109" stroke="#c05515" stroke-width="1.4" opacity="0.7"/>
+          <line x1="148" y1="128" x2="292" y2="128" stroke="#c05515" stroke-width="1.4" opacity="0.7"/>
+          <line x1="148" y1="147" x2="292" y2="147" stroke="#c05515" stroke-width="1.4" opacity="0.7"/>
+          <line x1="150" y1="166" x2="290" y2="166" stroke="#c05515" stroke-width="1.4" opacity="0.7"/>
+          <line x1="155" y1="185" x2="285" y2="185" stroke="#c05515" stroke-width="1.4" opacity="0.7"/>
+          <line x1="164" y1="203" x2="276" y2="203" stroke="#c05515" stroke-width="1.4" opacity="0.7"/>
+          <!-- 格紋直線 -->
+          <line x1="176" y1="74"  x2="176" y2="220" stroke="#c05515" stroke-width="1.4" opacity="0.6"/>
+          <line x1="198" y1="65"  x2="198" y2="225" stroke="#c05515" stroke-width="1.4" opacity="0.6"/>
+          <line x1="220" y1="62"  x2="220" y2="225" stroke="#c05515" stroke-width="1.4" opacity="0.6"/>
+          <line x1="242" y1="65"  x2="242" y2="225" stroke="#c05515" stroke-width="1.4" opacity="0.6"/>
+          <line x1="264" y1="74"  x2="264" y2="220" stroke="#c05515" stroke-width="1.4" opacity="0.6"/>
+          <!-- 高光橢圓 -->
+          <ellipse cx="200" cy="115" rx="24" ry="16" fill="rgba(255,255,255,0.14)"/>
+          <!-- 頸部銜接圈 -->
+          <rect x="203" y="218" width="34" height="10" rx="5" fill="#b04d10"/>
+          <!-- 金屬環（金黃色，兩層） -->
+          <rect x="198" y="225" width="44" height="22" rx="11" fill="#b8880e"/>
+          <rect x="200" y="225" width="40" height="18" rx="9" fill="#e0b820"/>
+          <!-- 金屬環高光 -->
+          <rect x="206" y="228" width="24" height="6" rx="3" fill="rgba(255,255,255,0.35)"/>
+          <!-- 手柄主體（深橘，圓柱感） -->
+          <rect x="206" y="242" width="28" height="120" rx="14" fill="#b04d10"/>
+          <!-- 手柄中層（亮橘） -->
+          <rect x="208" y="242" width="24" height="120" rx="12" fill="#d46018"/>
+          <!-- 手柄高光條 -->
+          <rect x="213" y="248" width="6" height="108" rx="3" fill="rgba(255,255,255,0.15)"/>
+          <!-- 手柄底蓋 -->
+          <ellipse cx="220" cy="362" rx="14" ry="8" fill="#903d08"/>
+          <!-- 電線 -->
+          <path d="M220 370 C220 390, 198 403, 186 426 C174 449, 190 466, 175 484 C160 502, 134 496, 116 508" stroke="#2d2b1f" stroke-width="5" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR：數字統計 -->
+  <div class="hero-stats-bar" id="hero-stats">
+    <div class="hst-item">
+      <div class="hst-icon">📅</div>
+      <div>
+        <div class="hst-num" id="stat-shows">8</div>
+        <div class="hst-lbl"><span class="zh-text">近一個月演出</span><span class="en-text">Shows (30 days)</span></div>
+      </div>
+    </div>
+    <div class="hst-item">
+      <div class="hst-icon">👥</div>
+      <div>
+        <div class="hst-num" id="stat-performers">10</div>
+        <div class="hst-lbl"><span class="zh-text">喜劇演員</span><span class="en-text">Performers</span></div>
+      </div>
+    </div>
+    <div class="hst-item">
+      <div class="hst-icon">📍</div>
+      <div>
+        <div class="hst-num" id="stat-venues">13</div>
+        <div class="hst-lbl"><span class="zh-text">喜劇據點</span><span class="en-text">Venues</span></div>
+      </div>
+    </div>
+    <div class="hst-item">
+      <div class="hst-icon">🎤</div>
+      <div>
+        <div class="hst-num" id="stat-mics">30</div>
+        <div class="hst-lbl"><span class="zh-text">每月 Open Mic</span><span class="en-text">Monthly Open Mics</span></div>
+      </div>
+    </div>
+    <a href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener" class="hst-cta">
+      <div class="hst-cta-icon">🎉</div>
+      <div class="hst-cta-txt">
+        <span class="zh-text">演員資料新增申請表單，<br>歡迎填寫加入喔！</span>
+        <span class="en-text">Apply to join the<br>performer directory!</span>
+      </div>
+      <div class="hst-cta-arr">→</div>
+    </a>
+  </div>
+
+  <!-- MID：快速前往 + 最近演出 -->
+  <div class="home-mid" id="home-mid-section">
+    <!-- 快速前往 -->
+    <div class="home-quick-nav">
+      <h3>
+        <span class="zh-text">快速前往</span><span class="en-text">Quick Nav</span>
+        <span style="color:var(--or);margin-left:4px">✦</span>
+      </h3>
+      <div class="home-quick-grid">
+        <button class="home-quick-card" onclick="showPage('shows')">
+          <div class="qc-icon">📅</div>
+          <div class="qc-title"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></div>
+          <div class="qc-sub"><span class="zh-text">找演出</span><span class="en-text">Find shows</span></div>
+        </button>
+        <button class="home-quick-card" onclick="showPage('opmic')">
+          <div class="qc-icon">🎤</div>
+          <div class="qc-title">Open Mic</div>
+          <div class="qc-sub"><span class="zh-text">報名資訊</span><span class="en-text">Sign-up info</span></div>
+        </button>
+        <button class="home-quick-card" onclick="showPage('venues')">
+          <div class="qc-icon">📍</div>
+          <div class="qc-title"><span class="zh-text">全台喜劇據點</span><span class="en-text">Venues</span></div>
+          <div class="qc-sub"><span class="zh-text">場地資訊</span><span class="en-text">Venue info</span></div>
+        </button>
+        <button class="home-quick-card" onclick="showPage('performers')">
+          <div class="qc-icon">🎭</div>
+          <div class="qc-title"><span class="zh-text">認識演員</span><span class="en-text">Performers</span></div>
+          <div class="qc-sub"><span class="zh-text">演員資料庫</span><span class="en-text">Directory</span></div>
+        </button>
+      </div>
+    </div>
+    <!-- 最近一場演出 -->
+    <div class="home-upcoming">
+      <div class="home-upcoming-header">
+        <h3><span class="zh-text">最近一場演出</span><span class="en-text">Upcoming Shows</span></h3>
+        <a class="home-upcoming-more" href="#" onclick="showPage('shows');return false">
+          <span class="zh-text">查看更多 →</span><span class="en-text">See all →</span>
+        </a>
+      </div>
+      <div id="home-upcoming-list"></div>
+    </div>
+  </div>
+
+  <!-- PODCAST 區塊 -->
+  <section class="home-podcast-sec">
+    <div class="home-podcast-inner">
+      <div class="home-podcast-text">
+        <div class="home-pod-eyebrow">
+          <span class="zh-text">🎙 Podcast</span>
+          <span class="en-text">🎙 Podcast</span>
+        </div>
+        <h2 class="home-pod-title">
+          <span class="zh-text">看喜劇，也聽聽<br>喜劇與我們的故事</span>
+          <span class="en-text">Comedy shows —<br>and the stories behind them</span>
+        </h2>
+        <p class="home-pod-desc">
+          <span class="zh-text">因為對台灣現場喜劇的熱情，我們開啟了 Podcast 之路。這裡有我們和喜劇的日常故事，也有我們對喜劇圈的真心話！希望可以陪伴你們度過每一天～</span>
+          <span class="en-text">Our passion for live comedy sparked this podcast. Everyday stories, honest takes on the scene, and good company for your day.</span>
         </p>
-        <div class="podcast-btns">
-          <a class="podcast-btn" href="https://open.spotify.com/show/1NVkhQJcHj91hIdBJ5QAIC?si=3984ca5ae248418a" target="_blank" rel="noopener">🎵 Spotify</a>
-          <a class="podcast-btn" href="https://podcasts.apple.com/tw/podcast/%E5%98%BB%E5%98%BB%E5%93%AA%E5%93%A9%E5%94%B7/id1625193833" target="_blank" rel="noopener">🎙 Apple Podcasts</a>
-          <a class="podcast-btn" href="https://player.soundon.fm/p/62d755ad-810c-4d6e-9ed5-56bb24140d13" target="_blank" rel="noopener">🎧 SoundOn</a>
+        <div class="home-pod-btns">
+          <a class="home-pod-btn home-pod-btn--spotify" href="https://open.spotify.com/show/1NVkhQJcHj91hIdBJ5QAIC?si=3984ca5ae248418a" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+            Spotify
+          </a>
+          <a class="home-pod-btn home-pod-btn--apple" href="https://podcasts.apple.com/tw/podcast/%E5%98%BB%E5%98%BB%E5%93%AA%E5%93%A9%E5%94%B7/id1625193833" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+            Apple Podcasts
+          </a>
+          <a class="home-pod-btn home-pod-btn--soundon" href="https://player.soundon.fm/p/62d755ad-810c-4d6e-9ed5-56bb24140d13" target="_blank" rel="noopener">
+            🎧 SoundOn
+          </a>
         </div>
       </div>
-      <div class="podcast-iframe-wrap">
-        <iframe id="spotify-iframe" width="100%" height="232" style="border-radius:12px;border:none;display:block;position:relative;z-index:1" data-src="https://open.spotify.com/embed/show/1NVkhQJcHj91hIdBJ5QAIC?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="嘻嘻哪哩唷 Podcast on Spotify"
-        onerror="this.style.display='none'"></iframe>
-        <div class="podcast-fallback">
-          <div style="font-size:2rem;margin-bottom:10px">🎙️</div>
-          <div style="font-size:.85rem;font-weight:700;color:var(--tm);font-family:var(--f-zh);margin-bottom:14px"><span class="zh-text">在你喜歡的平台收聽</span><span class="en-text">Listen on your favourite platform</span></div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <a href="https://open.spotify.com/show/1NVkhQJcHj91hIdBJ5QAIC" target="_blank" rel="noopener" class="podcast-platform-btn" style="background:#1db954;color:#fff">🎵 Spotify</a>
-            <a href="https://podcasts.apple.com/tw/podcast/%E5%98%BB%E5%98%BB%E5%93%AA%E5%93%A9%E5%94%B7/id1625193833" target="_blank" rel="noopener" class="podcast-platform-btn" style="background:#9933cc;color:#fff">🎙 Apple Podcasts</a>
-            <a href="https://player.soundon.fm/p/62d755ad-810c-4d6e-9ed5-56bb24140d13" target="_blank" rel="noopener" class="podcast-platform-btn" style="background:#ff6b35;color:#fff">🎧 SoundOn</a>
-          </div>
-        </div>
+      <div class="home-podcast-player">
+        <iframe width="100%" height="232" style="border-radius:14px;border:none;display:block" src="https://open.spotify.com/embed/show/1NVkhQJcHj91hIdBJ5QAIC?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="嘻嘻哪哩唷 Podcast on Spotify"></iframe>
       </div>
     </div>
   </section>
 
-  <section class="sec" style="background:var(--cr)">
-    <h2 class="sec-title"><span class="zh-text">大家怎麼說</span><span class="en-text">What People Say</span></h2>
-    <div id="home-comments-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:14px;margin-bottom:26px"></div>
-    <div style="text-align:center"><button class="btn-ww" onclick="showPage('board')">💬 <span class="zh-text">留下你的回饋</span><span class="en-text">Leave Feedback</span></button></div>
+  <!-- 留言板預覽 -->
+  <section class="home-board-sec">
+    <div class="home-board-header">
+      <div>
+        <div class="home-pod-eyebrow" style="color:var(--or)">💬 <span class="zh-text">留言板</span><span class="en-text">Board</span></div>
+        <h2 class="home-pod-title" style="font-size:1.4rem;margin-top:6px">
+          <span class="zh-text">大家怎麼說？</span>
+          <span class="en-text">What People Say</span>
+        </h2>
+      </div>
+      <button class="home-board-more-btn" onclick="showPage('board')">
+        <span class="zh-text">前往留言板 →</span><span class="en-text">Go to Board →</span>
+      </button>
+    </div>
+    <div id="home-comments-grid" class="home-board-grid"></div>
+    <div class="home-board-cta">
+      <button class="hero-browse-btn" onclick="showPage('board')" style="background:var(--sd)">
+        💬 <span class="zh-text">留下你的回饋</span><span class="en-text">Leave Feedback</span>
+      </button>
+    </div>
   </section>
+  <!-- 保留此容器供 renderHomeShows() 使用，視覺上隱藏 -->
+  <div id="home-shows-grid" style="display:none"></div>
 </div>
 
 <!-- SHOWS PAGE -->
@@ -966,48 +1223,51 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="type" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
         </div>
       </div>
-      <div class="filter-row-indent">
-        <span class="filter-lbl"><span class="zh-text">場地</span><span class="en-text">Venue</span></span>
-        <div class="filter-chips">
-        <button class="chip on" data-f="venue" data-v="all"><span class="zh-text">全部<span class="mob-text">場地</span></span><span class="en-text">All<span class="mob-text"> Venues</span></span></button>
-        <button class="chip" data-f="venue" data-v="comedy-plus"><span class="zh-text">卡米地＋</span><span class="en-text">Comedy Plus</span></button>
-        <button class="chip" data-f="venue" data-v="two-three"><span class="zh-text">23喜劇</span><span class="en-text">two three comedy</span></button>
-        <button class="chip" data-f="venue" data-v="fakers"><span class="zh-text">飛客劇樂部 - basis coffee.</span><span class="en-text">Fakers - basis coffee.</span></button>
-        <button class="chip" data-f="venue" data-v="beitou"><span class="zh-text">北投喜劇 - 山峸二手書店</span><span class="en-text">Beitou Comedy</span></button>
-        <button class="chip" data-f="venue" data-v="ginting"><span class="zh-text">樂君亭</span><span class="en-text">Gingting Comedy</span></button>
-        <button class="chip" data-f="venue" data-v="windcity"><span class="zh-text">站立風城 - 現場馬拉桑餐酒館</span><span class="en-text">Wind City Stand-Up</span></button>
-        <button class="chip" data-f="venue" data-v="smo"><span class="zh-text">思MIC歐 - 不染酒吧</span><span class="en-text">S.M.O - Buran Bar</span></button>
-        <button class="chip" data-f="venue" data-v="laughhouse"><span class="zh-text">來福好事 - 群島藝術園區</span><span class="en-text">Laugh House - Archipelago Arts</span></button>
-        <button class="chip" data-f="venue" data-v="tainan"><span class="zh-text">府城喜劇 - SASADRA cafe</span><span class="en-text">Tainan Comedy</span></button>
-        <button class="chip" data-f="venue" data-v="takao"><span class="zh-text">喜劇開港</span><span class="en-text">Takao Comedy Bay</span></button>
-        <button class="chip" data-f="venue" data-v="ponwo"><span class="zh-text">月半窩</span><span class="en-text">Ponwo Cafe</span></button>
-        <button class="chip" data-f="venue" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
+      <!-- 場地、地區、星期：下拉選單 -->
+      <div class="filter-dropdowns">
+        <div class="filter-dropdown-wrap">
+          <label class="filter-dropdown-lbl"><span class="zh-text">場地</span><span class="en-text">Venue</span></label>
+          <select id="sel-venue" class="filter-dropdown" onchange="fVenue=this.value;this.classList.toggle('active',this.value!=='all');showsPage=1;renderShows();syncFiltersToURL()">
+            <option value="all"><span class="zh-text">全部場地</span></option>
+            <option value="comedy-plus">卡米地＋</option>
+            <option value="two-three">23喜劇</option>
+            <option value="fakers">飛客劇樂部 - basis coffee.</option>
+            <option value="beitou">北投喜劇 - 山峸二手書店</option>
+            <option value="ginting">樂君亭</option>
+            <option value="windcity">站立風城 - 現場馬拉桑餐酒館</option>
+            <option value="smo">思MIC歐 - 不染酒吧</option>
+            <option value="laughhouse">來福好事 - 群島藝術園區</option>
+            <option value="tainan">府城喜劇 - SASADRA cafe</option>
+            <option value="takao">喜劇開港</option>
+            <option value="ponwo">月半窩</option>
+            <option value="other">其他</option>
+          </select>
         </div>
-      </div>
-      <div class="filter-row-indent">
-        <span class="filter-lbl"><span class="zh-text">地區</span><span class="en-text">Area</span></span>
-        <div class="filter-chips">
-        <button class="chip on" data-f="area" data-v="all"><span class="zh-text">全部<span class="mob-text">地區</span></span><span class="en-text">All<span class="mob-text"> Areas</span></span></button>
-        <button class="chip" data-f="area" data-v="taipei"><span class="zh-text">雙北</span><span class="en-text">Taipei and New Taipei City</span></button>
-        <button class="chip" data-f="area" data-v="taoyuan"><span class="zh-text">桃園</span><span class="en-text">Taoyuan</span></button>
-        <button class="chip" data-f="area" data-v="hsinchu"><span class="zh-text">新竹</span><span class="en-text">Hsinchu</span></button>
-        <button class="chip" data-f="area" data-v="taichung"><span class="zh-text">台中</span><span class="en-text">Taichung</span></button>
-        <button class="chip" data-f="area" data-v="tainan"><span class="zh-text">台南</span><span class="en-text">Tainan</span></button>
-        <button class="chip" data-f="area" data-v="kaohsiung"><span class="zh-text">高雄</span><span class="en-text">Kaohsiung</span></button>
-        <button class="chip" data-f="area" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
+        <div class="filter-dropdown-wrap">
+          <label class="filter-dropdown-lbl"><span class="zh-text">地區</span><span class="en-text">Area</span></label>
+          <select id="sel-area" class="filter-dropdown" onchange="fArea=this.value;this.classList.toggle('active',this.value!=='all');showsPage=1;renderShows();syncFiltersToURL()">
+            <option value="all">全部地區</option>
+            <option value="taipei">雙北</option>
+            <option value="taoyuan">桃園</option>
+            <option value="hsinchu">新竹</option>
+            <option value="taichung">台中</option>
+            <option value="tainan">台南</option>
+            <option value="kaohsiung">高雄</option>
+            <option value="other">其他</option>
+          </select>
         </div>
-      </div>
-      <div class="filter-row-indent">
-        <span class="filter-lbl"><span class="zh-text">星期</span><span class="en-text">Day</span></span>
-        <div class="filter-chips">
-        <button class="chip on" data-f="day" data-v="all"><span class="zh-text">全部<span class="mob-text">星期</span></span><span class="en-text">All<span class="mob-text"> Days</span></span></button>
-        <button class="chip" data-f="day" data-v="1"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
-        <button class="chip" data-f="day" data-v="2"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
-        <button class="chip" data-f="day" data-v="3"><span class="zh-text">週三</span><span class="en-text">Wed.</span></button>
-        <button class="chip" data-f="day" data-v="4"><span class="zh-text">週四</span><span class="en-text">Thu.</span></button>
-        <button class="chip" data-f="day" data-v="5"><span class="zh-text">週五</span><span class="en-text">Fri.</span></button>
-        <button class="chip" data-f="day" data-v="6"><span class="zh-text">週六</span><span class="en-text">Sat.</span></button>
-        <button class="chip" data-f="day" data-v="0"><span class="zh-text">週日</span><span class="en-text">Sun.</span></button>
+        <div class="filter-dropdown-wrap">
+          <label class="filter-dropdown-lbl"><span class="zh-text">星期</span><span class="en-text">Day</span></label>
+          <select id="sel-day" class="filter-dropdown" onchange="fDay=this.value;this.classList.toggle('active',this.value!=='all');showsPage=1;renderShows();syncFiltersToURL()">
+            <option value="all">全部星期</option>
+            <option value="1">週一</option>
+            <option value="2">週二</option>
+            <option value="3">週三</option>
+            <option value="4">週四</option>
+            <option value="5">週五</option>
+            <option value="6">週六</option>
+            <option value="0">週日</option>
+          </select>
         </div>
       </div>
     </div>
@@ -2171,6 +2431,7 @@ async function loadAllData(retryCount = 0) {
     window._dataReady = true;
     if(typeof renderHeroStats==='function') try{renderHeroStats();}catch(e){console.error('renderHeroStats:',e);}
     if(typeof renderHomeShows==='function') try{renderHomeShows();}catch(e){console.error('renderHomeShows:',e);}
+    if(typeof renderHomeUpcoming==='function') try{renderHomeUpcoming();}catch(e){console.error('renderHomeUpcoming:',e);}
     if(typeof renderHomeComments==='function') try{renderHomeComments();}catch(e){console.error('renderHomeComments:',e);}
     if(typeof renderShows==='function') try{renderShows();}catch(e){console.error('renderShows:',e);}
     if(typeof renderVenues==='function') try{renderVenues();}catch(e){console.error('renderVenues:',e);}
@@ -2309,7 +2570,7 @@ const TYPE_META = {
   mixed:    {bg:'#dce8ff',color:'#2a3ba0',  label:'拼盤秀',     labelEn:'Mixed-bill Show'},
   special:  {bg:'#d4f5d4',color:'#1a5c1a',  label:'喜劇專場',   labelEn:'Comedy Special'},
   english:  {bg:'#d4eeff',color:'#0a4878',  label:'英文喜劇',   labelEn:'English Comedy'},
-  podcast:  {bg:'#e0f0e0',color:'#1a5c1a',  label:'Live Podcast',labelEn:'Live Podcast'},
+  podcast:  {bg:'#c8e8ff',color:'#0a3860',  label:'Live Podcast',labelEn:'Live Podcast'},
   spevent:   {bg:'#ddd8f8',color:'#3a1e8c',  label:'特殊企劃',   labelEn:'Special Event'},
   other:    {bg:'#e8e8e8',color:'#444',     label:'其他',       labelEn:'Others'},
 };
@@ -2419,9 +2680,12 @@ function syncFiltersToURL(){
 function resetAllFilters(){
   fType='all'; fVenue='all'; fArea='all'; fDay='all';
   showsPage=1;
-  // 重置所有 chip 為 all
-  ['type','venue','area','day'].forEach(f=>{
-    document.querySelectorAll(`.chip[data-f="${f}"]`).forEach(c=>c.classList.toggle('on', c.dataset.v==='all'));
+  // 重置 type chip
+  document.querySelectorAll(`.chip[data-f="type"]`).forEach(c=>c.classList.toggle('on', c.dataset.v==='all'));
+  // 重置下拉選單
+  ['sel-venue','sel-area','sel-day'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.value='all';el.classList.remove('active');}
   });
   // 清空搜尋欄
   const searchEl = document.getElementById('shows-search');
@@ -2446,9 +2710,9 @@ function restoreFiltersFromURL(){
   if(!qs) return;
   const params = new URLSearchParams(qs);
   if(params.get('type'))  { fType  = params.get('type');  setChip('type',  fType); }
-  if(params.get('venue')) { fVenue = params.get('venue'); setChip('venue', fVenue); }
-  if(params.get('area'))  { fArea  = params.get('area');  setChip('area',  fArea); }
-  if(params.get('day'))   { fDay   = params.get('day');   setChip('day',   fDay); }
+  if(params.get('venue')) { fVenue = params.get('venue'); const el=document.getElementById('sel-venue'); if(el){el.value=fVenue;el.classList.toggle('active',fVenue!=='all');} }
+  if(params.get('area'))  { fArea  = params.get('area');  const el=document.getElementById('sel-area');  if(el){el.value=fArea; el.classList.toggle('active',fArea!=='all');} }
+  if(params.get('day'))   { fDay   = params.get('day');   const el=document.getElementById('sel-day');   if(el){el.value=fDay;  el.classList.toggle('active',fDay!=='all');} }
   if(params.get('ctype')) { fCtype = params.get('ctype'); setChip('ctype', fCtype); }
   if(params.get('city'))  { fCity  = params.get('city');  setChip('city',  fCity); }
   if(params.get('q')) {
@@ -3066,6 +3330,70 @@ function renderHomeShows() {
   // 讓瀏覽器先完成 layout 再讀取欄數
   if(typeof requestAnimationFrame !== 'undefined') requestAnimationFrame(doRender);
   else doRender();
+}
+
+// ── HOME UPCOMING LIST ──
+function renderHomeUpcoming() {
+  const el = document.getElementById('home-upcoming-list');
+  if (!el) return;
+  const shows = window._SHOWS || SHOWS || [];
+  const lang = getLang();
+
+  // 星期縮寫
+  const DOW_ZH = ['日','一','二','三','四','五','六'];
+  const DOW_EN = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+
+  const upcoming = shows
+    .filter(s => (s.status || 'published') === 'published' && !isExpired(s.date, s.time))
+    .sort((a, b) => showSortKey(a).localeCompare(showSortKey(b)))
+    .slice(0, 4);
+
+  if (!upcoming.length) {
+    el.innerHTML = `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:12px 0;text-align:center">
+      <span class="zh-text">近期演出整理中，敬請期待！</span>
+      <span class="en-text">More shows coming soon!</span>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = upcoming.map(s => {
+    // 日期格式
+    const rawDate = String(s.date || '').split(',')[0].trim().replace(/\//g, '-');
+    const d = new Date(rawDate + 'T00:00');
+    const isValidDate = !isNaN(d);
+    const mm = isValidDate ? String(d.getMonth() + 1).padStart(2, '0') : '--';
+    const dd = isValidDate ? String(d.getDate()).padStart(2, '0') : '--';
+    const dow = isValidDate ? (lang === 'en' ? DOW_EN[d.getDay()] : DOW_ZH[d.getDay()]) : '';
+
+    // 類型（取第一個）
+    const types = Array.isArray(s.types) ? s.types : (s.type ? [s.type] : ['other']);
+    const firstType = types[0] || 'other';
+    const meta = TYPE_META[firstType] || TYPE_META.other;
+    const tagLabel = lang === 'en' ? meta.labelEn : meta.label;
+
+    // 海報 emoji fallback
+    const emojiMap = {opmic:'🎤', standup:'🎭', improv:'🎪', sketch:'🎬', mancai:'🥢', musicom:'🎵', english:'🌏'};
+    const thumbEmoji = emojiMap[firstType] || '🎭';
+    const thumbHtml = (s.image && s.image.trim())
+      ? `<img src="${s.image.trim()}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0" referrerpolicy="no-referrer" onerror="this.outerHTML='<div style=\\'font-size:1.4rem\\'>${thumbEmoji}</div>'">`
+      : `<div class="home-show-thumb" style="font-size:1.4rem">${thumbEmoji}</div>`;
+
+    // 場地名稱（用 helper 轉換 id → 名稱）
+    const venue = getShowVenueLabelById(s.venue) || s.venue || '';
+    const time  = s.time  || '';
+
+    return `<div class="home-show-row" onclick="openShowDetail('${s.id}')" style="cursor:pointer">
+      <div class="home-show-date-block"><div class="md">${mm}/${dd}</div><div class="wd">${dow}</div></div>
+      <div class="home-show-thumb">${(s.image && s.image.trim())
+        ? `<img src="${s.image.trim()}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
+        : `<span style="font-size:1.4rem">${thumbEmoji}</span>`}</div>
+      <div class="home-show-info">
+        <div class="home-show-title">${s.title || ''}</div>
+        <div class="home-show-meta">${time ? '⏰ ' + time + ' &nbsp;' : ''}${venue ? '📍 ' + venue : ''}</div>
+      </div>
+      <div class="home-show-tag" style="background:${meta.bg};color:${meta.color}">${tagLabel}</div>
+    </div>`;
+  }).join('');
 }
 
 // ── COURSES ──
@@ -5207,7 +5535,7 @@ function restorePageFromHash(){
   // 還原篩選條件（chips 已存在）
   restoreFiltersFromURL();
   // render 一次（opmic 等 Firebase 載完才 render，避免空資料閃爍）
-  if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
+  if(page==='home'){renderHomeShows();renderHomeUpcoming();renderHomeComments();renderHeroStats();}
   if(page==='shows') renderShows();
   if(page==='courses') renderCourses();
   if(page==='about') renderAbout();
@@ -5444,7 +5772,7 @@ function showPage(page, skipHistory){
   } else {
     history.replaceState({page},'','#'+page);
   }
-  if(page==='home'){renderHomeShows();renderHomeComments();renderHeroStats();}
+  if(page==='home'){renderHomeShows();renderHomeUpcoming();renderHomeComments();renderHeroStats();}
   if(page==='shows')renderShows();
   if(page==='opmic'){initTodayTab();selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));}
   if(page==='venues')renderVenues();
