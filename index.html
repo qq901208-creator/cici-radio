@@ -574,18 +574,27 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
 .about-goal-more{font-size:.8rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7;border-top:1px solid rgba(45,43,31,.08);padding-top:10px;margin-top:4px}
 .about-goal-toggle{margin-top:auto;padding:5px 0;background:none;border:none;color:var(--or);font-size:.78rem;font-weight:600;font-family:var(--f-zh);cursor:pointer;text-align:left;transition:opacity .15s}
 .about-goal-toggle:hover{opacity:.7}
-/* Timeline */
-.about-timeline{display:flex;flex-direction:column;gap:0;margin-top:16px;position:relative;padding-left:20px}
-.about-timeline::before{content:'';position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--or),rgba(239,111,32,.2))}
-.about-tl-item{display:grid;grid-template-columns:auto auto 1fr;gap:0 14px;align-items:start;padding-bottom:24px;position:relative}
-.about-tl-item:last-child{padding-bottom:0}
-.about-tl-dot{width:16px;height:16px;border-radius:50%;background:var(--or);border:3px solid var(--ww);box-shadow:0 0 0 2px var(--or);flex-shrink:0;margin-top:3px;position:relative;z-index:1}
-.about-tl-dot-now{background:var(--or);box-shadow:0 0 0 3px rgba(239,111,32,.3),0 0 0 2px var(--or)}
-.about-tl-year{font-size:.9rem;font-weight:900;font-family:var(--f-bo);color:var(--or);white-space:nowrap;padding-top:1px}
-.about-tl-title{font-size:.92rem;font-weight:700;font-family:var(--f-zh);color:var(--sd);margin-bottom:4px}
-.about-tl-summary{font-size:.82rem;color:var(--ts);font-family:var(--f-zh);line-height:1.65}
-.about-tl-more{font-size:.82rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7;margin-top:8px;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)}
-@media(max-width:768px){.about-goals{grid-template-columns:1fr}};padding:calc(var(--nav)+56px) 5vw 66px;text-align:center;position:relative;overflow:hidden}
+/* Timeline - horizontal on desktop, vertical on mobile */
+.about-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:20px;position:relative}
+.about-timeline::before{content:'';position:absolute;top:8px;left:calc(12.5%);right:calc(12.5%);height:2px;background:linear-gradient(to right,var(--or),rgba(239,111,32,.2));z-index:0}
+.about-tl-item{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 8px;position:relative}
+.about-tl-dot{width:18px;height:18px;border-radius:50%;background:var(--or);border:3px solid var(--ww);box-shadow:0 0 0 2px var(--or);flex-shrink:0;margin-bottom:12px;position:relative;z-index:1}
+.about-tl-dot-now{box-shadow:0 0 0 4px rgba(239,111,32,.25),0 0 0 2px var(--or)}
+.about-tl-year{font-size:.88rem;font-weight:900;font-family:var(--f-bo);color:var(--or);margin-bottom:6px}
+.about-tl-content{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%}
+.about-tl-title{font-size:.86rem;font-weight:700;font-family:var(--f-zh);color:var(--sd);line-height:1.4}
+.about-tl-summary{font-size:.76rem;color:var(--ts);font-family:var(--f-zh);line-height:1.6}
+.about-tl-more{font-size:.76rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7;margin-top:6px;padding-top:6px;border-top:1px solid rgba(45,43,31,.07);text-align:left}
+@media(max-width:768px){
+  .about-timeline{display:flex;flex-direction:column;gap:0;padding-left:20px}
+  .about-timeline::before{left:7px;top:8px;bottom:8px;right:auto;width:2px;height:auto;background:linear-gradient(to bottom,var(--or),rgba(239,111,32,.2))}
+  .about-tl-item{flex-direction:row;align-items:flex-start;text-align:left;padding:0 0 24px 0;gap:14px}
+  .about-tl-item:last-child{padding-bottom:0}
+  .about-tl-dot{margin-bottom:0;margin-top:3px;flex-shrink:0}
+  .about-tl-content{align-items:flex-start}
+  .about-tl-more{text-align:left}
+  .about-goal-toggle{text-align:left}
+};padding:calc(var(--nav)+56px) 5vw 66px;text-align:center;position:relative;overflow:hidden}
 .about-hero::before{content:'';position:absolute;width:480px;height:480px;border-radius:50%;background:var(--y);opacity:.33;top:-170px;right:-100px}
 .about-logo{width:110px;height:110px;border-radius:20px;overflow:hidden;margin:0 auto 22px;border:3px solid rgba(239,111,32,.2);box-shadow:0 6px 28px rgba(239,111,32,.15);position:relative;z-index:1}
 .about-logo img{width:100%;height:100%;object-fit:contain;display:block}
@@ -1767,7 +1776,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <div class="about-tl-year">2022</div>
           <div class="about-tl-content">
             <div class="about-tl-title"><span class="zh-text">🎙️ Podcast 誕生</span><span class="en-text">🎙️ Podcast Launched</span></div>
-            <div class="about-tl-summary"><span class="zh-text">六位世新大學的大學生，因對台灣現場喜劇的熱愛，共同創立了「嘻嘻哪哩唷」，並推出同名 Podcast 節目。</span><span class="en-text">Six students from Shih Hsin University, driven by a passion for live comedy, co-founded "Cici Radio" and launched the namesake podcast.</span></div>
+            <div class="about-tl-summary"><span class="zh-text">六位世新大學的大學生，因對台灣現場喜劇的熱愛，共同創立了「嘻嘻哪哩唷」，並推出同名 Podcast 節目。</span><span class="en-text">Six students from Shih Hsin University co-founded "Cici Radio" and launched the namesake podcast.</span></div>
             <div class="about-tl-more" style="display:none"><span class="zh-text">六位就讀世新大學廣播電視電影學系的大學生，因爲對台灣現場喜劇有著滿腔的熱情！共同催生了「嘻嘻哪哩唷」這個品牌/頻道，製作了以採訪喜劇演員為題的同名 Podcast 節目。</span><span class="en-text">Six students from the Department of Radio, Television and Film at Shih Hsin University, driven by an overflowing passion for live comedy in Taiwan, came together to create the brand and channel "Cici Radio" — producing a podcast of the same name featuring interviews with comedians.</span></div>
             <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
           </div>
@@ -1777,18 +1786,28 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <div class="about-tl-year">2023</div>
           <div class="about-tl-content">
             <div class="about-tl-title"><span class="zh-text">📊 開始整理</span><span class="en-text">📊 Spreadsheet Era</span></div>
-            <div class="about-tl-summary"><span class="zh-text">推出「台灣現場喜劇時間表」Google 試算表，整理演出資訊，讓更多人找到今晚該去哪。</span><span class="en-text">Launched the "Taiwan Live Comedy Schedule" Google Spreadsheet to help people find shows happening tonight.</span></div>
-            <div class="about-tl-more" style="display:none"><span class="zh-text">我們開始了漫長的「台灣現場喜劇時間表」Google 試算表製作，整理了所有這個網站包含、又不完全包含的眾多喜劇內容。在我們一度停更的空窗期中，喜劇演員 Pete 也大力協助，一人扛起了資訊更新的重要工作。</span><span class="en-text">We began the long journey of maintaining a "Taiwan Live Comedy Schedule" Google Spreadsheet. During a period when we went on hiatus, comedian Pete stepped up and single-handedly kept the information updated.</span></div>
+            <div class="about-tl-summary"><span class="zh-text">推出「台灣現場喜劇時間表」Google 試算表，整理演出資訊，讓更多人找到今晚該去哪。</span><span class="en-text">Launched the "Taiwan Live Comedy Schedule" spreadsheet to help people find shows happening tonight.</span></div>
+            <div class="about-tl-more" style="display:none"><span class="zh-text">我們開始了漫長的「台灣現場喜劇時間表」Google 試算表製作，整理了所有這個網站包含、又不完全包含的眾多喜劇內容。在我們一度停更的空窗期中，喜劇演員 Pete 也大力協助，一人扛起了資訊更新的重要工作。</span><span class="en-text">We began maintaining a "Taiwan Live Comedy Schedule" Google Spreadsheet. During a period when we went on hiatus, comedian Pete stepped up and single-handedly kept the information updated.</span></div>
+            <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
+          </div>
+        </div>
+        <div class="about-tl-item">
+          <div class="about-tl-dot"></div>
+          <div class="about-tl-year">2025/4</div>
+          <div class="about-tl-content">
+            <div class="about-tl-title"><span class="zh-text">💛 重新出發</span><span class="en-text">💛 A New Beginning</span></div>
+            <div class="about-tl-summary"><span class="zh-text">一場憾事讓成員鼻猴、Kooky、Yumi 決定重拾嘻嘻哪哩唷，開始每週在 Instagram 整理喜劇演出資訊。</span><span class="en-text">A heartbreaking event prompted the team to revive Cici Radio — sharing weekly comedy show updates on Instagram.</span></div>
+            <div class="about-tl-more" style="display:none"><span class="zh-text">2025 年 4 月份發生的憾事，讓成員鼻猴、Kooky、Yumi 決定重拾嘻嘻哪哩唷的經營。從此開始每週手動整理全台喜劇演出資訊，並在 Instagram 上發布，持續陪伴喜劇圈。</span><span class="en-text">Following a heartbreaking event in April 2025, members Bíhóu, Kooky, and Yumi decided to revive Cici Radio. They began manually curating Taiwan's comedy show information every week, sharing it on Instagram to stay connected with the comedy community.</span></div>
             <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
           </div>
         </div>
         <div class="about-tl-item">
           <div class="about-tl-dot about-tl-dot-now"></div>
-          <div class="about-tl-year" style="color:var(--or)">2025</div>
+          <div class="about-tl-year" style="color:var(--or)">2026/5</div>
           <div class="about-tl-content">
             <div class="about-tl-title"><span class="zh-text">🎉 網站誕生</span><span class="en-text">🎉 Website Launched</span></div>
-            <div class="about-tl-summary"><span class="zh-text">嘻嘻哪哩唷網站正式上線！希望透過更方便的介面與功能，讓更多人認識台灣喜劇。</span><span class="en-text">Cici Radio website goes live — with a better interface to help more people discover Taiwan's comedy scene.</span></div>
-            <div class="about-tl-more" style="display:none"><span class="zh-text">2025 年 4 月份發生的憾事，讓成員鼻猴、Kooky、Yumi 決定重拾嘻嘻哪哩唷的經營，為了讓全台喜劇演出的資訊更方便查閱，鼻猴決定將「台灣現場喜劇時間表」的精神繼承下去，透過 AI 學習網站架設，也因此誕生了現在你所看到的「嘻嘻哪哩唷｜台灣喜劇演出資訊站」。</span><span class="en-text">Following a heartbreaking event in April 2025, members Bíhóu, Kooky, and Yumi decided to revive Cici Radio. Bíhóu resolved to carry on the spirit of the spreadsheet — learning web development with the help of AI — and so was born the site you're looking at now.</span></div>
+            <div class="about-tl-summary"><span class="zh-text">嘻嘻哪哩唷網站正式上線！希望透過更方便的介面與功能，讓更多人認識台灣喜劇。</span><span class="en-text">Cici Radio website goes live — a better way to explore Taiwan's comedy scene.</span></div>
+            <div class="about-tl-more" style="display:none"><span class="zh-text">鼻猴決定將「台灣現場喜劇時間表」的精神繼承下去，透過 AI 學習網站架設，也因此誕生了現在你所看到的「嘻嘻哪哩唷｜台灣喜劇演出資訊站」。希望透過更方便的介面與功能，讓更多人認識並走進台灣現場喜劇。</span><span class="en-text">Bíhóu resolved to carry on the spirit of the spreadsheet — learning web development with the help of AI — and so was born the site you're looking at now: Cici Radio | Taiwan Comedy Show Guide.</span></div>
             <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
           </div>
         </div>
