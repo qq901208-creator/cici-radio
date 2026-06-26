@@ -3406,6 +3406,13 @@ function renderShows() {
       if(aHidden && !bHidden) return -1;
       if(!aHidden && bHidden) return 1;
     }
+    // 使用者模式：過期演出排到最後
+    if(!adminMode){
+      const aExp = isExpired(a.date, a.time);
+      const bExp = isExpired(b.date, b.time);
+      if(aExp && !bExp) return 1;
+      if(!aExp && bExp) return -1;
+    }
     return showSortKey(a).localeCompare(showSortKey(b));
   });
 
