@@ -1447,7 +1447,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         </div>
       </div>
     </div>
-    <!-- 地區篩選 -->
+    <!-- 地區 + 類型篩選 -->
     <div class="opmic-filters">
       <select id="mic-area-filter" class="filter-dropdown" onchange="renderMicTable()">
         <option value="all"><span class="zh-text">全部地區</span></option>
@@ -1460,8 +1460,21 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <option value="kaohsiung"><span class="zh-text">高雄</span></option>
         <option value="other"><span class="zh-text">其他</span></option>
       </select>
+      <select id="mic-type-filter" class="filter-dropdown" onchange="renderMicTable()">
+        <option value="all">全部類型</option>
+        <option value="standup">站立喜劇</option>
+        <option value="improv">即興</option>
+        <option value="mancai">漫才</option>
+        <option value="crosstalk">相聲</option>
+        <option value="rakugo">落語</option>
+        <option value="ogiri">大喜利</option>
+        <option value="english">英文喜劇</option>
+        <option value="musicom">音樂喜劇</option>
+        <option value="other">其他</option>
+      </select>
     </div>
     <div class="day-tabs" id="day-tabs-row">
+      <button class="day-tab" data-day="all" onclick="selectMicDay('all',this)"><span class="zh-text">全部</span><span class="en-text">All</span></button>
       <button class="day-tab on" data-day="1" onclick="selectMicDay(1,this)"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
       <button class="day-tab" data-day="2" onclick="selectMicDay(2,this)"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
       <button class="day-tab" data-day="3" onclick="selectMicDay(3,this)"><span class="zh-text">週三</span><span class="en-text">Wed.</span></button>
@@ -2197,6 +2210,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="improv" style="accent-color:var(--or)"> 即興</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="mancai" style="accent-color:var(--or)"> 漫才</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="crosstalk" style="accent-color:var(--or)"> 相聲</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="rakugo" style="accent-color:var(--or)"> 落語</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ogiri" style="accent-color:var(--or)"> 大喜利</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="english" style="accent-color:var(--or)"> 英文喜劇</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="musicom" style="accent-color:var(--or)"> 音樂喜劇</label>
@@ -4201,14 +4215,19 @@ function renderMicTable() {
   if(wrap) wrap.classList.add('ready');
   if(loading) loading.classList.add('hidden');
 
-  const isAdmin = isLoggedIn() && editMode; // 必須登入且在編輯模式
+  const isAdmin = isLoggedIn() && editMode;
   const lang=getLang();
   const isIrregular = micDay === 'irregular';
   const micAreaFilter = document.getElementById('mic-area-filter')?.value || 'all';
+  const micTypeFilter = document.getElementById('mic-type-filter')?.value || 'all';
   const rows=MICS.filter(m=>{
     if(isIrregular) return m.day === 'irregular';
-    if(m.day !== micDay) return false;
+    if(micDay !== 'all' && m.day !== micDay) return false;
     if(micAreaFilter !== 'all' && m.city !== micAreaFilter) return false;
+    if(micTypeFilter !== 'all'){
+      const mt = Array.isArray(m.types) ? m.types : (m.types ? [m.types] : []);
+      if(!mt.includes(micTypeFilter)) return false;
+    }
     return true;
   }).sort((a,b)=>{
     // ① 報名時間由早到晚（轉 24 小時制，無法解析排最後）
@@ -4830,10 +4849,10 @@ function renderMicCards(rows, isAdmin, lang, isIrregular) {
   }).join('');
 }
 function selectMicDay(d,el){
-  micDay = (d === 'irregular') ? 'irregular' : parseInt(d);
+  micDay = (d === 'irregular') ? 'irregular' : (d === 'all') ? 'all' : parseInt(d);
   document.querySelectorAll('.day-tab').forEach(t=>{
     const tv = t.dataset.day;
-    t.classList.toggle('on', tv === String(micDay) || (tv === 'irregular' && micDay === 'irregular'));
+    t.classList.toggle('on', tv === String(micDay) || (tv === 'irregular' && micDay === 'irregular') || (tv === 'all' && micDay === 'all'));
   });
   renderMicTable();
 }
@@ -4844,8 +4863,8 @@ function initTodayTab() {
   document.querySelectorAll('.day-tab').forEach(btn => {
     btn.classList.remove('today-tab');
     const old = btn.querySelector('.today-badge'); if(old) old.remove();
-    // irregular tab 永遠不加 today highlight
-    if(btn.dataset.day === 'irregular') return;
+    // irregular 和 all tab 永遠不加 today highlight
+    if(btn.dataset.day === 'irregular' || btn.dataset.day === 'all') return;
     if(parseInt(btn.dataset.day) === todayDay) {
       btn.classList.add('today-tab');
       const badge = document.createElement('span');
