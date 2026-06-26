@@ -581,6 +581,7 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
   .about-goal-title{font-size:.88rem}
   .about-goal-summary{font-size:.8rem}
   #about-pie-legend{grid-template-columns:1fr!important}
+  #about-pie-wrap{flex-direction:column;align-items:flex-start}
 }
 /* Timeline - horizontal on desktop, vertical on mobile */
 .about-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:20px;position:relative}
@@ -1870,7 +1871,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <!-- 演出類型圓餅圖 -->
       <div>
         <div style="font-size:.86rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:12px;letter-spacing:.05em"><span class="zh-text">演出類型佔比</span><span class="en-text">Show Types</span></div>
-        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;overflow:hidden">
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;overflow:hidden" id="about-pie-wrap">
           <canvas id="about-pie-chart" width="140" height="140" style="flex-shrink:0"></canvas>
           <div id="about-pie-legend" style="display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;font-size:.84rem;font-family:var(--f-zh);min-width:0;flex:1"></div>
         </div>
@@ -3648,13 +3649,14 @@ function renderAboutStats(){
     });
     const col1 = legendItems.slice(0,4).join('');
     const col2 = legendItems.slice(4).join('');
+    const isMob = window.innerWidth <= 768;
     legendEl.style.cssText = 'min-width:0;flex:1;overflow:hidden';
-    legendEl.innerHTML = col2
+    legendEl.innerHTML = (col2 && !isMob)
       ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;width:100%">
           <div style="display:flex;flex-direction:column;gap:4px;min-width:0">${col1}</div>
           <div style="display:flex;flex-direction:column;gap:4px;min-width:0">${col2}</div>
         </div>`
-      : `<div style="display:flex;flex-direction:column;gap:4px">${col1}</div>`;
+      : `<div style="display:flex;flex-direction:column;gap:4px">${col1}${col2}</div>`;
   }
 }
 
