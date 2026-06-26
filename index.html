@@ -2728,6 +2728,7 @@ async function loadAllData(retryCount = 0) {
     if(typeof renderPerformers==='function') try{renderPerformers();}catch(e){console.error('renderPerformers:',e);}
     if(typeof renderCourses==='function') try{renderCourses();}catch(e){console.error('renderCourses:',e);}
     if(typeof renderAbout==='function') try{renderAbout();}catch(e){console.error('renderAbout:',e);}
+    if(typeof renderAboutStats==='function') try{renderAboutStats();}catch(e){console.error('renderAboutStats:',e);}
     if(typeof renderFpList==='function') try{renderFpList();}catch(e){console.error('renderFpList:',e);}
     if(typeof renderRatBar==='function') try{renderRatBar();}catch(e){}
     if(typeof selectMicDay==='function') try{
