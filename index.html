@@ -3553,7 +3553,7 @@ function renderHeroStats(){
 }
 
 function renderAboutStats(){
-  const shows = (window._SHOWS||[]).filter(s=>(s.status||'published')!=='hidden');
+  const shows = window._SHOWS||[];  // 包含封存演出
   const performers = window._PERFORMERS||[];
   const venues = window._VENUES||[];
   const courses = window._COURSES||[];  const lang = getLang();
