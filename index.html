@@ -117,14 +117,14 @@ body.ready{visibility:visible}
 .hst-cta-arr{font-size:.85rem;color:var(--or);font-weight:700;flex-shrink:0}
 /* HOME MID — 快速前往 + 最近演出 */
 .home-mid{display:grid;grid-template-columns:1fr 1.75fr;gap:10px;padding:28px 5vw 12px}
-.home-quick-nav{background:#fff;border-radius:var(--r-xl);padding:12px 14px;box-shadow:0 4px 16px rgba(45,43,31,.06)}
-.home-quick-nav h3{font-family:var(--f-zh);font-weight:900;font-size:.84rem;color:var(--sd);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.home-quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.home-quick-card{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;transition:background .15s,transform .15s;border:none;font-family:var(--f-zh)}
-.home-quick-card:hover{background:var(--py);transform:translateY(-2px)}
-.qc-icon{width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:.9rem;box-shadow:0 2px 6px rgba(45,43,31,.08)}
-.qc-title{font-size:.84rem;font-weight:700;color:var(--sd);text-align:center}
-.qc-sub{font-size:.7rem;color:var(--ts)}
+.home-quick-nav{background:#fff;border-radius:var(--r-xl);padding:22px 20px;box-shadow:0 6px 24px rgba(45,43,31,.1)}
+.home-quick-nav h3{font-family:var(--f-zh);font-weight:900;font-size:1.1rem;color:var(--sd);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.home-quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.home-quick-card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 10px;background:var(--cr);border-radius:var(--r-lg);cursor:pointer;transition:background .15s,transform .15s,border-color .15s;border:2px solid transparent;font-family:var(--f-zh)}
+.home-quick-card:hover{background:var(--py);transform:translateY(-3px);border-color:var(--or)}
+.qc-icon{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 2px 8px rgba(45,43,31,.1)}
+.qc-title{font-size:.92rem;font-weight:700;color:var(--sd);text-align:center}
+.qc-sub{font-size:.76rem;color:var(--ts)}
 .home-upcoming{background:#fff;border-radius:var(--r-xl);padding:12px 14px;box-shadow:0 4px 16px rgba(45,43,31,.06);display:flex;flex-direction:column;overflow:hidden}
 .home-upcoming-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .home-upcoming-header h3{font-family:var(--f-zh);font-weight:900;font-size:.84rem;color:var(--sd)}
@@ -170,7 +170,7 @@ body.ready{visibility:visible}
   .home-podcast-player{display:none}
 }
 /* HOME BOARD */
-.home-board-sec{background:#fff;padding:40px 5vw 44px}
+.home-board-sec{background:var(--ww);padding:40px 5vw 44px}
 .home-board-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;max-width:1100px;margin-left:auto;margin-right:auto}
 .home-board-more-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 18px;background:var(--py);border-radius:var(--r-pill);font-size:.8rem;font-weight:700;font-family:var(--f-zh);color:var(--or);border:none;cursor:pointer;transition:background .15s;white-space:nowrap}
 .home-board-more-btn:hover{background:var(--y)}
@@ -1204,7 +1204,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <!-- 快速前往 -->
     <div class="home-quick-nav">
       <h3>
-        <span class="zh-text">快速前往</span><span class="en-text">Quick Nav</span>
+        <span class="zh-text">今天你想找什麼？</span><span class="en-text">What are you looking for?</span>
         <span style="color:var(--or);margin-left:4px">✦</span>
       </h3>
       <div class="home-quick-grid">
@@ -1308,7 +1308,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
 <!-- SHOWS PAGE -->
 <div class="page" id="page-shows">
-  <section class="sec shows-sec" style="background:#f6efcf;padding-top:36px;padding-bottom:44px">
+  <section class="sec shows-sec" style="background:var(--cr);padding-top:36px;padding-bottom:44px">
     <!-- 頁面標題（桌機版在月曆上方） -->
     <div class="shows-top-header">
       <div>
@@ -1574,7 +1574,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
 <!-- COURSES PAGE — no Open Mic / English Comedy -->
 <div class="page" id="page-performers">
-  <section class="sec" style="background:#f6efcf">
+  <section class="sec" style="background:var(--py)">
     <div class="sec-label"><span class="zh-text">認識他們</span><span class="en-text">Meet the Comedians</span></div>
     <h2 class="sec-title"><span class="zh-text">現場喜劇演員資料庫 <span style="font-size:.5em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo);white-space:nowrap;display:inline-block">新功能更新中</span></span><span class="en-text">Performer Directory <span style="font-size:.5em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo);white-space:nowrap;display:inline-block">New</span></span></h2>
     <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br><a href="https://docs.google.com/forms/d/e/1FAIpQLSczttWuxCd3nGvrRfIsMeh_wJ4uftg3rGL7jEJEHo-MpSToog/viewform" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem"><span class="zh-text">發現資訊錯誤或想放上自己的資料嗎？歡迎填寫表單！</span></a></span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br><a href="https://docs.google.com/forms/d/e/1FAIpQLSczttWuxCd3nGvrRfIsMeh_wJ4uftg3rGL7jEJEHo-MpSToog/viewform" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found an error or want to add yourself? Let us know →</a></span></p>
