@@ -500,6 +500,7 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
   .opmic-top-right{display:none}
   .opmic-filters{display:flex!important;gap:6px;margin-bottom:12px}
   .opmic-filters .filter-dropdown{flex:1 1 0!important;min-width:0!important;width:0!important;font-size:.8rem;padding:8px 24px 8px 8px}
+  .opmic-filters .filter-reset-btn{flex-shrink:0;padding:7px 10px;font-size:.78rem}
   #page-opmic .opmic-filters{display:flex!important}
   #page-opmic .opmic-filters .filter-dropdown{display:block!important;flex:1 1 0!important;min-width:0!important;width:0!important}
   .mic-table-wrap{display:none!important}
@@ -1480,6 +1481,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <option value="musicom">音樂喜劇</option>
         <option value="other">其他</option>
       </select>
+      <button class="filter-reset-btn" onclick="resetMicFilters()">✕ <span class="zh-text">重置</span><span class="en-text">Reset</span></button>
     </div>
     <div class="day-tabs" id="day-tabs-row">
       <button class="day-tab" data-day="all" onclick="selectMicDay('all',this)"><span class="zh-text">全部</span><span class="en-text">All</span></button>
@@ -4856,6 +4858,16 @@ function renderMicCards(rows, isAdmin, lang, isIrregular) {
     </div>`;
   }).join('');
 }
+function resetMicFilters(){
+  const area = document.getElementById('mic-area-filter');
+  const type = document.getElementById('mic-type-filter');
+  if(area) area.value = 'all';
+  if(type) type.value = 'all';
+  // tab 重置回今天
+  const todayDay = new Date().getDay();
+  selectMicDay(todayDay, document.querySelector(`.day-tab[data-day="${todayDay}"]`));
+}
+
 function selectMicDay(d,el){
   micDay = (d === 'irregular') ? 'irregular' : (d === 'all') ? 'all' : parseInt(d);
   document.querySelectorAll('.day-tab').forEach(t=>{
