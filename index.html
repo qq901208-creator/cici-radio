@@ -494,7 +494,10 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
 @media(max-width:768px){
   .opmic-top-row{display:block}
   .opmic-top-right{display:none}
-  .opmic-filters{display:none}
+  .opmic-filters{display:flex!important;gap:6px;margin-bottom:12px}
+  .opmic-filters .filter-dropdown{flex:1 1 0!important;min-width:0!important;width:0!important;font-size:.8rem;padding:8px 24px 8px 8px}
+  #page-opmic .opmic-filters{display:flex!important}
+  #page-opmic .opmic-filters .filter-dropdown{display:block!important;flex:1 1 0!important;min-width:0!important;width:0!important}
   .mic-table-wrap{display:none!important}
   .mic-cards-list{display:flex!important}
 }
