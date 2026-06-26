@@ -574,6 +574,13 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
 .about-goal-more{font-size:.86rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7;border-top:1px solid rgba(45,43,31,.08);padding-top:10px;margin-top:4px}
 .about-goal-toggle{margin-top:auto;padding:5px 0;background:none;border:none;color:var(--or);font-size:.78rem;font-weight:600;font-family:var(--f-zh);cursor:pointer;text-align:left;transition:opacity .15s}
 .about-goal-toggle:hover{opacity:.7}
+@media(max-width:768px){
+  .about-goals{grid-template-columns:1fr;gap:10px}
+  .about-goal-card{flex-direction:row;align-items:flex-start;gap:12px;padding:14px}
+  .about-goal-icon{font-size:1.3rem;flex-shrink:0;margin-bottom:0}
+  .about-goal-title{font-size:.88rem}
+  .about-goal-summary{font-size:.8rem}
+}
 /* Timeline - horizontal on desktop, vertical on mobile */
 .about-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:20px;position:relative}
 .about-timeline::before{content:'';position:absolute;top:8px;left:calc(12.5%);right:calc(12.5%);height:2px;background:linear-gradient(to right,var(--or),rgba(239,111,32,.2));z-index:0}
@@ -1857,7 +1864,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <!-- 每月演出長條圖 -->
       <div style="margin-bottom:24px">
         <div style="font-size:.86rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:10px;letter-spacing:.05em"><span class="zh-text">每月演出場數</span><span class="en-text">Shows per Month</span></div>
-        <div id="about-monthly-chart" style="display:flex;align-items:flex-end;gap:6px;height:100px"></div>
+        <div id="about-monthly-chart" style="display:flex;align-items:flex-end;gap:6px;height:100px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px"></div>
       </div>
       <!-- 演出類型圓餅圖 -->
       <div>
@@ -3586,7 +3593,7 @@ function renderAboutStats(){
       const key = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}`;
       monthly[key] = (monthly[key]||0)+1;
     });
-    const keys = Object.keys(monthly).sort();
+    const keys = Object.keys(monthly).sort().slice(-12);
     const max = Math.max(...Object.values(monthly), 1);
     const chartH = 120;
     monthlyEl.style.height = chartH + 'px';
