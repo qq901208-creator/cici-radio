@@ -473,10 +473,28 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
 .mic-card-signup-btn:hover{background:#d45c10}
 .mic-card-admin{display:flex;gap:6px}
 /* desktop: show table hide cards; mobile: show cards hide table */
+.opmic-top-row{display:flex;gap:28px;align-items:flex-start;margin-bottom:24px}
+.opmic-top-left{flex:1;min-width:0}
+.opmic-top-right{flex:0 0 300px;align-self:flex-start}
+.opmic-report-banner{background:rgba(239,111,32,.08);border:1.5px solid rgba(239,111,32,.25);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:12px}
+.opmic-report-icon{font-size:1.4rem}
+.opmic-report-text{flex:1;min-width:0}
+.opmic-report-title{font-size:.88rem;font-weight:700;font-family:var(--f-zh);color:var(--sd);margin-bottom:4px}
+.opmic-report-desc{font-size:.74rem;color:var(--ts);font-family:var(--f-zh);line-height:1.5}
+.opmic-report-btn{padding:8px 16px;background:transparent;border:1.5px solid var(--or);color:var(--or);border-radius:var(--r-pill);font-size:.8rem;font-weight:700;font-family:var(--f-zh);text-decoration:none;white-space:nowrap;transition:all .15s;align-self:flex-start}
+.opmic-report-btn:hover{background:var(--or);color:#fff}
+.opmic-filters{display:flex;gap:10px;margin-bottom:14px}
+.opmic-filters .filter-dropdown{min-width:140px}
+/* 桌機版表格隱藏 */
+.mic-table-wrap{display:none!important}
 @media(min-width:769px){
-  .mic-cards-list{display:none!important}
+  .mic-cards-list{display:flex!important;flex-direction:row;flex-wrap:wrap;gap:16px}
+  .mic-cards-list .mic-card{flex:0 0 calc(25% - 12px)}
 }
 @media(max-width:768px){
+  .opmic-top-row{display:block}
+  .opmic-top-right{display:none}
+  .opmic-filters{display:none}
   .mic-table-wrap{display:none!important}
   .mic-cards-list{display:flex!important}
 }
@@ -1410,10 +1428,39 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <!-- OPEN MIC PAGE -->
 <div class="page" id="page-opmic">
   <section class="sec" style="background:var(--py)">
-    <div class="sec-label">Open Mic</div>
-    <h2 class="sec-title"><span class="zh-text">演員 Open Mic 報名資訊</span><span class="en-text">Open Mic Sign-Up Info</span></h2>
-    <p class="sec-desc editable" contenteditable="false"><span class="zh-text">今晚去哪試段子好呢？嘻嘻報你知！<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充場次？歡迎回報 →</a></span><span class="en-text">Not sure where to try your set tonight? Cici's got you!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
-    <div class="opmic-notice" style="display:block;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:8px 14px;margin-bottom:14px;font-size:.72rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">⚠️ <span class="zh-text">點擊報名連結將跳轉至外部頁面，本站不參與任何報名流程！</span><span class="en-text">Sign-up links lead to external pages. We are not involved in any sign-up process.</span></div>
+    <!-- 桌機版標題 + 回報 banner 並排 -->
+    <div class="opmic-top-row">
+      <div class="opmic-top-left">
+        <div class="sec-label">Open Mic</div>
+        <h2 class="sec-title"><span class="zh-text">演員 Open Mic 報名資訊</span><span class="en-text">Open Mic Sign-Up Info</span></h2>
+        <p class="sec-desc editable" contenteditable="false"><span class="zh-text">今晚去哪試段子好呢？嘻嘻報你知！</span><span class="en-text">Not sure where to try your set tonight? Cici's got you!</span></p>
+        <div class="opmic-notice" style="display:block;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:8px 14px;margin-bottom:0;font-size:.72rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">⚠️ <span class="zh-text">點擊報名連結將跳轉至外部頁面，本站不參與任何報名流程！</span><span class="en-text">Sign-up links lead to external pages. We are not involved in any sign-up process.</span></div>
+      </div>
+      <div class="opmic-top-right">
+        <div class="opmic-report-banner">
+          <div class="opmic-report-icon">📢</div>
+          <div class="opmic-report-text">
+            <div class="opmic-report-title"><span class="zh-text">我要回報場次</span><span class="en-text">Report a Venue</span></div>
+            <div class="opmic-report-desc"><span class="zh-text">發現新場次或資訊異動？歡迎填表回報！</span><span class="en-text">Found a new Open Mic or outdated info?</span></div>
+          </div>
+          <a href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener" class="opmic-report-btn"><span class="zh-text">回報場次 →</span><span class="en-text">Report →</span></a>
+        </div>
+      </div>
+    </div>
+    <!-- 地區篩選 -->
+    <div class="opmic-filters">
+      <select id="mic-area-filter" class="filter-dropdown" onchange="renderMicTable()">
+        <option value="all"><span class="zh-text">全部地區</span></option>
+        <option value="taipei"><span class="zh-text">台北</span></option>
+        <option value="newtaipei"><span class="zh-text">新北</span></option>
+        <option value="taoyuan"><span class="zh-text">桃園</span></option>
+        <option value="hsinchu"><span class="zh-text">新竹</span></option>
+        <option value="taichung"><span class="zh-text">台中</span></option>
+        <option value="tainan"><span class="zh-text">台南</span></option>
+        <option value="kaohsiung"><span class="zh-text">高雄</span></option>
+        <option value="other"><span class="zh-text">其他</span></option>
+      </select>
+    </div>
     <div class="day-tabs" id="day-tabs-row">
       <button class="day-tab on" data-day="1" onclick="selectMicDay(1,this)"><span class="zh-text">週一</span><span class="en-text">Mon.</span></button>
       <button class="day-tab" data-day="2" onclick="selectMicDay(2,this)"><span class="zh-text">週二</span><span class="en-text">Tue.</span></button>
@@ -4145,9 +4192,12 @@ function renderMicTable() {
   const isAdmin = isLoggedIn() && editMode; // 必須登入且在編輯模式
   const lang=getLang();
   const isIrregular = micDay === 'irregular';
+  const micAreaFilter = document.getElementById('mic-area-filter')?.value || 'all';
   const rows=MICS.filter(m=>{
     if(isIrregular) return m.day === 'irregular';
-    return m.day === micDay;
+    if(m.day !== micDay) return false;
+    if(micAreaFilter !== 'all' && m.city !== micAreaFilter) return false;
+    return true;
   }).sort((a,b)=>{
     // ① 報名時間由早到晚（轉 24 小時制，無法解析排最後）
     const timeVal = str => {
