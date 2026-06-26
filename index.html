@@ -4773,10 +4773,13 @@ const CAL_MONTHS=['一月','二月','三月','四月','五月','六月','七月'
 const CAL_MONTHS_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 function renderCalendar(){
+  const calLabel=document.getElementById('cal-label');
+  const dowEl=document.getElementById('cal-dow');
+  const daysEl=document.getElementById('cal-days');
+  if(!calLabel||!dowEl||!daysEl) return;
   const lang=getLang();
   const monthLbl=lang==='en'?`${CAL_MONTHS_EN[calMonth]} ${calYear}`:`${calYear} 年 ${CAL_MONTHS[calMonth]}`;
-  document.getElementById('cal-label').textContent=monthLbl;
-  const dowEl=document.getElementById('cal-dow');
+  calLabel.textContent=monthLbl;
   const dowLabels=lang==='en'?['Sun','Mon','Tue','Wed','Thu','Fri','Sat']:['日','一','二','三','四','五','六'];
   dowEl.innerHTML=dowLabels.map(d=>`<div class="cal-dow">${d}</div>`).join('');
   const firstDay=new Date(calYear,calMonth,1).getDay();
@@ -4804,7 +4807,7 @@ function renderCalendar(){
     const dots=hasEv?`<div class="cal-ev-dots">${dayShows.slice(0,3).map(()=>`<div class="cal-ev-dot" style="background:${dotColor}"></div>`).join('')}</div>`:'';
     html+=`<div class="cal-day${hasEv?' has-ev':''}${isToday?' today':''}${isSel?' sel':''}" onclick="selectCalDay('${ds}')">${d}${dots}</div>`;
   }
-  document.getElementById('cal-days').innerHTML=html;
+  daysEl.innerHTML=html;
 }
 
 function changeMonth(dir){
@@ -5769,8 +5772,11 @@ function restorePageFromHash(){
   if(page==='home'){renderHomeShows();renderHomeUpcoming();renderHomeComments();renderHeroStats();}
   if(page==='shows'){
     renderShows();
-    if(window.innerWidth >= 769 && window._dataReady){
-      setTimeout(()=>selectCalDayDesk(getTodayStr()), 50);
+    if(window.innerWidth >= 769){
+      requestAnimationFrame(()=>{
+        renderCalendar();
+        if(window._dataReady) setTimeout(()=>selectCalDayDesk(getTodayStr()), 50);
+      });
     }
   }
   if(page==='courses') renderCourses();
@@ -6011,8 +6017,11 @@ function showPage(page, skipHistory){
   if(page==='home'){renderHomeShows();renderHomeUpcoming();renderHomeComments();renderHeroStats();}
   if(page==='shows'){
     renderShows();
-    if(window.innerWidth >= 769 && window._dataReady){
-      setTimeout(()=>selectCalDayDesk(getTodayStr()), 50);
+    if(window.innerWidth >= 769){
+      requestAnimationFrame(()=>{
+        renderCalendar();
+        if(window._dataReady) setTimeout(()=>selectCalDayDesk(getTodayStr()), 50);
+      });
     }
   }
   if(page==='opmic'){initTodayTab();selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));}
