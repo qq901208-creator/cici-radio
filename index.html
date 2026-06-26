@@ -851,11 +851,11 @@ body.edit .edit-bar{display:flex!important}
   .hero-next{font-size:.78rem}
   /* stats bar mobile */
   .hero-stats-bar{flex-wrap:wrap;gap:8px;padding:14px 16px;margin:0 4vw;border-radius:var(--r-xl);box-shadow:0 4px 16px rgba(45,43,31,.06)}
-  .hst-item{flex:0 0 calc(50% - 8px);border-right:none;padding:0;gap:6px;align-items:center}
+  .hst-item{flex:0 0 calc(50% - 8px);border-right:none;padding:0;gap:6px;align-items:flex-start}
   .hst-cta{flex:0 0 100%;justify-content:center;padding:10px 20px;margin-left:0;margin-top:4px}
   .hst-num{font-size:.95rem}
   .hst-lbl{font-size:.62rem}
-  .hst-icon{width:26px;height:26px;font-size:.72rem;flex-shrink:0}
+  .hst-icon{width:26px;height:26px;font-size:.72rem;flex-shrink:0;margin-top:2px}
   /* 手機版最近演出：用演出卡片，桌機用條列 */
   #home-upcoming-list .shows-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:0}
   #home-upcoming-list .show-card{flex-direction:row;border-radius:var(--r-lg)!important;border:1.5px solid rgba(45,43,31,.09)!important;box-shadow:none!important;align-items:stretch}
@@ -2915,7 +2915,7 @@ function showCardHTML(s) {
   const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
   const expiredTag = isExpired(s.date, s.time) ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">已過期</span>` : '';
   const hiddenTag = (s.status==='hidden') ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#ffcccc;color:#cc0000;border-radius:var(--r-pill);margin-left:4px">已隱藏</span>` : '';
-  const expiredOverlay = isExpired(s.date, s.time) ? `style="opacity:.55"` : (s.status==='hidden' ? `style="opacity:.45"` : '');
+  const expiredOverlay = isExpired(s.date, s.time) ? `style="opacity:.55;animation:none"` : (s.status==='hidden' ? `style="opacity:.45;animation:none"` : '');
   return `<div class="show-card" data-id="${s.id}" onclick="openShowDetail('${s.id}')" ${expiredOverlay}>
     <div class="sc-img-col">
       <div class="sc-img" style="background:${gradientForTypes(types)}">
