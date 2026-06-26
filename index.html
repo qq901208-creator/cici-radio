@@ -575,11 +575,12 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
 .about-goal-toggle{margin-top:auto;padding:5px 0;background:none;border:none;color:var(--or);font-size:.78rem;font-weight:600;font-family:var(--f-zh);cursor:pointer;text-align:left;transition:opacity .15s}
 .about-goal-toggle:hover{opacity:.7}
 @media(max-width:768px){
-  .about-goals{grid-template-columns:1fr;gap:10px}
-  .about-goal-card{flex-direction:row;align-items:flex-start;gap:12px;padding:14px}
+  .about-goals{grid-template-columns:1fr!important;gap:10px}
+  .about-goal-card{flex-direction:column!important;align-items:flex-start;gap:8px;padding:14px}
   .about-goal-icon{font-size:1.3rem;flex-shrink:0;margin-bottom:0}
   .about-goal-title{font-size:.88rem}
   .about-goal-summary{font-size:.8rem}
+  #about-pie-legend{grid-template-columns:1fr!important}
 }
 /* Timeline - horizontal on desktop, vertical on mobile */
 .about-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:20px;position:relative}
@@ -1869,9 +1870,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <!-- 演出類型圓餅圖 -->
       <div>
         <div style="font-size:.86rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:12px;letter-spacing:.05em"><span class="zh-text">演出類型佔比</span><span class="en-text">Show Types</span></div>
-        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;overflow:hidden">
           <canvas id="about-pie-chart" width="140" height="140" style="flex-shrink:0"></canvas>
-          <div id="about-pie-legend" style="display:flex;flex-direction:column;gap:5px;font-size:.84rem;font-family:var(--f-zh)"></div>
+          <div id="about-pie-legend" style="display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;font-size:.84rem;font-family:var(--f-zh);min-width:0;flex:1"></div>
         </div>
       </div>
     </div>
