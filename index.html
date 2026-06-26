@@ -6665,6 +6665,7 @@ function openStoryCard(id){
     const range = min === max ? `NT$  ${min.toLocaleString()}` : `NT$  ${min.toLocaleString()} ～ NT$  ${max.toLocaleString()}`;
     return note ? `${range}${note}` : range;
   }
+  window._parseStoryPrice = parseStoryPrice;
   const isEnglishShow = (s.types||[]).includes('english') || s.type === 'english';
   const soldOutLabel = isEnglishShow ? 'Sold Out' : '已完售';
   const priceEl = document.getElementById('sc-new-price');
