@@ -566,7 +566,26 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
 .cc-imgsrc{font-size:.62rem;color:rgba(45,43,31,.3);padding:0 16px 9px;font-family:var(--f-bo)}
 
 /* ABOUT */
-.about-hero{background:var(--py);padding:calc(var(--nav)+56px) 5vw 66px;text-align:center;position:relative;overflow:hidden}
+.about-goals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.about-goal-card{background:var(--cr);border-radius:var(--r-lg);padding:18px;border:1.5px solid rgba(45,43,31,.08);display:flex;flex-direction:column;gap:6px}
+.about-goal-icon{font-size:1.6rem;margin-bottom:2px}
+.about-goal-title{font-size:.9rem;font-weight:700;font-family:var(--f-zh);color:var(--sd);line-height:1.4}
+.about-goal-summary{font-size:.8rem;color:var(--ts);font-family:var(--f-zh);line-height:1.6}
+.about-goal-more{font-size:.8rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7;border-top:1px solid rgba(45,43,31,.08);padding-top:10px;margin-top:4px}
+.about-goal-toggle{margin-top:auto;padding:5px 0;background:none;border:none;color:var(--or);font-size:.78rem;font-weight:600;font-family:var(--f-zh);cursor:pointer;text-align:left;transition:opacity .15s}
+.about-goal-toggle:hover{opacity:.7}
+/* Timeline */
+.about-timeline{display:flex;flex-direction:column;gap:0;margin-top:16px;position:relative;padding-left:20px}
+.about-timeline::before{content:'';position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,var(--or),rgba(239,111,32,.2))}
+.about-tl-item{display:grid;grid-template-columns:auto auto 1fr;gap:0 14px;align-items:start;padding-bottom:24px;position:relative}
+.about-tl-item:last-child{padding-bottom:0}
+.about-tl-dot{width:16px;height:16px;border-radius:50%;background:var(--or);border:3px solid var(--ww);box-shadow:0 0 0 2px var(--or);flex-shrink:0;margin-top:3px;position:relative;z-index:1}
+.about-tl-dot-now{background:var(--or);box-shadow:0 0 0 3px rgba(239,111,32,.3),0 0 0 2px var(--or)}
+.about-tl-year{font-size:.9rem;font-weight:900;font-family:var(--f-bo);color:var(--or);white-space:nowrap;padding-top:1px}
+.about-tl-title{font-size:.92rem;font-weight:700;font-family:var(--f-zh);color:var(--sd);margin-bottom:4px}
+.about-tl-summary{font-size:.82rem;color:var(--ts);font-family:var(--f-zh);line-height:1.65}
+.about-tl-more{font-size:.82rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7;margin-top:8px;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)}
+@media(max-width:768px){.about-goals{grid-template-columns:1fr}};padding:calc(var(--nav)+56px) 5vw 66px;text-align:center;position:relative;overflow:hidden}
 .about-hero::before{content:'';position:absolute;width:480px;height:480px;border-radius:50%;background:var(--y);opacity:.33;top:-170px;right:-100px}
 .about-logo{width:110px;height:110px;border-radius:20px;overflow:hidden;margin:0 auto 22px;border:3px solid rgba(239,111,32,.2);box-shadow:0 6px 28px rgba(239,111,32,.15);position:relative;z-index:1}
 .about-logo img{width:100%;height:100%;object-fit:contain;display:block}
@@ -1740,8 +1759,73 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <p class="about-sub">CICI._.RADIO · Comedy Guide Taiwan</p>
   </div>
   <section class="sec" style="background:var(--cr)"><div style="max-width:780px;margin:0 auto">
-    <div class="about-card"><h3>📖 <span class="zh-text">成立背景</span><span class="en-text">Our Origin</span></h3><p class="editable" contenteditable="false"><span class="zh-text">2022 年，六位就讀世新大學廣播電視電影學系的大學生，因爲對台灣現場喜劇有著滿腔的熱情！共同催生了「嘻嘻哪哩唷」這個品牌/頻道，製作了以採訪喜劇演員為題的同名 Podcast 節目。<br><br>隔年，我們開始了漫長的「台灣現場喜劇時間表」Google 試算表製作，整理了所有這個網站包含、又不完全包含的眾多喜劇內容。在我們一度停更的空窗期中，喜劇演員 Pete 也大力協助，一人扛起了資訊更新的重要工作。<br><br>2025 年 4 月份發生的憾事，讓成員鼻猴、Kooky、Yumi 決定重拾嘻嘻哪哩唷的經營，為了讓全台喜劇演出的資訊更方便查閱，鼻猴決定將「台灣現場喜劇時間表」的精神繼承下去，透過 AI 學習網站架設，也因此誕生了現在你所看到的「嘻嘻哪哩唷｜台灣喜劇演出資訊站」。</span><span class="en-text">In 2022, six students from the Department of Radio, Television and Film at Shih Hsin University, driven by an overflowing passion for live comedy in Taiwan, came together to create the brand and channel "Cici Radio" — producing a podcast of the same name featuring interviews with comedians.<br><br>The following year, we began the long journey of maintaining a "Taiwan Live Comedy Schedule" Google Spreadsheet, compiling a wide range of comedy content — some of which is reflected on this site, and some that isn't. During a period when we went on hiatus, comedian Pete stepped up and single-handedly kept the information updated.<br><br>Following a heartbreaking event in April 2025, members Bíhóu, Kooky, and Yumi decided to revive Cici Radio. To make Taiwan's comedy show information more accessible, Bíhóu resolved to carry on the spirit of the spreadsheet — learning web development with the help of AI — and so was born the site you're looking at now: Cici Radio | Taiwan Comedy Show Guide.</span></p></div>
-    <div class="about-card"><h3>🎯 <span class="zh-text">我們的目標</span><span class="en-text">Our Mission</span></h3><p class="editable" contenteditable="false"><span class="zh-text">1. 讓觀眾能更輕鬆地找到想看的現場喜劇演出！<br>2. 希望剛開始跑現場的新人們和想學習喜劇的夥伴們不孤單，有資料可循！<br>3. 讓所有喜劇演員們知道：「嘻嘻哪哩唷永遠瞎挺你們喔 &lt;3」（票錢不夠！網站來湊！）<br><br>所以我說...這個網站是不是很方便？（快說有！！！）</span><span class="en-text">1. Help audiences find the live comedy shows they want to see, easily and quickly!<br>2. So that newcomers just starting out in live comedy — and those who want to learn — never feel alone, and always have somewhere to look!<br>3. To let every comedian know: "Cici Radio will always have your back &lt;3" (Can't afford a ticket? Let the website make up for it!)<br><br>So tell me... isn't this website just super convenient? (Say YES!!!)</span></p></div>
+    <div class="about-card">
+      <h3>📖 <span class="zh-text">成立背景</span><span class="en-text">Our Origin</span></h3>
+      <div class="about-timeline">
+        <div class="about-tl-item">
+          <div class="about-tl-dot"></div>
+          <div class="about-tl-year">2022</div>
+          <div class="about-tl-content">
+            <div class="about-tl-title"><span class="zh-text">🎙️ Podcast 誕生</span><span class="en-text">🎙️ Podcast Launched</span></div>
+            <div class="about-tl-summary"><span class="zh-text">六位世新大學的大學生，因對台灣現場喜劇的熱愛，共同創立了「嘻嘻哪哩唷」，並推出同名 Podcast 節目。</span><span class="en-text">Six students from Shih Hsin University, driven by a passion for live comedy, co-founded "Cici Radio" and launched the namesake podcast.</span></div>
+            <div class="about-tl-more" style="display:none"><span class="zh-text">六位就讀世新大學廣播電視電影學系的大學生，因爲對台灣現場喜劇有著滿腔的熱情！共同催生了「嘻嘻哪哩唷」這個品牌/頻道，製作了以採訪喜劇演員為題的同名 Podcast 節目。</span><span class="en-text">Six students from the Department of Radio, Television and Film at Shih Hsin University, driven by an overflowing passion for live comedy in Taiwan, came together to create the brand and channel "Cici Radio" — producing a podcast of the same name featuring interviews with comedians.</span></div>
+            <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
+          </div>
+        </div>
+        <div class="about-tl-item">
+          <div class="about-tl-dot"></div>
+          <div class="about-tl-year">2023</div>
+          <div class="about-tl-content">
+            <div class="about-tl-title"><span class="zh-text">📊 開始整理</span><span class="en-text">📊 Spreadsheet Era</span></div>
+            <div class="about-tl-summary"><span class="zh-text">推出「台灣現場喜劇時間表」Google 試算表，整理演出資訊，讓更多人找到今晚該去哪。</span><span class="en-text">Launched the "Taiwan Live Comedy Schedule" Google Spreadsheet to help people find shows happening tonight.</span></div>
+            <div class="about-tl-more" style="display:none"><span class="zh-text">我們開始了漫長的「台灣現場喜劇時間表」Google 試算表製作，整理了所有這個網站包含、又不完全包含的眾多喜劇內容。在我們一度停更的空窗期中，喜劇演員 Pete 也大力協助，一人扛起了資訊更新的重要工作。</span><span class="en-text">We began the long journey of maintaining a "Taiwan Live Comedy Schedule" Google Spreadsheet. During a period when we went on hiatus, comedian Pete stepped up and single-handedly kept the information updated.</span></div>
+            <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
+          </div>
+        </div>
+        <div class="about-tl-item">
+          <div class="about-tl-dot about-tl-dot-now"></div>
+          <div class="about-tl-year" style="color:var(--or)">2025</div>
+          <div class="about-tl-content">
+            <div class="about-tl-title"><span class="zh-text">🎉 網站誕生</span><span class="en-text">🎉 Website Launched</span></div>
+            <div class="about-tl-summary"><span class="zh-text">嘻嘻哪哩唷網站正式上線！希望透過更方便的介面與功能，讓更多人認識台灣喜劇。</span><span class="en-text">Cici Radio website goes live — with a better interface to help more people discover Taiwan's comedy scene.</span></div>
+            <div class="about-tl-more" style="display:none"><span class="zh-text">2025 年 4 月份發生的憾事，讓成員鼻猴、Kooky、Yumi 決定重拾嘻嘻哪哩唷的經營，為了讓全台喜劇演出的資訊更方便查閱，鼻猴決定將「台灣現場喜劇時間表」的精神繼承下去，透過 AI 學習網站架設，也因此誕生了現在你所看到的「嘻嘻哪哩唷｜台灣喜劇演出資訊站」。</span><span class="en-text">Following a heartbreaking event in April 2025, members Bíhóu, Kooky, and Yumi decided to revive Cici Radio. Bíhóu resolved to carry on the spirit of the spreadsheet — learning web development with the help of AI — and so was born the site you're looking at now.</span></div>
+            <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="about-card">
+      <h3>🎯 <span class="zh-text">我們的目標</span><span class="en-text">Our Mission</span></h3>
+      <div class="about-goals">
+        <div class="about-goal-card">
+          <div class="about-goal-icon">🎟️</div>
+          <div class="about-goal-title"><span class="zh-text">讓觀眾更輕鬆找到想看的演出</span><span class="en-text">Help audiences find shows they love</span></div>
+          <div class="about-goal-summary"><span class="zh-text">整合全台演出資訊，打造一站式喜劇資訊站。</span><span class="en-text">A one-stop guide to comedy shows across Taiwan.</span></div>
+          <div class="about-goal-more" style="display:none">
+            <p><span class="zh-text">讓觀眾能更輕鬆地找到想看的現場喜劇演出！<br>所以我說...這個網站是不是很方便？（快說有！！！）</span><span class="en-text">Help audiences find the live comedy shows they want to see, easily and quickly! So tell me... isn't this website just super convenient? (Say YES!!!)</span></p>
+          </div>
+          <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
+        </div>
+        <div class="about-goal-card">
+          <div class="about-goal-icon">🎤</div>
+          <div class="about-goal-title"><span class="zh-text">讓新人不孤單，有資料可循</span><span class="en-text">Support newcomers in live comedy</span></div>
+          <div class="about-goal-summary"><span class="zh-text">提供 Open Mic、課程、據點等資訊，讓新手也能安心踏出第一步。</span><span class="en-text">Open Mic listings, courses, and venue info — so beginners always have somewhere to start.</span></div>
+          <div class="about-goal-more" style="display:none">
+            <p><span class="zh-text">希望剛開始跑現場的新人們和想學習喜劇的夥伴們不孤單，有資料可循！</span><span class="en-text">So that newcomers just starting out in live comedy — and those who want to learn — never feel alone, and always have somewhere to look!</span></p>
+          </div>
+          <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
+        </div>
+        <div class="about-goal-card">
+          <div class="about-goal-icon">❤️‍🔥</div>
+          <div class="about-goal-title"><span class="zh-text">永遠支持台灣喜劇演員</span><span class="en-text">Always rooting for Taiwan's comedians</span></div>
+          <div class="about-goal-summary"><span class="zh-text">演員資訊整合，讓更多人認識每一位在台灣努力的喜劇人。</span><span class="en-text">Helping more people discover every comedian working hard in Taiwan.</span></div>
+          <div class="about-goal-more" style="display:none">
+            <p><span class="zh-text">讓所有喜劇演員們知道：「嘻嘻哪哩唷永遠瞎挺你們喔 &lt;3」（票錢不夠！網站來湊！）</span><span class="en-text">To let every comedian know: "Cici Radio will always have your back &lt;3" (Can't afford a ticket? Let the website make up for it!)</span></p>
+          </div>
+          <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
+        </div>
+      </div>
+    </div>
     <div class="about-card"><h3>📡 <span class="zh-text">關於本站</span><span class="en-text">About This Site</span></h3><p class="editable" contenteditable="false"><span class="zh-text">本站以推廣台灣現場喜劇文化、整理演出資訊為出發點，目前不涉及商業營利行為。<br>網站資訊皆由人類（鼻猴本人）手動整理與更新。若有錯誤、遺漏，或想補充演出資訊，歡迎透過「聯絡我們」告訴我！</span><span class="en-text">This site is dedicated to promoting live comedy culture in Taiwan and curating show information — with no commercial involvement.<br>All content is manually updated by a human (Bíhóu, in person). If you spot any errors, missing info, or shows you'd like to add, feel free to reach out via "Contact Us"!</span></p></div>
 
     <!-- 網站統計區塊 -->
@@ -3761,6 +3845,17 @@ function selectWeekDesk(range, e){
       : `<div style="padding:40px 0;text-align:center;color:var(--ts);font-family:var(--f-zh);font-size:.88rem">這個時段暫無演出資訊</div>`;
   }
   document.getElementById('shows-pagination').innerHTML='';
+}
+
+function toggleGoal(btn){
+  const more = btn.previousElementSibling;
+  const isOpen = more.style.display !== 'none';
+  more.style.display = isOpen ? 'none' : 'block';
+  const zhOpen = '收起 ↑'; const zhClose = '展開 ↓';
+  const enOpen = 'Show less ↑'; const enClose = 'Read more ↓';
+  btn.innerHTML = isOpen
+    ? `<span class="zh-text">${zhClose}</span><span class="en-text">${enClose}</span>`
+    : `<span class="zh-text">${zhOpen}</span><span class="en-text">${enOpen}</span>`;
 }
 
 // ── COURSES ──
