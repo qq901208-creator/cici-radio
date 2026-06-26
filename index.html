@@ -3639,22 +3639,22 @@ function renderAboutStats(){
     const legendItems = sorted.slice(0,8).map(([type,count],i)=>{
       const m = TYPE_META[type]||TYPE_META.other;
       const lbl = lang==='en'?(m.labelEn||m.label):m.label;
-      const pct = String(Math.round((count/total)*100)).padStart(2,' ');
-      return `<div style="display:flex;align-items:center;gap:6px">
-        <span style="width:10px;height:10px;border-radius:50%;background:${COLORS[i%COLORS.length]};flex-shrink:0"></span>
-        <span style="color:var(--ts);min-width:60px">${lbl}</span>
-        <span style="font-weight:700;color:var(--tm);font-family:var(--f-bo);white-space:nowrap"><span style="display:inline-block;min-width:28px;text-align:right">${pct}%</span> <span style="font-weight:400;color:var(--ts)">(${count}場)</span></span>
+      const pct = Math.round((count/total)*100);
+      return `<div style="display:flex;align-items:center;gap:4px;min-width:0">
+        <span style="width:9px;height:9px;border-radius:50%;background:${COLORS[i%COLORS.length]};flex-shrink:0"></span>
+        <span style="color:var(--ts);font-size:.76rem;flex-shrink:0">${lbl}</span>
+        <span style="font-weight:700;color:var(--tm);font-family:var(--f-bo);font-size:.76rem;white-space:nowrap;margin-left:auto">${pct}% <span style="font-weight:400;color:var(--ts)">(${count}場)</span></span>
       </div>`;
     });
     const col1 = legendItems.slice(0,4).join('');
     const col2 = legendItems.slice(4).join('');
-    legendEl.style.cssText = 'display:flex;flex-direction:column;gap:5px;font-size:.84rem;font-family:var(--f-zh);flex:1';
+    legendEl.style.cssText = 'min-width:0;flex:1;overflow:hidden';
     legendEl.innerHTML = col2
-      ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 20px;width:100%">
-          <div style="display:flex;flex-direction:column;gap:5px">${col1}</div>
-          <div style="display:flex;flex-direction:column;gap:5px">${col2}</div>
+      ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;width:100%">
+          <div style="display:flex;flex-direction:column;gap:4px;min-width:0">${col1}</div>
+          <div style="display:flex;flex-direction:column;gap:4px;min-width:0">${col2}</div>
         </div>`
-      : `<div style="display:flex;flex-direction:column;gap:5px">${col1}</div>`;
+      : `<div style="display:flex;flex-direction:column;gap:4px">${col1}</div>`;
   }
 }
 
