@@ -150,8 +150,9 @@ body.ready{visibility:visible}
 .desk-text{display:inline}
 .scroll-hint{display:none}
 /* HOME PODCAST */
-.home-podcast-sec{background:var(--py);padding:40px 5vw 44px}
-.home-podcast-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;max-width:1100px;margin:0 auto}
+.home-podcast-sec{background:var(--cr);padding:0 5vw 44px}
+.home-podcast-card{background:#fff;border-radius:var(--r-xl);padding:36px 40px;box-shadow:0 4px 20px rgba(45,43,31,.07)}
+.home-podcast-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
 .home-pod-eyebrow{font-family:var(--f-zh);font-size:.78rem;font-weight:700;color:var(--ts);letter-spacing:.04em;margin-bottom:10px}
 .home-pod-title{font-family:var(--f-zh);font-weight:900;font-size:1.55rem;color:var(--sd);line-height:1.25;margin-bottom:14px}
 .home-pod-desc{font-family:var(--f-zh);font-size:.88rem;color:var(--ts);line-height:1.75;margin-bottom:22px}
@@ -1188,7 +1189,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <div class="hst-lbl"><span class="zh-text">每月 Open Mic</span><span class="en-text">Monthly Open Mics</span></div>
       </div>
     </div>
-    <a href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener" class="hst-cta">
+    <a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" class="hst-cta">
       <div class="hst-cta-icon">🎉</div>
       <div class="hst-cta-txt">
         <span class="zh-text">演員資料新增申請表單，<br>歡迎填寫加入喔！</span>
@@ -1242,7 +1243,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   </div>
 
   <!-- PODCAST 區塊 -->
-  <section class="home-podcast-sec">
+  <section class="home-podcast-sec" style="padding-top:28px">
+    <div class="home-podcast-card">
     <div class="home-podcast-inner">
       <div class="home-podcast-text">
         <div class="home-pod-eyebrow">
@@ -1274,6 +1276,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="home-podcast-player">
         <iframe width="100%" height="232" style="border-radius:14px;border:none;display:block" src="https://open.spotify.com/embed/show/1NVkhQJcHj91hIdBJ5QAIC?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="嘻嘻哪哩唷 Podcast on Spotify"></iframe>
       </div>
+    </div>
     </div>
   </section>
 
@@ -1311,7 +1314,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div>
         <div class="sec-label" style="margin-bottom:4px"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></div>
         <h2 class="sec-title" style="margin-bottom:6px"><span class="zh-text">現場喜劇演出資訊</span><span class="en-text">Comedy Shows in Taiwan</span></h2>
-        <p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);line-height:1.6"><span class="zh-text">售票連結均連至原始售票平台，本站不涉及任何商業行為。<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-size:.8rem">發現資訊有誤？歡迎回報 →</a></span><span class="en-text">Ticket links go to original platforms.<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-size:.8rem">Found an error? Let us know →</a></span></p>
+        <p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);line-height:1.6"><span class="zh-text">售票連結均連至原始售票平台，本站不涉及任何商業行為。<br><a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" style="color:var(--or);font-size:.8rem">發現資訊有誤？歡迎回報 →</a></span><span class="en-text">Ticket links go to original platforms.<br><a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" style="color:var(--or);font-size:.8rem">Found an error? Let us know →</a></span></p>
       </div>
     </div>
     <div class="shows-layout">
@@ -1480,20 +1483,10 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="opmic-top-left">
         <div class="sec-label">Open Mic</div>
         <h2 class="sec-title"><span class="zh-text">演員 Open Mic 報名資訊</span><span class="en-text">Open Mic Sign-Up Info</span></h2>
-        <p class="sec-desc editable" contenteditable="false"><span class="zh-text">今晚去哪試段子好呢？嘻嘻報你知！</span><span class="en-text">Not sure where to try your set tonight? Cici's got you!</span></p>
-        <a class="opmic-mobile-report" href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener"><span class="zh-text">發現新場次或資訊異動？歡迎填表回報 →</span><span class="en-text">Found a new Open Mic? Let us know →</span></a>
+        <p class="sec-desc editable" contenteditable="false"><span class="zh-text">今晚去哪試段子好呢？嘻嘻報你知！<br><a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現新場次或資訊異動？歡迎填表回報 →</a></span><span class="en-text">Not sure where to try your set tonight? Cici's got you!<br><a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found a new Open Mic? Let us know →</a></span></p>
         <div class="opmic-notice" style="display:inline-flex;align-items:center;gap:6px;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:8px 14px;margin-bottom:0;font-size:.72rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">⚠️ <span class="zh-text">點擊報名連結將跳轉至外部頁面，本站不參與任何報名流程！</span><span class="en-text">Sign-up links lead to external pages. We are not involved in any sign-up process.</span></div>
       </div>
-      <div class="opmic-top-right">
-        <div class="opmic-report-banner">
-          <div class="opmic-report-icon">📢</div>
-          <div class="opmic-report-text">
-            <div class="opmic-report-title"><span class="zh-text">我要回報場次</span><span class="en-text">Report a Venue</span></div>
-            <div class="opmic-report-desc"><span class="zh-text">發現新場次或資訊異動？歡迎填表回報！</span><span class="en-text">Found a new Open Mic or outdated info?</span></div>
-          </div>
-          <a href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener" class="opmic-report-btn"><span class="zh-text">回報場次 →</span><span class="en-text">Report →</span></a>
-        </div>
-      </div>
+
     </div>
     <!-- 地區 + 類型篩選 -->
     <div class="opmic-filters">
@@ -1561,7 +1554,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:var(--cr)">
     <div class="sec-label"><span class="zh-text">全台喜劇據點</span><span class="en-text">Venues</span></div>
     <h2 class="sec-title"><span class="zh-text">台灣喜劇據點一覽</span><span class="en-text">Comedy Venues in Taiwan</span></h2>
-    <p class="sec-desc editable" contenteditable="false"><span class="zh-text">點選場地看更多詳細資訊喔！<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充據點？歡迎回報 →</a></span><span class="en-text">Click on a venue to see more details!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
+    <p class="sec-desc editable" contenteditable="false"><span class="zh-text">點選場地看更多詳細資訊喔！<br><a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充據點？歡迎回報 →</a></span><span class="en-text">Click on a venue to see more details!<br><a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
     <div class="filter-row" style="margin-bottom:22px">
       <button class="chip on" data-f="city" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
       <button class="chip" data-f="city" data-v="taipei"><span class="zh-text">台北</span><span class="en-text">Taipei</span></button>
@@ -1584,7 +1577,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:#f6efcf">
     <div class="sec-label"><span class="zh-text">認識他們</span><span class="en-text">Meet the Comedians</span></div>
     <h2 class="sec-title"><span class="zh-text">現場喜劇演員資料庫 <span style="font-size:.5em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo);white-space:nowrap;display:inline-block">新功能更新中</span></span><span class="en-text">Performer Directory <span style="font-size:.5em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo);white-space:nowrap;display:inline-block">New</span></span></h2>
-    <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem"><span class="zh-text">發現資訊錯誤或想放上自己的資料嗎？歡迎填寫表單！</span></a></span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found an error or want to add yourself? Let us know →</a></span></p>
+    <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br><a href="https://docs.google.com/forms/d/e/1FAIpQLSczttWuxCd3nGvrRfIsMeh_wJ4uftg3rGL7jEJEHo-MpSToog/viewform" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem"><span class="zh-text">發現資訊錯誤或想放上自己的資料嗎？歡迎填寫表單！</span></a></span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br><a href="https://docs.google.com/forms/d/e/1FAIpQLSczttWuxCd3nGvrRfIsMeh_wJ4uftg3rGL7jEJEHo-MpSToog/viewform" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found an error or want to add yourself? Let us know →</a></span></p>
     <p style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-bottom:16px;margin-top:4px;opacity:.7"><span class="zh-text">本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義❤️‍🔥</span><span class="en-text">Sorted by stroke order / alphabet — the order means nothing ❤️‍🔥</span></p>
     <!-- 篩選列 -->
     <div id="performers-filter-row" style="display:flex;gap:8px;flex-wrap:nowrap;margin-bottom:18px;align-items:center">
@@ -1735,7 +1728,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:var(--cr)">
     <div class="sec-label"><span class="zh-text">課程講座</span><span class="en-text">Courses & Talks</span></div>
     <h2 class="sec-title"><span class="zh-text">喜劇課程與講座</span><span class="en-text">Comedy Courses & Workshops</span></h2>
-    <p class="sec-desc" style="margin-bottom:14px"><span class="zh-text">想學習不知道怎麼入手嗎？<br>去找吧！所有課程都在這，一起加入喜劇的大家庭～<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充課程？歡迎回報 →</a></span><span class="en-text">Not sure where to start?<br>Come find out! All the courses you need are right here — join the comedy family!<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
+    <p class="sec-desc" style="margin-bottom:14px"><span class="zh-text">想學習不知道怎麼入手嗎？<br>去找吧！所有課程都在這，一起加入喜劇的大家庭～<br><a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充課程？歡迎回報 →</a></span><span class="en-text">Not sure where to start?<br>Come find out! All the courses you need are right here — join the comedy family!<br><a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
     <div class="filter-row" style="margin-bottom:14px">
       <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
       <button class="chip on" data-f="ctype" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
@@ -2570,7 +2563,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <span><span class="zh-text">發現資訊有誤或想補充新演出？<br>點這裡填表單告訴我！</span><span class="en-text">Found an error or want to add a show?<br>Fill out the form and let me know!</span></span>
       </div>
     </a>
-    <a class="report-channel" href="https://forms.gle/vUC6DU83kGpdJyUF9" target="_blank" rel="noopener">
+    <a class="report-channel" href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener">
       <div class="report-ch-icon" style="background:#fff;padding:2px;display:flex;align-items:center;justify-content:center">
         <svg viewBox="0 0 48 48" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path d="M30 2H10C7.8 2 6 3.8 6 6v36c0 2.2 1.8 4 4 4h28c2.2 0 4-1.8 4-4V14L30 2z" fill="#7986cb"/><path d="M30 2v12h12L30 2z" fill="#c5cae9"/><path d="M14 22h20v2H14zm0 6h20v2H14zm0 6h12v2H14z" fill="#fff"/></svg>
       </div>
@@ -3406,13 +3399,6 @@ function renderShows() {
       if(aHidden && !bHidden) return -1;
       if(!aHidden && bHidden) return 1;
     }
-    // 使用者模式：過期演出排到最後
-    if(!adminMode){
-      const aExp = isExpired(a.date, a.time);
-      const bExp = isExpired(b.date, b.time);
-      if(aExp && !bExp) return 1;
-      if(!aExp && bExp) return -1;
-    }
     return showSortKey(a).localeCompare(showSortKey(b));
   });
 
@@ -3793,14 +3779,7 @@ function selectCalDayDesk(ds){
       if(isPast) return st === 'published' || st === 'hidden';
       return st === 'published';
     })
-    .sort((a,b)=>{
-      // 過期演出排最後
-      const aExp = isExpired(a.date, a.time);
-      const bExp = isExpired(b.date, b.time);
-      if(aExp && !bExp) return 1;
-      if(!aExp && bExp) return -1;
-      return showSortKey(a).localeCompare(showSortKey(b));
-    });
+    .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
 
   const lang2=getLang();
   const DOW_ZH2=['日','一','二','三','四','五','六'];
@@ -3863,13 +3842,7 @@ function selectWeekDesk(range, e){
   const allShows = window._SHOWS || SHOWS || [];
   const rangeShows = allShows
     .filter(s => ['published',undefined,'',null].includes(s.status||null) && dsSet.has(s.date))
-    .sort((a,b)=>{
-      const aExp = isExpired(a.date, a.time);
-      const bExp = isExpired(b.date, b.time);
-      if(aExp && !bExp) return 1;
-      if(!aExp && bExp) return -1;
-      return showSortKey(a).localeCompare(showSortKey(b));
-    });
+    .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
   const bar = document.getElementById('shows-date-bar');
   if(bar){
     const lang3=getLang();
