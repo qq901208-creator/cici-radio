@@ -382,11 +382,10 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
   .chip{padding:5px 11px;font-size:.72rem;border-width:1.5px}
   .filter-chips{flex-wrap:nowrap;padding-right:32px}
   /* 手機版下拉：三個同一行，字夠大 */
-  .filter-dropdowns{flex-wrap:nowrap;gap:6px;margin-top:8px;width:100%}
-  .filter-dropdown-wrap{flex:1;min-width:0}
-  .filter-dropdown-wrap:last-child{flex:1}
+  .filter-dropdowns{display:flex!important;flex-wrap:nowrap!important;gap:6px;margin-top:8px;width:100%}
+  .filter-dropdown-wrap{flex:1 1 0!important;min-width:0!important;width:0!important}
   .filter-dropdown-lbl{display:none}
-  .filter-dropdown{width:100%;min-width:0;padding:8px 24px 8px 10px;font-size:.8rem;text-overflow:ellipsis;background-position:right 8px center}
+  .filter-dropdown{width:100%!important;min-width:0!important;padding:8px 20px 8px 8px;font-size:.78rem;text-overflow:ellipsis;overflow:hidden;background-position:right 6px center;background-size:10px}
   /* 手機版首頁全寬 */
   .home-podcast-inner,.home-board-header,.home-board-grid,.home-board-cta{max-width:100%}
 
