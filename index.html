@@ -3211,7 +3211,20 @@ function renderShows() {
     return showSortKey(a).localeCompare(showSortKey(b));
   });
 
-  // 篩選條件改變時重置到第一頁
+  // 桌機版非管理模式：lazy load
+  if(window.innerWidth >= 769 && !adminMode){
+    window._showsFiltered = fil;
+    window._showsLoaded = 12;
+    grid.innerHTML = fil.length
+      ? fil.slice(0, 12).map(showCardHTML).join('')
+      : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">${q?'查無符合搜尋的演出':'查無符合條件的演出'}</div>`;
+    document.getElementById('shows-pagination').innerHTML='';
+    // 更新或建立 lazy load sentinel
+    _initShowsLazyLoad();
+    return;
+  }
+
+  // 手機版 / 管理模式：分頁
   const perPage = calcPerPage('shows-grid', 10);
   const totalPages = Math.ceil(fil.length / perPage);
   if(showsPage > totalPages) showsPage = Math.max(1, totalPages);
@@ -3223,6 +3236,41 @@ function renderShows() {
     : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">${q?'查無符合搜尋的演出':'查無符合條件的演出'}</div>`;
 
   renderPagination('shows-pagination', showsPage, totalPages, 'goShowsPage');
+}
+
+// ── Lazy load for desktop shows ──
+let _showsLazyObserver = null;
+
+function _initShowsLazyLoad(){
+  // 移除舊的 sentinel
+  const old = document.getElementById('shows-lazy-sentinel');
+  if(old) old.remove();
+  if(_showsLazyObserver){ _showsLazyObserver.disconnect(); _showsLazyObserver=null; }
+
+  const fil = window._showsFiltered || [];
+  if(!fil.length || (window._showsLoaded||0) >= fil.length) return;
+
+  // 加入 sentinel
+  const sentinel = document.createElement('div');
+  sentinel.id = 'shows-lazy-sentinel';
+  sentinel.style.cssText = 'height:40px;grid-column:1/-1;display:flex;align-items:center;justify-content:center';
+  sentinel.innerHTML = '<span style="font-size:.8rem;color:var(--ts);font-family:var(--f-zh)">載入中…</span>';
+  const grid = document.getElementById('shows-grid');
+  if(grid) grid.appendChild(sentinel);
+
+  _showsLazyObserver = new IntersectionObserver(entries=>{
+    if(!entries[0].isIntersecting) return;
+    const loaded = window._showsLoaded || 0;
+    const next = fil.slice(loaded, loaded + 12);
+    if(!next.length){ sentinel.remove(); _showsLazyObserver.disconnect(); return; }
+    window._showsLoaded = loaded + next.length;
+    sentinel.insertAdjacentHTML('beforebegin', next.map(showCardHTML).join(''));
+    if(window._showsLoaded >= fil.length){
+      sentinel.remove();
+      _showsLazyObserver.disconnect();
+    }
+  }, {rootMargin:'200px'});
+  _showsLazyObserver.observe(sentinel);
 }
 
 // ── 數字跳動動畫 ──
