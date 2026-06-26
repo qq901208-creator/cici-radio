@@ -62,7 +62,7 @@ body.ready{visibility:visible}
 .s-dot{width:6px;height:6px;border-radius:50%;background:#2ecc71}
 
 /* PAGES */
-.page{display:none;padding-top:var(--nav);min-height:100vh;overflow-x:hidden}
+.page{display:none;padding-top:var(--nav);min-height:100vh}
 .page.active{display:block}
 
 /* SECTION */
@@ -125,13 +125,13 @@ body.ready{visibility:visible}
 .qc-icon{width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:.9rem;box-shadow:0 2px 6px rgba(45,43,31,.08)}
 .qc-title{font-size:.84rem;font-weight:700;color:var(--sd);text-align:center}
 .qc-sub{font-size:.7rem;color:var(--ts)}
-.home-upcoming{background:#fff;border-radius:var(--r-xl);padding:12px 14px;box-shadow:0 4px 16px rgba(45,43,31,.06);display:flex;flex-direction:column}
+.home-upcoming{background:#fff;border-radius:var(--r-xl);padding:12px 14px;box-shadow:0 4px 16px rgba(45,43,31,.06);display:flex;flex-direction:column;overflow:hidden}
 .home-upcoming-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .home-upcoming-header h3{font-family:var(--f-zh);font-weight:900;font-size:.84rem;color:var(--sd)}
 .home-upcoming-more{font-size:.68rem;color:var(--or);font-weight:600;cursor:pointer;text-decoration:none;font-family:var(--f-zh)}
 .home-show-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(45,43,31,.06);cursor:pointer;border-radius:6px;transition:background .1s}
 .home-show-row:last-child{border-bottom:none;padding-bottom:0}
-.home-show-row:hover{background:rgba(45,43,31,.025);margin:0 -6px;padding:5px 6px}
+.home-show-row:hover{background:rgba(45,43,31,.04);border-radius:6px}
 .home-show-date-block{width:44px;flex-shrink:0;background:var(--py);border-radius:7px;padding:4px 2px;text-align:center}
 .home-show-date-block .md{font-size:.72rem;font-weight:900;font-family:var(--f-bo);color:var(--or);line-height:1}
 .home-show-date-block .wd{font-size:.58rem;font-weight:700;font-family:var(--f-bo);color:var(--ts);text-transform:uppercase;margin-top:1px}
@@ -295,6 +295,51 @@ body.ready{visibility:visible}
 .sc-imgsrc-desktop{display:block;padding:0 16px 9px;font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo);margin-top:4px;text-align:right}
 .cc-imgsrc-mobile{display:none}
 .cc-imgsrc-desktop{display:block}
+/* ── SHOWS PAGE DESKTOP LAYOUT ── */
+.shows-top-header{margin-bottom:20px}
+.shows-layout{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start}
+.shows-cal-col{position:sticky;top:calc(var(--nav) + 12px);max-height:calc(100vh - var(--nav) - 24px);overflow-y:auto;scrollbar-width:none}
+.shows-cal-col::-webkit-scrollbar{display:none}
+.shows-cal-header .sec-label{margin-bottom:2px}
+.cal-shortcuts-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.cal-sc-btn{padding:4px 10px;border-radius:var(--r-pill);font-size:.72rem;font-weight:600;font-family:var(--f-zh);border:1.5px solid rgba(45,43,31,.16);background:var(--cr);color:var(--ts);cursor:pointer;transition:all .14s}
+.cal-sc-btn:hover,.cal-sc-btn.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
+.shows-admin-btns{display:none;flex-wrap:wrap;gap:6px;margin-top:6px}
+body.edit .shows-admin-btns-main{display:flex!important}
+/* 左欄的管理按鈕在 edit 模式隱藏（右欄已有） */
+body.edit .shows-admin-btns{display:none}
+.shows-main-col{min-width:0}
+.shows-date-bar{font-size:.82rem;font-weight:700;color:var(--or);font-family:var(--f-zh);margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.shows-date-bar .sdb-count{font-size:.74rem;color:var(--sd);background:rgba(45,43,31,.08);padding:2px 8px;border-radius:var(--r-pill);font-weight:700}
+.filter-reset-btn{padding:7px 14px;border-radius:var(--r-pill);font-size:.78rem;font-weight:600;font-family:var(--f-zh);border:1.5px solid rgba(45,43,31,.18);background:transparent;color:var(--ts);cursor:pointer;transition:all .14s;white-space:nowrap}
+.filter-reset-btn:hover{border-color:var(--or);color:var(--or)}
+/* 管理模式：回到單欄直式卡片 */
+body.edit #page-shows .shows-layout{display:block}
+body.edit #page-shows .shows-cal-col{display:none}
+body.edit #page-shows .shows-main-col{display:block}
+body.edit #page-shows .shows-date-bar{display:none}
+body.edit #page-shows .shows-grid{grid-template-columns:repeat(auto-fill,minmax(276px,1fr));gap:18px}
+body.edit #page-shows .show-card{flex-direction:column;border-radius:var(--r-lg)!important;border:none!important;box-shadow:0 2px 10px rgba(45,43,31,.08)!important;align-items:stretch}
+body.edit #page-shows .sc-img-col{width:auto;min-width:unset}
+body.edit #page-shows .sc-img{width:100%;height:160px;border-radius:0}
+body.edit #page-shows .sc-img img.sc-poster{width:100%;height:160px;object-fit:contain}
+body.edit #page-shows .sc-imgsrc{flex:unset;display:block;padding:3px 16px 9px;border-radius:0;background:transparent;text-align:right}
+body.edit #page-shows .sc-body{padding:14px 16px 16px;gap:6px}
+body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
+@media(min-width:769px){
+  .shows-top-header{display:block}
+  .shows-layout .shows-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .shows-layout .show-card{flex-direction:column;border-radius:var(--r-lg)!important;border:1.5px solid rgba(45,43,31,.09)!important;box-shadow:0 2px 8px rgba(45,43,31,.06)!important;align-items:stretch}
+  .shows-layout .sc-img-col{display:flex;flex-direction:column;width:auto;min-width:unset}
+  .shows-layout .sc-img{width:100%;height:160px;flex-shrink:0;border-radius:var(--r-lg) var(--r-lg) 0 0;background:var(--ww);display:flex;align-items:center;justify-content:center}
+  .shows-layout .sc-img img.sc-poster{width:100%;height:160px;object-fit:contain;display:block;background:var(--ww)}
+  .shows-layout .sc-img .sc-types{display:flex}
+  .shows-layout .sc-types-mobile{display:none!important}
+  .shows-layout .sc-imgsrc-desktop{display:block;padding:3px 12px 6px;font-size:.55rem;color:rgba(45,43,31,.3);font-family:var(--f-bo);text-align:right}
+  .shows-layout .sc-imgsrc-mobile{display:none}
+  .shows-layout .sc-body{padding:12px 14px 14px;gap:5px;min-width:0;flex:1}
+  .shows-layout .sc-title{font-size:.92rem;line-height:1.35}
+}
 .info-banner{display:flex;align-items:center;gap:10px;padding:9px 16px;background:rgba(245,213,88,.15);border:1px solid rgba(239,111,32,.22);border-radius:var(--r-md);font-size:.8rem;font-family:var(--f-zh);color:var(--ts);margin-bottom:16px;cursor:pointer;transition:background .15s,border-color .15s;user-select:none}
 .info-banner:hover{background:rgba(245,213,88,.28);border-color:rgba(239,111,32,.45)}
 .info-banner span{flex:1;line-height:1.5}
@@ -325,6 +370,13 @@ body.ready{visibility:visible}
   .filter-chips .chip{flex-shrink:0}
   .filter-row::-webkit-scrollbar{display:none}
   .filter-row .chip{flex-shrink:0}
+  /* 手機版 shows layout 改回單欄 */
+  .shows-layout{display:block}
+  .shows-cal-col{display:none}
+  .shows-main-col{display:block}
+  .shows-date-bar{display:none}
+  .shows-top-header{display:none}
+  .filter-reset-btn{display:none}
   /* 手機版 chip：適中大小，最右截斷引導滑動 */
   .chip{padding:5px 11px;font-size:.72rem;border-width:1.5px}
   .filter-chips{flex-wrap:nowrap;padding-right:32px}
@@ -1187,21 +1239,50 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
 <!-- SHOWS PAGE -->
 <div class="page" id="page-shows">
-  <section class="sec" style="background:#f6efcf">
-    <div class="sec-label"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></div>
-    <h2 class="sec-title"><span class="zh-text">現場喜劇演出資訊</span><span class="en-text">Comedy Shows in Taiwan</span></h2>
-    <p class="sec-desc editable" contenteditable="false" style="margin-bottom:14px"><span class="zh-text">售票連結均連至原始售票平台，本站不涉及任何商業行為。<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充場次？歡迎回報 →</a></span><span class="en-text">All ticket links go directly to the original platforms — we have no commercial involvement.<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-      <div class="view-toggle">
-        <button class="view-btn on" id="vcards" onclick="setShowsView('cards')"><span class="zh-text">演出列表</span><span class="en-text">List</span></button>
-        <button class="view-btn" id="vcal" onclick="setShowsView('cal')">📅 <span class="zh-text">月曆</span><span class="en-text">Calendar</span></button>
-        <button onclick="resetAllFilters()" style="padding:5px 13px;font-size:.76rem;font-weight:700;font-family:var(--f-zh);color:var(--ts);background:transparent;border:1.5px solid rgba(45,43,31,.18);border-radius:var(--r-pill);cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:4px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.18)';this.style.color='var(--ts)'">
-          ✕ <span class="zh-text">重置篩選</span><span class="en-text">Reset</span>
-        </button>
+  <section class="sec shows-sec" style="background:#f6efcf;padding-top:36px;padding-bottom:44px">
+    <!-- 頁面標題（桌機版在月曆上方） -->
+    <div class="shows-top-header">
+      <div>
+        <div class="sec-label" style="margin-bottom:4px"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></div>
+        <h2 class="sec-title" style="margin-bottom:6px"><span class="zh-text">現場喜劇演出資訊</span><span class="en-text">Comedy Shows in Taiwan</span></h2>
+        <p style="font-size:.84rem;color:var(--ts);font-family:var(--f-zh);line-height:1.6"><span class="zh-text">售票連結均連至原始售票平台，本站不涉及任何商業行為。<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-size:.8rem">發現資訊有誤？歡迎回報 →</a></span><span class="en-text">Ticket links go to original platforms.<br><a onclick="document.getElementById('modal-report').classList.add('open')" style="color:var(--or);cursor:pointer;font-size:.8rem">Found an error? Let us know →</a></span></p>
       </div>
-      <button class="edit-add-btn" style="width:auto;padding:6px 14px;margin-top:0;font-size:.78rem" onclick="openVenueManagerModal()">⚙️ <span class="zh-text">管理場地／地區</span><span class="en-text">Manage Venues/Areas</span></button>
-      <button class="edit-add-btn" id="btn-hide-expired-shows" style="width:auto;padding:6px 14px;margin-top:0;font-size:.78rem" onclick="toggleHideExpiredShows()">👁 <span class="zh-text">顯示過期</span><span class="en-text">Show Expired</span></button>
     </div>
+    <div class="shows-layout">
+      <!-- 左欄：月曆 -->
+      <div class="shows-cal-col">
+        <div class="cal-wrap" style="margin-bottom:10px">
+          <div class="cal-header">
+            <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+            <div class="cal-month-lbl" id="cal-label"></div>
+            <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+          </div>
+          <div class="cal-grid" id="cal-dow"></div>
+          <div class="cal-grid" id="cal-days" style="margin-top:3px"></div>
+        </div>
+        <!-- 快捷按鈕 -->
+        <div class="cal-shortcuts-row">
+          <button class="cal-sc-btn" onclick="selectCalDayDesk(getTodayStr())"><span class="zh-text">今天</span><span class="en-text">Today</span></button>
+          <button class="cal-sc-btn" onclick="selectWeekDesk('this',event)"><span class="zh-text">本週</span><span class="en-text">This Week</span></button>
+          <button class="cal-sc-btn" onclick="selectWeekDesk('weekend',event)"><span class="zh-text">本週末</span><span class="en-text">Weekend</span></button>
+          <button class="cal-sc-btn" onclick="selectWeekDesk('next',event)"><span class="zh-text">下週</span><span class="en-text">Next Week</span></button>
+        </div>
+        <!-- 場次統計 -->
+        <div class="shows-date-bar" id="shows-date-bar"></div>
+        <!-- 管理模式按鈕 -->
+        <div class="shows-admin-btns">
+          <button class="edit-add-btn" style="width:auto;padding:5px 10px;font-size:.72rem" onclick="openVenueManagerModal()">⚙️ <span class="zh-text">管理場地</span><span class="en-text">Manage Venues</span></button>
+          <button class="edit-add-btn" style="width:auto;padding:5px 10px;font-size:.72rem" onclick="toggleHideExpiredShows()">👁 <span class="zh-text">顯示過期</span><span class="en-text">Show Expired</span></button>
+        </div>
+      </div>
+      <!-- 右欄：篩選 + 演出列表 -->
+      <div class="shows-main-col">
+        <!-- 管理模式按鈕（右欄，body.edit 才顯示） -->
+        <div class="shows-admin-btns-main" style="display:none;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+          <button class="edit-add-btn" style="width:auto;padding:6px 14px;font-size:.78rem" onclick="openVenueManagerModal()">⚙️ <span class="zh-text">管理場地／地區</span><span class="en-text">Manage Venues/Areas</span></button>
+          <button class="edit-add-btn" id="btn-hide-expired-shows" style="width:auto;padding:6px 14px;font-size:.78rem" onclick="toggleHideExpiredShows()">👁 <span class="zh-text">顯示過期</span><span class="en-text">Show Expired</span></button>
+        </div>
+
     <!-- 搜尋欄 -->
     <div class="shows-search-wrap">
       <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
@@ -1215,9 +1296,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="type" data-v="opmic"><span class="zh-text">Open Mic</span><span class="en-text">Open Mic</span></button>
         <button class="chip" data-f="type" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
         <button class="chip" data-f="type" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
+        <button class="chip" data-f="type" data-v="mancai"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></button>
         <button class="chip" data-f="type" data-v="sketch"><span class="zh-text">素描短劇</span><span class="en-text">Sketch</span></button>
         <button class="chip" data-f="type" data-v="konto"><span class="zh-text">短劇 コント</span><span class="en-text">Konto</span></button>
-        <button class="chip" data-f="type" data-v="mancai"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></button>
         <button class="chip" data-f="type" data-v="crosstalk"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></button>
         <button class="chip" data-f="type" data-v="rakugo"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></button>
         <button class="chip" data-f="type" data-v="ogiri"><span class="zh-text">大喜利</span><span class="en-text">Ōgiri</span></button>
@@ -1277,39 +1358,36 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
             <option value="0">週日</option>
           </select>
         </div>
-      </div>
-    </div>
-    <div id="view-cards">
-      <div class="shows-grid" id="shows-grid"></div>
-      <div id="shows-pagination" class="pagination"></div>
-      <p style="text-align:right;font-size:.68rem;color:rgba(45,43,31,.28);font-family:var(--f-bo);margin-top:12px"><span id="last-updated-shows"></span></p>
-      <button class="edit-add-btn" onclick="openShowModal(null)">＋ <span class="zh-text">新增演出</span><span class="en-text">Add Show</span></button>
-      <!-- 封存演出列表（僅管理模式顯示） -->
-      <div id="archived-shows-panel" style="display:none;margin-top:32px;padding-top:24px;border-top:2px dashed rgba(45,43,31,.15)">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
-          <h3 style="font-size:1rem;font-weight:700;font-family:var(--f-zh);margin:0">🗄 封存演出列表</h3>
-          <input id="archived-search" type="text" placeholder="搜尋名稱或場地…" maxlength="40"
-            style="padding:5px 12px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.8rem;font-family:var(--f-zh);outline:none;min-width:180px"
-            oninput="window._archivedPage=1;renderArchivedShows()">
-          <span id="archived-count" style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo)"></span>
+        <!-- 重置篩選按鈕 -->
+        <div class="filter-dropdown-wrap" style="display:flex;align-items:flex-end">
+          <button onclick="resetAllFilters()" class="filter-reset-btn">✕ <span class="zh-text">重置</span><span class="en-text">Reset</span></button>
         </div>
-        <div id="archived-list" style="display:flex;flex-direction:column;gap:8px"></div>
-        <div id="archived-pagination"></div>
       </div>
     </div>
-    <div id="view-cal" style="display:none">
-      <div class="cal-wrap">
-        <div class="cal-header">
-          <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
-          <div class="cal-month-lbl" id="cal-label"></div>
-          <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+        <!-- 演出列表 -->
+        <div id="view-cards">
+          <div class="shows-grid" id="shows-grid"></div>
+          <div id="shows-pagination" class="pagination"></div>
+          <p style="text-align:right;font-size:.68rem;color:rgba(45,43,31,.28);font-family:var(--f-bo);margin-top:12px"><span id="last-updated-shows"></span></p>
+          <button class="edit-add-btn" onclick="openShowModal(null)">＋ <span class="zh-text">新增演出</span><span class="en-text">Add Show</span></button>
+          <div id="archived-shows-panel" style="display:none;margin-top:32px;padding-top:24px;border-top:2px dashed rgba(45,43,31,.15)">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+              <h3 style="font-size:1rem;font-weight:700;font-family:var(--f-zh);margin:0">🗄 封存演出列表</h3>
+              <input id="archived-search" type="text" placeholder="搜尋名稱或場地…" maxlength="40"
+                style="padding:5px 12px;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-pill);font-size:.8rem;font-family:var(--f-zh);outline:none;min-width:180px"
+                oninput="window._archivedPage=1;renderArchivedShows()">
+              <span id="archived-count" style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo)"></span>
+            </div>
+            <div id="archived-list" style="display:flex;flex-direction:column;gap:8px"></div>
+            <div id="archived-pagination"></div>
+          </div>
         </div>
-        <div class="cal-grid" id="cal-dow"></div>
-        <div class="cal-grid" id="cal-days" style="margin-top:3px"></div>
-      </div>
-      <div class="cal-banner" id="cal-banner"></div>
-      <div id="cal-result"></div>
-    </div>
+        <!-- 月曆 result（桌機版不顯示，但保留 id 供 JS 使用） -->
+        <div id="view-cal" style="display:none"></div>
+        <div class="cal-banner" id="cal-banner" style="display:none"></div>
+        <div id="cal-result" style="display:none"></div>
+      </div><!-- end shows-main-col -->
+    </div><!-- end shows-layout -->
   </section>
 </div>
 
@@ -3017,8 +3095,9 @@ function getGridCols(gridId) {
 
 function calcPerPage(gridId, mobilePerPage) {
   if(window.innerWidth <= 768) return mobilePerPage || 10;
+  if(gridId === 'shows-grid' && !document.body.classList.contains('edit')) return 12;
   const cols = getGridCols(gridId);
-  return cols * 3; // 3 行
+  return cols * 3;
 }
 
 // resize 時重新計算並重繪
@@ -3383,11 +3462,15 @@ function renderHomeUpcoming() {
       const types = Array.isArray(s.types) ? s.types : (s.type ? [s.type] : ['other']);
       const firstType = types[0] || 'other';
       const meta = TYPE_META[firstType] || TYPE_META.other;
-      const tagLabel = lang === 'en' ? meta.labelEn : meta.label;
       const emojiMap = {opmic:'🎤',standup:'🎭',improv:'🎪',sketch:'🎬',mancai:'🥢',musicom:'🎵',english:'🌏'};
       const thumbEmoji = emojiMap[firstType] || '🎭';
       const venue = getShowVenueLabelById(s.venue) || s.venue || '';
       const time = s.time || '';
+      const tagsHtml = types.map(t=>{
+        const m = TYPE_META[t] || TYPE_META.other;
+        const lbl = lang==='en' ? m.labelEn : m.label;
+        return `<span class="home-show-tag" style="background:${m.bg};color:${m.color}">${lbl}</span>`;
+      }).join('');
       return `<div class="home-show-row" onclick="openShowDetail('${s.id}', true)" style="cursor:pointer">
         <div class="home-show-date-block"><div class="md">${mm}/${dd}</div><div class="wd">${dow}</div></div>
         <div class="home-show-thumb">${(s.image && s.image.trim())
@@ -3397,10 +3480,139 @@ function renderHomeUpcoming() {
           <div class="home-show-title">${s.title || ''}</div>
           <div class="home-show-meta">${time ? '⏰ ' + time + ' &nbsp;' : ''}${venue ? '📍 ' + venue : ''}</div>
         </div>
-        <div class="home-show-tag" style="background:${meta.bg};color:${meta.color}">${tagLabel}</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;flex-shrink:0;align-items:center">${tagsHtml}</div>
       </div>`;
     }).join('');
   }
+}
+
+function getTodayStr(){
+  const t=new Date();
+  return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+}
+
+function updateShowsDateBar(ds, count){
+  const bar = document.getElementById('shows-date-bar');
+  if(!bar) return;
+  if(!ds){ bar.innerHTML=''; return; }
+  const lang=getLang();
+  const d = new Date(ds+'T00:00');
+  const DOW_ZH=['日','一','二','三','四','五','六'];
+  const DOW_EN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const label = lang==='en'
+    ? `📅 ${CAL_MONTHS_EN[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()} (${DOW_EN[d.getDay()]})`
+    : `📅 ${ds.replace(/-/g,'/')}（${DOW_ZH[d.getDay()]}）`;
+  const countLabel = lang==='en' ? `${count} shows` : `共有 ${count} 場演出`;
+  bar.innerHTML = `<span>${label}</span><span class="sdb-count">${countLabel}</span>`;
+}
+
+function selectCalDayDesk(ds){
+  if(window.innerWidth < 769){ selectCalDay(ds); return; }
+  calSel = ds;
+  renderCalendar();
+  document.querySelectorAll('.cal-sc-btn').forEach(b=>b.classList.remove('on'));
+  const allShows = window._SHOWS || SHOWS || [];
+  const today = getTodayStr();
+  const isPast = ds < today;
+
+  // 過去日期：顯示 published + hidden（封存）；未來：只顯示 published
+  const dayShows = allShows
+    .filter(s => {
+      const st = s.status || 'published';
+      if(s.date !== ds) return false;
+      if(isPast) return st === 'published' || st === 'hidden';
+      return st === 'published';
+    })
+    .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
+
+  const lang2=getLang();
+  const DOW_ZH2=['日','一','二','三','四','五','六'];
+  const DOW_EN2=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  // 更新日期統計列
+  const bar = document.getElementById('shows-date-bar');
+  if(bar){
+    const d2 = new Date(ds+'T00:00');
+    const dateLabel = lang2==='en'
+      ? `📅 ${CAL_MONTHS_EN[d2.getMonth()]} ${d2.getDate()}, ${d2.getFullYear()} (${DOW_EN2[d2.getDay()]})`
+      : `📅 ${ds.replace(/-/g,'/')}（${DOW_ZH2[d2.getDay()]}）`;
+    const pastBadge = isPast ? `<span style="font-size:.7rem;color:var(--ts);background:rgba(45,43,31,.08);padding:2px 8px;border-radius:var(--r-pill);font-weight:600">${lang2==='en'?'Ended':'已結束'}</span>` : '';
+    const countLabel = lang2==='en' ? `${dayShows.length} shows` : `共有 ${dayShows.length} 場演出`;
+    bar.innerHTML = `<span>${dateLabel}</span>${pastBadge}<span class="sdb-count">${countLabel}</span>`;
+  }
+
+  const grid = document.getElementById('shows-grid');
+  if(grid){
+    if(!dayShows.length){
+      grid.innerHTML = `<div style="padding:40px 0;text-align:center;color:var(--ts);font-family:var(--f-zh);font-size:.88rem">這天暫無演出資訊</div>`;
+    } else {
+      // 過去日期卡片加半透明
+      grid.innerHTML = dayShows.map(s => {
+        const html = showCardHTML(s);
+        if(isPast) return html.replace('<div class="show-card"', '<div class="show-card" style="opacity:.72"');
+        return html;
+      }).join('');
+    }
+  }
+  document.getElementById('shows-pagination').innerHTML='';
+}
+
+function selectWeekDesk(range, e){
+  if(window.innerWidth < 769) return;
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  let dates = [];
+  if(range==='this'){
+    for(let i=0;i<7;i++){
+      const d=new Date(today); d.setDate(today.getDate()+i); dates.push(d);
+    }
+  } else if(range==='weekend'){
+    const dow=today.getDay();
+    const sat=new Date(today); sat.setDate(today.getDate()+(6-dow)%7);
+    const sun=new Date(sat); sun.setDate(sat.getDate()+1);
+    dates=[sat,sun];
+  } else if(range==='next'){
+    const dow=today.getDay();
+    const nextMon=new Date(today); nextMon.setDate(today.getDate()+(8-dow)%7||7);
+    for(let i=0;i<7;i++){
+      const d=new Date(nextMon); d.setDate(nextMon.getDate()+i); dates.push(d);
+    }
+  }
+  const toDs = d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const dsSet = new Set(dates.map(toDs));
+  calSel = null;
+  renderCalendar();
+  document.querySelectorAll('.cal-sc-btn').forEach(b=>b.classList.remove('on'));
+  (e?.target||event?.target)?.classList.add('on');
+  const allShows = window._SHOWS || SHOWS || [];
+  const rangeShows = allShows
+    .filter(s => ['published',undefined,'',null].includes(s.status||null) && dsSet.has(s.date))
+    .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
+  const bar = document.getElementById('shows-date-bar');
+  if(bar){
+    const lang3=getLang();
+    const DOW_ZH3=['日','一','二','三','四','五','六'];
+    const DOW_EN3=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const label = lang3==='en'
+      ? (range==='this'?'This Week':range==='weekend'?'This Weekend':'Next Week')
+      : (range==='this'?'本週':range==='weekend'?'本週末':'下週');
+    let rangeText = '';
+    if(dates.length >= 2){
+      const first=dates[0], last=dates[dates.length-1];
+      const fmt = lang3==='en'
+        ? d=>`${CAL_MONTHS_EN[d.getMonth()].slice(0,3)} ${d.getDate()} (${DOW_EN3[d.getDay()]})`
+        : d=>`${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}（${DOW_ZH3[d.getDay()]}）`;
+      rangeText = `<span style="font-size:.76rem;color:var(--ts);font-weight:400">${fmt(first)} ～ ${fmt(last)}</span>`;
+    }
+    const countLabel = lang3==='en' ? `${rangeShows.length} shows` : `共有 ${rangeShows.length} 場演出`;
+    bar.innerHTML = `<span>📅 ${label}</span>${rangeText}<span class="sdb-count">${countLabel}</span>`;
+  }
+  const grid = document.getElementById('shows-grid');
+  if(grid){
+    grid.innerHTML = rangeShows.length
+      ? rangeShows.map(showCardHTML).join('')
+      : `<div style="padding:40px 0;text-align:center;color:var(--ts);font-family:var(--f-zh);font-size:.88rem">這個時段暫無演出資訊</div>`;
+  }
+  document.getElementById('shows-pagination').innerHTML='';
 }
 
 // ── COURSES ──
@@ -4558,11 +4770,15 @@ function setShowsView(v){
 ═══════════════════════════════════════ -->
 <script>
 const CAL_MONTHS=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+const CAL_MONTHS_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 function renderCalendar(){
-  document.getElementById('cal-label').textContent=`${calYear} 年 ${CAL_MONTHS[calMonth]}`;
+  const lang=getLang();
+  const monthLbl=lang==='en'?`${CAL_MONTHS_EN[calMonth]} ${calYear}`:`${calYear} 年 ${CAL_MONTHS[calMonth]}`;
+  document.getElementById('cal-label').textContent=monthLbl;
   const dowEl=document.getElementById('cal-dow');
-  if(!dowEl.children.length)dowEl.innerHTML=['日','一','二','三','四','五','六'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const dowLabels=lang==='en'?['Sun','Mon','Tue','Wed','Thu','Fri','Sat']:['日','一','二','三','四','五','六'];
+  dowEl.innerHTML=dowLabels.map(d=>`<div class="cal-dow">${d}</div>`).join('');
   const firstDay=new Date(calYear,calMonth,1).getDay();
   const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
   const now=new Date();
@@ -4574,11 +4790,18 @@ function renderCalendar(){
     const dd=String(d).padStart(2,'0');
     const ds=`${calYear}-${mm}-${dd}`;
     // Match shows by comparing the stored date string directly (avoids timezone issues)
-    const dayShows=SHOWS.filter(s=>['published',undefined,'',null].includes(s.status||null)&&s.date===ds);
+    const isPastDate = new Date(ds+'T00:00') < new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    const dayShows=SHOWS.filter(s=>{
+      const st=s.status||'published';
+      if(s.date!==ds) return false;
+      if(isPastDate) return st==='published'||st==='hidden';
+      return st==='published';
+    });
     const hasEv=dayShows.length>0;
     const isToday=now.getFullYear()===calYear&&now.getMonth()===calMonth&&now.getDate()===d;
     const isSel=calSel===ds;
-    const dots=hasEv?`<div class="cal-ev-dots">${dayShows.slice(0,3).map(()=>`<div class="cal-ev-dot"></div>`).join('')}</div>`:'';
+    const dotColor=isPastDate?'rgba(45,43,31,.28)':'var(--or)';
+    const dots=hasEv?`<div class="cal-ev-dots">${dayShows.slice(0,3).map(()=>`<div class="cal-ev-dot" style="background:${dotColor}"></div>`).join('')}</div>`:'';
     html+=`<div class="cal-day${hasEv?' has-ev':''}${isToday?' today':''}${isSel?' sel':''}" onclick="selectCalDay('${ds}')">${d}${dots}</div>`;
   }
   document.getElementById('cal-days').innerHTML=html;
@@ -4592,6 +4815,7 @@ function changeMonth(dir){
 }
 
 function selectCalDay(ds){
+  if(window.innerWidth >= 769){ selectCalDayDesk(ds); return; }
   calSel=ds;
   renderCalendar();
   const dayShows=SHOWS.filter(s=>['published',undefined,'',null].includes(s.status||null)&&s.date===ds).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
@@ -5543,7 +5767,12 @@ function restorePageFromHash(){
   restoreFiltersFromURL();
   // render 一次（opmic 等 Firebase 載完才 render，避免空資料閃爍）
   if(page==='home'){renderHomeShows();renderHomeUpcoming();renderHomeComments();renderHeroStats();}
-  if(page==='shows') renderShows();
+  if(page==='shows'){
+    renderShows();
+    if(window.innerWidth >= 769 && window._dataReady){
+      setTimeout(()=>selectCalDayDesk(getTodayStr()), 50);
+    }
+  }
   if(page==='courses') renderCourses();
   if(page==='about') renderAbout();
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
@@ -5780,7 +6009,12 @@ function showPage(page, skipHistory){
     history.replaceState({page},'','#'+page);
   }
   if(page==='home'){renderHomeShows();renderHomeUpcoming();renderHomeComments();renderHeroStats();}
-  if(page==='shows')renderShows();
+  if(page==='shows'){
+    renderShows();
+    if(window.innerWidth >= 769 && window._dataReady){
+      setTimeout(()=>selectCalDayDesk(getTodayStr()), 50);
+    }
+  }
   if(page==='opmic'){initTodayTab();selectMicDay(micDay,document.querySelector(`.day-tab[data-day="${micDay}"]`));}
   if(page==='venues')renderVenues();
   if(page==='performers')renderPerformers();
@@ -5814,12 +6048,46 @@ function setLang(l){
   const cur=document.querySelector('.page.active')?.id?.replace('page-','');
   if(typeof populateShowSelects==='function') populateShowSelects('','');
   if(cur==='home' && window._dataReady) renderHeroStats();
-  if(cur==='shows')renderShows();
+  if(cur==='shows'){
+    renderShows();
+    renderCalendar();
+    updateFilterDropdownsLang(l);
+    if(calSel) selectCalDayDesk(calSel);
+  }
   if(cur==='courses')renderCourses();
   if(cur==='performers')renderPerformers();
   if(cur==='about' && window._dataReady) renderAboutStats();
   if(cur==='opmic' && window._dataReady) renderMicTable();
   if(window._dataReady) updateLastUpdatedDisplay();
+}
+
+function updateFilterDropdownsLang(l){
+  const isEn = l==='en';
+  // sel-venue
+  const sv=document.getElementById('sel-venue');
+  if(sv){
+    const cur=sv.value;
+    sv.options[0].text = isEn?'All Venues':'全部場地';
+    sv.value=cur;
+  }
+  // sel-area
+  const sa=document.getElementById('sel-area');
+  if(sa){
+    const cur=sa.value;
+    const areaZh=['全部地區','雙北','桃園','新竹','台中','台南','高雄','其他'];
+    const areaEn=['All Areas','Taipei/New Taipei','Taoyuan','Hsinchu','Taichung','Tainan','Kaohsiung','Others'];
+    Array.from(sa.options).forEach((o,i)=>{ o.text=isEn?(areaEn[i]||o.text):(areaZh[i]||o.text); });
+    sa.value=cur;
+  }
+  // sel-day
+  const sd=document.getElementById('sel-day');
+  if(sd){
+    const cur=sd.value;
+    const dayZh=['全部星期','週一','週二','週三','週四','週五','週六','週日'];
+    const dayEn=['All Days','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.','Sun.'];
+    Array.from(sd.options).forEach((o,i)=>{ o.text=isEn?(dayEn[i]||o.text):(dayZh[i]||o.text); });
+    sd.value=cur;
+  }
 }
 
 function switchStoryTab(tab){
