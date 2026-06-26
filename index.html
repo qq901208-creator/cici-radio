@@ -476,12 +476,12 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
 .opmic-top-row{display:flex;gap:28px;align-items:flex-start;margin-bottom:24px}
 .opmic-top-left{flex:1;min-width:0}
 .opmic-top-right{flex:0 0 300px;align-self:flex-start}
-.opmic-report-banner{background:rgba(239,111,32,.08);border:1.5px solid rgba(239,111,32,.25);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;gap:12px}
-.opmic-report-icon{font-size:1.4rem}
+.opmic-report-banner{background:rgba(239,111,32,.08);border:1.5px solid rgba(239,111,32,.25);border-radius:var(--r-lg);padding:14px 16px;display:flex;align-items:center;gap:12px}
+.opmic-report-icon{font-size:1.2rem;flex-shrink:0}
 .opmic-report-text{flex:1;min-width:0}
-.opmic-report-title{font-size:.88rem;font-weight:700;font-family:var(--f-zh);color:var(--sd);margin-bottom:4px}
-.opmic-report-desc{font-size:.74rem;color:var(--ts);font-family:var(--f-zh);line-height:1.5}
-.opmic-report-btn{padding:8px 16px;background:transparent;border:1.5px solid var(--or);color:var(--or);border-radius:var(--r-pill);font-size:.8rem;font-weight:700;font-family:var(--f-zh);text-decoration:none;white-space:nowrap;transition:all .15s;align-self:flex-start}
+.opmic-report-title{font-size:.84rem;font-weight:700;font-family:var(--f-zh);color:var(--sd);margin-bottom:2px}
+.opmic-report-desc{font-size:.72rem;color:var(--ts);font-family:var(--f-zh);line-height:1.4}
+.opmic-report-btn{flex-shrink:0;padding:7px 14px;background:transparent;border:1.5px solid var(--or);color:var(--or);border-radius:var(--r-pill);font-size:.78rem;font-weight:700;font-family:var(--f-zh);text-decoration:none;white-space:nowrap;transition:all .15s}
 .opmic-report-btn:hover{background:var(--or);color:#fff}
 .opmic-filters{display:flex;gap:10px;margin-bottom:14px}
 .opmic-filters .filter-dropdown{min-width:140px}
@@ -1434,7 +1434,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <div class="sec-label">Open Mic</div>
         <h2 class="sec-title"><span class="zh-text">演員 Open Mic 報名資訊</span><span class="en-text">Open Mic Sign-Up Info</span></h2>
         <p class="sec-desc editable" contenteditable="false"><span class="zh-text">今晚去哪試段子好呢？嘻嘻報你知！</span><span class="en-text">Not sure where to try your set tonight? Cici's got you!</span></p>
-        <div class="opmic-notice" style="display:block;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:8px 14px;margin-bottom:0;font-size:.72rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">⚠️ <span class="zh-text">點擊報名連結將跳轉至外部頁面，本站不參與任何報名流程！</span><span class="en-text">Sign-up links lead to external pages. We are not involved in any sign-up process.</span></div>
+        <div class="opmic-notice" style="display:inline-flex;align-items:center;gap:6px;background:rgba(239,111,32,.1);border:1.5px solid rgba(239,111,32,.35);border-radius:var(--r-md);padding:8px 14px;margin-bottom:0;font-size:.72rem;font-family:var(--f-zh);font-weight:700;color:#b84a00">⚠️ <span class="zh-text">點擊報名連結將跳轉至外部頁面，本站不參與任何報名流程！</span><span class="en-text">Sign-up links lead to external pages. We are not involved in any sign-up process.</span></div>
       </div>
       <div class="opmic-top-right">
         <div class="opmic-report-banner">
@@ -2191,6 +2191,18 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div class="fg-g"><label class="fl"><span class="zh-text">演出時長限制</span><span class="en-text">Time Limit</span></label><input class="fi" type="text" id="m-timelimit" placeholder="e.g. 5 分鐘 / 3–5 分鐘"></div>
     <div class="fg-g"><label class="fl"><span class="zh-text">報名費用</span><span class="en-text">Sign-up Fee</span></label><input class="fi" type="text" id="m-signupfee" placeholder="e.g. 免費 / NT$100 / 低消一杯"></div>
+    <div class="fg-g full"><label class="fl">喜劇類型（可複選）</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="m-types-group">
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="standup" style="accent-color:var(--or)"> 站立喜劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="improv" style="accent-color:var(--or)"> 即興</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="mancai" style="accent-color:var(--or)"> 漫才</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="crosstalk" style="accent-color:var(--or)"> 相聲</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ogiri" style="accent-color:var(--or)"> 大喜利</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="english" style="accent-color:var(--or)"> 英文喜劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="musicom" style="accent-color:var(--or)"> 音樂喜劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="other" style="accent-color:var(--or)"> 其他</label>
+      </div>
+    </div>
     <div class="fg-g full"><label class="fl">備註</label><textarea class="fta" id="m-notes" rows="2" placeholder="e.g. 免費入場、純英文場次、需先報名..."></textarea></div>
   </div>
   <div class="fa">
@@ -4789,6 +4801,15 @@ function renderMicCards(rows, isAdmin, lang, isIrregular) {
 
     return `<div class="mic-card${isToday?' today-card':''}">
       ${todayBadge}
+      ${(() => {
+        const types = Array.isArray(m.types) ? m.types : (m.types ? [m.types] : []);
+        if(!types.length) return '';
+        return `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${types.map(t=>{
+          const meta = (typeof TYPE_META!=='undefined'&&TYPE_META[t]) ? TYPE_META[t] : {bg:'rgba(45,43,31,.08)',color:'var(--ts)',label:t};
+          const lbl = lang==='en' ? (meta.labelEn||meta.label) : meta.label;
+          return `<span style="font-size:.64rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);background:${meta.bg};color:${meta.color};font-family:var(--f-zh)">${lbl}</span>`;
+        }).join('')}</div>`;
+      })()}
       <div class="mic-card-venue">${venueDisplay}</div>
       ${cityLbl ? `<div class="mic-card-city">📍 ${cityLbl}</div>` : ''}
       ${m.name ? `<div class="mic-card-name">${m.name}</div>` : ''}
@@ -5119,6 +5140,8 @@ function openMicModal(id){
   });
   // 重設演出星期 checkbox
   document.querySelectorAll('#m-showday-group input[type=checkbox]').forEach(cb=>cb.checked=false);
+  // 重設喜劇類型 checkbox
+  document.querySelectorAll('#m-types-group input[type=checkbox]').forEach(cb=>cb.checked=false);
   // 重設 ampm 預設值
   ['m-showtime-ampm','m-showtime-end-ampm','m-signuptime-ampm','m-checkintime-ampm'].forEach(k=>{
     const el=document.getElementById(k); if(el) el.value='下午';
@@ -5157,6 +5180,10 @@ function openMicModal(id){
     document.getElementById('m-timelimit').value=m.timeLimit||'';
     document.getElementById('m-signupfee').value=m.signupFee||'';
     document.getElementById('m-notes').value=m.notes||'';
+    // 還原喜劇類型複選
+    document.querySelectorAll('#m-types-group input[type=checkbox]').forEach(cb=>cb.checked=false);
+    const mTypes = Array.isArray(m.types) ? m.types : (m.types ? [m.types] : []);
+    mTypes.forEach(t=>{ const cb=document.querySelector(`#m-types-group input[value="${t}"]`); if(cb) cb.checked=true; });
   }
   document.getElementById('modal-mic').classList.add('open');
 }
@@ -5186,6 +5213,7 @@ function saveMic(){
     signupFee:document.getElementById('m-signupfee').value.trim(),
     link:'#',
     notes:document.getElementById('m-notes').value,
+    types:[...document.querySelectorAll('#m-types-group input[type=checkbox]:checked')].map(cb=>cb.value),
   };
   window.FB.save('mics', eMicId||null, item).then(newId=>{
     if(eMicId){const i=MICS.findIndex(x=>x.id===eMicId);if(i>=0)MICS[i]={id:eMicId,...item};}
