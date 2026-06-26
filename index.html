@@ -262,7 +262,8 @@ body.ready{visibility:visible}
 .chip[data-v="podcast"]{border-color:#6898c8;color:#0a3860;background:#c8e8ff}
 .chip[data-v="spevent"]{border-color:#9888d0;color:#3a1e8c;background:#ddd8f8}
 .chip[data-v="other"]{border-color:#b8b8b8;color:#444;background:#e8e8e8}
-.view-toggle{display:flex;gap:6px}
+.shows-mobile-toggle{display:none}
+@media(max-width:768px){.shows-mobile-toggle{display:flex;margin-bottom:12px}}
 .view-btn{height:34px;padding:0 16px;border-radius:var(--r-pill);font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s;display:inline-flex;align-items:center}
 .view-btn.on{background:var(--sd);color:var(--y);border-color:var(--sd)}
 .filter-dropdowns{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:10px}
@@ -385,7 +386,7 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
   .filter-dropdown-wrap{flex:1;min-width:0}
   .filter-dropdown-wrap:last-child{flex:1}
   .filter-dropdown-lbl{display:none}
-  .filter-dropdown{width:100%;min-width:0;padding:8px 22px 8px 10px;font-size:.82rem}
+  .filter-dropdown{width:100%;min-width:0;padding:8px 28px 8px 10px;font-size:.82rem}
   /* 手機版首頁全寬 */
   .home-podcast-inner,.home-board-header,.home-board-grid,.home-board-cta{max-width:100%}
 
@@ -1283,6 +1284,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <button class="edit-add-btn" id="btn-hide-expired-shows" style="width:auto;padding:6px 14px;font-size:.78rem" onclick="toggleHideExpiredShows()">👁 <span class="zh-text">顯示過期</span><span class="en-text">Show Expired</span></button>
         </div>
 
+        <!-- 手機版月曆/列表切換（桌機隱藏） -->
+        <div class="view-toggle shows-mobile-toggle">
+          <button class="view-btn on" id="vcards" onclick="setShowsView('cards')"><span class="zh-text">演出列表</span><span class="en-text">List</span></button>
+          <button class="view-btn" id="vcal" onclick="setShowsView('cal')">📅 <span class="zh-text">月曆</span><span class="en-text">Calendar</span></button>
+        </div>
     <!-- 搜尋欄 -->
     <div class="shows-search-wrap">
       <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
@@ -1382,10 +1388,20 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
             <div id="archived-pagination"></div>
           </div>
         </div>
-        <!-- 月曆 result（桌機版不顯示，但保留 id 供 JS 使用） -->
-        <div id="view-cal" style="display:none"></div>
-        <div class="cal-banner" id="cal-banner" style="display:none"></div>
-        <div id="cal-result" style="display:none"></div>
+        <!-- 月曆（手機版顯示，桌機版隱藏） -->
+        <div id="view-cal" style="display:none">
+          <div class="cal-wrap">
+            <div class="cal-header">
+              <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+              <div class="cal-month-lbl" id="cal-label-mob"></div>
+              <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+            </div>
+            <div class="cal-grid" id="cal-dow-mob"></div>
+            <div class="cal-grid" id="cal-days-mob" style="margin-top:3px"></div>
+          </div>
+          <div class="cal-banner" id="cal-banner"></div>
+          <div id="cal-result"></div>
+        </div>
       </div><!-- end shows-main-col -->
     </div><!-- end shows-layout -->
   </section>
@@ -4772,10 +4788,10 @@ function setShowsView(v){
 const CAL_MONTHS=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
 const CAL_MONTHS_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-function renderCalendar(){
-  const calLabel=document.getElementById('cal-label');
-  const dowEl=document.getElementById('cal-dow');
-  const daysEl=document.getElementById('cal-days');
+function renderCalendarInto(labelId, dowId, daysId){
+  const calLabel=document.getElementById(labelId);
+  const dowEl=document.getElementById(dowId);
+  const daysEl=document.getElementById(daysId);
   if(!calLabel||!dowEl||!daysEl) return;
   const lang=getLang();
   const monthLbl=lang==='en'?`${CAL_MONTHS_EN[calMonth]} ${calYear}`:`${calYear} 年 ${CAL_MONTHS[calMonth]}`;
@@ -4788,11 +4804,9 @@ function renderCalendar(){
   let html='';
   for(let i=0;i<firstDay;i++)html+=`<div class="cal-day other-month"></div>`;
   for(let d=1;d<=daysInMonth;d++){
-    // Build ISO date string — guaranteed YYYY-MM-DD
     const mm=String(calMonth+1).padStart(2,'0');
     const dd=String(d).padStart(2,'0');
     const ds=`${calYear}-${mm}-${dd}`;
-    // Match shows by comparing the stored date string directly (avoids timezone issues)
     const isPastDate = new Date(ds+'T00:00') < new Date(now.getFullYear(),now.getMonth(),now.getDate());
     const dayShows=SHOWS.filter(s=>{
       const st=s.status||'published';
@@ -4808,6 +4822,11 @@ function renderCalendar(){
     html+=`<div class="cal-day${hasEv?' has-ev':''}${isToday?' today':''}${isSel?' sel':''}" onclick="selectCalDay('${ds}')">${d}${dots}</div>`;
   }
   daysEl.innerHTML=html;
+}
+
+function renderCalendar(){
+  renderCalendarInto('cal-label','cal-dow','cal-days');
+  renderCalendarInto('cal-label-mob','cal-dow-mob','cal-days-mob');
 }
 
 function changeMonth(dir){
