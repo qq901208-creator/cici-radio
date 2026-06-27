@@ -3689,7 +3689,7 @@ function renderHomeUpcoming() {
   const upcoming = shows
     .filter(s => (s.status || 'published') === 'published' && !isExpired(s.date, s.time))
     .sort((a, b) => showSortKey(a).localeCompare(showSortKey(b)))
-    .slice(0, 4);
+    .slice(0, 3);
 
   if (!upcoming.length) {
     el.innerHTML = `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:12px 0;text-align:center">
@@ -3734,7 +3734,7 @@ function renderHomeUpcoming() {
     }).join('');
   } else {
     // 桌機：演出卡片
-    el.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:4px 0';
+    el.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 0';
     el.innerHTML = upcoming.map(s => showCardHTML(s)).join('');
   }
 }
