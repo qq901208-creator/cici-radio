@@ -5095,7 +5095,8 @@ function renderCalendarInto(labelId, dowId, daysId){
     const dd=String(d).padStart(2,'0');
     const ds=`${calYear}-${mm}-${dd}`;
     const isPastDate = new Date(ds+'T00:00') < new Date(now.getFullYear(),now.getMonth(),now.getDate());
-    const dayShows=SHOWS.filter(s=>{
+    const allShowsForCal = window._SHOWS || [];
+    const dayShows=allShowsForCal.filter(s=>{
       const st=s.status||'published';
       if(s.date!==ds) return false;
       if(isPastDate) return st==='published'||st==='hidden';
