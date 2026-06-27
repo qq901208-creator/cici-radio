@@ -247,42 +247,10 @@ body.ready{visibility:visible}
 .chip[data-f="format"].on{background:var(--or);color:#fff;border-color:var(--or);font-weight:700}
 .chip:hover{border-color:var(--sd);color:var(--sd)}
 .chip.on{background:var(--sd);color:#fff;border-color:var(--sd);font-weight:700}
-/* 類型 chip 各自顏色（active 時）— 對齊 TYPE_META */
-.chip[data-v="opmic"].on{background:#5e4200;border-color:#5e4200;color:#fff3a0}
-.chip[data-v="standup"].on{background:#7a2e00;border-color:#7a2e00;color:#ffd6b3}
-.chip[data-v="improv"].on{background:#0d5c30;border-color:#0d5c30;color:#b8f0d0}
-.chip[data-v="sketch"].on{background:#7a4000;border-color:#7a4000;color:#ffe0b3}
-.chip[data-v="konto"].on{background:#6e2800;border-color:#6e2800;color:#fce8d0}
-.chip[data-v="mancai"].on{background:#1a2e8c;border-color:#1a2e8c;color:#c8d8ff}
-.chip[data-v="crosstalk"].on{background:#8c0038;border-color:#8c0038;color:#ffd6e8}
-.chip[data-v="rakugo"].on{background:#4a1a6e;border-color:#4a1a6e;color:#e8d5f5}
-.chip[data-v="musicom"].on{background:#6e0062;border-color:#6e0062;color:#f5d0f0}
-.chip[data-v="mixed"].on{background:#2a3ba0;border-color:#2a3ba0;color:#dce8ff}
-.chip[data-v="special"].on{background:#1a5c1a;border-color:#1a5c1a;color:#d4f5d4}
-.chip[data-v="english"].on{background:#0a4878;border-color:#0a4878;color:#d4eeff}
-.chip[data-v="ogiri"].on{background:#0a4a5e;border-color:#0a4a5e;color:#d0f0f8}
-.chip[data-v="gameshow"].on{background:#5e4a00;border-color:#5e4a00;color:#fff0b3}
-.chip[data-v="podcast"].on{background:#0a3860;border-color:#0a3860;color:#c8e8ff}
-.chip[data-v="spevent"].on{background:#3a1e8c;border-color:#3a1e8c;color:#ddd8f8}
-.chip[data-v="other"].on{background:#444;border-color:#444;color:#e8e8e8}
-/* 非 active 時的淡色底 — 對齊 TYPE_META 卡片標籤顏色 */
-.chip[data-v="opmic"]{border-color:#c8b840;color:#5e4200;background:#fff3a0}
-.chip[data-v="standup"]{border-color:#e09060;color:#7a2e00;background:#ffd6b3}
-.chip[data-v="improv"]{border-color:#70c890;color:#0d5c30;background:#b8f0d0}
-.chip[data-v="sketch"]{border-color:#e0a060;color:#7a4000;background:#ffe0b3}
-.chip[data-v="konto"]{border-color:#d0a878;color:#6e2800;background:#fce8d0}
-.chip[data-v="mancai"]{border-color:#8098d8;color:#1a2e8c;background:#c8d8ff}
-.chip[data-v="crosstalk"]{border-color:#e890b0;color:#8c0038;background:#ffd6e8}
-.chip[data-v="rakugo"]{border-color:#c898e8;color:#4a1a6e;background:#e8d5f5}
-.chip[data-v="musicom"]{border-color:#e090d0;color:#6e0062;background:#f5d0f0}
-.chip[data-v="mixed"]{border-color:#9098c8;color:#2a3ba0;background:#dce8ff}
-.chip[data-v="special"]{border-color:#80c880;color:#1a5c1a;background:#d4f5d4}
-.chip[data-v="english"]{border-color:#80b8e0;color:#0a4878;background:#d4eeff}
-.chip[data-v="ogiri"]{border-color:#80c8d8;color:#0a4a5e;background:#d0f0f8}
-.chip[data-v="gameshow"]{border-color:#c8b050;color:#5e4a00;background:#fff0b3}
-.chip[data-v="podcast"]{border-color:#6898c8;color:#0a3860;background:#c8e8ff}
-.chip[data-v="spevent"]{border-color:#9888d0;color:#3a1e8c;background:#ddd8f8}
-.chip[data-v="other"]{border-color:#b8b8b8;color:#444;background:#e8e8e8}
+/* 類型 chip 統一顏色 */
+.chip[data-f="type"]{background:#fff;border-color:rgba(45,43,31,.16);color:var(--ts)}
+.chip[data-f="type"]:hover{border-color:var(--sd);color:var(--sd)}
+.chip[data-f="type"].on{background:var(--sd);border-color:var(--sd);color:#fff;font-weight:700}
 .shows-mobile-toggle{display:none}
 @media(max-width:768px){.shows-mobile-toggle{display:flex;margin-bottom:12px}}
 .view-btn{height:34px;padding:0 16px;border-radius:var(--r-pill);font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(45,43,31,.16);background:transparent;color:var(--ts);font-family:var(--f-zh);transition:all .14s;display:inline-flex;align-items:center}
