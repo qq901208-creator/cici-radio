@@ -1384,15 +1384,17 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
             <option value="all"><span class="zh-text">全部場地</span></option>
             <option value="comedy-plus">卡米地＋</option>
             <option value="two-three">23喜劇</option>
+            <option value="ponwo">月半窩Cafe</option>
             <option value="fakers">飛客劇樂部 - basis coffee.</option>
             <option value="beitou">北投喜劇 - 山峸二手書店</option>
+            <option value="humorbeing">Humorbeing - 遊牧計畫 Project Nomad</option>
             <option value="ginting">樂君亭</option>
             <option value="windcity">站立風城 - 現場馬拉桑餐酒館</option>
             <option value="smo">思MIC歐 - 不染酒吧</option>
             <option value="laughhouse">來福好事 - 群島藝術園區</option>
+            <option value="stage">STAGE 時代劇</option>
             <option value="tainan">府城喜劇 - SASADRA cafe</option>
             <option value="takao">喜劇開港</option>
-            <option value="ponwo">月半窩</option>
             <option value="other">其他</option>
           </select>
         </div>
@@ -3143,11 +3145,13 @@ const VENUE_GROUPS = {
   'laughhouse':  ['來福好事', 'laugh house', 'laughhouse', '群島'],
   'tainan':      ['府城喜劇', 'tainan comedy', 'sasadra'],
   'takao':       ['喜劇開港', 'takao comedy', '鸚鵡螺'],
-  'ponwo':       ['月半窩', 'ponwo', 'ponwo cafe'],
+  'ponwo':       ['月半窩', 'ponwo', 'ponwo cafe', '月半窩cafe', '月半窩Cafe'],
+  'humorbeing':  ['humorbeing', '遊牧計畫', 'project nomad', 'humorbeing project nomad'],
+  'stage':       ['stage', 'stage時代劇', '時代劇'],
   'goldens':     ['金手套', '劍潭', "golden's bar", 'goldens'],
 };
 // 「其他」篩選時要排除的已知場地 ID
-const KNOWN_VENUE_IDS = ['comedy-plus','two-three','fakers','beitou','ginting','windcity','smo','laughhouse','tainan','takao','ponwo','goldens'];
+const KNOWN_VENUE_IDS = ['comedy-plus','two-three','fakers','beitou','ginting','windcity','smo','laughhouse','tainan','takao','ponwo','goldens','humorbeing','stage'];
 
 function venueMatchesFilter(s, fVenue) {
   if (fVenue === 'all') return true;
@@ -5667,7 +5671,9 @@ const DEFAULT_SHOW_VENUES = [
   {id:'smo',               labelZh:'思MIC歐 - 不染酒吧',                    labelEn:'S.M.O - UNSULLIED COFFEE & COCKTAIL'},
   {id:'windcity',          labelZh:'站立風城 - 新竹市綠水市民活動中心',     labelEn:'Wind City Stand-Up - Lushui Community Center'},
   {id:'windcity-malasang', labelZh:'站立風城 - 現場馬拉桑餐酒館',           labelEn:"Wind City Stand-Up - The Local's Bistro"},
-  {id:'laughhouse',        labelZh:'來福好事',                               labelEn:'Laugh House'},  {id:'tainan',            labelZh:'府城喜劇 - SASADRA cafe',               labelEn:'Tainan Comedy - SASADRA cafe'},
+  {id:'laughhouse',        labelZh:'來福好事',                               labelEn:'Laugh House'},
+  {id:'stage',             labelZh:'STAGE 時代劇',                           labelEn:'STAGE'},
+  {id:'tainan',            labelZh:'府城喜劇 - SASADRA cafe',               labelEn:'Tainan Comedy - SASADRA cafe'},
   {id:'seety',             labelZh:'Seety新城視展演空間',                    labelEn:'Seety Tainan'},
   {id:'takao',             labelZh:'喜劇開港',                               labelEn:'Takaocomedybay'},
   {id:'touring',           labelZh:'各地文化局場館、劇場巡迴',               labelEn:'Touring Venues'},
