@@ -3230,7 +3230,7 @@ function showCardHTML(s) {
               ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation();if(typeof gtag==='function')gtag('event','click_ticket',{show_title:'${(s.title||'').replace(/'/g,"\\'")}',venue:'${s.venueLabel||s.venue||''}',platform:'${s.platform||''}'})"><span class="zh-text">馬上購票</span><span class="en-text">Buy Tickets</span></a>`
               : `<span></span>`
         }
-        <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);display:flex;align-items:center;gap:3px;opacity:.7"><span class="zh-text">詳情</span><span class="en-text">Details</span> ↗</span>
+        <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);display:flex;align-items:center;gap:3px;opacity:.7"></span>
       </div>
       ${s.imgSrc?`<div class="sc-imgsrc sc-imgsrc-desktop" style="margin-top:4px">${s.imgSrc}</div>`:''}
     </div>
@@ -3780,7 +3780,13 @@ function selectCalDayDesk(ds){
       if(isPast) return st === 'published' || st === 'hidden';
       return st === 'published';
     })
-    .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
+    .sort((a,b)=>{
+      const aExp = isExpired(a.date, a.time);
+      const bExp = isExpired(b.date, b.time);
+      if(aExp && !bExp) return 1;
+      if(!aExp && bExp) return -1;
+      return showSortKey(a).localeCompare(showSortKey(b));
+    });
 
   const lang2=getLang();
   const DOW_ZH2=['日','一','二','三','四','五','六'];
@@ -3917,7 +3923,7 @@ function courseCardHTML(c) {
     </div>
     <div class="cc-foot">
       ${(c.url&&c.url!=='#')?`<a href="${c.url}" class="cc-link" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">立即報名 ↗</span><span class="en-text">Sign Up ↗</span></a>`:'<span></span>'}
-      <span style="font-size:.68rem;color:var(--ts);font-family:var(--f-bo);opacity:.7">詳情 ↗</span>
+      <span></span>
     </div>
     ${c.imgSrc?`<div class="cc-imgsrc cc-imgsrc-desktop" style="font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo);padding:0 16px 10px;text-align:right">${c.imgSrc}</div>`:''}
     <div class="card-eo">
