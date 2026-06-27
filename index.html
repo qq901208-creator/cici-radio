@@ -6430,13 +6430,12 @@ function showPage(page, skipHistory){
       requestAnimationFrame(()=>{
         renderCalendar();
         if(window._dataReady){
-          setTimeout(()=>{ renderCalendar(); selectCalDayDesk(getTodayStr()); }, 30);
+          setTimeout(()=>{ renderCalendar(); }, 30);
         } else {
           const waitData2 = setInterval(()=>{
             if(window._dataReady){
               clearInterval(waitData2);
               renderCalendar();
-              selectCalDayDesk(getTodayStr());
             }
           }, 100);
         }
