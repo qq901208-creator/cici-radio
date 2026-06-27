@@ -89,9 +89,10 @@ body.ready{visibility:visible}
 .hero-h1 .hl{color:var(--or);position:relative;display:inline-block}
 .hero-h1 .hl::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:5px;background:var(--y);border-radius:3px;z-index:-1}
 .hero-sub{display:none}
-.hero-platform{font-family:var(--f-zh);font-size:1.1rem;color:var(--sd);font-weight:800;margin-bottom:6px;letter-spacing:.01em}
+.hero-platform{font-family:var(--f-zh);font-size:1.1rem;color:var(--sd);font-weight:800;margin-bottom:20px;letter-spacing:.01em}
 .hero-desc{font-size:.95rem;color:var(--ts);line-height:1.8;margin-bottom:16px;font-family:var(--f-zh);opacity:.85}
 .hero-ctas{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hero-next{display:none!important}
 .hero-browse-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:var(--or);color:#fff;font-weight:700;font-size:.82rem;border:none;border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh);box-shadow:0 4px 14px rgba(239,111,32,.28)}
 .hero-browse-btn:hover{background:#d45c10;transform:translateY(-2px)}
 .hero-quick-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;background:#fff;color:var(--sd);font-weight:600;font-size:.82rem;border:2px solid rgba(45,43,31,.13);border-radius:var(--r-pill);cursor:pointer;font-family:var(--f-zh);transition:all .15s}
@@ -1086,7 +1087,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </p>
       <div class="hero-ctas">
         <a href="#" class="hero-browse-btn" onclick="showPage('shows');return false">
-          📅 <span class="zh-text">查看演出資訊 →</span><span class="en-text">Browse Shows →</span>
+          <span class="zh-text">查看演出資訊 →</span><span class="en-text">Browse Shows →</span>
         </a>
       </div>
       <div id="hero-next-show" class="hero-next" style="display:none"></div>
@@ -1186,9 +1187,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </div>
     </div>
     <a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" class="hst-cta">
-      <div class="hst-cta-icon">🎉</div>
       <div class="hst-cta-txt">
-        <span class="zh-text">演員資料新增申請表單，<br>歡迎填寫加入喔！</span>
+        <span class="zh-text">演員資料新增申請表單，<br>歡迎填寫加入！</span>
         <span class="en-text">Apply to join the<br>performer directory!</span>
       </div>
       <div class="hst-cta-arr">→</div>
