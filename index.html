@@ -3712,40 +3712,9 @@ function renderHomeUpcoming() {
   }
 
   if (isMobile) {
-    // 手機：演出卡片
+    // 手機：用演出頁同款橫向卡片
     el.style.cssText = 'display:flex;flex-direction:column;gap:10px;padding:4px 0';
-    const AREA_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'};
-    el.innerHTML = upcoming.map(s => {
-      const types = Array.isArray(s.types) ? s.types : (s.type ? [s.type] : ['other']);
-      const typeTags = types.map(t=>{ const m=TYPE_META[t]||TYPE_META.other; return `<span style="font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);background:${m.bg};color:${m.color}">${m.label}</span>`; }).join('');
-      const rawDate = String(s.date||'').split(',')[0].trim();
-      const d = new Date(rawDate+'T00:00');
-      const DOW_ZH2=['日','一','二','三','四','五','六'];
-      const dow = isNaN(d)?'':DOW_ZH2[d.getDay()];
-      const areaLabel = AREA_ZH[s.area||'other']||'';
-      const expiredStyle = isExpired(s.date,s.time) ? 'opacity:.55;' : '';
-      const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
-      const ticketBtn = s.soldOut
-        ? `<span style="font-size:.74rem;color:#8b1a1a">已售完</span>`
-        : s.platform==='door'
-          ? `<span style="font-size:.74rem;color:var(--or);font-weight:600">現場付費</span>`
-          : (s.ticketUrl&&s.ticketUrl!=='#')
-            ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">馬上購票</a>`
-            : `<span></span>`;
-      const posterEl = (s.image&&s.image.trim()) ? `<img src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:100%;height:120px;object-fit:contain;display:block;background:#fff">` : '';
-      return `<div style="${expiredStyle}background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:0 2px 12px rgba(45,43,31,.08);cursor:pointer" onclick="openShowDetail('${s.id}', true)">
-        <div style="position:relative;background:linear-gradient(135deg,var(--py),var(--y));height:120px;overflow:hidden">
-          ${posterEl}
-          <div style="position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-wrap:wrap;z-index:3">${typeTags}</div>
-        </div>
-        <div style="padding:12px">
-          <div style="font-size:.76rem;color:var(--ts);margin-bottom:4px">📅 ${rawDate} (${dow}) ${s.time||''}${soldTag}</div>
-          <div style="font-size:.9rem;font-weight:700;font-family:var(--f-zh);color:var(--sd);margin-bottom:4px;line-height:1.4">${s.title}</div>
-          <div style="font-size:.76rem;color:var(--ts)">📍 ${areaLabel}</div>
-          <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">${ticketBtn}</div>
-        </div>
-      </div>`;
-    }).join('');
+    el.innerHTML = upcoming.map(s => showCardHTML(s)).join('');
   } else {
     // 桌機：簡化卡片（無票價、無演員、地點改地區）
     el.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 0';
