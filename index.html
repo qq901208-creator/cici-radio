@@ -1645,7 +1645,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ponwo" style="accent-color:var(--or)"> 月半窩</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="beitou" style="accent-color:var(--or)"> 北投喜劇 - 山峸二手書店</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="dikia" style="accent-color:var(--or)"> 底加書店</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="humorbeing" style="accent-color:var(--or)"> Humorbeing - 遊牧計畫 Project Nomad</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="goldens" style="accent-color:var(--or)"> 劍潭金手套 Golden's Bar</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="papsximen" style="accent-color:var(--or)"> Pap's Ximen</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="otwoofour" style="accent-color:var(--or)"> 人文工坊</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ginting" style="accent-color:var(--or)"> 樂君亭</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="smo" style="accent-color:var(--or)"> 思MIC歐 - 不染酒吧</label>
@@ -4854,7 +4856,7 @@ function openPerformerDetail(id){
     p.showVideo3 ? `<a href="${safeUrl(p.showVideo3)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap"><span class="zh-text">專場影片 3</span><span class="en-text">Special Show 3</span></a>` : '',
     ...(p.extraLinks||[]).map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'Linktree',portaly:'Portaly',other:'其他連結'}[l.type]||l.type}</a>`),
   ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
-  const shareBtn = `<span class="desktop-only" style="color:var(--ts);margin:0 6px">·</span><button onclick="sharePerformer('${p.id}')" style="padding:3px 9px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.15);background:transparent;font-size:.84rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:3px;vertical-align:middle" class="desktop-only" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.15)';this.style.color='var(--ts)'">↗ 分享</button>`;
+  const shareBtn = ``;
   const heroAvatar = p.photoUrl
     ? `<img src="${p.photoUrl}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:2px solid rgba(45,43,31,.1);flex-shrink:0">`
     : `<div style="width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:3.2rem;color:#fff;font-weight:700;flex-shrink:0">${(p.name||'?')[0]}</div>`;
@@ -5657,16 +5659,17 @@ const DEFAULT_SHOW_VENUES = [
   {id:'ponwo',             labelZh:'月半窩Cafe',                             labelEn:'Ponwo Cafe'},
   {id:'beitou',            labelZh:'北投喜劇 - 山峸二手書店',                labelEn:'Beitou Comedy - Ridge Books'},
   {id:'dikia',             labelZh:'底加書店',                               labelEn:'Titsia Bookstore'},
+  {id:'humorbeing',        labelZh:'Humorbeing - 遊牧計畫 Project Nomad',    labelEn:'Humorbeing - Project Nomad'},
+  {id:'goldens',           labelZh:'劍潭金手套',                                 labelEn:"Golden's Bar"},
+  {id:'papsximen',         labelZh:"Pap's Ximen",                            labelEn:"Pap's Ximen"},
   {id:'otwoofour',         labelZh:'人文工坊',                               labelEn:'O Two O Four'},
   {id:'ginting',           labelZh:'樂君亭',                                 labelEn:'Ginting Comedy'},
   {id:'smo',               labelZh:'思MIC歐 - 不染酒吧',                    labelEn:'S.M.O - UNSULLIED COFFEE & COCKTAIL'},
   {id:'windcity',          labelZh:'站立風城 - 新竹市綠水市民活動中心',     labelEn:'Wind City Stand-Up - Lushui Community Center'},
   {id:'windcity-malasang', labelZh:'站立風城 - 現場馬拉桑餐酒館',           labelEn:"Wind City Stand-Up - The Local's Bistro"},
-  {id:'laughhouse',        labelZh:'來福好事',                               labelEn:'Laugh House'},
-  {id:'tainan',            labelZh:'府城喜劇 - SASADRA cafe',               labelEn:'Tainan Comedy - SASADRA cafe'},
+  {id:'laughhouse',        labelZh:'來福好事',                               labelEn:'Laugh House'},  {id:'tainan',            labelZh:'府城喜劇 - SASADRA cafe',               labelEn:'Tainan Comedy - SASADRA cafe'},
   {id:'seety',             labelZh:'Seety新城視展演空間',                    labelEn:'Seety Tainan'},
   {id:'takao',             labelZh:'喜劇開港',                               labelEn:'Takaocomedybay'},
-  {id:'goldens',           labelZh:'劍潭金手套',                                 labelEn:"Golden's Bar"},
   {id:'touring',           labelZh:'各地文化局場館、劇場巡迴',               labelEn:'Touring Venues'},
   {id:'other',             labelZh:'其他',                                   labelEn:'Others'},
 ];
