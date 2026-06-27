@@ -1378,10 +1378,19 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div class="filter-section">
       <div class="filter-row-indent">
+        <span class="filter-lbl"><span class="zh-text">形式</span><span class="en-text">Format</span></span>
+        <div class="filter-chips">
+        <button class="chip on" data-f="format" data-v="all"><span class="zh-text">全部<span class="mob-text">形式</span></span><span class="en-text">All<span class="mob-text"> Formats</span></span></button>
+        <button class="chip" data-f="format" data-v="opmic"><span class="zh-text">Open Mic</span><span class="en-text">Open Mic</span></button>
+        <button class="chip" data-f="format" data-v="mixed"><span class="zh-text">拼盤秀</span><span class="en-text">Mixed-bill Show</span></button>
+        <button class="chip" data-f="format" data-v="special"><span class="zh-text">喜劇專場</span><span class="en-text">Comedy Special</span></button>
+        <button class="chip" data-f="format" data-v="spevent"><span class="zh-text">特殊企劃</span><span class="en-text">Special Event</span></button>
+        </div>
+      </div>
+      <div class="filter-row" style="margin-top:8px">
         <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
         <div class="filter-chips">
         <button class="chip on" data-f="type" data-v="all"><span class="zh-text">全部<span class="mob-text">類型</span></span><span class="en-text">All<span class="mob-text"> Types</span></span></button>
-        <button class="chip" data-f="type" data-v="opmic"><span class="zh-text">Open Mic</span><span class="en-text">Open Mic</span></button>
         <button class="chip" data-f="type" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
         <button class="chip" data-f="type" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
         <button class="chip" data-f="type" data-v="mancai"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></button>
@@ -1392,11 +1401,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="type" data-v="ogiri"><span class="zh-text">大喜利</span><span class="en-text">Ōgiri</span></button>
         <button class="chip" data-f="type" data-v="musicom"><span class="zh-text">音樂喜劇</span><span class="en-text">Music Comedy</span></button>
         <button class="chip" data-f="type" data-v="gameshow">Game Show</button>
-        <button class="chip" data-f="type" data-v="mixed"><span class="zh-text">拼盤秀</span><span class="en-text">Mixed-bill Show</span></button>
-        <button class="chip" data-f="type" data-v="special"><span class="zh-text">喜劇專場</span><span class="en-text">Comedy Special</span></button>
         <button class="chip" data-f="type" data-v="english"><span class="zh-text">英文喜劇</span><span class="en-text">English Comedy</span></button>
         <button class="chip" data-f="type" data-v="podcast">Live Podcast</button>
-        <button class="chip" data-f="type" data-v="spevent"><span class="zh-text">特殊企劃</span><span class="en-text">Special Event</span></button>
         <button class="chip" data-f="type" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
         </div>
       </div>
@@ -2964,7 +2970,7 @@ window._syncData = function(){
 
 let editMode = false;
 let eShowId=null, eMicId=null, eVenueId=null, eCourseId=null;
-let fType='all', fVenue='all', fArea='all', fDay='all', fCtype='all', fCity='all';
+let fType='all', fVenue='all', fArea='all', fDay='all', fCtype='all', fCity='all', fFormat='all';
 let micDay = 1;
 
 // ── 篩選條件 URL 同步 ──
@@ -2985,7 +2991,7 @@ function syncFiltersToURL(){
 
 // ── 重置所有篩選 ──
 function resetAllFilters(){
-  fType='all'; fVenue='all'; fArea='all'; fDay='all';
+  fType='all'; fVenue='all'; fArea='all'; fDay='all'; fFormat='all';
   showsPage=1;
   // 重置 type chip
   document.querySelectorAll(`.chip[data-f="type"]`).forEach(c=>c.classList.toggle('on', c.dataset.v==='all'));
@@ -3388,6 +3394,7 @@ function renderShows() {
     if (adminMode && hideExpiredShows && isExpired(s.date, s.time) && st !== 'pending') return false;
     const types = s.types||(s.type?[s.type]:[]);
     if (fType!=='all' && !types.includes(fType)) return false;
+    if (fFormat!=='all' && !types.includes(fFormat)) return false;
     if (!venueMatchesFilter(s, fVenue)) return false;
     const KNOWN_AREAS = ['taipei','newtaipei','taoyuan','hsinchu','taichung','tainan','kaohsiung'];
     if (fArea!=='all'){
@@ -5067,6 +5074,7 @@ document.querySelectorAll('.chip').forEach(btn=>{
     document.querySelectorAll(`.chip[data-f="${f}"]`).forEach(c=>c.classList.remove('on'));
     this.classList.add('on');
     if(f==='type') {fType=v;showsPage=1;renderShows();syncFiltersToURL();}
+    if(f==='format'){fFormat=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='venue'){fVenue=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='area') {fArea=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='day')  {fDay=v;showsPage=1;renderShows();syncFiltersToURL();}
