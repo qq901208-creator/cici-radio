@@ -2720,6 +2720,7 @@ async function loadAllData(retryCount = 0) {
     if(typeof renderHomeUpcoming==='function') try{renderHomeUpcoming();}catch(e){console.error('renderHomeUpcoming:',e);}
     if(typeof renderHomeComments==='function') try{renderHomeComments();}catch(e){console.error('renderHomeComments:',e);}
     if(typeof renderShows==='function') try{renderShows();}catch(e){console.error('renderShows:',e);}
+    if(typeof renderCalendar==='function') try{renderCalendar();}catch(e){}
     if(typeof renderVenues==='function') try{renderVenues();}catch(e){console.error('renderVenues:',e);}
     if(typeof renderPerformers==='function') try{renderPerformers();}catch(e){console.error('renderPerformers:',e);}
     if(typeof renderCourses==='function') try{renderCourses();}catch(e){console.error('renderCourses:',e);}
@@ -3760,6 +3761,10 @@ function updateShowsDateBar(ds, count){
 
 function selectCalDayDesk(ds){
   if(window.innerWidth < 769){ selectCalDay(ds); return; }
+  // 停止 lazy load，避免干擾月曆日期顯示
+  if(_showsLazyObserver){ _showsLazyObserver.disconnect(); _showsLazyObserver=null; }
+  const old = document.getElementById('shows-lazy-sentinel');
+  if(old) old.remove();
   calSel = ds;
   renderCalendar();
   document.querySelectorAll('.cal-sc-btn').forEach(b=>b.classList.remove('on'));
