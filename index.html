@@ -3700,14 +3700,7 @@ function renderHomeUpcoming() {
   }
 
   if (isMobile) {
-    // 手機：用演出頁卡片
-    el.innerHTML = `<div class="shows-grid">${upcoming.map(showCardHTML).join('')}</div>`;
-    el.querySelectorAll('.show-card').forEach(card => {
-      const id = card.dataset.id;
-      if(id) card.onclick = (e) => { e.stopPropagation(); openShowDetail(id, true); };
-    });
-  } else {
-    // 桌機：條列
+    // 手機：條列
     el.innerHTML = upcoming.map(s => {
       const rawDate = String(s.date || '').split(',')[0].trim().replace(/\//g, '-');
       const d = new Date(rawDate + 'T00:00');
@@ -3739,6 +3732,10 @@ function renderHomeUpcoming() {
         <div style="display:flex;gap:4px;flex-wrap:wrap;flex-shrink:0;align-items:center">${tagsHtml}</div>
       </div>`;
     }).join('');
+  } else {
+    // 桌機：演出卡片
+    el.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:4px 0';
+    el.innerHTML = upcoming.map(s => showCardHTML(s)).join('');
   }
 }
 
