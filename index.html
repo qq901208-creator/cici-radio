@@ -392,7 +392,8 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
   .shows-cal-col{display:none}
   .shows-main-col{display:block}
   .shows-date-bar{display:none}
-  .shows-top-header{display:none}
+  .shows-top-header{display:block!important}
+  #page-shows .shows-top-header{display:block!important}
   .filter-reset-btn{display:none}
   #page-shows .filter-reset-btn{display:inline-flex}
   /* 手機版 chip：適中大小，最右截斷引導滑動 */
@@ -3711,36 +3712,38 @@ function renderHomeUpcoming() {
   }
 
   if (isMobile) {
-    // 手機：條列
+    // 手機：演出卡片
+    el.style.cssText = 'display:flex;flex-direction:column;gap:10px;padding:4px 0';
+    const AREA_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'};
     el.innerHTML = upcoming.map(s => {
-      const rawDate = String(s.date || '').split(',')[0].trim().replace(/\//g, '-');
-      const d = new Date(rawDate + 'T00:00');
-      const isValidDate = !isNaN(d);
-      const mm = isValidDate ? String(d.getMonth() + 1).padStart(2, '0') : '--';
-      const dd = isValidDate ? String(d.getDate()).padStart(2, '0') : '--';
-      const dow = isValidDate ? (lang === 'en' ? DOW_EN[d.getDay()] : DOW_ZH[d.getDay()]) : '';
       const types = Array.isArray(s.types) ? s.types : (s.type ? [s.type] : ['other']);
-      const firstType = types[0] || 'other';
-      const meta = TYPE_META[firstType] || TYPE_META.other;
-      const emojiMap = {opmic:'🎤',standup:'🎭',improv:'🎪',sketch:'🎬',mancai:'🥢',musicom:'🎵',english:'🌏'};
-      const thumbEmoji = emojiMap[firstType] || '🎭';
-      const venue = getShowVenueLabelById(s.venue) || s.venue || '';
-      const time = s.time || '';
-      const tagsHtml = types.map(t=>{
-        const m = TYPE_META[t] || TYPE_META.other;
-        const lbl = lang==='en' ? m.labelEn : m.label;
-        return `<span class="home-show-tag" style="background:${m.bg};color:${m.color}">${lbl}</span>`;
-      }).join('');
-      return `<div class="home-show-row" onclick="openShowDetail('${s.id}', true)" style="cursor:pointer">
-        <div class="home-show-date-block"><div class="md">${mm}/${dd}</div><div class="wd">${dow}</div></div>
-        <div class="home-show-thumb">${(s.image && s.image.trim())
-          ? `<img src="${s.image.trim()}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
-          : `<span style="font-size:1.4rem">${thumbEmoji}</span>`}</div>
-        <div class="home-show-info">
-          <div class="home-show-title">${s.title || ''}</div>
-          <div class="home-show-meta">${time ? '⏰ ' + time + ' &nbsp;' : ''}${venue ? '📍 ' + venue : ''}</div>
+      const typeTags = types.map(t=>{ const m=TYPE_META[t]||TYPE_META.other; return `<span style="font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);background:${m.bg};color:${m.color}">${m.label}</span>`; }).join('');
+      const rawDate = String(s.date||'').split(',')[0].trim();
+      const d = new Date(rawDate+'T00:00');
+      const DOW_ZH2=['日','一','二','三','四','五','六'];
+      const dow = isNaN(d)?'':DOW_ZH2[d.getDay()];
+      const areaLabel = AREA_ZH[s.area||'other']||'';
+      const expiredStyle = isExpired(s.date,s.time) ? 'opacity:.55;' : '';
+      const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
+      const ticketBtn = s.soldOut
+        ? `<span style="font-size:.74rem;color:#8b1a1a">已售完</span>`
+        : s.platform==='door'
+          ? `<span style="font-size:.74rem;color:var(--or);font-weight:600">現場付費</span>`
+          : (s.ticketUrl&&s.ticketUrl!=='#')
+            ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">馬上購票</a>`
+            : `<span></span>`;
+      const posterEl = (s.image&&s.image.trim()) ? `<img src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:100%;height:120px;object-fit:contain;display:block;background:#fff">` : '';
+      return `<div style="${expiredStyle}background:#fff;border-radius:var(--r-lg);overflow:hidden;box-shadow:0 2px 12px rgba(45,43,31,.08);cursor:pointer" onclick="openShowDetail('${s.id}', true)">
+        <div style="position:relative;background:linear-gradient(135deg,var(--py),var(--y));height:120px;overflow:hidden">
+          ${posterEl}
+          <div style="position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-wrap:wrap;z-index:3">${typeTags}</div>
         </div>
-        <div style="display:flex;gap:4px;flex-wrap:wrap;flex-shrink:0;align-items:center">${tagsHtml}</div>
+        <div style="padding:12px">
+          <div style="font-size:.76rem;color:var(--ts);margin-bottom:4px">📅 ${rawDate} (${dow}) ${s.time||''}${soldTag}</div>
+          <div style="font-size:.9rem;font-weight:700;font-family:var(--f-zh);color:var(--sd);margin-bottom:4px;line-height:1.4">${s.title}</div>
+          <div style="font-size:.76rem;color:var(--ts)">📍 ${areaLabel}</div>
+          <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">${ticketBtn}</div>
+        </div>
       </div>`;
     }).join('');
   } else {
