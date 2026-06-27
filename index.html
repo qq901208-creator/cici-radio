@@ -394,6 +394,7 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
   .shows-date-bar{display:none}
   .shows-top-header{display:none}
   .filter-reset-btn{display:none}
+  #page-shows .filter-reset-btn{display:inline-flex}
   /* 手機版 chip：適中大小，最右截斷引導滑動 */
   .chip{padding:5px 11px;font-size:.72rem;border-width:1.5px}
   .filter-chips{flex-wrap:nowrap;padding-right:32px}
@@ -6684,6 +6685,12 @@ function restoreIgPreview(){
     priceEl.style.textDecoration='';
     priceEl.style.color='rgba(45,43,31,0.88)';
     priceEl.textContent = window._parseStoryPrice ? window._parseStoryPrice(s.price) : (s.price||'—');
+    if(s.soldOut){
+      priceEl.style.color='rgba(45,43,31,0.4)';
+      priceEl.style.textDecoration='line-through';
+      const isEn = (s.types||[]).includes('english')||s.type==='english';
+      priceEl.insertAdjacentHTML('afterend',`<span style="font-size:.52em;font-weight:700;color:var(--or);margin-left:0.4em;background:rgba(239,111,32,0.12);padding:1px 6px;border-radius:4px">${isEn?'Sold Out':'已完售'}</span>`);
+    }
   }
   // 海報
   const img = document.getElementById('sc-new-poster');
