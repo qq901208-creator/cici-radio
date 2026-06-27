@@ -3770,7 +3770,7 @@ function selectCalDayDesk(ds){
   document.querySelectorAll('.cal-sc-btn').forEach(b=>b.classList.remove('on'));
   const allShows = window._SHOWS || SHOWS || [];
   const today = getTodayStr();
-  const isPast = ds < today;
+  const isPast = ds <= today;
 
   // 過去日期：顯示 published + hidden（封存）；未來：只顯示 published
   const dayShows = allShows
