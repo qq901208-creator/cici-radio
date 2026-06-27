@@ -242,6 +242,9 @@ body.ready{visibility:visible}
 .filter-row-indent .filter-lbl{padding-top:5px;margin-right:6px}
 .filter-chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
 .chip{padding:5px 14px;font-size:.76rem;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.14);background:#fff;color:var(--ts);cursor:pointer;font-family:var(--f-zh);transition:all .14s;white-space:nowrap;font-weight:500}
+.chip[data-f="format"]{background:rgba(239,111,32,.07);border-color:rgba(239,111,32,.3);color:#b84a00}
+.chip[data-f="format"]:hover{background:rgba(239,111,32,.15);border-color:var(--or)}
+.chip[data-f="format"].on{background:var(--or);color:#fff;border-color:var(--or);font-weight:700}
 .chip:hover{border-color:var(--sd);color:var(--sd)}
 .chip.on{background:var(--sd);color:#fff;border-color:var(--sd);font-weight:700}
 /* 類型 chip 各自顏色（active 時）— 對齊 TYPE_META */
@@ -1403,7 +1406,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="type" data-v="gameshow">Game Show</button>
         <button class="chip" data-f="type" data-v="english"><span class="zh-text">英文喜劇</span><span class="en-text">English Comedy</span></button>
         <button class="chip" data-f="type" data-v="podcast">Live Podcast</button>
-        <button class="chip" data-f="type" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
         </div>
       </div>
       <!-- 場地、地區、星期：下拉選單 -->
@@ -2882,7 +2884,7 @@ const TYPE_META = {
   gameshow: {bg:'#fff0b3',color:'#5e4a00',  label:'Game Show',  labelEn:'Game Show'},
   mixed:    {bg:'#dce8ff',color:'#2a3ba0',  label:'拼盤秀',     labelEn:'Mixed-bill Show'},
   special:  {bg:'#d4f5d4',color:'#1a5c1a',  label:'喜劇專場',   labelEn:'Comedy Special'},
-  english:  {bg:'#d4eeff',color:'#0a4878',  label:'英文喜劇',   labelEn:'English Comedy'},
+  english:  {bg:'#c8f5d8',color:'#0d5c2a',  label:'英文喜劇',   labelEn:'English Comedy'},
   podcast:  {bg:'#c8e8ff',color:'#0a3860',  label:'Live Podcast',labelEn:'Live Podcast'},
   spevent:   {bg:'#ddd8f8',color:'#3a1e8c',  label:'特殊企劃',   labelEn:'Special Event'},
   other:    {bg:'#e8e8e8',color:'#444',     label:'其他',       labelEn:'Others'},
