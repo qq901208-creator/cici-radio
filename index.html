@@ -3886,7 +3886,13 @@ function selectWeekDesk(range, e){
   const allShows = window._SHOWS || SHOWS || [];
   const rangeShows = allShows
     .filter(s => ['published',undefined,'',null].includes(s.status||null) && dsSet.has(s.date))
-    .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
+    .sort((a,b)=>{
+      const aExp = isExpired(a.date, a.time);
+      const bExp = isExpired(b.date, b.time);
+      if(aExp && !bExp) return 1;
+      if(!aExp && bExp) return -1;
+      return showSortKey(a).localeCompare(showSortKey(b));
+    });
   const bar = document.getElementById('shows-date-bar');
   if(bar){
     const lang3=getLang();
