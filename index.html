@@ -3191,7 +3191,7 @@ function showCardHTML(s) {
     : '';
   const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
   const expiredTag = isExpired(s.date, s.time) ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">已過期</span>` : '';
-  const hiddenTag = (s.status==='hidden') ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#ffcccc;color:#cc0000;border-radius:var(--r-pill);margin-left:4px">已隱藏</span>` : '';
+  const hiddenTag = (s.status==='hidden' && isLoggedIn() && editMode) ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#ffcccc;color:#cc0000;border-radius:var(--r-pill);margin-left:4px">已隱藏</span>` : '';
   const expiredOverlay = isExpired(s.date, s.time) ? `style="opacity:.55;animation:none"` : (s.status==='hidden' ? `style="opacity:.45;animation:none"` : '');
   return `<div class="show-card" data-id="${s.id}" onclick="openShowDetail('${s.id}')" ${expiredOverlay}>
     <div class="sc-img-col">
