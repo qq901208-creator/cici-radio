@@ -129,6 +129,8 @@ body.ready{visibility:visible}
 #home-upcoming-list .sc-date,
 #home-upcoming-list .sc-price,
 #home-upcoming-list .sc-performers{font-size:.74rem}
+#home-upcoming-list .sc-price{display:none!important}
+#home-upcoming-list .sc-meta-performers{display:none!important}
 .home-quick-card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:32px 10px;background:var(--cr);border-radius:var(--r-lg);cursor:pointer;transition:background .15s,transform .15s,border-color .15s;border:2px solid transparent;font-family:var(--f-zh)}
 .home-quick-card:hover{background:var(--py);transform:translateY(-3px);border-color:var(--or)}
 .qc-icon{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 2px 8px rgba(45,43,31,.1)}
@@ -3219,7 +3221,7 @@ function showCardHTML(s) {
       <div class="sc-date">📅 ${s.date} (${dow}) ${s.time||''}${soldTag}${expiredTag}${hiddenTag}</div>
       <div class="sc-title">${s.title}</div>
       <div class="sc-meta">📍 ${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</div>
-      ${s.performer?`<div class="sc-meta">🎙 ${s.performer}</div>`:''}
+      ${s.performer?`<div class="sc-meta sc-meta-performers">🎙 ${s.performer}</div>`:''}
       ${s.price?`<div class="sc-price">💰 ${s.price}</div>`:''}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">
         ${s.soldOut
@@ -3737,9 +3739,40 @@ function renderHomeUpcoming() {
       </div>`;
     }).join('');
   } else {
-    // 桌機：演出卡片
+    // 桌機：簡化卡片（無票價、無演員、地點改地區）
     el.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 0';
-    el.innerHTML = upcoming.map(s => showCardHTML(s)).join('');
+    const AREA_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'};
+    el.innerHTML = upcoming.map(s => {
+      const types = Array.isArray(s.types) ? s.types : (s.type ? [s.type] : ['other']);
+      const typeTags = types.map(t=>{ const m=TYPE_META[t]||TYPE_META.other; return `<span style="font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);background:${m.bg};color:${m.color}">${m.label}</span>`; }).join('');
+      const rawDate = String(s.date||'').split(',')[0].trim();
+      const d = new Date(rawDate+'T00:00');
+      const DOW_ZH2=['日','一','二','三','四','五','六'];
+      const dow = isNaN(d)?'':DOW_ZH2[d.getDay()];
+      const posterEl = (s.image&&s.image.trim()) ? `<img class="sc-poster" src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:100%;height:90px;object-fit:contain;display:block;background:#fff">` : `<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
+      const areaLabel = AREA_ZH[s.area||'other']||'';
+      const expiredStyle = isExpired(s.date,s.time) ? 'opacity:.55;' : '';
+      const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
+      const ticketBtn = s.soldOut
+        ? `<span style="font-size:.74rem;color:#8b1a1a">已售完</span>`
+        : s.platform==='door'
+          ? `<span style="font-size:.74rem;color:var(--or);font-weight:600">現場付費</span>`
+          : (s.ticketUrl&&s.ticketUrl!=='#')
+            ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">馬上購票</a>`
+            : `<span></span>`;
+      return `<div class="show-card" data-id="${s.id}" onclick="openShowDetail('${s.id}', true)" style="${expiredStyle}cursor:pointer">
+        <div class="sc-img" style="width:100%;height:90px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--py),var(--y))">
+          ${posterEl}
+          <div style="position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-wrap:wrap;z-index:3">${typeTags}</div>
+        </div>
+        <div class="sc-body">
+          <div class="sc-date">📅 ${rawDate} (${dow}) ${s.time||''}${soldTag}</div>
+          <div class="sc-title">${s.title}</div>
+          <div class="sc-meta">📍 ${areaLabel}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">${ticketBtn}</div>
+        </div>
+      </div>`;
+    }).join('');
   }
 }
 
