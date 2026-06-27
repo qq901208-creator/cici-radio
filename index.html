@@ -6091,16 +6091,13 @@ function restorePageFromHash(){
     if(window.innerWidth >= 769){
       requestAnimationFrame(()=>{
         renderCalendar();
-        // 資料已 ready：立即顯示今天的點點和演出
         if(window._dataReady){
-          setTimeout(()=>{ renderCalendar(); selectCalDayDesk(getTodayStr()); }, 30);
+          setTimeout(()=>{ renderCalendar(); }, 30);
         } else {
-          // 資料未 ready：等待 _dataReady 後再更新
           const waitData = setInterval(()=>{
             if(window._dataReady){
               clearInterval(waitData);
               renderCalendar();
-              selectCalDayDesk(getTodayStr());
             }
           }, 100);
         }
