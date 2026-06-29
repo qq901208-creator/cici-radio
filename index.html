@@ -2067,7 +2067,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="sec" style="background:var(--cr);padding-top:36px!important">
     <div class="sec-label"><span class="zh-text">新手指引</span><span class="en-text">First Timer's Guide</span></div>
     <h2 class="sec-title"><span class="zh-text">第一次看喜劇嗎？</span><span class="en-text">First time at a comedy show?</span></h2>
-    <h3 class="guide-subtitle"><span class="zh-text">嘻嘻來幫你！</span><span class="en-text">Cici's got you!</span></h3>
+    <h3 class="guide-subtitle"><span class="zh-text">嘻嘻來幫你！</span></h3>
     <div class="guide-box">
     <div class="guide-wrap" id="guide-wrap">
       <div class="guide-sidebar" id="guide-sidebar">
@@ -6956,6 +6956,7 @@ function guideGoTo(n){
   const tipEl=document.getElementById('guide-tip-body');
   if(tipEl){ tipEl.style.opacity='0'; setTimeout(()=>{ tipEl.textContent=_guideTips[_guideCur]; tipEl.style.opacity='1'; },200); }
   if(_guideCur===3){ _renderGuideShows(); }
+  window.scrollTo({top:0,behavior:'smooth'});
   _updateGuideNav();
 }
 function _renderGuideShows(){
