@@ -6961,7 +6961,9 @@ function guideGoTo(n){
   if(_guideCur===3){ _renderGuideShows(); }
   // STEP 4：隱藏右欄
   const rightCol=document.querySelector('.guide-right-col');
+  const guideWrap=document.getElementById('guide-wrap');
   if(rightCol){ rightCol.style.display=_guideCur===3?'none':'flex'; }
+  if(guideWrap){ guideWrap.style.gridTemplateColumns=_guideCur===3?'220px 1fr':'220px 1fr 200px'; }
   window.scrollTo({top:0,behavior:'smooth'});
   _updateGuideNav();
 }
