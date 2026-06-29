@@ -1031,16 +1031,16 @@ body.edit .edit-bar{display:flex!important}
   .guide-box{border-radius:18px;padding:20px}
   .guide-wrap{grid-template-columns:1fr;gap:0;display:flex;flex-direction:column}
   /* 側欄改成底部步驟指示器 */
-  .guide-sidebar{order:3;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:0;padding:16px 0 4px;margin-top:8px;border-top:1px solid rgba(45,43,31,.08)}
+  .guide-sidebar{order:0;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:0;padding:0 0 16px;margin-bottom:8px;border-bottom:1px solid rgba(45,43,31,.08)}
   .guide-step-item{flex-direction:column;align-items:center;text-align:center;padding:4px 6px;flex:1;cursor:pointer}
   .guide-step-num{width:32px;height:32px;font-size:.8rem}
   .guide-step-label{display:none}
   .guide-step-line{width:100%;height:1.5px;flex:1;margin:0;align-self:center;margin-top:-16px}
   .guide-step-item.active .guide-step-num{transform:scale(1.15)}
   /* 右欄移到內容下方 */
-  .guide-right-col{order:2;margin-top:16px;display:flex;flex-direction:row;gap:12px}
-  .guide-tip-card{flex:1}
-  .guide-cta-card{flex:1}
+  .guide-right-col{order:2;margin-top:16px;display:flex;flex-direction:column;gap:12px}
+  .guide-tip-card{flex:unset}
+  .guide-cta-card{flex:unset}
   /* 類型卡片改單欄 */
   .guide-type-grid{grid-template-columns:1fr}
   .guide-price-row{grid-template-columns:1fr}
@@ -2252,7 +2252,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
                 <p>當然有一定的機率會被點到～</p>
                 <p>如果害怕被互動，可以先避免<strong>即興類型</strong>的節目。</p>
                 <p>反之！喜歡互動的朋友，非常推薦試試即興，或是二三嚴選的「<strong>即興互動場</strong>」！</p>
-                <div class="guide-faq-tip"><strong>嘻嘻偷偷分享</strong><br>如果是內向的朋友也別擔心！根據嘻嘻多年看演出的觀察，通常坐在「<strong>第三排以後</strong>」，被演員互動的機率就會低很多。</div>
+                <div class="guide-faq-tip"><strong>嘻嘻小撇步</strong><br>如果是內向的朋友也別擔心！根據嘻嘻多年看演出的觀察，通常坐在「<strong>第三排以後</strong>」，被演員互動的機率就會低很多。</div>
               </div></div>
             </div>
             <div class="guide-faq-item">
@@ -2293,7 +2293,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
               <div class="guide-faq-q" onclick="toggleFaq(this)">要提早多久到？<span class="guide-faq-arrow">▼</span></div>
               <div class="guide-faq-a"><div class="guide-faq-a-inner">
                 <p>通常<strong>提早 15～30 分鐘</strong>到就好了！到時候現場都會有工作人員指引入場。</p>
-                <div class="guide-faq-tip"><strong>嘻嘻偷偷分享</strong><br>如果是知名演員的演出，想坐前排就得<strong>更早來排隊</strong>囉～</div>
+                <div class="guide-faq-tip"><strong>嘻嘻小撇步</strong><br>如果是知名演員的演出，想坐前排就得<strong>更早來排隊</strong>囉～</div>
               </div></div>
             </div>
             <div class="guide-faq-item">
@@ -2307,7 +2307,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
               <div class="guide-faq-q" onclick="toggleFaq(this)">中途可以去廁所嗎？<span class="guide-faq-arrow">▼</span></div>
               <div class="guide-faq-a"><div class="guide-faq-a-inner">
                 <p>可以喔！有些演出會有<strong>中場休息</strong>時間，沒有的話，只要<strong>低調離場</strong>就好～</p>
-                <div class="guide-faq-tip"><strong>嘻嘻偷偷分享</strong><br>其實選在<strong>演員棒次交替</strong>的時候去上廁所還挺適合的。</div>
+                <div class="guide-faq-tip"><strong>嘻嘻小撇步</strong><br>其實選在<strong>演員棒次交替</strong>的時候去上廁所還挺適合的。</div>
               </div></div>
             </div>
             <div class="guide-faq-item">
@@ -2315,7 +2315,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
               <div class="guide-faq-a"><div class="guide-faq-a-inner">
                 <p>如果真的有<strong>不可抗力</strong>的原因要離場是可以的！</p>
                 <p><strong>低調、不影響演出進行</strong>就好（例如不要大聲說話）。</p>
-                <div class="guide-faq-tip"><strong>嘻嘻偷偷分享</strong><br>如果知道自己可能需要提早離場，建議可以選<strong>靠近走道、出口</strong>的位置！</div>
+                <div class="guide-faq-tip"><strong>嘻嘻小撇步</strong><br>如果知道自己可能需要提早離場，建議可以選<strong>靠近走道、出口</strong>的位置！</div>
               </div></div>
             </div>
             <div class="guide-faq-item">
