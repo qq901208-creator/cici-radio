@@ -6969,15 +6969,15 @@ function guideGoTo(n){
 }
 function _renderGuideShows(){
   const isMobile=window.innerWidth<=768;
-  const el=document.getElementById(isMobile?'guide-shows-preview-mobile':'guide-shows-preview');
   const elDesktop=document.getElementById('guide-shows-preview');
   const elMobile=document.getElementById('guide-shows-preview-mobile');
+  const el=isMobile?elMobile:elDesktop;
   if(!el) return;
   const shows=(window._SHOWS||[]);
   const upcoming=shows
     .filter(s=>(s.status||'published')==='published'&&!isExpired(s.date,s.time))
     .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)))
-    .slice(0,isMobile?4:4);
+    .slice(0,4);
   if(!upcoming.length){ el.style.display='none'; return; }
   if(isMobile){ elDesktop.style.display='none'; elMobile.style.display='flex'; }
   else { elMobile.style.display='none'; elDesktop.style.display='grid'; }
@@ -6991,6 +6991,9 @@ function _renderGuideShows(){
     const DOW=['日','一','二','三','四','五','六'];
     const dateStr=isNaN(d.getTime())?rawDate:`${rawDate}（${DOW[d.getDay()]}）`;
     const areaLabel=AREA_ZH2[s.area||'other']||'';
+    if(isMobile){
+      return showCardHTML(s);
+    }
     return `<div class="show-card" onclick="openShowDetail('${s.id}',true)">
       <div class="sc-img" style="background:linear-gradient(135deg,var(--py),var(--y))">
         ${posterEl}
