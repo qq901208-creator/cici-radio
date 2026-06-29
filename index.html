@@ -6581,7 +6581,7 @@ function initReveal(){
 
 // ── 從 hash 還原頁面 ──
 function restorePageFromHash(){
-  const validPages = ['home','shows','opmic','venues','performers','courses','about','board'];
+  const validPages = ['home','shows','opmic','venues','performers','courses','about','board','guide'];
   const hash = location.hash.split('?')[0].replace('#','');
   const page = validPages.includes(hash) ? hash : 'home';
   // 先切換頁面（不 render 內容）
@@ -6965,6 +6965,9 @@ function guideGoTo(n){
   if(rightCol){ rightCol.style.display=_guideCur===3?'none':'flex'; }
   if(guideWrap){ guideWrap.style.gridTemplateColumns=_guideCur===3?'220px 1fr':'220px 1fr 200px'; }
   window.scrollTo({top:0,behavior:'smooth'});
+  if(location.hash.startsWith('#guide')){
+    history.replaceState({page:'guide'},'','#guide?step='+_guideCur);
+  }
   _updateGuideNav();
 }
 function _renderGuideShows(){
@@ -7050,7 +7053,11 @@ function showPage(page, skipHistory){
   if(page==='courses')renderCourses();
   if(page==='about'){renderAbout();if(window._dataReady)renderAboutStats();const sf=document.getElementById('spotify-iframe');if(sf&&sf.dataset.src&&!sf.src){sf.src=sf.dataset.src;}}
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
-  if(page==='guide'){_guideCur=0;document.querySelectorAll('.guide-panel').forEach((p,i)=>{p.classList.toggle('active',i===0);p.classList.remove('exit');});document.querySelectorAll('.guide-step-item').forEach((el,i)=>{el.classList.toggle('active',i===0);el.classList.remove('done');});document.querySelectorAll('.guide-step-line').forEach(el=>el.style.background='');_updateGuideNav();}
+  if(page==='guide'){_guideCur=0;document.querySelectorAll('.guide-panel').forEach((p,i)=>{p.classList.toggle('active',i===0);p.classList.remove('exit');});document.querySelectorAll('.guide-step-item').forEach((el,i)=>{el.classList.toggle('active',i===0);el.classList.remove('done');});document.querySelectorAll('.guide-step-line').forEach(el=>el.style.background='');_updateGuideNav();
+    // 還原 step
+    const stepParam=parseInt(new URLSearchParams(location.search).get('step')||'0');
+    if(stepParam>0) setTimeout(()=>guideGoTo(stepParam),50);
+  }
   // GA4 虛擬頁面瀏覽追蹤
   const pageTitles = {home:'首頁',shows:'演出資訊',opmic:'Open Mic',venues:'喜劇場地',performers:'演員資料庫',courses:'課程講座',about:'關於本站',board:'留言板',guide:'新手指南'};
   const pageTitle = (pageTitles[page]||page) + ' | 嘻嘻哪哩唷';
@@ -7066,7 +7073,7 @@ function showPage(page, skipHistory){
 }
 // 瀏覽器上一頁/下一頁
 window.addEventListener('popstate', e=>{
-  const validPages = ['home','shows','opmic','venues','performers','courses','about','board'];
+  const validPages = ['home','shows','opmic','venues','performers','courses','about','board','guide'];
   const page = e.state?.page || location.hash.replace('#','') || 'home';
   if(validPages.includes(page)) showPage(page, true);
 });
