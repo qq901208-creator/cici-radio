@@ -87,17 +87,23 @@ body.ready{visibility:visible}
 .hero-tag{display:none}
 .hero-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--or);animation:pulse 2s infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.6)}}
-.hero-h1{font-family:var(--f-zh);font-weight:900;font-size:clamp(2.6rem,4.2vw,3.8rem);color:var(--sd);line-height:1.04;letter-spacing:-.03em;margin-bottom:10px}
+.hero-h1{font-family:var(--f-zh);font-weight:900;font-size:clamp(2.6rem,4.2vw,3.8rem);color:var(--sd);line-height:1.04;letter-spacing:-.01em;margin-bottom:10px}
 .hero-h1 .hl{color:var(--or);position:relative;display:inline-block}
 .hero-h1 .hl::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:5px;background:var(--y);border-radius:3px;z-index:-1}
 .hero-sub{display:none}
-.hero-platform{font-family:var(--f-zh);font-size:1.1rem;color:var(--sd);font-weight:800;margin-bottom:20px;letter-spacing:.01em}
-@media(max-width:768px){.hero-platform{font-size:1rem;font-weight:600}}
+.hero-platform{font-family:var(--f-zh);font-size:.96rem;color:var(--tm);font-weight:500;margin-bottom:20px;letter-spacing:.04em;opacity:.7;padding-left:12px;border-left:2.5px solid var(--or)}
+@media(max-width:768px){.hero-platform{font-size:.74rem}}
 .hero-desc{font-size:.95rem;color:var(--ts);line-height:1.8;margin-bottom:16px;font-family:var(--f-zh);opacity:.85}
-.hero-ctas{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hero-ctas{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
 .hero-next{display:none!important}
-.hero-browse-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:var(--or);color:#fff;font-weight:700;font-size:.82rem;border:none;border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh);box-shadow:0 4px 14px rgba(239,111,32,.28)}
+.hero-browse-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:var(--or);color:#fff;font-weight:700;font-size:.9rem;border:none;border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh);box-shadow:0 4px 14px rgba(239,111,32,.28)}
 .hero-browse-btn:hover{background:#d45c10;transform:translateY(-2px)}
+@keyframes underlinePulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero-guide-btn{display:inline-flex;align-items:center;gap:6px;padding:4px 0;background:transparent;color:var(--or);font-weight:500;font-size:.88rem;border:none;cursor:pointer;text-decoration:none;font-family:var(--f-zh);position:relative;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.hero-guide-btn::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1.5px;background:var(--or);animation:underlinePulse 2.4s ease-in-out infinite;transition:none}
+.hero-guide-btn:hover{color:var(--or);transform:translateY(-2px)}
+.hero-guide-btn:hover::after{animation:none;opacity:1}
+.hero-guide-btn:hover .btn-arrow{transform:translateX(5px)}
 .hero-quick-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;background:#fff;color:var(--sd);font-weight:600;font-size:.82rem;border:2px solid rgba(45,43,31,.13);border-radius:var(--r-pill);cursor:pointer;font-family:var(--f-zh);transition:all .15s}
 .hero-quick-btn:hover{border-color:var(--or);color:var(--or)}
 .hero-quick-btn svg{width:13px;height:13px;flex-shrink:0}
@@ -914,6 +920,134 @@ body.edit .edit-bar{display:flex!important}
 
 /* 卡片 hover 提升感 */
 .show-card,.course-card,.venue-card{transition:transform .2s ease,box-shadow .2s ease;animation:cardIn .35s ease both}
+.mic-card{animation:cardIn .35s ease both}
+.desk-br{display:block}
+@media(max-width:768px){.desk-br{display:none}}
+.guide-subtitle{font-size:1.1rem;font-weight:900;color:var(--or);font-family:var(--f-zh);margin-bottom:24px;margin-top:2px}
+.guide-subtitle .en-text{display:block;font-family:var(--f-di);font-size:.6em;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--or);opacity:.6;margin-top:3px}
+#page-guide .sec-title{margin-bottom:4px}
+.guide-box{background:var(--ww);border-radius:28px;padding:32px;box-shadow:0 2px 24px rgba(45,43,31,.07)}
+.guide-wrap{display:grid;grid-template-columns:220px 1fr 200px;gap:28px;align-items:start;margin-top:0}
+.guide-sidebar{display:flex;flex-direction:column}
+.guide-step-item{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border-radius:var(--r-md);cursor:pointer;transition:background .2s}
+.guide-step-item:hover{background:rgba(45,43,31,.05)}
+.guide-step-item.active{background:var(--y)}
+.guide-step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;border:1.5px solid rgba(45,43,31,.18);color:var(--ts);background:var(--ww);transition:all .3s;font-family:var(--f-bo)}
+.guide-step-item.active .guide-step-num,.guide-step-item.done .guide-step-num{background:var(--sd);color:var(--y);border-color:var(--sd)}
+.guide-step-label{display:flex;flex-direction:column;gap:2px;padding-top:2px}
+.guide-step-tag{font-size:10px;font-weight:700;color:var(--ts);letter-spacing:.04em;transition:color .25s;font-family:var(--f-bo)}
+.guide-step-item.active .guide-step-tag{color:#6b6200}
+.guide-step-name{font-size:15px;font-weight:400;color:var(--ts);font-family:var(--f-zh);transition:font-size .3s cubic-bezier(.4,0,.2,1),font-weight .3s,color .3s}
+.guide-step-item.active .guide-step-name{font-size:17px;font-weight:700;color:var(--sd)}
+.guide-step-item.done .guide-step-name{color:var(--tm)}
+.guide-step-line{width:1.5px;height:14px;background:rgba(45,43,31,.12);margin-left:26px;transition:background .3s}
+.guide-step-item.done+.guide-step-line{background:var(--sd)}
+.guide-content{position:relative;overflow:hidden}
+.guide-panel{position:absolute;inset:0;opacity:0;transform:translateX(28px);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none;display:flex;flex-direction:column;visibility:hidden}
+.guide-panel.active{opacity:1;transform:translateX(0);pointer-events:auto;position:relative;visibility:visible}
+.guide-panel.exit{opacity:0;transform:translateX(-28px);pointer-events:none;position:absolute;visibility:hidden}
+.guide-tag-pill{display:inline-block;align-self:flex-start;background:var(--y);color:#6b6200;font-size:11px;font-weight:700;padding:3px 10px;border-radius:var(--r-pill);margin-bottom:12px;letter-spacing:.03em;font-family:var(--f-bo)}
+.guide-panel-title{font-size:1.6rem;font-weight:900;color:var(--sd);margin-bottom:18px;line-height:1.2;font-family:var(--f-zh)}
+.guide-intro-block{margin-bottom:18px}
+.guide-intro-q{font-size:.95rem;font-weight:700;color:var(--sd);font-family:var(--f-zh);margin-bottom:8px}
+.guide-intro-a{font-size:.92rem;color:var(--tm);line-height:1.8;font-family:var(--f-zh)}
+.guide-intro-a strong{font-weight:700;color:var(--sd)}
+.guide-section-label{font-size:.75rem;font-weight:700;color:var(--ts);letter-spacing:.06em;margin-bottom:10px;font-family:var(--f-bo)}
+.guide-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.guide-type-card{border:1.5px solid rgba(45,43,31,.1);border-radius:var(--r-md);padding:14px 12px;background:var(--ww);transition:border-color .2s,transform .2s,box-shadow .2s}
+.guide-type-card:hover{border-color:var(--or);transform:translateY(-3px);box-shadow:0 8px 24px rgba(239,111,32,.13)}
+.guide-type-card:hover .guide-type-name-zh{font-size:.96rem;color:var(--or)}
+.guide-type-name-zh{font-size:.9rem;font-weight:900;color:var(--sd);margin-bottom:2px;font-family:var(--f-zh);transition:font-size .2s,color .2s}
+.guide-type-name-en{font-size:.72rem;color:var(--ts);font-family:var(--f-bo)}
+.guide-type-desc{font-size:.88rem;color:var(--tm);margin-top:8px;line-height:1.6;font-family:var(--f-zh)}
+.guide-type-sub{margin-top:10px;padding-top:10px;border-top:1px solid rgba(45,43,31,.08)}
+.guide-type-sub-label{font-size:.82rem;font-weight:700;color:var(--ts);font-family:var(--f-zh);margin-bottom:6px}
+.guide-type-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}
+.guide-type-list li{font-size:.86rem;color:var(--tm);font-family:var(--f-zh);line-height:1.6;padding-left:14px;position:relative}
+.guide-type-list li::before{content:'·';position:absolute;left:0;color:var(--or)}
+.guide-highlight-box{background:#fffce8;border:1.5px solid rgba(245,213,88,.6);border-radius:var(--r-md);padding:12px 16px;font-size:.84rem;color:#5a4e00;line-height:1.65;font-family:var(--f-zh);margin-bottom:4px}
+.guide-nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:24px;gap:10px}
+.guide-btn-prev{background:none;border:1.5px solid rgba(45,43,31,.18);border-radius:var(--r-pill);padding:8px 18px;font-size:.82rem;color:var(--ts);cursor:pointer;font-family:var(--f-zh);font-weight:700;transition:all .15s}
+.guide-btn-prev:hover{border-color:var(--tm);color:var(--tm)}
+.guide-btn-next{background:var(--sd);border:none;border-radius:var(--r-pill);padding:8px 20px;font-size:.82rem;color:var(--y);cursor:pointer;font-family:var(--f-zh);font-weight:700;transition:all .15s}
+.guide-btn-next:hover{background:#1a1810;transform:translateX(2px)}
+.guide-price-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.guide-price-card{background:var(--ww);border:1.5px solid rgba(45,43,31,.1);border-radius:var(--r-md);padding:14px;transition:border-color .2s,transform .2s,box-shadow .2s}
+.guide-price-card:hover{border-color:var(--or);transform:translateY(-3px);box-shadow:0 8px 24px rgba(239,111,32,.13)}
+.guide-price-card:hover .guide-price-val{font-size:1.22rem}
+.guide-price-label{font-size:.72rem;font-weight:700;color:var(--ts);margin-bottom:4px;font-family:var(--f-bo)}
+.guide-price-val{font-size:1.15rem;font-weight:900;color:var(--sd);font-family:var(--f-bo);transition:font-size .2s}
+.guide-price-note{font-size:.78rem;color:var(--ts);margin-top:6px;line-height:1.5;font-family:var(--f-zh)}
+.guide-checklist{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.guide-check-item{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--ww);border:1.5px solid rgba(45,43,31,.08);border-radius:var(--r-md);font-size:.84rem;color:var(--tm);line-height:1.6;font-family:var(--f-zh);transition:border-color .2s,transform .2s,box-shadow .2s,font-size .2s}
+.guide-check-item:hover{border-color:var(--or);transform:translateY(-2px);box-shadow:0 6px 18px rgba(239,111,32,.1);font-size:.88rem}
+.guide-check-dot{width:8px;height:8px;border-radius:50%;background:var(--or);flex-shrink:0;margin-top:6px}
+.guide-tip-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.guide-tip-row{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:var(--ww);border:1.5px solid rgba(45,43,31,.08);border-radius:var(--r-md);transition:border-color .2s,transform .2s,box-shadow .2s}
+.guide-tip-row:hover{border-color:var(--or);transform:translateY(-2px);box-shadow:0 6px 18px rgba(239,111,32,.1)}
+.guide-tip-row:hover p{font-size:.88rem}
+.guide-tip-dot{width:6px;height:6px;border-radius:50%;background:var(--or);flex-shrink:0;margin-top:7px}
+.guide-tip-row p{font-size:.84rem;color:var(--tm);line-height:1.6;font-family:var(--f-zh);transition:font-size .2s}
+.guide-right-col{display:flex;flex-direction:column;gap:16px}
+.guide-qa-question{font-size:1.05rem;font-weight:900;color:var(--sd);font-family:var(--f-zh);margin-bottom:6px}
+.guide-qa-label{display:inline-block;font-size:.72rem;font-weight:700;font-family:var(--f-bo);background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);margin-bottom:8px;letter-spacing:.04em}
+.guide-qa-answer{margin:8px 0 10px}
+.guide-closing{display:inline;font-size:1.05rem;font-weight:900;color:var(--sd);font-family:var(--f-zh);margin-top:20px;background:linear-gradient(transparent 55%, #f5d55880 55%);padding:0 2px;line-height:2}
+.guide-faq-group{margin-bottom:16px}
+.guide-faq-group-title{font-size:1rem;font-weight:700;color:var(--or);font-family:var(--f-zh);margin-bottom:10px;padding-bottom:8px;border-bottom:1.5px solid rgba(239,111,32,.2)}
+.guide-faq-item{border:1.5px solid rgba(45,43,31,.09);border-radius:var(--r-md);margin-bottom:8px;overflow:hidden;background:var(--ww);box-shadow:0 2px 8px rgba(45,43,31,.05);transition:border-color .2s,transform .2s,box-shadow .2s}
+.guide-faq-item:hover{border-color:var(--or);transform:translateY(-2px);box-shadow:0 6px 18px rgba(239,111,32,.1)}
+.guide-faq-q{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;font-size:.88rem;font-weight:700;color:var(--sd);font-family:var(--f-zh);gap:8px;user-select:none;transition:background .15s,color .15s}
+.guide-faq-q:hover{background:rgba(239,111,32,.06);color:var(--or)}
+.guide-faq-q.open{color:var(--or);background:rgba(239,111,32,.04)}
+.guide-faq-arrow{font-size:.7rem;color:var(--ts);transition:transform .25s,color .2s;flex-shrink:0}
+.guide-faq-q:hover .guide-faq-arrow{color:var(--or)}
+.guide-faq-q.open .guide-faq-arrow{transform:rotate(180deg);color:var(--or)}
+.guide-faq-a{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1)}
+.guide-faq-a.open{max-height:600px}
+.guide-faq-a-inner{padding:10px 16px 16px;font-size:.86rem;color:var(--tm);line-height:1.8;font-family:var(--f-zh);border-top:1px solid rgba(45,43,31,.06);background:rgba(45,43,31,.02)}
+.guide-faq-a-inner p+p{margin-top:6px}
+.guide-faq-tip{background:#fffce8;border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;padding:10px 12px;margin-top:10px;font-size:.82rem;color:#5a4e00;line-height:1.7;font-family:var(--f-zh)}
+.guide-show-card{border:1.5px solid rgba(45,43,31,.1);border-radius:var(--r-md);padding:16px;background:var(--ww);transition:border-color .2s,transform .2s,box-shadow .2s;margin-bottom:10px}
+.guide-show-card:hover{border-color:var(--or);transform:translateY(-2px);box-shadow:0 6px 18px rgba(239,111,32,.1)}
+.guide-show-card-title{font-size:.88rem;font-weight:700;color:var(--sd);font-family:var(--f-zh);margin-bottom:6px;transition:color .2s}
+.guide-show-card:hover .guide-show-card-title{color:var(--or)}
+.guide-show-card-rec{font-size:.84rem;color:var(--tm);font-family:var(--f-zh);margin-bottom:10px}
+.guide-show-card-why{margin-bottom:10px}
+.guide-show-card-why-label{font-size:.78rem;font-weight:700;color:var(--ts);font-family:var(--f-zh);margin-bottom:6px}
+.guide-show-card-body{font-size:.86rem;color:var(--tm);line-height:1.7;font-family:var(--f-zh)}
+.guide-tip-card{background:var(--ww);border:2px solid var(--y);border-radius:var(--r-md);padding:16px}
+.guide-tip-card-title{font-size:.88rem;font-weight:900;color:var(--sd);margin-bottom:8px;font-family:var(--f-zh);display:flex;align-items:center;gap:6px}
+.guide-tip-card-title::before{content:'💛';font-size:1rem;flex-shrink:0}
+#guide-shows-preview .sc-img{background:#fff!important;height:200px!important;overflow:hidden}
+#guide-shows-preview .sc-img img.sc-poster{width:100%;height:200px!important;object-fit:contain;transform:none}
+.guide-tip-card-body{font-size:.78rem;color:var(--ts);line-height:1.7;font-family:var(--f-zh);transition:opacity .25s}
+.guide-cta-card{background:var(--sd);border-radius:var(--r-md);padding:16px}
+.guide-cta-title{font-size:.84rem;font-weight:900;color:var(--y);margin-bottom:6px;font-family:var(--f-zh)}
+.guide-cta-body{font-size:.76rem;color:rgba(245,213,88,.7);line-height:1.6;margin-bottom:12px;font-family:var(--f-zh)}
+.guide-cta-btn{display:block;width:100%;background:var(--or);border:none;border-radius:var(--r-pill);padding:9px 14px;font-size:.82rem;color:#fff;cursor:pointer;font-family:var(--f-zh);font-weight:700;text-align:center;transition:opacity .15s}
+.guide-cta-btn:hover{opacity:.85}
+@media(max-width:768px){
+  .guide-box{border-radius:18px;padding:20px}
+  .guide-wrap{grid-template-columns:1fr;gap:0;display:flex;flex-direction:column}
+  /* 側欄改成底部步驟指示器 */
+  .guide-sidebar{order:3;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:0;padding:16px 0 4px;margin-top:8px;border-top:1px solid rgba(45,43,31,.08)}
+  .guide-step-item{flex-direction:column;align-items:center;text-align:center;padding:4px 6px;flex:1;cursor:pointer}
+  .guide-step-num{width:32px;height:32px;font-size:.8rem}
+  .guide-step-label{display:none}
+  .guide-step-line{width:100%;height:1.5px;flex:1;margin:0;align-self:center;margin-top:-16px}
+  .guide-step-item.active .guide-step-num{transform:scale(1.15)}
+  /* 右欄移到內容下方 */
+  .guide-right-col{order:2;margin-top:16px;display:flex;flex-direction:row;gap:12px}
+  .guide-tip-card{flex:1}
+  .guide-cta-card{flex:1}
+  /* 類型卡片改單欄 */
+  .guide-type-grid{grid-template-columns:1fr}
+  .guide-price-row{grid-template-columns:1fr}
+  /* 內容區 */
+  .guide-content{order:1}
+  .guide-panel-title{font-size:1.3rem}
+}
 .show-card:hover,.course-card:hover,.venue-card:hover{transform:translateY(-4px);box-shadow:0 10px 32px rgba(0,0,0,.14)}
 .performer-card{animation:cardIn .35s ease both}
 @media(max-width:900px){.ft-grid{grid-template-columns:1fr 1fr;gap:30px}}
@@ -1078,6 +1212,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <a href="#" class="hero-browse-btn" onclick="showPage('shows');return false">
           <span class="zh-text">查看演出資訊 →</span><span class="en-text">Browse Shows →</span>
         </a>
+        <a href="#" class="hero-guide-btn" onclick="showPage('guide');return false">
+          <span class="zh-text">第一次看喜劇嗎？從這裡開始<span class="btn-arrow">→</span></span><span class="en-text">First time? Start here<span class="btn-arrow">→</span></span>
+        </a>
       </div>
       <div id="hero-next-show" class="hero-next" style="display:none"></div>
     </div>
@@ -1241,7 +1378,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <span class="en-text">Comedy shows —<br>and the stories behind them</span>
         </h2>
         <p class="home-pod-desc">
-          <span class="zh-text">因為對台灣現場喜劇的熱情，我們開啟了 Podcast 之路。這裡有我們和喜劇的日常故事，也有我們對喜劇圈的真心話！希望可以陪伴你們度過每一天～</span>
+          <span class="zh-text">因為對台灣現場喜劇的熱情，我們開啟了 Podcast 之路。<br class="desk-br">這裡有我們和喜劇的日常，也有我們對喜劇圈的真心話！希望可以陪你們度過每一天～</span>
           <span class="en-text">Our passion for live comedy sparked this podcast. Everyday stories, honest takes on the scene, and good company for your day.</span>
         </p>
         <div class="home-pod-btns">
@@ -1926,6 +2063,320 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 </div></div>
 
 <!-- BOARD PAGE -->
+<div class="page" id="page-guide">
+  <section class="sec" style="background:var(--cr);padding-top:36px!important">
+    <div class="sec-label"><span class="zh-text">新手指引</span><span class="en-text">First Timer's Guide</span></div>
+    <h2 class="sec-title"><span class="zh-text">第一次看喜劇嗎？</span><span class="en-text">First time at a comedy show?</span></h2>
+    <h3 class="guide-subtitle"><span class="zh-text">嘻嘻來幫你！</span><span class="en-text">Cici's got you!</span></h3>
+    <div class="guide-box">
+    <div class="guide-wrap" id="guide-wrap">
+      <div class="guide-sidebar" id="guide-sidebar">
+        <div class="guide-step-item active" data-step="0" onclick="guideGoTo(0)">
+          <div class="guide-step-num">1</div>
+          <div class="guide-step-label">
+            <span class="guide-step-tag">STEP 1</span>
+            <span class="guide-step-name">認識現場喜劇</span>
+          </div>
+        </div>
+        <div class="guide-step-line"></div>
+        <div class="guide-step-item" data-step="1" onclick="guideGoTo(1)">
+          <div class="guide-step-num">2</div>
+          <div class="guide-step-label">
+            <span class="guide-step-tag">STEP 2</span>
+            <span class="guide-step-name">找到你的第一場</span>
+          </div>
+        </div>
+        <div class="guide-step-line"></div>
+        <div class="guide-step-item" data-step="2" onclick="guideGoTo(2)">
+          <div class="guide-step-num">3</div>
+          <div class="guide-step-label">
+            <span class="guide-step-tag">STEP 3</span>
+            <span class="guide-step-name">第一次常見問題</span>
+          </div>
+        </div>
+        <div class="guide-step-line"></div>
+        <div class="guide-step-item" data-step="3" onclick="guideGoTo(3)">
+          <div class="guide-step-num">4</div>
+          <div class="guide-step-label">
+            <span class="guide-step-tag">STEP 4</span>
+            <span class="guide-step-name">來找演出吧！</span>
+          </div>
+        </div>
+      </div>
+      <div class="guide-content" id="guide-content">
+        <div class="guide-panel active" id="guide-panel-0">
+          <div class="guide-tag-pill">STEP 1</div>
+          <h3 class="guide-panel-title">認識現場喜劇</h3>
+          <div class="guide-intro-block">
+            <p class="guide-intro-q">什麼是現場喜劇（Live Comedy）？</p>
+            <p class="guide-intro-a">現場喜劇，就是在觀眾面前即時演出的喜劇表演。<br>每一場演出都會因為演員、觀眾和當下的互動，而有所不同。<br>也因此，現場喜劇不是演員一個人的表演，而是<strong>演員和觀眾一起完成的一場體驗</strong>。</p>
+          </div>
+          <p class="guide-section-label">常見類型</p>
+          <div class="guide-type-grid">
+            <div class="guide-type-card">
+              <div class="guide-type-name-zh">站立喜劇 <span style="font-size:.75em;font-weight:500;color:var(--ts)">（單口喜劇，台灣俗稱脫口秀）</span></div>
+              <div class="guide-type-name-en">Stand-up Comedy</div>
+              <div class="guide-type-desc">一位演員將自己的生活觀察、想法和故事，變成一個個笑話，邀請觀眾一起笑！</div>
+              <div class="guide-type-sub">
+                <div class="guide-type-sub-label">演員會分享什麼？</div>
+                <ul class="guide-type-list">
+                  <li>生活中各種狗屁倒灶的事</li>
+                  <li>自己最近觀察到的現象（小至生活、大至社會）</li>
+                  <li>天馬行空的想像或荒謬的假設</li>
+                </ul>
+              </div>
+            </div>
+            <div class="guide-type-card">
+              <div class="guide-type-name-zh">漫才</div>
+              <div class="guide-type-name-en">Manzai</div>
+              <div class="guide-type-desc">通常由兩位演員搭檔（漫才師）演出，透過裝傻、吐槽和快速的對話節奏，把看似平凡的話題，一路發展成意想不到的荒謬笑點。</div>
+              <div class="guide-type-sub">
+                <div class="guide-type-sub-label">他們會怎麼表演？</div>
+                <ul class="guide-type-list">
+                  <li>從很日常的聊天或話題開始</li>
+                  <li>一來一往地接話、吐槽，越聊越歪，甚至超展開！</li>
+                  <li>用默契十足的對話和反應，帶著觀眾一路笑到最後</li>
+                </ul>
+              </div>
+            </div>
+            <div class="guide-type-card">
+              <div class="guide-type-name-zh">即興喜劇</div>
+              <div class="guide-type-name-en">Improvisation</div>
+              <div class="guide-type-desc">完全沒有劇本！演員根據觀眾提供的關鍵字或情境，靠著彼此的默契和臨場反應，在台上即興創作一場獨一無二的演出。</div>
+              <div class="guide-type-sub">
+                <div class="guide-type-sub-label">演員會怎麼演？</div>
+                <ul class="guide-type-list">
+                  <li>根據觀眾提供的靈感，當場開始一段全新的故事</li>
+                  <li>不管劇情發展得多突然、不連貫，都要想盡辦法接下去</li>
+                  <li>演員彼此接球、臨場反應，每一場演出都完全不同</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="guide-highlight-box">
+            <p style="font-weight:700;font-size:1rem;color:#5a4e00;margin-bottom:8px">現場和影片最大的不同！</p>
+            <p style="margin-bottom:8px">如果你是從 Reels、YouTube 開始認識喜劇，第一次來到現場時，很可能會發現：</p>
+            <ul class="guide-type-list" style="margin-bottom:10px">
+              <li>有時候，現場比影片還好笑</li>
+              <li>有很多內容和互動，是網路上看不到的🤫</li>
+              <li>在大家一起笑的氛圍裡，快樂好像也會跟著放大</li>
+            </ul>
+            <p><strong>現場喜劇不是單純把影片搬到現場，而是一場只會發生一次的體驗。</strong></p>
+          </div>
+          <div class="guide-nav-row"><div></div><button class="guide-btn-next" onclick="guideGoTo(1)"><span class="zh-text">下一步 →</span><span class="en-text">Next →</span></button></div>
+        </div>
+        <div class="guide-panel" id="guide-panel-1">
+          <div class="guide-tag-pill">STEP 2</div>
+          <h3 class="guide-panel-title">找到你的第一場</h3>
+          <div class="guide-qa-question">第一次看現場喜劇，該怎麼選？</div>
+          <p class="guide-intro-a" style="margin-bottom:12px">每種演出都有不同的特色，看看哪一種情況最像現在的你吧！</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+            <button onclick="(function(){const el=document.getElementById('guide-case-a');if(el){window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-80,behavior:'smooth'});}})()" style="background:none;border:1.5px solid var(--or);color:var(--or);font-family:var(--f-zh);font-size:.8rem;font-weight:700;padding:6px 14px;border-radius:var(--r-pill);cursor:pointer;transition:all .2s" onmouseover="this.style.background='var(--or)';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='var(--or)'">情況 A：完全沒看過</button>
+            <button onclick="(function(){const el=document.getElementById('guide-case-b');if(el){window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-80,behavior:'smooth'});}})()" style="background:none;border:1.5px solid var(--or);color:var(--or);font-family:var(--f-zh);font-size:.8rem;font-weight:700;padding:6px 14px;border-radius:var(--r-pill);cursor:pointer;transition:all .2s" onmouseover="this.style.background='var(--or)';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='var(--or)'">情況 B：已有喜歡的演員</button>
+          </div>
+          <div class="guide-show-cards">
+            <div class="guide-show-card" id="guide-case-a">
+              <div class="guide-qa-label">情況 A</div>
+              <div class="guide-show-card-title">我完全沒看過現場喜劇</div>
+              <div class="guide-show-card-rec">👉 推薦：<strong>拼盤秀</strong> <span style="font-size:.85em;color:var(--ts);font-weight:400">（例如二三嚴選）</span></div>
+              <div class="guide-qa-answer">
+                <p class="guide-show-card-body">一場演出通常會有 3 位以上的演員輪流登台，你可以一次看到不同風格的表演，總會有一位特別對你的胃口！</p>
+                <p class="guide-show-card-body" style="margin-top:6px">而且，大部分演出的內容都經過了多次測試和打磨，不用擔心踩雷！</p>
+              </div>
+              <div class="guide-type-sub">
+                <div class="guide-type-sub-label">你可能會得到……</div>
+                <ul class="guide-type-list">
+                  <li>一次認識不同風格的演員</li>
+                  <li>聽到經過反覆測試、成熟的段子</li>
+                  <li>發現自己開始對某個演員產生興趣</li>
+                </ul>
+              </div>
+              <div class="guide-type-sub">
+                <div class="guide-type-sub-label">嘻嘻推薦的拼盤秀</div>
+                <ul class="guide-type-list">
+                  <li><strong>北部</strong>｜二三嚴選、卡米地週末夜（週五夜、週六夜）、樂君亭週末夜</li>
+                  <li><strong>中部</strong>｜來福週末夜</li>
+                  <li><strong>南部</strong>｜歡樂週末夜</li>
+                </ul>
+              </div>
+            </div>
+            <div class="guide-show-card" id="guide-case-b">
+              <div class="guide-qa-label">情況 B</div>
+              <div class="guide-show-card-title">我已經有好奇 / 喜歡的演員</div>
+              <div class="guide-show-card-rec">👉 推薦：<strong>專場（或有他演出的拼盤秀）</strong></div>
+              <div class="guide-qa-answer">
+                <p class="guide-show-card-body">如果你已經因為 Reels 或朋友推薦，開始對某位演員產生好奇，那就直接去現場吧！</p>
+                <p class="guide-show-card-body" style="margin-top:6px">根據許多演員與喜劇迷的說法：如果影片就已經讓你覺得很好笑，現場通常更值得一看！</p>
+              </div>
+              <div class="guide-type-sub">
+                <div class="guide-type-sub-label">你可能會得到……</div>
+                <ul class="guide-type-list">
+                  <li>更完整地認識這位演員的創作風格</li>
+                  <li>感受到影片裡體驗不到的現場節奏與互動</li>
+                  <li>看完後，更期待他的下一場演出</li>
+                  <li>如果是拼盤秀，還能多發現其他演員，也許會有意想不到的收穫</li>
+                </ul>
+              </div>
+            </div>
+            <div class="guide-show-card">
+              <div class="guide-qa-label">補充說明</div>
+              <div class="guide-show-card-title">那 Open Mic 呢？</div>
+              <div class="guide-qa-answer">
+                <p class="guide-show-card-body">Open Mic 是演員測試新笑話的地方。如果你對喜劇創作很好奇，或已經開始喜歡現場喜劇，很推薦找時間去體驗！</p>
+                <p class="guide-show-card-body" style="margin-top:6px">不過因為內容還在發展中，每一場的狀態和品質都可能不太一樣。</p>
+              </div>
+              <div class="guide-highlight-box" style="margin-top:10px;margin-bottom:0">💛 <strong>嘻嘻建議：</strong>如果是第一次接觸現場喜劇，建議先從拼盤秀或專場開始，等熟悉現場演出的氛圍後，再去體驗 Open Mic，會更容易感受到它的魅力。</div>
+            </div>
+          </div>
+          <div class="guide-highlight-box" style="margin-top:12px">
+            <p style="font-weight:700;color:#5a4e00;margin-bottom:8px">看完還是不知道怎麼選？</p>
+            <p class="guide-show-card-body">沒關係！可以先從近期的<strong style="font-size:1.05em">拼盤秀</strong>開始，或是找一位你在 Reels、YouTube 上喜歡的演員。</p>
+            <p class="guide-show-card-body" style="margin-top:6px">如果還是猶豫，也歡迎私訊嘻嘻，我們很樂意一起幫你挑第一場！</p>
+            <p class="guide-show-card-body" style="margin-top:6px">很多人的第一場，就是這樣開始的。</p>
+            <button class="guide-btn-next" onclick="showPage('shows')" style="margin-top:12px"><span class="zh-text">來找演出吧！→</span></button>
+          </div>
+          <div class="guide-nav-row"><button class="guide-btn-prev" onclick="guideGoTo(0)"><span class="zh-text">← 上一步</span><span class="en-text">← Back</span></button><button class="guide-btn-next" onclick="guideGoTo(2)"><span class="zh-text">下一步 →</span><span class="en-text">Next →</span></button></div>
+        </div>
+        <div class="guide-panel" id="guide-panel-2">
+          <div class="guide-tag-pill">STEP 3</div>
+          <h3 class="guide-panel-title">第一次常見問題</h3>
+          <div class="guide-faq-group">
+            <div class="guide-faq-group-title">Part. I　去之前你可能會想知道的事</div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">一個人去可以嗎？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner"><p><strong>當然可以！</strong>只要挑好想去的演出，準備好時間＋錢錢，其他都不用擔心。</p></div></div>
+            </div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">會被演員點到嗎？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p>當然有一定的機率會被點到～</p>
+                <p>如果害怕被互動，可以先避免<strong>即興類型</strong>的節目。</p>
+                <p>反之！喜歡互動的朋友，非常推薦試試即興，或是二三嚴選的「<strong>即興互動場</strong>」！</p>
+                <div class="guide-faq-tip"><strong>嘻嘻偷偷分享</strong><br>如果是內向的朋友也別擔心！根據嘻嘻多年看演出的觀察，通常坐在「<strong>第三排以後</strong>」，被演員互動的機率就會低很多。</div>
+              </div></div>
+            </div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">第一次去會不會很尷尬？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p>很多演出開始前，主持人都會詢問現場有沒有<strong>第一次來看喜劇</strong>的觀眾。</p>
+                <p>也會簡單介紹今天的演出形式和觀賞方式，<strong>不用擔心跟不上</strong>喔！</p>
+                <p>如果真的不知道該怎麼做，跟著其他觀眾就對了！</p>
+              </div></div>
+            </div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">我一定要一直笑嗎？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p>當然不用！<strong>想笑再笑就好</strong>～</p>
+                <p>只要不干擾他人和演出，想怎麼做都是自由的！</p>
+                <p>也不用擔心跟別人笑的點不一樣，每個人的<strong>笑點和審美本來就不同</strong>。</p>
+              </div></div>
+            </div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">如果聽不懂怎麼辦？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p><strong>聽不懂也沒關係！</strong>看喜劇也是<strong>很吃電波</strong>的 XD</p>
+                <p>就繼續順順地聽下去，不用糾結在沒有聽懂這件事～</p>
+              </div></div>
+            </div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">我需要先懂很多喜劇知識嗎？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p>當然不需要！<strong>先看就對了！</strong></p>
+                <p>如果真的喜歡上了喜劇，以後再慢慢了解就好～</p>
+              </div></div>
+            </div>
+          </div>
+
+          <div class="guide-faq-group" style="margin-top:20px">
+            <div class="guide-faq-group-title">Part. II　現場觀賞小提醒</div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">要提早多久到？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p>通常<strong>提早 15～30 分鐘</strong>到就好了！到時候現場都會有工作人員指引入場。</p>
+                <div class="guide-faq-tip"><strong>嘻嘻偷偷分享</strong><br>如果是知名演員的演出，想坐前排就得<strong>更早來排隊</strong>囉～</div>
+              </div></div>
+            </div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">遲到怎麼辦？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p>遲到先找<strong>場內工作人員</strong>驗票，工作人員會在<strong>適當的時機</strong>引導入座。</p>
+                <p>但還是建議提早到場，不要遲到喔～</p>
+              </div></div>
+            </div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">中途可以去廁所嗎？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p>可以喔！有些演出會有<strong>中場休息</strong>時間，沒有的話，只要<strong>低調離場</strong>就好～</p>
+                <div class="guide-faq-tip"><strong>嘻嘻偷偷分享</strong><br>其實選在<strong>演員棒次交替</strong>的時候去上廁所還挺適合的。</div>
+              </div></div>
+            </div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">可以提早離場嗎？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p>如果真的有<strong>不可抗力</strong>的原因要離場是可以的！</p>
+                <p><strong>低調、不影響演出進行</strong>就好（例如不要大聲說話）。</p>
+                <div class="guide-faq-tip"><strong>嘻嘻偷偷分享</strong><br>如果知道自己可能需要提早離場，建議可以選<strong>靠近走道、出口</strong>的位置！</div>
+              </div></div>
+            </div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">可以錄影、拍照嗎？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p><strong>錄影是絕對 NG</strong> 的！（除非演員有特別允許。）</p>
+                <p>不過演員們通常都很歡迎大家<strong>拍照、發布限時動態並標註他們</strong>！</p>
+              </div></div>
+            </div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">演員演完可以聊天、拍照嗎？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p>拍照通常都是可以的喔！</p>
+                <p>但是聊天就要看<strong>演員的意願</strong>了，有問有機會（大家其實都很親切）。</p>
+              </div></div>
+            </div>
+          </div>
+
+          <div class="guide-faq-group" style="margin-top:20px">
+            <div class="guide-faq-group-title">Part. III　看喜劇前，先知道一件事！</div>
+            <div class="guide-faq-item">
+              <div class="guide-faq-q" onclick="toggleFaq(this)">演員在台上說的，都是真的嗎？<span class="guide-faq-arrow">▼</span></div>
+              <div class="guide-faq-a"><div class="guide-faq-a-inner">
+                <p>有些內容來自真實生活，但也可能會為了笑話發展去<strong>改編、誇張化，甚至完全虛構</strong>。</p>
+                <p>我們也要記得：<strong>「演出裡的每句話，未必代表演員的真正立場。」</strong></p>
+                <p>如果遇到讓自己不舒服或被冒犯的內容，可以試著先把它當成<strong>一場表演</strong>。</p>
+                <p>沒有必要跟演員，也跟自己的心情過不去～</p>
+              </div></div>
+            </div>
+          </div>
+
+          <div class="guide-highlight-box" style="margin-top:16px">還有其他問題嗎？歡迎私訊嘻嘻哪哩唷！<br>點擊右下方的「聯絡我們」找我們聊聊～</div>
+          <div class="guide-nav-row"><button class="guide-btn-prev" onclick="guideGoTo(1)"><span class="zh-text">← 上一步</span><span class="en-text">← Back</span></button><button class="guide-btn-next" onclick="guideGoTo(3)"><span class="zh-text">下一步 →</span><span class="en-text">Next →</span></button></div>
+        </div>
+
+        <div class="guide-panel" id="guide-panel-3">
+          <div class="guide-tag-pill">STEP 4</div>
+          <h3 class="guide-panel-title">來找演出吧！</h3>
+          <p style="font-size:.95rem;color:var(--ts);line-height:1.8;margin-bottom:16px;font-family:var(--f-zh)">出發前的功課都做完了！<br>接下來！準備去現場親身感受吧～</p>
+          <div id="guide-shows-preview" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px"></div>
+          <div class="guide-nav-row">
+            <button class="guide-btn-prev" onclick="guideGoTo(2)"><span class="zh-text">← 上一步</span><span class="en-text">← Back</span></button>
+            <button class="guide-btn-next" onclick="showPage('shows')"><span class="zh-text">查看近期演出 →</span><span class="en-text">Browse Shows →</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="guide-right-col">
+        <div class="guide-tip-card">
+          <div class="guide-tip-card-title">嘻嘻小提醒</div>
+          <div class="guide-tip-card-body" id="guide-tip-body">第一次接觸現場喜劇，記不起來也很正常～先找到一場想看的演出，比搞懂所有名詞更重要！<br><span style="font-size:.85em;opacity:.55">（嘻嘻也是花了半年才慢慢熟悉這些演出形式的）</span></div>
+        </div>
+        <div class="guide-cta-card">
+          <div class="guide-cta-title">想找演出資訊？</div>
+          <div class="guide-cta-body">看看近期有哪些現場喜劇正在發生！</div>
+          <button class="guide-cta-btn" onclick="showPage('shows')"><span class="zh-text">查看近期演出 →</span><span class="en-text">Browse Shows →</span></button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+</div>
 <div class="page" id="page-board">
   <section class="sec" style="background:var(--cr);padding-top:36px!important">
     <div class="sec-label"><span class="zh-text">留言板</span><span class="en-text">Community Board</span></div>
@@ -6460,6 +6911,87 @@ function updFbBadge(){const cnt=COMMENTS.filter(c=>!c.hidden).length;const b=doc
 <script>
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>18));
 
+function toggleFaq(el){
+  const q=el;
+  const a=el.nextElementSibling;
+  const isOpen=q.classList.contains('open');
+  q.classList.toggle('open',!isOpen);
+  a.classList.toggle('open',!isOpen);
+}
+function _updateGuideNav(){
+  const prev=document.getElementById('guide-btn-prev');
+  const next=document.getElementById('guide-btn-next');
+  if(!prev||!next) return;
+  // 上一步
+  if(_guideCur===0){ prev.style.visibility='hidden'; }
+  else { prev.style.visibility='visible'; }
+  // 下一步（step 5 改成查看近期演出）
+  if(_guideCur===3){
+    next.innerHTML='<span class="zh-text">查看近期演出 →</span><span class="en-text">Browse Shows →</span>';
+    next.onclick=()=>showPage('shows');
+  } else {
+    next.innerHTML='<span class="zh-text">下一步 →</span><span class="en-text">Next →</span>';
+    next.onclick=()=>guideGoTo(_guideCur+1);
+  }
+}
+const _guideTips=['第一次接觸現場喜劇，記不起來也很正常～先找到一場想看的演出，比搞懂所有名詞更重要！（嘻嘻也是花了半年才慢慢熟悉這些演出形式的）','找到一場讓你願意走進劇場的演出，就是最好的開始！喜劇口味是可以慢慢培養的～','第一次不用擔心自己是不是「好觀眾」。放輕鬆，好好享受演出就可以了！','看完第一場以後，你大概就會想買第二張票了。'];
+let _guideCur=0;
+function guideGoTo(n){
+  if(n===_guideCur) return;
+  const prev=_guideCur;
+  const panels=document.querySelectorAll('.guide-panel');
+  const items=document.querySelectorAll('.guide-step-item');
+  const lines=document.querySelectorAll('.guide-step-line');
+  panels[prev].classList.remove('active');
+  panels[prev].classList.add('exit');
+  setTimeout(()=>{ if(panels[prev]) panels[prev].classList.remove('exit'); },380);
+  _guideCur=n;
+  panels[_guideCur].classList.add('active');
+  items.forEach((el,i)=>{
+    el.classList.remove('active','done');
+    if(i===_guideCur) el.classList.add('active');
+    else if(i<_guideCur) el.classList.add('done');
+  });
+  lines.forEach((el,i)=>{ el.style.background=i<_guideCur?'var(--sd)':'rgba(45,43,31,.12)'; });
+  const tipEl=document.getElementById('guide-tip-body');
+  if(tipEl){ tipEl.style.opacity='0'; setTimeout(()=>{ tipEl.textContent=_guideTips[_guideCur]; tipEl.style.opacity='1'; },200); }
+  if(_guideCur===3){ _renderGuideShows(); }
+  _updateGuideNav();
+}
+function _renderGuideShows(){
+  const el=document.getElementById('guide-shows-preview');
+  if(!el) return;
+  const shows=(window._SHOWS||[]);
+  const upcoming=shows
+    .filter(s=>(s.status||'published')==='published'&&!isExpired(s.date,s.time))
+    .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)))
+    .slice(0,3);
+  if(!upcoming.length){ el.style.display='none'; return; }
+  el.style.display='grid';
+  el.innerHTML=upcoming.map(s=>{
+    const types=Array.isArray(s.types)?s.types:(s.type?[s.type]:['other']);
+    const typeTags=types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span style="font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:var(--r-pill);background:${m.bg};color:${m.color}">${m.label}</span>`;}).join('');
+    const posterEl=(s.image&&s.image.trim())?`<img src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" class="sc-poster">`:`<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
+    const rawDate=String(s.date||'').split(',')[0].trim();
+    const d=new Date(rawDate+'T00:00');
+    const DOW=['日','一','二','三','四','五','六'];
+    const dateStr=isNaN(d.getTime())?rawDate:`${rawDate}（${DOW[d.getDay()]}）`;
+    const AREA_ZH2={taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'};
+    const areaLabel=AREA_ZH2[s.area||'other']||'';
+    return `<div class="show-card" onclick="openShowDetail('${s.id}',true)">
+      <div class="sc-img" style="background:linear-gradient(135deg,var(--py),var(--y))">
+        ${posterEl}
+        <div class="sc-types sc-types-desktop">${typeTags}</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-date">📅 ${dateStr}</div>
+        <div class="sc-title">${s.title||''}</div>
+        <div class="sc-meta">📍 ${areaLabel}</div>
+        ${s.price?`<div class="sc-price">💰 ${s.price}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
 function showPage(page, skipHistory){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   // 離開首頁時停止輪播
@@ -6502,8 +7034,9 @@ function showPage(page, skipHistory){
   if(page==='courses')renderCourses();
   if(page==='about'){renderAbout();if(window._dataReady)renderAboutStats();const sf=document.getElementById('spotify-iframe');if(sf&&sf.dataset.src&&!sf.src){sf.src=sf.dataset.src;}}
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
+  if(page==='guide'){_guideCur=0;document.querySelectorAll('.guide-panel').forEach((p,i)=>{p.classList.toggle('active',i===0);p.classList.remove('exit');});document.querySelectorAll('.guide-step-item').forEach((el,i)=>{el.classList.toggle('active',i===0);el.classList.remove('done');});document.querySelectorAll('.guide-step-line').forEach(el=>el.style.background='');_updateGuideNav();}
   // GA4 虛擬頁面瀏覽追蹤
-  const pageTitles = {home:'首頁',shows:'演出資訊',opmic:'Open Mic',venues:'喜劇場地',performers:'演員資料庫',courses:'課程講座',about:'關於本站',board:'留言板'};
+  const pageTitles = {home:'首頁',shows:'演出資訊',opmic:'Open Mic',venues:'喜劇場地',performers:'演員資料庫',courses:'課程講座',about:'關於本站',board:'留言板',guide:'新手指南'};
   const pageTitle = (pageTitles[page]||page) + ' | 嘻嘻哪哩唷';
   document.title = pageTitle;
   if(typeof gtag==='function'){
