@@ -5345,11 +5345,13 @@ function openPerformerDetail(id){
     : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">近期暫無演出資訊</div>`;
   const venueDisplay = p.venueIds&&p.venueIds.length ? p.venueIds.map(v=>getShowVenueLabelById(v)||v).join('、') : (p.venues||'');
   const safeUrl = u => u ? u.replace(/&amp;/g,'&') : '';
-  const socialLinks = [
+  const socialGroup1 = [
     p.fb ? `<a href="${safeUrl(p.fb)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Facebook</a>` : '',
     p.ig ? `<a href="${safeUrl(p.ig)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Instagram</a>` : '',
     p.threads ? `<a href="${safeUrl(p.threads)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Threads</a>` : '',
     p.youtube ? `<a href="${safeUrl(p.youtube)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">YouTube</a>` : '',
+  ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
+  const socialGroup2 = [
     ...((()=>{
       const videoTypeLabel = {performance:'演出片段',solo:'專場影片',podcast:'Podcast 採訪'};
       const videoTypeCount = {};
@@ -5367,6 +5369,7 @@ function openPerformerDetail(id){
     })()),
     ...(p.extraLinks||[]).map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'Linktree',portaly:'Portaly',other:'其他連結'}[l.type]||l.type}</a>`),
   ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
+  const socialLinks = (socialGroup1?`<div style="word-break:keep-all">${socialGroup1}</div>`:'') + (socialGroup2?`<div style="word-break:keep-all;margin-top:${socialGroup1?'4px':'0'}">${socialGroup2}</div>`:'');
   const shareBtn = ``;
   const heroAvatar = p.photoUrl
     ? `<img src="${p.photoUrl}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:2px solid rgba(45,43,31,.1);flex-shrink:0">`
@@ -5379,7 +5382,7 @@ function openPerformerDetail(id){
           <div style="font-size:1.15rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);flex:1">${p.name||''}</div>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:${socialLinks?'8px':'0'}">${typeTags}</div>
-        ${socialLinks?`<div style="word-break:keep-all">${socialLinks}${shareBtn}</div>`:`<div>${shareBtn.replace('<span style="color:var(--ts);margin:0 6px">·</span>','')}</div>`}
+        ${socialLinks?`${socialLinks}${shareBtn}`:`<div>${shareBtn.replace('<span style="color:var(--ts);margin:0 6px">·</span>','')}</div>`}
         ${p.troupe?(()=>{
           const troupeNames = p.troupe.split(/[、,，]/).map(s=>s.trim()).filter(Boolean);
           const links = p.troupeLinks||[];
