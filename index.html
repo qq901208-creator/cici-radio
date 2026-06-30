@@ -5344,13 +5344,19 @@ function openPerformerDetail(id){
     </div>`).join('')
     : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">近期暫無演出資訊</div>`;
   const venueDisplay = p.venueIds&&p.venueIds.length ? p.venueIds.map(v=>getShowVenueLabelById(v)||v).join('、') : (p.venues||'');
+  const ICONS = {
+    fb: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12"/></svg>',
+    ig: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>',
+    threads: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.2 22c-2.9 0-5.2-.9-6.8-2.6-1.5-1.6-2.3-3.9-2.4-6.9v-1c.1-3 .9-5.3 2.4-6.9C7 2.9 9.3 2 12.2 2c2.8 0 5 .8 6.4 2.4 1.2 1.3 1.9 3.1 2.1 5.2l-2 .2c-.2-1.7-.7-3-1.6-4-1-1.1-2.6-1.7-4.9-1.7-2.2 0-3.9.6-4.9 1.8-1 1.2-1.6 3-1.6 5.2v.6c0 2.2.6 4 1.6 5.2 1 1.2 2.7 1.8 4.9 1.8 2 0 3.4-.5 4.4-1.4.9-.8 1.3-1.9 1.3-3.2 0-.9-.3-1.6-.8-2.2-.4-.4-.9-.7-1.6-.9.1.5.1 1 .1 1.5 0 1.5-.5 2.7-1.5 3.5-.9.8-2.1 1.1-3.5 1.1-1.3 0-2.4-.4-3.2-1.1-.8-.7-1.2-1.7-1.2-2.9 0-1.2.5-2.2 1.4-2.9.9-.7 2.1-1.1 3.6-1.1.7 0 1.4.1 2 .2-.1-.8-.4-1.4-.8-1.8-.5-.5-1.2-.7-2.2-.7-1.2 0-2.2.4-2.9 1.1l-1.5-1.4c1.1-1.1 2.6-1.7 4.4-1.7 1.7 0 3 .5 3.9 1.4.8.8 1.3 2 1.4 3.4.8.2 1.6.6 2.2 1.2.9.9 1.4 2.1 1.4 3.5 0 1.9-.7 3.5-2 4.6-1.4 1.2-3.3 1.8-5.6 1.8m.2-9.6c-.9 0-1.6.2-2.1.6-.5.4-.7.9-.7 1.5 0 .6.2 1.1.6 1.4.4.3 1 .5 1.7.5.9 0 1.6-.2 2-.7.4-.5.6-1.2.6-2.1 0-.3 0-.6-.1-.9-.6-.2-1.3-.3-2-.3"/></svg>',
+    youtube: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.6-.5-5.3c-.3-1-1-1.8-2-2C18.9 4.2 12 4.2 12 4.2s-6.9 0-8.5.5c-1 .2-1.7 1-2 2C1 8.4 1 12 1 12s0 3.6.5 5.3c.3 1 1 1.8 2 2 1.6.5 8.5.5 8.5.5s6.9 0 8.5-.5c1-.2 1.7-1 2-2 .5-1.7.5-5.3.5-5.3M9.8 15.5V8.5l6 3.5z"/></svg>',
+  };
   const safeUrl = u => u ? u.replace(/&amp;/g,'&') : '';
   const socialGroup1 = [
-    p.fb ? `<a href="${safeUrl(p.fb)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Facebook</a>` : '',
-    p.ig ? `<a href="${safeUrl(p.ig)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Instagram</a>` : '',
-    p.threads ? `<a href="${safeUrl(p.threads)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">Threads</a>` : '',
-    p.youtube ? `<a href="${safeUrl(p.youtube)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">YouTube</a>` : '',
-  ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
+    p.fb ? `<a href="${safeUrl(p.fb)}" target="_blank" rel="noopener noreferrer" title="Facebook" style="display:inline-flex;color:var(--or);text-decoration:none">${ICONS.fb}</a>` : '',
+    p.ig ? `<a href="${safeUrl(p.ig)}" target="_blank" rel="noopener noreferrer" title="Instagram" style="display:inline-flex;color:var(--or);text-decoration:none">${ICONS.ig}</a>` : '',
+    p.threads ? `<a href="${safeUrl(p.threads)}" target="_blank" rel="noopener noreferrer" title="Threads" style="display:inline-flex;color:var(--or);text-decoration:none">${ICONS.threads}</a>` : '',
+    p.youtube ? `<a href="${safeUrl(p.youtube)}" target="_blank" rel="noopener noreferrer" title="YouTube" style="display:inline-flex;color:var(--or);text-decoration:none">${ICONS.youtube}</a>` : '',
+  ].filter(Boolean).join('<span style="display:inline-block;width:10px"></span>');
   const socialGroup2 = [
     ...((()=>{
       const videoTypeLabel = {performance:'演出片段',solo:'專場影片',podcast:'Podcast 採訪'};
@@ -5369,7 +5375,7 @@ function openPerformerDetail(id){
     })()),
     ...(p.extraLinks||[]).map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;color:var(--or);font-size:.82rem;font-family:var(--f-bo);text-decoration:none;white-space:nowrap">${{website:'網站',podcast:'Podcast',newsletter:'電子報',linktree:'Linktree',portaly:'Portaly',other:'其他連結'}[l.type]||l.type}</a>`),
   ].filter(Boolean).join('<span style="color:var(--ts);margin:0 6px">·</span>');
-  const socialLinks = (socialGroup1?`<div style="word-break:keep-all">${socialGroup1}</div>`:'') + (socialGroup2?`<div style="word-break:keep-all;margin-top:${socialGroup1?'4px':'0'}">${socialGroup2}</div>`:'');
+  const socialLinks = (socialGroup1?`<div style="display:flex;align-items:center;gap:2px">${socialGroup1}</div>`:'') + (socialGroup2?`<div style="word-break:keep-all;margin-top:${socialGroup1?'6px':'0'}">${socialGroup2}</div>`:'');
   const shareBtn = ``;
   const heroAvatar = p.photoUrl
     ? `<img src="${p.photoUrl}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:2px solid rgba(45,43,31,.1);flex-shrink:0">`
