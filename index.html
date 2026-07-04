@@ -3425,6 +3425,8 @@ function resetAllFilters(){
   showsPage=1;
   // 重置 type chip
   document.querySelectorAll(`.chip[data-f="type"]`).forEach(c=>c.classList.toggle('on', c.dataset.v==='all'));
+  // 重置 format chip
+  document.querySelectorAll(`.chip[data-f="format"]`).forEach(c=>c.classList.toggle('on', c.dataset.v==='all'));
   // 重置下拉選單
   ['sel-venue','sel-area','sel-day'].forEach(id=>{
     const el=document.getElementById(id);
