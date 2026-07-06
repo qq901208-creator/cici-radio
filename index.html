@@ -4354,11 +4354,12 @@ function toggleGoal(btn){
 
 // ── COURSES ──
 function courseCardHTML(c) {
-  const m = COURSE_META[c.type] || COURSE_META.other;
+  const allTypes = (c.types&&c.types.length) ? c.types : [c.type||'other'];
+  const m = COURSE_META[allTypes[0]] || COURSE_META.other;
   const emj = {standup:'🎙️',improv:'🎭',mancai:'🥢',other:'📚'};
   const imgEl = c.image ? `<img src="${c.image}" alt="" onerror="this.style.display='none'">` : '';
-  const lbl = getLang()==='en' ? m.labelEn : m.label;
   const expiredOverlay = isExpired(c.date, c.time) ? `style="opacity:.7"` : '';
+  const typeTags = allTypes.map(t=>{const mt=COURSE_META[t]||COURSE_META.other;const lbl=getLang()==='en'?mt.labelEn:mt.label;return `<span class="cc-cat" style="background:${mt.tag};color:${mt.tagC};margin-right:3px">${lbl}</span>`;}).join('');
   // 卡片日期：多堂課只顯示「首日 ～ 尾日」
   function courseCardDateRange(dateStr) {
     if(!dateStr) return '';
@@ -4369,7 +4370,7 @@ function courseCardHTML(c) {
   }
   const cardDate = courseCardDateRange(c.dateDisplay || c.date);
   return `<div class="course-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')" ${expiredOverlay} style="display:flex;flex-direction:column">
-    <div class="cc-img" style="background:${m.bg}">${imgEl}${c.image?'':` <span style="font-size:2.4rem;position:relative;z-index:1">${emj[c.type]||'📚'}</span>`}<span class="cc-cat" style="background:${m.tag};color:${m.tagC}">${lbl}</span></div>
+    <div class="cc-img" style="background:${m.bg}">${imgEl}${c.image?'':` <span style="font-size:2.4rem;position:relative;z-index:1">${emj[allTypes[0]]||'📚'}</span>`}${typeTags}</div>
     <div class="cc-body" style="flex:1;display:flex;flex-direction:column;gap:5px">
       <div class="cc-title">${c.title}</div>
       <div class="cc-meta">
@@ -4405,7 +4406,7 @@ function renderCourses() {
     if(!adminMode && st==='pending') return false;
     if(!adminMode && isExpired(c.date, c.time)) return false;
     if(adminMode && hideExpiredCourses && isExpired(c.date, c.time)) return false;
-    if(fCtype!=='all' && c.type!==fCtype) return false;
+    if(fCtype!=='all'){const ct=c.types&&c.types.length?c.types:[c.type];if(!ct.includes(fCtype))return false;}
     return true;
   }).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
 
