@@ -7405,11 +7405,6 @@ function openCourseStoryCard(id){
   // 海報
   const posterUrl = c.image||'';
   document.getElementById('sc-poster-url').value = posterUrl;
-  // 課程用中性背景色
-  const preview = document.getElementById('new-story-preview');
-  if(preview) preview.style.background = '#f0ede8';
-  const placeholder = document.getElementById('sc-new-poster-placeholder');
-  if(placeholder) placeholder.style.background = 'linear-gradient(160deg,#d4cfc8 0%,#a8a29a 100%)';
   updateNewStoryPreview();
   // 重置
   const imgResult = document.getElementById('sc-new-img-result');
@@ -7419,7 +7414,14 @@ function openCourseStoryCard(id){
   const storyModal = document.getElementById('modal-story-card');
   storyModal.classList.remove('open');
   storyModal.style.zIndex = '700';
-  setTimeout(()=>{ storyModal.classList.add('open'); }, 50);
+  setTimeout(()=>{
+    storyModal.classList.add('open');
+    // 課程用中性背景色（開啟後設定確保不被覆蓋）
+    const preview = document.getElementById('new-story-preview');
+    if(preview) preview.style.background = '#f0ede8';
+    const placeholder = document.getElementById('sc-new-poster-placeholder');
+    if(placeholder) placeholder.style.background = 'linear-gradient(160deg,#d4cfc8 0%,#a8a29a 100%)';
+  }, 50);
   switchStoryTab('ig');
 }
 function openStoryCard(id){
