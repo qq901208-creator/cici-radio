@@ -2180,7 +2180,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
             <div class="guide-show-card" id="guide-case-a">
               <div class="guide-qa-label">情況 A</div>
               <div class="guide-show-card-title">我完全沒看過現場喜劇</div>
-              <div class="guide-show-card-rec">👉 推薦：<strong>拼盤秀</strong> <span style="font-size:.85em;color:var(--ts);font-weight:400">（例如二三嚴選）</span></div>
+              <div class="guide-show-card-rec">👉 推薦：<strong>拼盤秀</strong></div>
               <div class="guide-qa-answer">
                 <p class="guide-show-card-body">一場演出通常會有 3 位以上的演員輪流登台，你可以一次看到不同風格的表演，總會有一位特別對你的胃口！</p>
                 <p class="guide-show-card-body" style="margin-top:6px">而且，大部分演出的內容都經過了多次測試和打磨，不用擔心踩雷！</p>
@@ -2341,7 +2341,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
             <div class="guide-faq-item">
               <div class="guide-faq-q" onclick="toggleFaq(this)">演員在台上說的，都是真的嗎？<span class="guide-faq-arrow">▼</span></div>
               <div class="guide-faq-a"><div class="guide-faq-a-inner">
-                <p>有些內容來自真實生活，但也可能會為了笑話發展去<strong>改編、誇張化，甚至完全虛構</strong>。</p>
+                <p>創作內容大多來自生活經驗，但也可能會為了笑話發展去<strong>改編、誇張化，甚至完全虛構</strong>。</p>
                 <p>我們也要記得：<strong>「演出裡的每句話，未必代表演員的真正立場。」</strong></p>
                 <p>如果遇到讓自己不舒服或被冒犯的內容，可以試著先把它當成<strong>一場表演</strong>。</p>
                 <p>沒有必要跟演員，也跟自己的心情過不去～</p>
@@ -5646,13 +5646,14 @@ function selectCalDay(ds){
   if(window.innerWidth >= 769){ selectCalDayDesk(ds); return; }
   calSel=ds;
   renderCalendar();
-  const dayShows=SHOWS.filter(s=>['published',undefined,'',null].includes(s.status||null)&&s.date===ds).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
+  const allShows = window._SHOWS || SHOWS || [];
+  const dayShows=allShows.filter(s=>['published',undefined,'',null].includes(s.status||null)&&String(s.date||'').split(',').map(d=>d.trim()).includes(ds)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
   const banner=document.getElementById('cal-banner');
   const result=document.getElementById('cal-result');
   banner.classList.add('show');
   if(dayShows.length){
     banner.textContent=`📅 ${ds} 的演出（${dayShows.length} 場）`;
-    result.innerHTML=`<div class="shows-grid">${dayShows.map(showCardHTML).join('')}</div>`;
+    result.innerHTML=`<div class="shows-layout">${dayShows.map(showCardHTML).join('')}</div>`;
   }else{
     banner.textContent=`📅 ${ds} — 這天暫無演出資訊`;
     result.innerHTML='';
