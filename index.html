@@ -3400,7 +3400,7 @@ window._syncData = function(){
 
 let editMode = false;
 let eShowId=null, eMicId=null, eVenueId=null, eCourseId=null;
-let fType='all', fVenue='all', fArea='all', fDay='all', fCtype='all', fCity='all', fFormat='all';
+let fType='all', fVenue='all', fArea='all', fDay='all', fCtypes=[], fCity='all', fFormat='all';
 let micDay = 1;
 
 // ── 篩選條件 URL 同步 ──
@@ -3411,7 +3411,7 @@ function syncFiltersToURL(){
   if(fVenue!=='all')  params.set('venue', fVenue);
   if(fArea!=='all')   params.set('area',  fArea);
   if(fDay!=='all')    params.set('day',   fDay);
-  if(fCtype!=='all')  params.set('ctype', fCtype);
+  if(fCtypes.length>0) params.set('ctype', fCtypes.join(','));
   if(fCity!=='all')   params.set('city',  fCity);
   const q = document.getElementById('shows-search')?.value?.trim();
   if(q) params.set('q', q);
@@ -3458,7 +3458,7 @@ function restoreFiltersFromURL(){
   if(params.get('venue')) { fVenue = params.get('venue'); const el=document.getElementById('sel-venue'); if(el){el.value=fVenue;el.classList.toggle('active',fVenue!=='all');} }
   if(params.get('area'))  { fArea  = params.get('area');  const el=document.getElementById('sel-area');  if(el){el.value=fArea; el.classList.toggle('active',fArea!=='all');} }
   if(params.get('day'))   { fDay   = params.get('day');   const el=document.getElementById('sel-day');   if(el){el.value=fDay;  el.classList.toggle('active',fDay!=='all');} }
-  if(params.get('ctype')) { fCtype = params.get('ctype'); setChip('ctype', fCtype); }
+  if(params.get('ctype')) { fCtypes = params.get('ctype').split(','); fCtypes.forEach(v=>setChip('ctype',v)); }
   if(params.get('city'))  { fCity  = params.get('city');  setChip('city',  fCity); }
   if(params.get('q')) {
     const el = document.getElementById('shows-search');
@@ -4405,7 +4405,7 @@ function renderCourses() {
     if(!adminMode && st==='pending') return false;
     if(!adminMode && isExpired(c.date, c.time)) return false;
     if(adminMode && hideExpiredCourses && isExpired(c.date, c.time)) return false;
-    if(fCtype!=='all' && c.type!==fCtype) return false;
+    if(fCtypes.length>0 && !fCtypes.includes(c.type)) return false;
     return true;
   }).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
 
@@ -5565,14 +5565,27 @@ function renderAbout() {
 document.querySelectorAll('.chip').forEach(btn=>{
   btn.addEventListener('click',function(){
     const f=this.dataset.f, v=this.dataset.v;
-    document.querySelectorAll(`.chip[data-f="${f}"]`).forEach(c=>c.classList.remove('on'));
-    this.classList.add('on');
+    if(f!=='ctype'){
+      document.querySelectorAll(`.chip[data-f="${f}"]`).forEach(c=>c.classList.remove('on'));
+      this.classList.add('on');
+    }
     if(f==='type') {fType=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='format'){fFormat=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='venue'){fVenue=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='area') {fArea=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='day')  {fDay=v;showsPage=1;renderShows();syncFiltersToURL();}
-    if(f==='ctype'){fCtype=v;coursesPage=1;renderCourses();syncFiltersToURL();}
+    if(f==='ctype'){
+      if(v==='all'){ fCtypes=[]; document.querySelectorAll('.chip[data-f="ctype"]').forEach(c=>c.classList.toggle('on',c.dataset.v==='all')); }
+      else{
+        document.querySelectorAll('.chip[data-f="ctype"][data-v="all"]').forEach(c=>c.classList.remove('on'));
+        this.classList.toggle('on');
+        if(fCtypes.includes(v)) fCtypes=fCtypes.filter(x=>x!==v);
+        else fCtypes.push(v);
+        if(fCtypes.length===0) document.querySelector('.chip[data-f="ctype"][data-v="all"]').classList.add('on');
+      }
+      coursesPage=1;renderCourses();syncFiltersToURL();
+      return;
+    }
     if(f==='city') {fCity=v;renderVenues();syncFiltersToURL();}
   });
 });
