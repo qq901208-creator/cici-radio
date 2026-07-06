@@ -2884,19 +2884,19 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         </div>
       </div>
     </div>
-    <div class="fg-g"><label class="fl">類型</label>
-      <select class="fs" id="c-type">
-        <option value="standup">站立喜劇 Stand-up</option>
-        <option value="improv">即興 Improv</option>
-        <option value="sketch">短劇 Sketch</option>
-        <option value="konto">短劇 コント Konto</option>
-        <option value="mancai">漫才 Mancai</option>
-        <option value="crosstalk">相聲 Crosstalk</option>
-        <option value="rakugo">落語 Rakugo</option>
-        <option value="ogiri">大喜利 Ōgiri</option>
-        <option value="musicom">音樂喜劇 Music Comedy</option>
-        <option value="other">其他 Others</option>
-      </select>
+    <div class="fg-g full"><label class="fl">類型（可複選）</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="c-types-group">
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="standup" style="accent-color:var(--or)"> 站立喜劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="improv" style="accent-color:var(--or)"> 即興</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="sketch" style="accent-color:var(--or)"> 短劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="konto" style="accent-color:var(--or)"> コント</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="mancai" style="accent-color:var(--or)"> 漫才</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="crosstalk" style="accent-color:var(--or)"> 相聲</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="rakugo" style="accent-color:var(--or)"> 落語</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ogiri" style="accent-color:var(--or)"> 大喜利</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="musicom" style="accent-color:var(--or)"> 音樂喜劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="other" style="accent-color:var(--or)"> 其他</label>
+      </div>
     </div>
     <div class="fg-g"><label class="fl">主辦 / 講師</label><input class="fi" type="text" id="c-organizer"></div>
     <div class="fg-g"><label class="fl">地點</label><input class="fi" type="text" id="c-location" placeholder="e.g. 台北市 / 線上 Online"></div>
@@ -3400,7 +3400,7 @@ window._syncData = function(){
 
 let editMode = false;
 let eShowId=null, eMicId=null, eVenueId=null, eCourseId=null;
-let fType='all', fVenue='all', fArea='all', fDay='all', fCtypes=[], fCity='all', fFormat='all';
+let fType='all', fVenue='all', fArea='all', fDay='all', fCtype='all', fCity='all', fFormat='all';
 let micDay = 1;
 
 // ── 篩選條件 URL 同步 ──
@@ -3411,7 +3411,7 @@ function syncFiltersToURL(){
   if(fVenue!=='all')  params.set('venue', fVenue);
   if(fArea!=='all')   params.set('area',  fArea);
   if(fDay!=='all')    params.set('day',   fDay);
-  if(fCtypes.length>0) params.set('ctype', fCtypes.join(','));
+  if(fCtype!=='all')  params.set('ctype', fCtype);
   if(fCity!=='all')   params.set('city',  fCity);
   const q = document.getElementById('shows-search')?.value?.trim();
   if(q) params.set('q', q);
@@ -3458,7 +3458,7 @@ function restoreFiltersFromURL(){
   if(params.get('venue')) { fVenue = params.get('venue'); const el=document.getElementById('sel-venue'); if(el){el.value=fVenue;el.classList.toggle('active',fVenue!=='all');} }
   if(params.get('area'))  { fArea  = params.get('area');  const el=document.getElementById('sel-area');  if(el){el.value=fArea; el.classList.toggle('active',fArea!=='all');} }
   if(params.get('day'))   { fDay   = params.get('day');   const el=document.getElementById('sel-day');   if(el){el.value=fDay;  el.classList.toggle('active',fDay!=='all');} }
-  if(params.get('ctype')) { fCtypes = params.get('ctype').split(','); fCtypes.forEach(v=>setChip('ctype',v)); }
+  if(params.get('ctype')) { fCtype = params.get('ctype'); setChip('ctype', fCtype); }
   if(params.get('city'))  { fCity  = params.get('city');  setChip('city',  fCity); }
   if(params.get('q')) {
     const el = document.getElementById('shows-search');
@@ -4405,7 +4405,7 @@ function renderCourses() {
     if(!adminMode && st==='pending') return false;
     if(!adminMode && isExpired(c.date, c.time)) return false;
     if(adminMode && hideExpiredCourses && isExpired(c.date, c.time)) return false;
-    if(fCtypes.length>0 && !fCtypes.includes(c.type)) return false;
+    if(fCtype!=='all' && c.type!==fCtype) return false;
     return true;
   }).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
 
@@ -5565,27 +5565,14 @@ function renderAbout() {
 document.querySelectorAll('.chip').forEach(btn=>{
   btn.addEventListener('click',function(){
     const f=this.dataset.f, v=this.dataset.v;
-    if(f!=='ctype'){
-      document.querySelectorAll(`.chip[data-f="${f}"]`).forEach(c=>c.classList.remove('on'));
-      this.classList.add('on');
-    }
+    document.querySelectorAll(`.chip[data-f="${f}"]`).forEach(c=>c.classList.remove('on'));
+    this.classList.add('on');
     if(f==='type') {fType=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='format'){fFormat=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='venue'){fVenue=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='area') {fArea=v;showsPage=1;renderShows();syncFiltersToURL();}
     if(f==='day')  {fDay=v;showsPage=1;renderShows();syncFiltersToURL();}
-    if(f==='ctype'){
-      if(v==='all'){ fCtypes=[]; document.querySelectorAll('.chip[data-f="ctype"]').forEach(c=>c.classList.toggle('on',c.dataset.v==='all')); }
-      else{
-        document.querySelectorAll('.chip[data-f="ctype"][data-v="all"]').forEach(c=>c.classList.remove('on'));
-        this.classList.toggle('on');
-        if(fCtypes.includes(v)) fCtypes=fCtypes.filter(x=>x!==v);
-        else fCtypes.push(v);
-        if(fCtypes.length===0) document.querySelector('.chip[data-f="ctype"][data-v="all"]').classList.add('on');
-      }
-      coursesPage=1;renderCourses();syncFiltersToURL();
-      return;
-    }
+    if(f==='ctype'){fCtype=v;coursesPage=1;renderCourses();syncFiltersToURL();}
     if(f==='city') {fCity=v;renderVenues();syncFiltersToURL();}
   });
 });
@@ -5976,7 +5963,10 @@ function openCourseModal(id){
       document.getElementById('c-time-end-ampm').value=isAM?'上午':'下午';
       document.getElementById('c-time-end').value=e.replace(/^(上午|下午)/,'').trim();
     }
-    document.getElementById('c-type').value=c.type||'standup';
+  // 清空並載入類型 checkbox
+  document.querySelectorAll('#c-types-group input[type=checkbox]').forEach(cb=>cb.checked=false);
+  const savedTypes=c.types&&c.types.length?c.types:(c.type?[c.type]:[]);
+  savedTypes.forEach(t=>{const cb=document.querySelector(`#c-types-group input[value="${t}"]`);if(cb)cb.checked=true;});
     document.getElementById('c-organizer').value=c.organizer||'';
     // 第二階段日期與時間
     const d2El=document.getElementById('c-date2');
@@ -6020,7 +6010,8 @@ function openCourseModal(id){
 function saveCourse(status){
   const title=document.getElementById('c-title').value.trim();
   if(!title){showToast('請填入課程名稱','err');return;}
-  const ctype=document.getElementById('c-type').value;
+  const ctypes=[...document.querySelectorAll('#c-types-group input:checked')].map(cb=>cb.value);
+  const ctype=ctypes[0]||'other';
   // 組合第一階段時間字串
   const startAmpm=document.getElementById('c-time-start-ampm').value;
   const startTime=document.getElementById('c-time-start').value.trim();
@@ -6047,7 +6038,7 @@ function saveCourse(status){
     return;
   }
   const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
-  const item={title,date:lastDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,type:ctype,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
+  const item={title,date:lastDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,type:ctype,types:ctypes,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
   window.FB.save('courses', eCourseId||null, item).then(newId=>{
     if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
     else COURSES.push({id:newId,...item});
