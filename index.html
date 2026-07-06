@@ -558,7 +558,8 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
 .cc-desc{font-size:.8rem;color:var(--ts);line-height:1.62;font-family:var(--f-zh);margin-top:3px;white-space:pre-line;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .cc-foot{padding:11px 16px 14px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(45,43,31,.07);margin-top:10px}
 .cc-plat{font-size:.68rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);text-transform:uppercase;background:rgba(45,43,31,.06);padding:3px 8px;border-radius:var(--r-pill)}
-.cc-link{font-size:.76rem;font-weight:600;color:var(--or);text-decoration:none;font-family:var(--f-bo);display:flex;align-items:center;gap:4px;padding:5px 11px;border:1.5px solid rgba(239,111,32,.28);border-radius:var(--r-pill);transition:all .13s}
+.cc-link{font-size:.76rem;font-weight:700;color:#fff;text-decoration:none;font-family:var(--f-zh);display:inline-flex;align-items:center;justify-content:center;padding:7px 18px;background:var(--or);border:none;border-radius:var(--r-pill);transition:all .13s;box-shadow:0 3px 10px rgba(239,111,32,.25)}
+.cc-link:hover{background:#d45c10;transform:translateY(-1px)}
 .cc-link:hover{background:rgba(239,111,32,.07)}
 .cc-imgsrc{font-size:.62rem;color:rgba(45,43,31,.3);padding:0 16px 9px;font-family:var(--f-bo)}
 
@@ -4388,7 +4389,7 @@ function courseCardHTML(c) {
       ${c.imgSrc?`<div class="cc-imgsrc cc-imgsrc-mobile" style="padding:4px 0 0;font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo)">${c.imgSrc}</div>`:''}
     </div>
     <div class="cc-foot">
-      ${(c.url&&c.url!=='#')?`<a href="${c.url}" class="cc-link" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">立即報名 ↗</span><span class="en-text">Sign Up ↗</span></a>`:'<span></span>'}
+      ${(c.url&&c.url!=='#')?`<a href="${c.url}" class="cc-link" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">立即報名</span><span class="en-text">Sign Up</span></a>`:'<span></span>'}
       <span></span>
     </div>
     ${c.imgSrc?`<div class="cc-imgsrc cc-imgsrc-desktop" style="font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo);padding:0 16px 10px;text-align:right">${c.imgSrc}</div>`:''}
