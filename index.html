@@ -551,7 +551,7 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
 .course-card:hover{transform:translateY(-4px);box-shadow:var(--sh)}
 .cc-img{width:100%;height:140px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;position:relative}
 .cc-img img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;background:var(--ww)}
-.cc-cat{position:absolute;top:9px;left:9px;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);z-index:1}
+.cc-cat{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);z-index:1;white-space:nowrap}
 .cc-body{padding:14px 16px 0;display:flex;flex-direction:column;gap:5px}
 .cc-title{font-size:.94rem;font-weight:700;font-family:var(--f-zh);line-height:1.35}
 .cc-meta{display:flex;flex-wrap:wrap;gap:7px;font-size:.74rem;color:var(--ts);font-family:var(--f-zh)}
@@ -1868,10 +1868,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <button class="chip on" data-f="ctype" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
       <button class="chip" data-f="ctype" data-v="standup"><span class="zh-text">站立喜劇</span><span class="en-text">Stand-up</span></button>
       <button class="chip" data-f="ctype" data-v="improv"><span class="zh-text">即興</span><span class="en-text">Improv</span></button>
-      <button class="chip" data-f="ctype" data-v="sketch"><span class="zh-text">短劇</span><span class="en-text">Sketch</span></button>
       <button class="chip" data-f="ctype" data-v="mancai"><span class="zh-text">漫才</span><span class="en-text">Mancai</span></button>
+      <button class="chip" data-f="ctype" data-v="sketch"><span class="zh-text">素描短劇</span><span class="en-text">Sketch</span></button>
+      <button class="chip" data-f="ctype" data-v="konto"><span class="zh-text">短劇 コント</span><span class="en-text">Konto</span></button>
       <button class="chip" data-f="ctype" data-v="crosstalk"><span class="zh-text">相聲</span><span class="en-text">Crosstalk</span></button>
       <button class="chip" data-f="ctype" data-v="rakugo"><span class="zh-text">落語</span><span class="en-text">Rakugo</span></button>
+      <button class="chip" data-f="ctype" data-v="musicom"><span class="zh-text">音樂喜劇</span><span class="en-text">Music Comedy</span></button>
       <button class="chip" data-f="ctype" data-v="other"><span class="zh-text">其他</span><span class="en-text">Others</span></button>
     </div>
     <div style="margin-bottom:28px">
@@ -2888,12 +2890,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div style="display:flex;gap:6px;flex-wrap:wrap" id="c-types-group">
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="standup" style="accent-color:var(--or)"> 站立喜劇</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="improv" style="accent-color:var(--or)"> 即興</label>
-        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="sketch" style="accent-color:var(--or)"> 短劇</label>
-        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="konto" style="accent-color:var(--or)"> コント</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="mancai" style="accent-color:var(--or)"> 漫才</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="sketch" style="accent-color:var(--or)"> 素描短劇</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="konto" style="accent-color:var(--or)"> 短劇 コント</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="crosstalk" style="accent-color:var(--or)"> 相聲</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="rakugo" style="accent-color:var(--or)"> 落語</label>
-        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ogiri" style="accent-color:var(--or)"> 大喜利</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="musicom" style="accent-color:var(--or)"> 音樂喜劇</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="other" style="accent-color:var(--or)"> 其他</label>
       </div>
@@ -4370,7 +4371,8 @@ function courseCardHTML(c) {
   }
   const cardDate = courseCardDateRange(c.dateDisplay || c.date);
   return `<div class="course-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')" ${expiredOverlay} style="display:flex;flex-direction:column">
-    <div class="cc-img" style="background:${m.bg}">${imgEl}${c.image?'':` <span style="font-size:2.4rem;position:relative;z-index:1">${emj[allTypes[0]]||'📚'}</span>`}${typeTags}</div>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;padding:8px 10px 0">${typeTags}</div>
+    <div class="cc-img" style="background:${m.bg}">${imgEl}${c.image?'':` <span style="font-size:2.4rem;position:relative;z-index:1">${emj[allTypes[0]]||'📚'}</span>`}</div>
     <div class="cc-body" style="flex:1;display:flex;flex-direction:column;gap:5px">
       <div class="cc-title">${c.title}</div>
       <div class="cc-meta">
@@ -4404,7 +4406,6 @@ function renderCourses() {
     const st=c.status||'published';
     if(st==='hidden') return false;
     if(!adminMode && st==='pending') return false;
-    if(!adminMode && isExpired(c.date, c.time)) return false;
     if(adminMode && hideExpiredCourses && isExpired(c.date, c.time)) return false;
     if(fCtype!=='all'){const ct=c.types&&c.types.length?c.types:[c.type];if(!ct.includes(fCtype))return false;}
     return true;
