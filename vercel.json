@@ -4,6 +4,6 @@
     { "source": "/performer/:id", "destination": "/api/performer/:id" },
     { "source": "/show/:id", "destination": "/api/show/:id" },
     { "source": "/guide", "destination": "/api/guide" },
-    { "source": "/course/:id", "destination": "/api/course-detail?id=:id" }
+    { "source": "/course/:id", "destination": "/api/course/course?id=:id" }
   ]
 }
