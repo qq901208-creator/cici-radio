@@ -4357,19 +4357,21 @@ function toggleGoal(btn){
 
 function parseFeeRange(fee){
   if(!fee) return {range:'', lines:[]};
-  // 用 / 或換行分割各個價格項目
-  const lines = fee.split(/[\/\n]/).map(s=>s.trim()).filter(Boolean);
+  // 用 NT$ 作為分割點，拆成各個價格項目
+  const raw = fee.replace(/\r?\n/g,' ');
+  // 以 NT$ 為起點分割（保留 NT$ 在每段開頭）
+  const parts = raw.split(/(?=NT\$)/).map(s=>s.trim().replace(/^[\/\s·,]+/,'').replace(/[\/\s·,]+$/,'').trim()).filter(Boolean);
+  const lines = parts.length > 1 ? parts : raw.split(/[\/\n]/).map(s=>s.trim()).filter(Boolean);
   if(lines.length===0) return {range:fee, lines:[fee]};
   if(lines.length===1) return {range:lines[0], lines};
-  // 抽出數字找 min/max
+  // 抽出數字找 min/max（忽略 /人 等後綴）
   const nums = lines.map(l=>{
-    const m = l.match(/[\d,]+/g);
-    return m ? parseInt(m[m.length-1].replace(/,/g,'')) : null;
+    const m = l.match(/NT\$\s*([\d,]+)/);
+    return m ? parseInt(m[1].replace(/,/g,'')) : null;
   }).filter(n=>n!==null);
   if(nums.length<2) return {range:lines[0], lines};
   const min=Math.min(...nums), max=Math.max(...nums);
-  const currency = fee.match(/NT\$|TWD|\$/) ? 'NT$ ' : '';
-  const range = min===max ? `${currency}${min.toLocaleString()}` : `${currency}${min.toLocaleString()} – ${max.toLocaleString()}`;
+  const range = min===max ? `NT$ ${min.toLocaleString()}` : `NT$ ${min.toLocaleString()} – ${max.toLocaleString()}`;
   return {range, lines};
 }
 
@@ -4408,7 +4410,7 @@ function courseCardHTML(c) {
         const multiLine=lines.length>1;
         const detailId=`fee-detail-${c.id}`;
         return `<div style="font-size:.79rem;font-weight:700;color:var(--or)">
-          ${range}${multiLine?`<button onclick="event.stopPropagation();var d=document.getElementById('${detailId}');d.style.display=d.style.display==='none'?'block':'none'" style="font-size:.7rem;font-weight:500;color:var(--ts);background:none;border:none;cursor:pointer;margin-left:4px;font-family:var(--f-zh);padding:0">詳情 ▾</button>`:''}
+          ${range}${multiLine?`<button onclick="event.stopPropagation();var d=document.getElementById('${detailId}');var isOpen=d.style.display!=='none';d.style.display=isOpen?'none':'block';this.textContent=isOpen?'展開 ▾':'收起 ▴'" style="font-size:.72rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:6px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button>`:''}
           ${multiLine?`<div id="${detailId}" style="display:none;margin-top:4px;padding:6px 8px;background:rgba(45,43,31,.04);border-radius:6px">${lines.map(l=>`<div style="font-size:.74rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">${l}</div>`).join('')}</div>`:''}
         </div>`;
       })():''}
@@ -4437,7 +4439,7 @@ function renderCourses() {
     if(adminMode && hideExpiredCourses && isExpired(c.date, c.time)) return false;
     if(fCtype!=='all'){const ct=c.types&&c.types.length?c.types:[c.type];if(!ct.includes(fCtype))return false;}
     return true;
-  }).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  }).sort((a,b)=>String(a.date||'').split(',')[0].trim().localeCompare(String(b.date||'').split(',')[0].trim()));
 
   const perPage = calcPerPage('courses-grid', 10);
   const totalPages = Math.ceil(fil.length / perPage);
