@@ -4357,12 +4357,9 @@ function toggleGoal(btn){
 
 function parseFeeRange(fee){
   if(!fee) return {range:'', lines:[]};
+  // 只用 / 切割，換行也轉成 /
   const raw = fee.replace(/\r?\n/g,' / ');
-  // 在每個 NT$ 前面（且前面有非空白字元）加分隔符
-  const normalized = raw.replace(/([^\s\/])\s*(?=NT\$)/g,'$1 | ');
-  const parts = normalized.split(/\s*[|\/]\s*(?=NT\$|[^NT].*NT\$)/).map(s=>s.trim()).filter(Boolean);
-  // 再用 / 分割剩餘
-  const lines = parts.length > 1 ? parts : raw.split(/\s*\/\s*/).map(s=>s.trim()).filter(Boolean);
+  const lines = raw.split(/\s*\/\s*/).map(s=>s.trim()).filter(Boolean);
   if(lines.length===0) return {range:fee, lines:[fee]};
   if(lines.length===1) return {range:lines[0], lines};
   // 抽數字找 min/max
