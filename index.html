@@ -4355,6 +4355,24 @@ function toggleGoal(btn){
     : `<span class="zh-text">${zhOpen}</span><span class="en-text">${enOpen}</span>`;
 }
 
+function parseFeeRange(fee){
+  if(!fee) return {range:'', lines:[]};
+  // 用 / 或換行分割各個價格項目
+  const lines = fee.split(/[\/\n]/).map(s=>s.trim()).filter(Boolean);
+  if(lines.length===0) return {range:fee, lines:[fee]};
+  if(lines.length===1) return {range:lines[0], lines};
+  // 抽出數字找 min/max
+  const nums = lines.map(l=>{
+    const m = l.match(/[\d,]+/g);
+    return m ? parseInt(m[m.length-1].replace(/,/g,'')) : null;
+  }).filter(n=>n!==null);
+  if(nums.length<2) return {range:lines[0], lines};
+  const min=Math.min(...nums), max=Math.max(...nums);
+  const currency = fee.match(/NT\$|TWD|\$/) ? 'NT$ ' : '';
+  const range = min===max ? `${currency}${min.toLocaleString()}` : `${currency}${min.toLocaleString()} – ${max.toLocaleString()}`;
+  return {range, lines};
+}
+
 // ── COURSES ──
 function courseCardHTML(c) {
   const allTypes = (c.types&&c.types.length) ? c.types : [c.type||'other'];
@@ -4385,7 +4403,15 @@ function courseCardHTML(c) {
         <span>📍 ${c.location||''}</span>
         ${c.organizer?`<span>${c.organizer}</span>`:''}
       </div>
-      ${c.fee?`<div style="font-size:.79rem;font-weight:700;color:var(--or)">${c.fee}</div>`:''}
+      ${c.fee?(()=>{
+        const {range,lines}=parseFeeRange(c.fee);
+        const multiLine=lines.length>1;
+        const detailId=`fee-detail-${c.id}`;
+        return `<div style="font-size:.79rem;font-weight:700;color:var(--or)">
+          ${range}${multiLine?`<button onclick="event.stopPropagation();var d=document.getElementById('${detailId}');d.style.display=d.style.display==='none'?'block':'none'" style="font-size:.7rem;font-weight:500;color:var(--ts);background:none;border:none;cursor:pointer;margin-left:4px;font-family:var(--f-zh);padding:0">詳情 ▾</button>`:''}
+          ${multiLine?`<div id="${detailId}" style="display:none;margin-top:4px;padding:6px 8px;background:rgba(45,43,31,.04);border-radius:6px">${lines.map(l=>`<div style="font-size:.74rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">${l}</div>`).join('')}</div>`:''}
+        </div>`;
+      })():''}
       <p class="cc-desc" style="flex:1">${c.description||''}</p>
       ${c.imgSrc?`<div class="cc-imgsrc cc-imgsrc-mobile" style="padding:4px 0 0;font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo)">${c.imgSrc}</div>`:''}
     </div>
@@ -4503,7 +4529,10 @@ function openCourseDetail(id){
       ${c.location?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${lang==='en'?'Location':'地點'}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06)">${c.location}</td></tr>`:''}
       ${c.address?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${lang==='en'?'Address':'地址'}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06)"><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address)}" target="_blank" rel="noopener" style="color:var(--or);text-decoration:none">${c.address} ↗</a></td></tr>`:''}
       ${c.organizer?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${lang==='en'?'Organizer':'主辦'}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06)">${c.organizer}</td></tr>`:''}
-      ${c.fee?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top">${lang==='en'?'Fee':'費用'}</td><td style="padding:7px 0;font-weight:700;color:var(--or)">${c.fee}</td></tr>`:''}
+      ${c.fee?(()=>{
+        const {lines}=parseFeeRange(c.fee);
+        return `<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top">${lang==='en'?'Fee':'費用'}</td><td style="padding:7px 0;font-weight:700;color:var(--or)">${lines.map(l=>`<div>${l}</div>`).join('')}</td></tr>`;
+      })():''}
     </table>
     <div style="margin-top:10px">
     </div>
