@@ -4357,12 +4357,11 @@ function toggleGoal(btn){
 
 function parseFeeRange(fee){
   if(!fee) return {range:'', lines:[]};
-  // 只用 / 切割，換行也轉成 /
-  const raw = fee.replace(/\r?\n/g,' / ');
-  const lines = raw.split(/\s*\/\s*/).map(s=>s.trim()).filter(Boolean);
+  // 保護 /人 不被切割，先替換成佔位符
+  const raw = fee.replace(/\r?\n/g,' / ').replace(/\/人/g,'__PER_PERSON__');
+  const lines = raw.split(/\s*\/\s*/).map(s=>s.trim().replace(/__PER_PERSON__/g,'/人')).filter(Boolean);
   if(lines.length===0) return {range:fee, lines:[fee]};
   if(lines.length===1) return {range:lines[0], lines};
-  // 抽數字找 min/max
   const nums = lines.map(l=>{
     const m = l.match(/NT\$\s*([\d,]+)/);
     return m ? parseInt(m[1].replace(/,/g,'')) : null;
