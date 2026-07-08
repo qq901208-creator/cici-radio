@@ -4357,14 +4357,15 @@ function toggleGoal(btn){
 
 function parseFeeRange(fee){
   if(!fee) return {range:'', lines:[]};
-  // 用 NT$ 作為分割點，拆成各個價格項目
-  const raw = fee.replace(/\r?\n/g,' ');
-  // 以 NT$ 為起點分割（保留 NT$ 在每段開頭）
-  const parts = raw.split(/(?=NT\$)/).map(s=>s.trim().replace(/^[\/\s·,]+/,'').replace(/[\/\s·,]+$/,'').trim()).filter(Boolean);
-  const lines = parts.length > 1 ? parts : raw.split(/[\/\n]/).map(s=>s.trim()).filter(Boolean);
+  const raw = fee.replace(/\r?\n/g,' / ');
+  // 在每個 NT$ 前面（且前面有非空白字元）加分隔符
+  const normalized = raw.replace(/([^\s\/])\s*(?=NT\$)/g,'$1 | ');
+  const parts = normalized.split(/\s*[|\/]\s*(?=NT\$|[^NT].*NT\$)/).map(s=>s.trim()).filter(Boolean);
+  // 再用 / 分割剩餘
+  const lines = parts.length > 1 ? parts : raw.split(/\s*\/\s*/).map(s=>s.trim()).filter(Boolean);
   if(lines.length===0) return {range:fee, lines:[fee]};
   if(lines.length===1) return {range:lines[0], lines};
-  // 抽出數字找 min/max（忽略 /人 等後綴）
+  // 抽數字找 min/max
   const nums = lines.map(l=>{
     const m = l.match(/NT\$\s*([\d,]+)/);
     return m ? parseInt(m[1].replace(/,/g,'')) : null;
