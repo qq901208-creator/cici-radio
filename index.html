@@ -6071,7 +6071,7 @@ function saveCourse(status){
     return;
   }
   const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
-  const item={title,date:lastDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,type:ctype,types:ctypes,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
+  const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,type:ctype,types:ctypes,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
   window.FB.save('courses', eCourseId||null, item).then(newId=>{
     if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
     else COURSES.push({id:newId,...item});
