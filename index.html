@@ -4372,6 +4372,16 @@ function parseFeeRange(fee){
   return {range, lines};
 }
 
+function isCourseOngoing(c){
+  const dates = String(c.date||c.dateDisplay||'').split(',').map(s=>s.trim()).filter(Boolean);
+  if(dates.length===0) return false;
+  const firstDate = dates[0];
+  const lastDate = dates[dates.length-1];
+  const today = new Date(); today.setHours(0,0,0,0);
+  const first = new Date(firstDate+'T00:00');
+  const last = new Date(lastDate+'T23:59:59');
+  return first<=today && last>=today;
+}
 // ── COURSES ──
 function courseCardHTML(c) {
   const allTypes = (c.types&&c.types.length) ? c.types : [c.type||'other'];
@@ -4415,7 +4425,7 @@ function courseCardHTML(c) {
       ${c.imgSrc?`<div class="cc-imgsrc cc-imgsrc-mobile" style="padding:4px 0 0;font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo)">${c.imgSrc}</div>`:''}
     </div>
     <div class="cc-foot">
-      ${(c.url&&c.url!=='#')?`<a href="${c.url}" class="cc-link" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">立即報名</span><span class="en-text">Sign Up</span></a>`:'<span></span>'}
+      ${(c.url&&c.url!=='#')?(isCourseOngoing(c)?`<span class="cc-link" style="background:rgba(45,43,31,.08);color:var(--sd);box-shadow:none;cursor:default"><span class="zh-text">進行中</span><span class="en-text">In Progress</span></span>`:`<a href="${c.url}" class="cc-link" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="zh-text">立即報名</span><span class="en-text">Sign Up</span></a>`):'<span></span>'}
       <span></span>
     </div>
     ${c.imgSrc?`<div class="cc-imgsrc cc-imgsrc-desktop" style="font-size:.62rem;color:rgba(45,43,31,.3);font-family:var(--f-bo);padding:0 16px 10px;text-align:right">${c.imgSrc}</div>`:''}
