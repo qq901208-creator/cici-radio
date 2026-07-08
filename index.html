@@ -4373,13 +4373,13 @@ function parseFeeRange(fee){
 }
 
 function isCourseOngoing(c){
-  const dates = String(c.date||c.dateDisplay||'').split(',').map(s=>s.trim()).filter(Boolean);
+  // 優先用 dateDisplay（多日期），fallback 到 date
+  const raw = c.dateDisplay || c.date || '';
+  const dates = String(raw).split(',').map(s=>s.trim()).filter(s=>/^\d{4}-\d{2}-\d{2}$/.test(s));
   if(dates.length===0) return false;
-  const firstDate = dates[0];
-  const lastDate = dates[dates.length-1];
   const today = new Date(); today.setHours(0,0,0,0);
-  const first = new Date(firstDate+'T00:00');
-  const last = new Date(lastDate+'T23:59:59');
+  const first = new Date(dates[0]+'T00:00');
+  const last = new Date(dates[dates.length-1]+'T23:59:59');
   return first<=today && last>=today;
 }
 // ── COURSES ──
