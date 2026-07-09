@@ -3823,6 +3823,7 @@ function renderShows() {
   const shows = window._SHOWS || SHOWS || [];
   const fil = shows.filter(s => {
     const st = s.status || 'published';
+    if (st === 'archived') return false;
     if (st === 'hidden' && !adminMode) return false;
     if (st === 'hidden' && adminMode && isExpired(s.date, s.time)) return false;
     if (st === 'hidden' && adminMode && !isExpired(s.date, s.time)) return true;
@@ -4953,7 +4954,7 @@ function renderArchivedShows(){
   panel.style.display='block';
   const q = (document.getElementById('archived-search')?.value||'').trim().toLowerCase();
   const allShows = window._SHOWS || SHOWS || [];
-  let archived = allShows.filter(s => s.status === 'archived');
+  let archived = allShows.filter(s => s.status === 'archived' || (s.status === 'hidden' && isExpired(s.date, s.time)));
   if(q) archived = archived.filter(s =>
     (s.title||'').toLowerCase().includes(q) ||
     (s.venue||'').toLowerCase().includes(q) ||
