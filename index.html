@@ -2698,7 +2698,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div class="fg-g full"><label class="fl">演出簡介</label><textarea class="fta" id="s-desc"></textarea></div>
     <div class="fg-g full"><label class="fl">製作團隊 Production Team</label><textarea class="fta" id="s-production" placeholder="e.g. 卡米地俱樂部&#10;Two Three Comedy&#10;嘻嘻哪哩唷 × 某某單位"></textarea></div>
-    <div class="fg-g"><label class="fl">狀態</label><select class="fs" id="s-status"><option value="published">已發布</option><option value="hidden">隱藏</option></select></div>
+    <div class="fg-g"><label class="fl">狀態</label><select class="fs" id="s-status"><option value="published">已發布</option><option value="hidden">隱藏（延期）</option><option value="archived">封存（取消）</option></select></div>
     <div class="fg-g"><label class="fl">是否售完</label><select class="fs" id="s-soldout"><option value="0">尚有票券</option><option value="1">已售完</option></select></div>
   </div>
   <div class="fa">
@@ -3656,8 +3656,8 @@ function showCardHTML(s) {
     : '';
   const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
   const expiredTag = isExpired(s.date, s.time) ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">已過期</span>` : '';
-  const hiddenTag = (s.status==='hidden' && isLoggedIn() && editMode) ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#ffcccc;color:#cc0000;border-radius:var(--r-pill);margin-left:4px">已隱藏</span>` : '';
-  const expiredOverlay = isExpired(s.date, s.time) ? `style="opacity:.7;animation:none"` : (s.status==='hidden' ? `style="opacity:.45;animation:none"` : '');
+  const hiddenTag = isLoggedIn()&&editMode ? (s.status==='hidden'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fff0cc;color:#cc7700;border-radius:var(--r-pill);margin-left:4px">延期</span>`:(s.status==='archived'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#ffcccc;color:#cc0000;border-radius:var(--r-pill);margin-left:4px">已封存</span>`:'')) : '';
+  const expiredOverlay = isExpired(s.date, s.time) ? `style="opacity:.7;animation:none"` : ((s.status==='hidden'||s.status==='archived') ? `style="opacity:.45;animation:none"` : '');
   return `<div class="show-card" data-id="${s.id}" onclick="openShowDetail('${s.id}')" ${expiredOverlay}>
     <div class="sc-img-col">
       <div class="sc-img" style="background:${gradientForTypes(types)}">
@@ -4441,7 +4441,7 @@ function renderCourses() {
   const courses = window._COURSES || COURSES || [];
   const fil=courses.filter(c=>{
     const st=c.status||'published';
-    if(st==='hidden') return false;
+    if(st==='hidden'||st==='archived') return false;
     if(!adminMode && st==='pending') return false;
     if(adminMode && hideExpiredCourses && isExpired(c.date, c.time)) return false;
     if(fCtype!=='all'){const ct=c.types&&c.types.length?c.types:[c.type];if(!ct.includes(fCtype))return false;}
@@ -4953,7 +4953,7 @@ function renderArchivedShows(){
   panel.style.display='block';
   const q = (document.getElementById('archived-search')?.value||'').trim().toLowerCase();
   const allShows = window._SHOWS || SHOWS || [];
-  let archived = allShows.filter(s => s.status === 'hidden');
+  let archived = allShows.filter(s => s.status === 'archived');
   if(q) archived = archived.filter(s =>
     (s.title||'').toLowerCase().includes(q) ||
     (s.venue||'').toLowerCase().includes(q) ||
@@ -5730,7 +5730,7 @@ document.addEventListener('click', e=>{
 });
 
 function updateExpiredBadge() {
-  const cnt = SHOWS.filter(s => isExpired(s.date, s.time) && s.status !== 'hidden').length;
+  const cnt = SHOWS.filter(s => isExpired(s.date, s.time) && s.status === 'published').length;
   const el = document.getElementById('expired-count-badge');
   if (el) el.textContent = cnt > 0 ? `⏰ ${cnt} 場已過期` : '';
 }
@@ -6094,8 +6094,8 @@ function saveAll(){showToast('✅ 所有變更已儲存','ok');}
 
 // ── 一鍵封存過期演出與課程 ──
 async function archiveAllExpired(){
-  const expiredShows = SHOWS.filter(s => isExpired(s.date, s.time) && s.status !== 'hidden');
-  const expiredCourses = COURSES.filter(c => isExpired(c.date, c.time) && c.status !== 'hidden');
+  const expiredShows = SHOWS.filter(s => isExpired(s.date, s.time) && s.status === 'published');
+  const expiredCourses = COURSES.filter(c => isExpired(c.date, c.time) && c.status === 'published');
   const total = expiredShows.length + expiredCourses.length;
   if(total === 0){ showToast('目前沒有需要封存的過期資料','ok'); return; }
   if(!confirm(`確定要封存 ${expiredShows.length} 筆過期演出 + ${expiredCourses.length} 筆過期課程？\n封存後將從前台隱藏，管理模式仍可查看。`)) return;
@@ -6105,18 +6105,18 @@ async function archiveAllExpired(){
   // 封存演出
   for(const s of expiredShows){
     try{
-      await window.FB.save('shows', s.id, {...s, status:'hidden'});
+      await window.FB.save('shows', s.id, {...s, status:'archived'});
       const i = SHOWS.findIndex(x=>x.id===s.id);
-      if(i>=0) SHOWS[i].status = 'hidden';
+      if(i>=0) SHOWS[i].status = 'archived';
       done++;
     } catch(e){ errors.push(s.title); }
   }
   // 封存課程
   for(const c of expiredCourses){
     try{
-      await window.FB.save('courses', c.id, {...c, status:'hidden'});
+      await window.FB.save('courses', c.id, {...c, status:'archived'});
       const i = COURSES.findIndex(x=>x.id===c.id);
-      if(i>=0) COURSES[i].status = 'hidden';
+      if(i>=0) COURSES[i].status = 'archived';
       done++;
     } catch(e){ errors.push(c.title); }
   }
