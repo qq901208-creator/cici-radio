@@ -2699,7 +2699,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <div class="fg-g full"><label class="fl">演出簡介</label><textarea class="fta" id="s-desc"></textarea></div>
     <div class="fg-g full"><label class="fl">製作團隊 Production Team</label><textarea class="fta" id="s-production" placeholder="e.g. 卡米地俱樂部&#10;Two Three Comedy&#10;嘻嘻哪哩唷 × 某某單位"></textarea></div>
-    <div class="fg-g"><label class="fl">狀態</label><select class="fs" id="s-status"><option value="published">已發布</option><option value="postponed">延期</option><option value="hidden">隱藏</option><option value="archived">封存（取消）</option></select></div>
+    <div class="fg-g"><label class="fl">狀態</label><select class="fs" id="s-status"><option value="published">已發布</option><option value="postponed">延期</option><option value="hidden">隱藏</option><option value="archived">封存</option><option value="cancelled">取消</option></select></div>
     <div class="fg-g"><label class="fl">是否售完</label><select class="fs" id="s-soldout"><option value="0">尚有票券</option><option value="1">已售完</option></select></div>
   </div>
   <div class="fa">
@@ -3657,8 +3657,8 @@ function showCardHTML(s) {
     : '';
   const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
   const expiredTag = isExpired(s.date, s.time) ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">已過期</span>` : '';
-  const hiddenTag = isLoggedIn()&&editMode ? (s.status==='postponed'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fff0cc;color:#cc7700;border-radius:var(--r-pill);margin-left:4px">延期</span>`:(s.status==='hidden'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">隱藏</span>`:(s.status==='archived'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#ffcccc;color:#cc0000;border-radius:var(--r-pill);margin-left:4px">已封存</span>`:''))) : '';
-  const expiredOverlay = isExpired(s.date, s.time) ? `style="opacity:.7;animation:none"` : ((s.status==='hidden'||s.status==='postponed'||s.status==='archived') ? `style="opacity:.45;animation:none"` : '');
+  const hiddenTag = isLoggedIn()&&editMode ? (s.status==='postponed'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fff0cc;color:#cc7700;border-radius:var(--r-pill);margin-left:4px">延期</span>`:(s.status==='hidden'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">隱藏</span>`:(s.status==='archived'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8d0ff;color:#6600cc;border-radius:var(--r-pill);margin-left:4px">封存</span>`:(s.status==='cancelled'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#ffcccc;color:#cc0000;border-radius:var(--r-pill);margin-left:4px">取消</span>`:'')))): '';
+  const expiredOverlay = isExpired(s.date, s.time) ? `style="opacity:.7;animation:none"` : ((s.status==='hidden'||s.status==='postponed'||s.status==='archived'||s.status==='cancelled') ? `style="opacity:.45;animation:none"` : '');
   return `<div class="show-card" data-id="${s.id}" onclick="openShowDetail('${s.id}')" ${expiredOverlay}>
     <div class="sc-img-col">
       <div class="sc-img" style="background:${gradientForTypes(types)}">
@@ -3824,7 +3824,7 @@ function renderShows() {
   const shows = window._SHOWS || SHOWS || [];
   const fil = shows.filter(s => {
     const st = s.status || 'published';
-    if (st === 'archived') return false;
+    if (st === 'archived' || st === 'cancelled') return false;
     if (st === 'postponed' && !adminMode) return false;
     if (st === 'hidden' && !adminMode) return false;
     if (st === 'hidden' && isExpired(s.date, s.time)) return false;
@@ -4244,7 +4244,8 @@ function selectCalDayDesk(ds){
         return t.replace(/^(\d{4})-(\d{1,2})-(\d{1,2})$/,(_,y,m,dd)=>`${y}-${m.padStart(2,'0')}-${dd.padStart(2,'0')}`);
       });
       if(!dates.includes(ds)) return false;
-      if(st === 'archived') return false;
+      if(st === 'cancelled') return false;
+      if(st === 'archived') return isPast;
       if(st === 'hidden' || st === 'postponed') return adminMode;
       return st === 'published';
     })
@@ -4961,7 +4962,7 @@ function renderArchivedShows(){
   panel.style.display='block';
   const q = (document.getElementById('archived-search')?.value||'').trim().toLowerCase();
   const allShows = window._SHOWS || SHOWS || [];
-  let archived = allShows.filter(s => s.status === 'archived' || (s.status === 'hidden' && isExpired(s.date, s.time)));
+  let archived = allShows.filter(s => s.status === 'archived' || s.status === 'cancelled' || (s.status === 'hidden' && isExpired(s.date, s.time)));
   if(q) archived = archived.filter(s =>
     (s.title||'').toLowerCase().includes(q) ||
     (s.venue||'').toLowerCase().includes(q) ||
@@ -5668,7 +5669,8 @@ function renderCalendarInto(labelId, dowId, daysId){
     const dayShows=allShowsForCal.filter(s=>{
       const st=s.status||'published';
       if(!String(s.date||'').split(',').map(d=>d.trim()).includes(ds)) return false;
-      if(st==='archived'||st==='hidden'||st==='postponed') return false;
+      if(st==='cancelled'||st==='hidden'||st==='postponed') return false;
+      if(st==='archived') return isPastDate;
       return st==='published';
     });
     const hasEv=dayShows.length>0;
@@ -5699,10 +5701,12 @@ function selectCalDay(ds){
   renderCalendar();
   const allShows = window._SHOWS || SHOWS || [];
   const adminMode2 = isLoggedIn() && editMode;
+  const isPast2 = ds <= getTodayStr();
   const dayShows=allShows.filter(s=>{
     const st=s.status||'published';
     if(!String(s.date||'').split(',').map(d=>d.trim()).includes(ds)) return false;
-    if(st==='archived') return false;
+    if(st==='cancelled') return false;
+    if(st==='archived') return isPast2;
     if(st==='hidden'||st==='postponed') return adminMode2;
     return st==='published';
   }).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
@@ -6109,7 +6113,7 @@ function saveAll(){showToast('✅ 所有變更已儲存','ok');}
 
 // ── 一鍵封存過期演出與課程 ──
 async function archiveAllExpired(){
-  const expiredShows = SHOWS.filter(s => isExpired(s.date, s.time) && s.status === 'published' && s.status !== 'postponed');
+  const expiredShows = SHOWS.filter(s => isExpired(s.date, s.time) && s.status === 'published');
   const expiredCourses = COURSES.filter(c => isExpired(c.date, c.time) && c.status === 'published');
   const total = expiredShows.length + expiredCourses.length;
   if(total === 0){ showToast('目前沒有需要封存的過期資料','ok'); return; }
