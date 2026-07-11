@@ -4235,11 +4235,10 @@ function selectCalDayDesk(ds){
   const isPast = ds <= today;
 
   const adminMode = isLoggedIn() && editMode;
-  // 過去日期：admin 顯示 published + hidden（延期）；一般用戶只顯示 published
   const dayShows = allShows
     .filter(s => {
       const st = s.status || 'published';
-      if(s.date !== ds) return false;
+      if(!String(s.date||'').split(',').map(d=>d.trim()).includes(ds)) return false;
       if(st === 'archived') return false;
       if(st === 'hidden' || st === 'postponed') return adminMode;
       return st === 'published';
@@ -5663,7 +5662,7 @@ function renderCalendarInto(labelId, dowId, daysId){
     const allShowsForCal = window._SHOWS || [];
     const dayShows=allShowsForCal.filter(s=>{
       const st=s.status||'published';
-      if(s.date!==ds) return false;
+      if(!String(s.date||'').split(',').map(d=>d.trim()).includes(ds)) return false;
       if(st==='archived') return false;
       if(st==='hidden'||st==='postponed') return false;
       return st==='published';
