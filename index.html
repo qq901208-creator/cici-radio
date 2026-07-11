@@ -2505,7 +2505,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
 <!-- Edit bar (only visible in edit mode) -->
 <span id="sessionBadge" style="display:none"></span>
-<div class="edit-bar"><span class="eb-dot"></span><span class="zh-text">編輯模式啟用中</span><span class="en-text">Edit Mode Active</span><span id="expired-count-badge" style="font-size:.72rem;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:var(--r-pill);font-family:var(--f-bo)"></span><button class="eb-btn" onclick="archiveAllExpired()" style="background:#6b6440"><span class="zh-text">📦 封存過期</span><span class="en-text">Archive Expired</span></button><button class="eb-btn" onclick="saveAll()"><span class="zh-text">儲存</span><span class="en-text">Save</span></button><button class="eb-ghost" onclick="ciciLogout()"><span class="zh-text">登出</span><span class="en-text">Logout</span></button></div>
+<div class="edit-bar"><span class="eb-dot"></span><span class="zh-text">編輯模式啟用中</span><span class="en-text">Edit Mode Active</span><span id="expired-count-badge" style="font-size:.72rem;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:var(--r-pill);font-family:var(--f-bo)"></span><button class="eb-btn" onclick="archiveAllExpired()" style="background:#6b6440"><span class="zh-text">📦 封存過期</span><span class="en-text">Archive Expired</span></button><button class="eb-btn" onclick="migrateHiddenToArchived()" style="background:#5a4e7a"><span class="zh-text">🔄 舊隱藏→封存</span></button><button class="eb-btn" onclick="saveAll()"><span class="zh-text">儲存</span><span class="en-text">Save</span></button><button class="eb-ghost" onclick="ciciLogout()"><span class="zh-text">登出</span><span class="en-text">Logout</span></button></div>
 
 <!-- ═══ MODALS ═══ -->
 
@@ -6110,6 +6110,25 @@ function saveCourse(status){
 function delCourse(id){if(!confirm('確定刪除？'))return;window.FB.del('courses',id).then(()=>{COURSES=COURSES.filter(x=>x.id!==id);renderCourses();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
 function saveAll(){showToast('✅ 所有變更已儲存','ok');}
+
+// ── 批量把舊 hidden 演出改成 archived ──
+async function migrateHiddenToArchived(){
+  const shows = window._SHOWS || SHOWS || [];
+  const targets = shows.filter(s => s.status === 'hidden');
+  if(!targets.length){ showToast('沒有需要更新的演出','ok'); return; }
+  if(!confirm(`將 ${targets.length} 筆隱藏演出改成「封存」，確定嗎？`)) return;
+  let count = 0;
+  for(const s of targets){
+    try{
+      await window.FB.save('shows', s.id, {...s, status:'archived'});
+      const i = (window._SHOWS||SHOWS).findIndex(x=>x.id===s.id);
+      if(i>=0){ (window._SHOWS||SHOWS)[i].status='archived'; }
+      count++;
+    }catch(e){ console.error('migrate failed:', s.id, e); }
+  }
+  showToast(`已更新 ${count} 筆演出為封存`, 'ok');
+  renderShows();
+}
 
 // ── 一鍵封存過期演出與課程 ──
 async function archiveAllExpired(){
