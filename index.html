@@ -3852,12 +3852,12 @@ function renderShows() {
     }
     return true;
   }).sort((a,b)=>{
-    // 管理員模式：隱藏的演出置頂
+    // 管理員模式：延期(postponed)和隱藏(hidden)置頂
     if(adminMode){
-      const aHidden = (a.status||'published')==='hidden';
-      const bHidden = (b.status||'published')==='hidden';
-      if(aHidden && !bHidden) return -1;
-      if(!aHidden && bHidden) return 1;
+      const aTop = ['postponed','hidden'].includes(a.status||'published');
+      const bTop = ['postponed','hidden'].includes(b.status||'published');
+      if(aTop && !bTop) return -1;
+      if(!aTop && bTop) return 1;
     }
     return showSortKey(a).localeCompare(showSortKey(b));
   });
