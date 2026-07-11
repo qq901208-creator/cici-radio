@@ -4239,8 +4239,8 @@ function selectCalDayDesk(ds){
     .filter(s => {
       const st = s.status || 'published';
       if(!String(s.date||'').split(',').map(d=>d.trim()).includes(ds)) return false;
-      if(st === 'archived') return false;
       if(st === 'hidden' || st === 'postponed') return adminMode;
+      if(st === 'archived') return isPast;
       return st === 'published';
     })
     .sort((a,b)=>{
@@ -5663,8 +5663,8 @@ function renderCalendarInto(labelId, dowId, daysId){
     const dayShows=allShowsForCal.filter(s=>{
       const st=s.status||'published';
       if(!String(s.date||'').split(',').map(d=>d.trim()).includes(ds)) return false;
-      if(st==='archived') return false;
       if(st==='hidden'||st==='postponed') return false;
+      if(st==='archived') return isPastDate;
       return st==='published';
     });
     const hasEv=dayShows.length>0;
@@ -5695,11 +5695,12 @@ function selectCalDay(ds){
   renderCalendar();
   const allShows = window._SHOWS || SHOWS || [];
   const adminMode2 = isLoggedIn() && editMode;
+  const isPast2 = ds <= getTodayStr();
   const dayShows=allShows.filter(s=>{
     const st=s.status||'published';
     if(!String(s.date||'').split(',').map(d=>d.trim()).includes(ds)) return false;
-    if(st==='archived') return false;
     if(st==='hidden'||st==='postponed') return adminMode2;
+    if(st==='archived') return isPast2;
     return st==='published';
   }).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
   const banner=document.getElementById('cal-banner');
