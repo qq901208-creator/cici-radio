@@ -4277,12 +4277,7 @@ function selectCalDayDesk(ds){
     if(!dayShows.length){
       grid.innerHTML = `<div style="padding:40px 0;text-align:center;color:var(--ts);font-family:var(--f-zh);font-size:.88rem">這天暫無演出資訊</div>`;
     } else {
-      // 過去日期卡片加半透明
-      grid.innerHTML = dayShows.map(s => {
-        const html = showCardHTML(s);
-        if(isPast) return html.replace('<div class="show-card"', '<div class="show-card" style="opacity:.72"');
-        return html;
-      }).join('');
+      grid.innerHTML = dayShows.map(s => showCardHTML(s)).join('');
     }
   }
   document.getElementById('shows-pagination').innerHTML='';
