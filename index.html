@@ -3825,10 +3825,12 @@ function renderShows() {
   const fil = shows.filter(s => {
     const st = s.status || 'published';
     if (st === 'archived') return false;
-    if ((st === 'hidden' || st === 'postponed') && !adminMode) return false;
+    if (st === 'postponed' && !adminMode) return false;
+    if (st === 'hidden' && !adminMode) return false;
+    if (st === 'hidden' && isExpired(s.date, s.time)) return false;
     if (!adminMode && st === 'pending') return false;
     if (!adminMode && isExpired(s.date, s.time)) return false;
-    if (adminMode && hideExpiredShows && isExpired(s.date, s.time) && st !== 'pending' && st !== 'hidden' && st !== 'postponed') return false;
+    if (adminMode && hideExpiredShows && isExpired(s.date, s.time) && st !== 'pending' && st !== 'postponed') return false;
     const types = s.types||(s.type?[s.type]:[]);
     if (fType!=='all' && !types.includes(fType)) return false;
     if (fFormat!=='all' && !types.includes(fFormat)) return false;
