@@ -3825,7 +3825,7 @@ function renderShows() {
   const fil = shows.filter(s => {
     const st = s.status || 'published';
     if (st === 'archived') return false;
-    if (st === 'hidden') return false;
+    if (st === 'hidden' && !adminMode) return false;
     if (!adminMode && st === 'pending') return false;
     if (!adminMode && isExpired(s.date, s.time)) return false;
     if (adminMode && hideExpiredShows && isExpired(s.date, s.time) && st !== 'pending' && st !== 'hidden') return false;
@@ -4232,12 +4232,14 @@ function selectCalDayDesk(ds){
   const today = getTodayStr();
   const isPast = ds <= today;
 
-  // 過去日期：顯示 published + hidden（封存）；未來：只顯示 published
+  const adminMode = isLoggedIn() && editMode;
+  // 過去日期：admin 顯示 published + hidden（延期）；一般用戶只顯示 published
   const dayShows = allShows
     .filter(s => {
       const st = s.status || 'published';
       if(s.date !== ds) return false;
-      if(isPast) return st === 'published' || st === 'hidden';
+      if(st === 'archived') return false;
+      if(st === 'hidden') return adminMode;
       return st === 'published';
     })
     .sort((a,b)=>{
@@ -5660,8 +5662,8 @@ function renderCalendarInto(labelId, dowId, daysId){
     const dayShows=allShowsForCal.filter(s=>{
       const st=s.status||'published';
       if(s.date!==ds) return false;
-      if(st==='hidden'||st==='archived') return false;
-      if(isPastDate) return st==='published';
+      if(st==='archived') return false;
+      if(st==='hidden') return false;
       return st==='published';
     });
     const hasEv=dayShows.length>0;
@@ -5691,7 +5693,14 @@ function selectCalDay(ds){
   calSel=ds;
   renderCalendar();
   const allShows = window._SHOWS || SHOWS || [];
-  const dayShows=allShows.filter(s=>['published',undefined,'',null].includes(s.status||null)&&String(s.date||'').split(',').map(d=>d.trim()).includes(ds)).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
+  const adminMode2 = isLoggedIn() && editMode;
+  const dayShows=allShows.filter(s=>{
+    const st=s.status||'published';
+    if(!String(s.date||'').split(',').map(d=>d.trim()).includes(ds)) return false;
+    if(st==='archived') return false;
+    if(st==='hidden') return adminMode2;
+    return st==='published';
+  }).sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
   const banner=document.getElementById('cal-banner');
   const result=document.getElementById('cal-result');
   banner.classList.add('show');
