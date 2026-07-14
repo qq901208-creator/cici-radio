@@ -2672,7 +2672,15 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g"><label class="fl">演員 / 表演者</label><input class="fi" type="text" id="s-performer"></div>
     <div class="fg-g"><label class="fl">票價</label><input class="fi" type="text" id="s-price" placeholder="e.g. NT$300 / 免費"></div>
     <div class="fg-g"><label class="fl">售票平台</label><select class="fs" id="s-platform" onchange="toggleTicketUrl(this.value)"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="opentix">OPENTIX</option><option value="google-form">Google 表單</option><option value="jokesonme">看我笑話工作室官方網站</option><option value="door">現場低消</option><option value="other">其他</option></select></div>
-    <div class="fg-g" id="s-ticket-url-row"><label class="fl">售票連結</label><input class="fi" type="url" id="s-ticketurl" placeholder="https://..."></div>
+    <div class="fg-g full" id="s-ticket-url-row">
+      <label class="fl">售票連結</label>
+      <div style="display:flex;gap:6px">
+        <input class="fi" type="url" id="s-ticketurl" placeholder="https://..." style="flex:1">
+        <button type="button" class="parse-btn" id="show-parse-btn" onclick="parseShowTicket()">⟳ 解析</button>
+      </div>
+      <div class="ps" id="show-ps"></div>
+      <div style="font-size:.7rem;color:var(--ts);font-family:var(--f-bo);margin-top:4px;opacity:.75">💡 目前只支援 KKTIX／Accupass／OPENTIX 連結，貼上後按「解析」可自動帶入標題、日期、時間</div>
+    </div>
     <div class="fg-g full">
       <label class="fl">活動圖片網址</label>
       <div style="display:flex;align-items:center;gap:0;border:1.5px solid rgba(45,43,31,.15);border-radius:var(--r-md);overflow:hidden;background:#fff;margin-bottom:6px">
@@ -5771,6 +5779,7 @@ function openShowModal(id){
   const imgHint=document.getElementById('s-img-hint');
   if(imgPrev)imgPrev.style.display='none';
   if(imgHint){imgHint.textContent='';imgHint.className='img-url-hint';}
+  setPS('show','','');
   document.querySelectorAll('#s-types input').forEach(cb=>{cb.checked=false;cb.closest('.type-cb-lbl').classList.remove('checked');});
   // 填入動態場地/地區選單
   populateShowSelects(s?.venue||'', s?.area||'');
@@ -6731,6 +6740,35 @@ function extractMeta(html){const gm=prop=>{for(const re of[new RegExp(`<meta[^>]
 function detectPlat(url){if(url.includes('kktix'))return'kktix';if(url.includes('accupass'))return'accupass';if(url.includes('opentix'))return'opentix';return'other';}
 function setParseLoad(t,l){const btn=document.getElementById(t+'-parse-btn');if(!btn)return;btn.disabled=l;btn.style.opacity=l?'.65':'1';btn.innerHTML=l?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin .7s linear infinite"><path d="M21 12a9 9 0 11-18 0"/></svg> 解析中...':'⟳ 解析';}
 function setPS(t,k,msg){const el=document.getElementById(t+'-ps');if(!el)return;el.textContent=msg;el.style.display=msg?'block':'none';if(k)el.className='ps '+k;}
+
+// ── 售票連結自動解析（伺服器端 /api/parse-ticket，取代舊版不穩定的公用 CORS 代理）──
+async function parseShowTicket(){
+  const urlInput=document.getElementById('s-ticketurl');
+  const url=(urlInput?.value||'').trim();
+  if(!url){setPS('show','err','⚠️ 請先貼上售票連結');return;}
+  const plat=detectPlat(url);
+  if(plat==='other'){setPS('show','err','⚠️ 目前只支援 KKTIX／Accupass／OPENTIX 連結，其他來源請手動輸入');return;}
+  setParseLoad('show',true);
+  setPS('show','','');
+  try{
+    const r=await fetch('/api/parse-ticket',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url})});
+    const data=await r.json();
+    if(!data.ok){setPS('show','err','⚠️ '+(data.error||'解析失敗，請手動輸入'));return;}
+    const titleEl=document.getElementById('s-title');
+    if(titleEl && !titleEl.value.trim()) titleEl.value=data.title||'';
+    if(data.date) document.getElementById('s-date').value=data.date;
+    if(data.time) document.getElementById('s-time').value=data.time;
+    document.getElementById('s-platform').value=plat;
+    if(typeof toggleTicketUrl==='function') toggleTicketUrl(plat);
+    let msg='✅ 已帶入標題／日期／時間，請確認正確';
+    if(data.image) msg+='；活動圖片可另存後上傳到 Google Drive 取得 ID 再填入下方欄位';
+    setPS('show','ok',msg);
+  }catch(e){
+    setPS('show','err','⚠️ 連線失敗，請確認網路連線或稍後再試');
+  }finally{
+    setParseLoad('show',false);
+  }
+}
 
 // ── Image live preview (exposed globally for use in oninput handlers) ──
 window.livePreview = function(imgId, hintId, url) {
