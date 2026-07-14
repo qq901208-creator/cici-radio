@@ -52,6 +52,34 @@ function extractMeta(html) {
   return { title, image, desc, date, time };
 }
 
+// 從頁面裡「加入 Google 日曆」連結解析出精確的起訖時間（比在自由文字裡猜日期可靠很多）
+// 同時用起訖天數差，偵測「一頁多場次」這種無法自動解析的活動，回傳警告而不是猜錯的日期
+function parseGCalDates(html) {
+  const m = html.match(/dates=(\d{8}T\d{6}Z)%2F(\d{8}T\d{6}Z)/);
+  if (!m) return null;
+
+  const toParts = (s) => ({
+    y: +s.slice(0, 4), mo: +s.slice(4, 6), d: +s.slice(6, 8),
+    h: +s.slice(9, 11), mi: +s.slice(11, 13), se: +s.slice(13, 15),
+  });
+
+  const toLocal = (p) => {
+    // UTC → 台北時間（+8，無日光節約）
+    const utcMs = Date.UTC(p.y, p.mo - 1, p.d, p.h, p.mi, p.se);
+    const localMs = utcMs + 8 * 3600 * 1000;
+    const local = new Date(localMs);
+    return {
+      dateStr: `${local.getUTCFullYear()}-${String(local.getUTCMonth() + 1).padStart(2, '0')}-${String(local.getUTCDate()).padStart(2, '0')}`,
+      timeStr: `${String(local.getUTCHours()).padStart(2, '0')}:${String(local.getUTCMinutes()).padStart(2, '0')}`,
+      epochDay: Math.floor(localMs / 86400000),
+    };
+  };
+
+  const start = toLocal(toParts(m[1]));
+  const end = toLocal(toParts(m[2]));
+  return { start, end, dayDiff: end.epochDay - start.epochDay };
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ ok: false, error: 'Method not allowed' });
@@ -100,15 +128,39 @@ module.exports = async function handler(req, res) {
 
     const html = await response.text();
     const meta = extractMeta(html);
+    const platform = detectPlatform(url);
 
     if (!meta.title) {
       res.status(200).json({ ok: false, error: '讀不到活動資訊，請手動輸入' });
       return;
     }
 
+    // Accupass：改用「加入日曆」連結取得精確時間，並偵測多場次活動
+    if (platform === 'accupass') {
+      const gcal = parseGCalDates(html);
+      if (gcal && gcal.dayDiff >= 2) {
+        res.status(200).json({
+          ok: true,
+          platform,
+          title: meta.title,
+          date: '',
+          time: '',
+          image: meta.image,
+          desc: meta.desc,
+          multiSession: true,
+          warning: '這場活動疑似包含多個場次（不同日期／地點合併顯示），日期時間請對照活動介紹欄位手動填寫，避免抓到誤導性的區間。',
+        });
+        return;
+      }
+      if (gcal) {
+        meta.date = gcal.start.dateStr;
+        meta.time = gcal.start.timeStr;
+      }
+    }
+
     res.status(200).json({
       ok: true,
-      platform: detectPlatform(url),
+      platform,
       title: meta.title,
       date: meta.date,
       time: meta.time,
