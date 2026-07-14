@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>嘻嘻哪哩唷｜台灣喜劇演出資訊站</title>
 <meta name="description" content="嘻嘻哪哩唷｜台灣現場喜劇資訊站。整理全台現場喜劇演出、Open Mic 報名、喜劇場地與課程資訊，Stand-up Comedy、漫才、即興劇應有盡有，陪你找到想看的現場喜劇。">
-<meta name="keywords" content="台灣喜劇,Stand-up Comedy,Open Mic,漫才,即興劇,喜劇演出,現場喜劇,喜劇課程,喜劇場地,嘻嘻哪哩唷,Cici Radio">
+<meta name="keywords" content="台灣喜劇,單口喜劇,站立喜劇,脫口秀,Stand-up Comedy,Open Mic,漫才,即興劇,喜劇演出,台北喜劇,新竹喜劇,台中喜劇,高雄喜劇,喜劇課程,喜劇場地,喜劇演員,Comedy,嘻嘻哪哩唷,Cici Radio">
 <meta name="google-site-verification" content="LbYfjuGxGYZXoOxodtVgERdeGINZwNjqZQVAsH0cGy0" />
 <link rel="sitemap" type="application/xml" href="/sitemap.xml">
 <meta property="og:title" content="嘻嘻哪哩唷｜台灣喜劇演出資訊站" />
@@ -709,6 +709,7 @@ body.edit .edit-bar{display:flex!important}
 .ps.ok{display:block;background:#d0f0de;color:#1a5c38}
 .ps.warn{display:block;background:#fffbea;color:#7a5900}
 .ps.err{display:block;background:#fde8e8;color:#8b1a1a}
+.ps.warn{display:block;background:#fff1dc;color:#8a4b00;border:1px solid var(--or)}
 .pp{background:rgba(245,213,88,.14);border:1.5px solid rgba(239,111,32,.18);border-radius:var(--r-md);padding:12px 14px;margin-top:2px;display:none}
 .pp.show{display:block}
 .pp-name{font-size:.87rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)}
@@ -6756,12 +6757,18 @@ async function parseShowTicket(){
     if(!data.ok){setPS('show','err','⚠️ '+(data.error||'解析失敗，請手動輸入'));return;}
     const titleEl=document.getElementById('s-title');
     if(titleEl && !titleEl.value.trim()) titleEl.value=data.title||'';
-    if(data.date) document.getElementById('s-date').value=data.date;
-    if(data.time) document.getElementById('s-time').value=data.time;
     document.getElementById('s-platform').value=plat;
     if(typeof toggleTicketUrl==='function') toggleTicketUrl(plat);
+    if(data.multiSession){
+      // 疑似多場次活動：不自動填日期時間，避免抓到誤導性的區間，提醒改為人工核對
+      setPS('show','warn','⚠️ '+(data.warning||'這場疑似包含多個場次，日期時間請對照活動介紹手動填寫'));
+      return;
+    }
+    if(data.date) document.getElementById('s-date').value=data.date;
+    if(data.time) document.getElementById('s-time').value=data.time;
     let msg='✅ 已帶入標題／日期／時間，請確認正確';
     if(data.image) msg+='；活動圖片可另存後上傳到 Google Drive 取得 ID 再填入下方欄位';
+    if(data.note) msg+='　'+data.note;
     setPS('show','ok',msg);
   }catch(e){
     setPS('show','err','⚠️ 連線失敗，請確認網路連線或稍後再試');
