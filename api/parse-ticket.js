@@ -80,6 +80,17 @@ function parseGCalDates(html) {
   return { start, end, dayDiff: end.epochDay - start.epochDay };
 }
 
+// OPENTIX 的 og:description 是系統套版產生的固定格式「時間:YYYY/MM/DD-YYYY/MM/DD,地點:...」
+// 只能可靠取得日期範圍，無法取得精確時間（實際場次時間是頁面載入後才動態抓進選單的）
+function parseOpentixDateRange(desc) {
+  const m = (desc || '').match(/時間[:：]\s*(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})-(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+  if (!m) return null;
+  const pad = (n) => String(n).padStart(2, '0');
+  const start = `${m[1]}-${pad(m[2])}-${pad(m[3])}`;
+  const end = `${m[4]}-${pad(m[5])}-${pad(m[6])}`;
+  return { start, end, sameDay: start === end };
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ ok: false, error: 'Method not allowed' });
@@ -158,6 +169,28 @@ module.exports = async function handler(req, res) {
       }
     }
 
+    // OPENTIX：只信任系統套版的日期範圍，時間一律不自動填（無法可靠取得）
+    if (platform === 'opentix') {
+      const range = parseOpentixDateRange(meta.desc);
+      meta.time = '';
+      if (range && !range.sameDay) {
+        res.status(200).json({
+          ok: true,
+          platform,
+          title: meta.title,
+          date: '',
+          time: '',
+          image: meta.image,
+          desc: meta.desc,
+          multiSession: true,
+          warning: '這場活動橫跨多天，可能包含多個場次，日期與時間請對照節目介紹欄位手動確認。',
+        });
+        return;
+      }
+      meta.date = range ? range.start : '';
+      meta.note = '⏰ OPENTIX 的確切時間無法自動判讀（場次是頁面動態載入的），請自行填寫時間';
+    }
+
     res.status(200).json({
       ok: true,
       platform,
@@ -166,6 +199,7 @@ module.exports = async function handler(req, res) {
       time: meta.time,
       image: meta.image,
       desc: meta.desc,
+      note: meta.note || undefined,
     });
   } catch (e) {
     res.status(200).json({
