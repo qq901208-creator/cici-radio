@@ -7450,7 +7450,7 @@ function downloadNewStoryCard(){
     const isThreads = window._storyTab === 'threads';
     const bgColor = isThreads ? '#1a1000' : '#ebecd7';
     const elWidth = el.getBoundingClientRect().width || el.offsetWidth || 320;
-    const elHeight = elWidth * (16/9);
+    const elHeight = isThreads ? (el.getBoundingClientRect().height || el.scrollHeight) : elWidth * (16/9);
     const scaleRatio = 1080 / elWidth;
     window.html2canvas(el, {
       scale: scaleRatio,
