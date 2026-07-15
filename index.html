@@ -7278,6 +7278,7 @@ function switchStoryTab(tab){
       preview.style.height = '';
       preview.style.fontSize = '87%';
       preview.style.background = '#ebecd7';
+      preview.style.display = 'flex';
       restoreIgPreview();
     }
   } else {
@@ -7286,8 +7287,10 @@ function switchStoryTab(tab){
     if(preview){
       preview.style.aspectRatio = '';
       preview.style.height = 'auto';
+      preview.style.minHeight = '';
       preview.style.fontSize = '100%';
       preview.style.background = '#1a1000';
+      preview.style.display = 'block';
       renderThreadsPreview();
     }
   }
