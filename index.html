@@ -7348,10 +7348,12 @@ function renderThreadsPreview(){
       const nums=target.flatMap(p=>[...p.matchAll(/\$\s*([\d,]+)/g)].map(m=>parseInt(m[1].replace(/,/g,''))));
       const noteMatch=priceStr.match(/（[^）]+）|\([^\)]+\)/);
       const note=noteMatch?noteMatch[0]:'';
+      const plusMatch=priceStr.match(/[+＋](.+)/);
+      const plus=plusMatch?` +${plusMatch[1].trim()}`:'';
       if(!nums.length)return priceStr;
       const min=Math.min(...nums),max=Math.max(...nums);
       const range=min===max?`NT$  ${min.toLocaleString()}`:`NT$  ${min.toLocaleString()} ～ NT$  ${max.toLocaleString()}`;
-      return note?`${range}${note}`:range;
+      return `${range}${note}${plus}`;
     }
     priceEl.textContent = parseStoryPriceThr(s.price);
     if(s.soldOut){
@@ -7587,14 +7589,17 @@ function openStoryCard(id){
     const regular = parts.filter(p=>!EXCLUDE.some(kw=>p.includes(kw)));
     const target = regular.length ? regular : parts;
     const nums = target.flatMap(p=>[...p.matchAll(/\$\s*([\d,]+)/g)].map(m=>parseInt(m[1].replace(/,/g,''))));
-    // 抓第一個括號備註
+    // 抓括號備註
     const noteMatch = priceStr.match(/（[^）]+）|\([^\)]+\)/);
     const note = noteMatch ? noteMatch[0] : '';
+    // 抓 + 或 ＋ 後面的補充說明
+    const plusMatch = priceStr.match(/[+＋](.+)/);
+    const plus = plusMatch ? ` +${plusMatch[1].trim()}` : '';
     if(!nums.length) return priceStr;
     const min = Math.min(...nums);
     const max = Math.max(...nums);
     const range = min === max ? `NT$  ${min.toLocaleString()}` : `NT$  ${min.toLocaleString()} ～ NT$  ${max.toLocaleString()}`;
-    return note ? `${range}${note}` : range;
+    return `${range}${note}${plus}`;
   }
   window._parseStoryPrice = parseStoryPrice;
   const isEnglishShow = (s.types||[]).includes('english') || s.type === 'english';
