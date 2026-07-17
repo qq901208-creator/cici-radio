@@ -7346,10 +7346,10 @@ function renderThreadsPreview(){
       const regular=parts.filter(p=>!EXCLUDE.some(kw=>p.includes(kw)));
       const target=regular.length?regular:parts;
       const nums=target.flatMap(p=>[...p.matchAll(/\$\s*([\d,]+)/g)].map(m=>parseInt(m[1].replace(/,/g,''))));
-      const plusMatch=priceStr.match(/[+＋](.*)/);
+      const strippedForPlus2=priceStr.replace(/（[^）]*）|\([^\)]*\)/g,'');
+      const plusMatch=strippedForPlus2.match(/[+＋](.*)/);
       const plus=plusMatch?` +${plusMatch[1].trim()}`:'';
-      const beforePlus=plusMatch?priceStr.slice(0,plusMatch.index):priceStr;
-      const noteMatch=beforePlus.match(/（[^）]+）|\([^\)]+\)/);
+      const noteMatch=priceStr.match(/（[^）]+）|\([^\)]+\)/);
       const note=noteMatch?noteMatch[0]:'';
       if(!nums.length)return priceStr;
       const min=Math.min(...nums),max=Math.max(...nums);
@@ -7590,12 +7590,13 @@ function openStoryCard(id){
     const regular = parts.filter(p=>!EXCLUDE.some(kw=>p.includes(kw)));
     const target = regular.length ? regular : parts;
     const nums = target.flatMap(p=>[...p.matchAll(/\$\s*([\d,]+)/g)].map(m=>parseInt(m[1].replace(/,/g,''))));
-    // 抓 + 或 ＋ 後面的補充說明（含後面所有文字）
-    const plusMatch = priceStr.match(/[+＋](.*)/);
+    // 移除括號內容後再找括號外的 +
+    const strippedForPlus = priceStr.replace(/（[^）]*）|\([^\)]*\)/g, '');
+    const plusMatch = strippedForPlus.match(/[+＋](.*)/);
     const plus = plusMatch ? ` +${plusMatch[1].trim()}` : '';
-    // 抓 + 之前的括號備註
-    const beforePlus = plusMatch ? priceStr.slice(0, plusMatch.index) : priceStr;
-    const noteMatch = beforePlus.match(/（[^）]+）|\([^\)]+\)/);
+    // 抓第一個括號備註（來自 + 之前的原始字串）
+    const beforePlus = plusMatch ? priceStr.slice(0, priceStr.indexOf(strippedForPlus[plusMatch.index]||'')) : priceStr;
+    const noteMatch = priceStr.match(/（[^）]+）|\([^\)]+\)/);
     const note = noteMatch ? noteMatch[0] : '';
     if(!nums.length) return priceStr;
     const min = Math.min(...nums);
