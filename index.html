@@ -269,10 +269,10 @@ body.ready{visibility:visible}
 .filter-dropdown:focus,.filter-dropdown:hover{border-color:var(--or)}
 .filter-dropdown.active{border-color:var(--or);background-color:#fff7ed;color:var(--or);font-weight:600}
 .shows-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(276px,1fr));gap:18px;margin-bottom:28px}
-.show-card{background:#fff;border:none;border-radius:var(--r-lg);overflow:hidden;transition:transform .2s,box-shadow .2s;color:var(--tm);display:flex;flex-direction:column;position:relative;cursor:pointer;box-shadow:0 2px 10px rgba(45,43,31,.08)}
+.show-card{background:#fff;border:none;border-radius:var(--r-lg);overflow:visible;transition:transform .2s,box-shadow .2s;color:var(--tm);display:flex;flex-direction:column;position:relative;cursor:pointer;box-shadow:0 2px 10px rgba(45,43,31,.08)}
 .show-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(45,43,31,.14)}
 .sc-img-col{display:contents}
-.sc-img{width:100%;height:160px;display:block;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--py),var(--y))}
+.sc-img{width:100%;height:160px;display:block;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--py),var(--y));border-radius:var(--r-lg) var(--r-lg) 0 0}
 .sc-img img.sc-poster{width:100%;height:160px;object-fit:contain;display:block;position:relative;z-index:2;background:#fff}
 .sc-img img.sc-poster[src=""]{display:none!important}
 .sc-img .sc-emoji{font-size:2.6rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0}
@@ -389,7 +389,7 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
 
   /* 手機版演出列表 */
   .shows-grid{grid-template-columns:1fr;gap:10px;background:transparent;border-radius:0;border:none;overflow:visible}
-  .show-card{flex-direction:row;border-radius:var(--r-lg)!important;border:1.5px solid rgba(45,43,31,.09)!important;box-shadow:none!important;align-items:stretch}
+  .show-card{flex-direction:row;border-radius:var(--r-lg)!important;border:1.5px solid rgba(45,43,31,.09)!important;box-shadow:none!important;align-items:flex-start}
   .sc-img-col{display:flex;flex-direction:column;width:100px;min-width:100px;flex-shrink:0}
   .sc-img{width:100%;height:90px;flex-shrink:0;border-radius:var(--r-lg) 0 0 0}
   .sc-img img.sc-poster{width:100%;height:90px;object-fit:contain;display:block;background:var(--ww)}
@@ -405,7 +405,7 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
   .sc-img .sc-emoji{font-size:2rem}
   .sc-img .sc-types{top:6px;left:6px;gap:3px;max-width:108px}
   .sc-type-tag{font-size:.58rem;padding:2px 6px}
-  .sc-body{padding:10px 12px;gap:4px;min-width:0;flex:1}
+  .sc-body{padding:10px 12px;gap:4px;min-width:0;flex:1;overflow:visible}
   .sc-date{font-size:.7rem}
   .sc-title{font-size:.88rem;line-height:1.3;word-break:break-word}
   .sc-meta{font-size:.72rem}
@@ -3043,8 +3043,10 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <button class="modal-close" onclick="document.getElementById('modal-copyright').classList.remove('open')">✕</button>
     <div class="modal-title" style="font-size:1rem">📋 內容使用與版權聲明</div>
     <div style="font-size:.85rem;line-height:1.85;color:var(--tm);font-family:var(--f-zh)">
-      <p style="margin-bottom:14px">本站（嘻嘻哪哩唷）為非營利之台灣現場喜劇文化推廣平台。站內所使用之演出海報、活動主視覺等圖片，其著作權皆屬原主辦單位或創作者所有。本站上架之目的僅供觀眾查閱與導流購票，並皆於文末標明圖片來源與購票超連結。</p>
-      <p style="padding:14px 16px;background:rgba(239,111,32,.07);border-left:3px solid var(--or);border-radius:0 var(--r-md) var(--r-md) 0;color:var(--tm)">若原著作者、主辦單位不願在本站進行非營利宣傳，或認為本站使用圖片有侵權疑慮，請來信至 <a href="mailto:ciciradio3@gmail.com" style="color:var(--or);font-weight:700">ciciradio3@gmail.com</a>，我們將於收到通知後第一時間進行下架處理。</p>
+      <p style="margin-bottom:10px">嘻嘻哪哩唷為台灣現場喜劇資訊整理平台，致力於推廣台灣現場喜劇文化。</p>
+      <p style="margin-bottom:10px">本站刊載之演出資訊、演出海報、活動主視覺及相關素材，其智慧財產權均屬原權利人所有。</p>
+      <p style="margin-bottom:14px">本站僅基於資訊整理、文化推廣及導流至官方售票或活動頁面之目的使用相關素材，並盡可能標示來源及提供官方連結。</p>
+      <p style="padding:14px 16px;background:rgba(239,111,32,.07);border-left:3px solid var(--or);border-radius:0 var(--r-md) var(--r-md) 0;color:var(--tm)">若您為相關權利人，認為本站內容有侵害您的權益，或不希望相關素材刊載於本站，請來信至 <a href="mailto:ciciradio3@gmail.com" style="color:var(--or);font-weight:700">ciciradio3@gmail.com</a>，本站將於確認後儘速處理。</p>
     </div>
   </div>
 </div>
@@ -3683,7 +3685,13 @@ function showCardHTML(s) {
       <div class="sc-title">${s.title}</div>
       <div class="sc-meta">📍 ${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</div>
       ${s.performer?`<div class="sc-meta sc-meta-performers">🎙 ${s.performer}</div>`:''}
-      ${s.price?`<div class="sc-price">💰 ${s.price}</div>`:''}
+      ${(()=>{
+        if(!s.price) return '';
+        const {range, lines} = parseFeeRange(s.price);
+        const multiLine = lines.length > 1;
+        const detailId = `sc-fee-detail-${s.id}`;
+        return `<div class="sc-price" style="flex-wrap:wrap">💰 ${range}${multiLine?`<button onclick="event.stopPropagation();var d=document.getElementById('${detailId}');var isOpen=d.style.display!=='none';d.style.display=isOpen?'none':'block';this.textContent=isOpen?'展開 ▾':'收起 ▴'" style="font-size:.68rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:5px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button><div id="${detailId}" style="display:none;width:100%;margin-top:4px;padding:5px 8px;background:rgba(45,43,31,.04);border-radius:6px">${lines.map(l=>`<div style="font-size:.72rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">${l}</div>`).join('')}</div>`:''}</div>`;
+      })()}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">
         ${s.soldOut
           ? `<span style="font-size:.74rem;color:#8b1a1a;font-family:var(--f-zh)">已售完</span>`
