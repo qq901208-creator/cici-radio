@@ -4378,12 +4378,16 @@ function toggleGoal(btn){
 
 function parseFeeRange(fee){
   if(!fee) return {range:'', lines:[]};
+  const EXCLUDE = ['早鳥','身心障礙','陪同','殘障','公益','愛心'];
   // 保護 /人 不被切割，先替換成佔位符
   const raw = fee.replace(/\r?\n/g,' / ').replace(/\/人/g,'__PER_PERSON__');
   const lines = raw.split(/\s*\/\s*/).map(s=>s.trim().replace(/__PER_PERSON__/g,'/人')).filter(Boolean);
   if(lines.length===0) return {range:fee, lines:[fee]};
   if(lines.length===1) return {range:lines[0], lines};
-  const nums = lines.map(l=>{
+  // 用於計算 range 的行（排除優惠票）
+  const regular = lines.filter(l=>!EXCLUDE.some(kw=>l.includes(kw)));
+  const target = regular.length ? regular : lines;
+  const nums = target.map(l=>{
     const m = l.match(/NT\$\s*([\d,]+)/);
     return m ? parseInt(m[1].replace(/,/g,'')) : null;
   }).filter(n=>n!==null);
