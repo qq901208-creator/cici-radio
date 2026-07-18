@@ -4374,20 +4374,20 @@ function toggleGoal(btn){
 
 function parseFeeRange(fee){
   if(!fee) return {range:'', lines:[]};
-  const EXCLUDE = ['早鳥','身心障礙','陪同','殘障','公益','愛心'];
+  const EXCLUDE_DISPLAY = ['身心障礙','陪同','殘障','公益','愛心'];
+  const EXCLUDE_RANGE = ['身心障礙','陪同','殘障','公益','愛心'];
   // 保護 /人 不被切割，先替換成佔位符
   const raw = fee.replace(/\r?\n/g,' / ').replace(/\/人/g,'__PER_PERSON__');
   const lines = raw.split(/\s*\/\s*/).map(s=>s.trim().replace(/__PER_PERSON__/g,'/人')).filter(Boolean);
   if(lines.length===0) return {range:fee, lines:[fee]};
   if(lines.length===1) return {range:lines[0], lines};
-  // 用於計算 range 的行（排除優惠票），但 lines 保留全部
-  const regular = lines.filter(l=>!EXCLUDE.some(kw=>l.includes(kw)));
-  const target = regular.length ? regular : lines;
+  // range 計算：排除身障等優惠，但保留早鳥（取最低價）
+  const forRange = lines.filter(l=>!EXCLUDE_RANGE.some(kw=>l.includes(kw)));
+  const target = forRange.length ? forRange : lines;
   const nums = target.map(l=>{
     const m = l.match(/NT\$\s*([\d,]+)/);
     return m ? parseInt(m[1].replace(/,/g,'')) : null;
   }).filter(n=>n!==null);
-  // 計算 range
   let range;
   if(nums.length===0){
     range = lines[0];
