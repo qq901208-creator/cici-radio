@@ -3691,8 +3691,7 @@ function showCardHTML(s) {
         const multiLine = lines.length > 1;
         const detailId = `sc-fee-detail-${s.id}`;
         const detailHtml = lines.map(l=>'<div style="font-size:.72rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">'+l+'</div>').join('');
-        const toggleFn = "var d=document.getElementById('"+detailId+"');var isOpen=d.style.display!=='none';d.style.display=isOpen?'none':'block';this.textContent=isOpen?'展開 ▾':'收起 ▴'";
-        const expandBtn = multiLine ? '<button onclick="event.stopPropagation();'+toggleFn+'" style="font-size:.68rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:5px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button><div id="'+detailId+'" style="display:none;width:100%;margin-top:4px;padding:5px 8px;background:rgba(45,43,31,.04);border-radius:6px">'+detailHtml+'</div>' : '';
+        const expandBtn = multiLine ? '<button onclick="return toggleShowPrice(event,''+detailId+'')" style="font-size:.68rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:5px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button><div id="'+detailId+'" style="display:none;width:100%;margin-top:4px;padding:5px 8px;background:rgba(45,43,31,.04);border-radius:6px">'+detailHtml+'</div>' : '';
         return '<div class="sc-price" style="flex-wrap:wrap">💰 '+range+expandBtn+'</div>';
       })()}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">
@@ -7073,6 +7072,16 @@ function updFbBadge(){const cnt=COMMENTS.filter(c=>!c.hidden).length;const b=doc
 <script>
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>18));
 
+function toggleShowPrice(e, id){
+  e.stopPropagation();
+  e.preventDefault();
+  const d = document.getElementById(id);
+  if(!d) return;
+  const isOpen = d.style.display !== 'none';
+  d.style.display = isOpen ? 'none' : 'block';
+  e.currentTarget.textContent = isOpen ? '展開 ▾' : '收起 ▴';
+  return false;
+}
 function toggleFaq(el){
   const q=el;
   const a=el.nextElementSibling;
