@@ -3927,6 +3927,7 @@ function _initShowsLazyLoad(){
     if(!next.length){ sentinel.remove(); _showsLazyObserver.disconnect(); return; }
     window._showsLoaded = loaded + next.length;
     sentinel.insertAdjacentHTML('beforebegin', next.map(showCardHTML).join(''));
+    initPriceExpand(grid);
     if(window._showsLoaded >= fil.length){
       sentinel.remove();
       _showsLazyObserver.disconnect();
