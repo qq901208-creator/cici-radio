@@ -3690,7 +3690,9 @@ function showCardHTML(s) {
         const {range, lines} = parseFeeRange(s.price);
         const multiLine = lines.length > 1;
         const detailId = `sc-fee-detail-${s.id}`;
-        return `<div class="sc-price" style="flex-wrap:wrap">💰 ${range}${multiLine?`<button onclick="event.stopPropagation();var d=document.getElementById('${detailId}');var isOpen=d.style.display!=='none';d.style.display=isOpen?'none':'block';this.textContent=isOpen?'展開 ▾':'收起 ▴'" style="font-size:.68rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:5px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button><div id="${detailId}" style="display:none;width:100%;margin-top:4px;padding:5px 8px;background:rgba(45,43,31,.04);border-radius:6px">${lines.map(l=>`<div style="font-size:.72rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">${l}</div>`).join('')}</div>`:''}</div>`;
+        const detailHtml = lines.map(l=>'<div style="font-size:.72rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">'+l+'</div>').join('');
+        const expandBtn = multiLine ? '<button onclick="event.stopPropagation();var d=document.getElementById(''+detailId+'');var isOpen=d.style.display!=='none';d.style.display=isOpen?'none':'block';this.textContent=isOpen?'展開 ▾':'收起 ▴'" style="font-size:.68rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:5px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button><div id="'+detailId+'" style="display:none;width:100%;margin-top:4px;padding:5px 8px;background:rgba(45,43,31,.04);border-radius:6px">'+detailHtml+'</div>' : '';
+        return '<div class="sc-price" style="flex-wrap:wrap">💰 '+range+expandBtn+'</div>';
       })()}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">
         ${s.soldOut
@@ -4384,16 +4386,23 @@ function parseFeeRange(fee){
   const lines = raw.split(/\s*\/\s*/).map(s=>s.trim().replace(/__PER_PERSON__/g,'/人')).filter(Boolean);
   if(lines.length===0) return {range:fee, lines:[fee]};
   if(lines.length===1) return {range:lines[0], lines};
-  // 用於計算 range 的行（排除優惠票）
+  // 用於計算 range 的行（排除優惠票），但 lines 保留全部
   const regular = lines.filter(l=>!EXCLUDE.some(kw=>l.includes(kw)));
   const target = regular.length ? regular : lines;
   const nums = target.map(l=>{
     const m = l.match(/NT\$\s*([\d,]+)/);
     return m ? parseInt(m[1].replace(/,/g,'')) : null;
   }).filter(n=>n!==null);
-  if(nums.length<2) return {range:lines[0], lines};
-  const min=Math.min(...nums), max=Math.max(...nums);
-  const range = min===max ? `NT$ ${min.toLocaleString()}` : `NT$ ${min.toLocaleString()} – ${max.toLocaleString()}`;
+  // 計算 range
+  let range;
+  if(nums.length===0){
+    range = lines[0];
+  } else if(nums.length===1){
+    range = `NT$ ${nums[0].toLocaleString()}`;
+  } else {
+    const min=Math.min(...nums), max=Math.max(...nums);
+    range = min===max ? `NT$ ${min.toLocaleString()}` : `NT$ ${min.toLocaleString()} – ${max.toLocaleString()}`;
+  }
   return {range, lines};
 }
 
