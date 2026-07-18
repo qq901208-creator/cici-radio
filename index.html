@@ -3691,7 +3691,7 @@ function showCardHTML(s) {
         const multiLine = lines.length > 1;
         const detailId = `sc-fee-detail-${s.id}`;
         const detailHtml = lines.map(l=>'<div style="font-size:.72rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">'+l+'</div>').join('');
-        const expandBtn = multiLine ? '<button onclick="return toggleShowPrice(event,''+detailId+'')" style="font-size:.68rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:5px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button><div id="'+detailId+'" style="display:none;width:100%;margin-top:4px;padding:5px 8px;background:rgba(45,43,31,.04);border-radius:6px">'+detailHtml+'</div>' : '';
+        const expandBtn = multiLine ? '<button onclick="return toggleShowPrice(event,this.dataset.target)" data-target="'+detailId+'" style="font-size:.68rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:5px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button><div id="'+detailId+'" style="display:none;width:100%;margin-top:4px;padding:5px 8px;background:rgba(45,43,31,.04);border-radius:6px">'+detailHtml+'</div>' : '';
         return '<div class="sc-price" style="flex-wrap:wrap">💰 '+range+expandBtn+'</div>';
       })()}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">
