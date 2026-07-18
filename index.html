@@ -3685,15 +3685,7 @@ function showCardHTML(s) {
       <div class="sc-title">${s.title}</div>
       <div class="sc-meta">📍 ${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</div>
       ${s.performer?`<div class="sc-meta sc-meta-performers">🎙 ${s.performer}</div>`:''}
-      ${(()=>{
-        if(!s.price) return '';
-        const {range, lines} = parseFeeRange(s.price);
-        const multiLine = lines.length > 1;
-        const detailId = `sc-fee-detail-${s.id}`;
-        const detailHtml = lines.map(l=>'<div style="font-size:.72rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">'+l+'</div>').join('');
-        const expandBtn = multiLine ? '<button onclick="return toggleShowPrice(event,this.dataset.target)" data-target="'+detailId+'" style="font-size:.68rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:5px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button><div id="'+detailId+'" style="display:none;width:100%;margin-top:4px;padding:5px 8px;background:rgba(45,43,31,.04);border-radius:6px">'+detailHtml+'</div>' : '';
-        return '<div class="sc-price" style="flex-wrap:wrap">💰 '+range+expandBtn+'</div>';
-      })()}
+      ${s.price ? `<div class="sc-price" data-fullprice="${s.price.replace(/"/g,'&quot;')}" data-showid="${s.id}">💰 ${parseFeeRange(s.price).range}</div>` : ''}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">
         ${s.soldOut
           ? `<span style="font-size:.74rem;color:#8b1a1a;font-family:var(--f-zh)">已售完</span>`
@@ -4297,6 +4289,7 @@ function selectCalDayDesk(ds){
       grid.innerHTML = `<div style="padding:40px 0;text-align:center;color:var(--ts);font-family:var(--f-zh);font-size:.88rem">這天暫無演出資訊</div>`;
     } else {
       grid.innerHTML = dayShows.map(s => showCardHTML(s)).join('');
+      initPriceExpand(grid);
     }
   }
   document.getElementById('shows-pagination').innerHTML='';
@@ -4363,6 +4356,7 @@ function selectWeekDesk(range, e){
     grid.innerHTML = rangeShows.length
       ? rangeShows.map(showCardHTML).join('')
       : `<div style="padding:40px 0;text-align:center;color:var(--ts);font-family:var(--f-zh);font-size:.88rem">這個時段暫無演出資訊</div>`;
+    initPriceExpand(grid);
   }
   document.getElementById('shows-pagination').innerHTML='';
 }
@@ -5741,6 +5735,7 @@ function selectCalDay(ds){
   if(dayShows.length){
     banner.textContent=`📅 ${ds} 的演出（${dayShows.length} 場）`;
     result.innerHTML=`<div class="shows-layout">${dayShows.map(showCardHTML).join('')}</div>`;
+    initPriceExpand(result);
   }else{
     banner.textContent=`📅 ${ds} — 這天暫無演出資訊`;
     result.innerHTML='';
@@ -7076,11 +7071,43 @@ function toggleShowPrice(e, id){
   e.stopPropagation();
   e.preventDefault();
   const d = document.getElementById(id);
-  if(!d) return;
+  if(!d) return false;
   const isOpen = d.style.display !== 'none';
   d.style.display = isOpen ? 'none' : 'block';
   e.currentTarget.textContent = isOpen ? '展開 ▾' : '收起 ▴';
   return false;
+}
+
+function initPriceExpand(container){
+  (container||document).querySelectorAll('.sc-price[data-fullprice]').forEach(el=>{
+    if(el.dataset.priceInit) return;
+    el.dataset.priceInit = '1';
+    const price = el.dataset.fullprice;
+    const id = el.dataset.showid;
+    const {lines} = parseFeeRange(price);
+    if(lines.length <= 1) return;
+    const detailId = 'sc-fee-d-' + id;
+    // 加展開按鈕
+    const btn = document.createElement('button');
+    btn.textContent = '展開 ▾';
+    btn.style.cssText = 'font-size:.68rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:5px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px';
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      e.preventDefault();
+      const d = document.getElementById(detailId);
+      if(!d) return;
+      const isOpen = d.style.display !== 'none';
+      d.style.display = isOpen ? 'none' : 'block';
+      this.textContent = isOpen ? '展開 ▾' : '收起 ▴';
+    });
+    el.appendChild(btn);
+    // 加詳細內容 div（插在 sc-price 後面）
+    const detail = document.createElement('div');
+    detail.id = detailId;
+    detail.style.cssText = 'display:none;margin-top:4px;padding:5px 8px;background:rgba(45,43,31,.04);border-radius:6px';
+    detail.innerHTML = lines.map(l=>`<div style="font-size:.72rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">${l}</div>`).join('');
+    el.parentNode.insertBefore(detail, el.nextSibling);
+  });
 }
 function toggleFaq(el){
   const q=el;
