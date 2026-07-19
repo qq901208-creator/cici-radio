@@ -3688,7 +3688,7 @@ function showCardHTML(s) {
       <div class="sc-title">${s.title}</div>
       <div class="sc-meta">📍 ${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</div>
       ${s.performer?`<div class="sc-meta sc-meta-performers">🎙 ${s.performer}</div>`:''}
-      ${s.price ? `<div class="sc-price" data-fullprice="${s.price.replace(/"/g,'&quot;')}" data-showid="${s.id}">💰 ${parseFeeRange(s.price).range}</div>` : ''}
+      ${s.price ? `<div class="sc-price" data-fullprice="${s.price.replace(/"/g,'&quot;').replace(/`/g,'&#96;')}" data-showid="${s.id}">💰 ${parseFeeRange(s.price).range.replace(/</g,'&lt;')}</div>` : ''}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">
         ${s.soldOut
           ? `<span style="font-size:.74rem;color:#8b1a1a;font-family:var(--f-zh)">已售完</span>`
@@ -7095,7 +7095,6 @@ function initPriceExpand(container){
     const {lines} = parseFeeRange(price);
     if(lines.length <= 1) return;
     const detailId = 'sc-fee-d-' + id;
-    // 加展開按鈕
     const btn = document.createElement('button');
     btn.textContent = '展開 ▾';
     btn.style.cssText = 'font-size:.68rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:5px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px';
@@ -7109,7 +7108,6 @@ function initPriceExpand(container){
       this.textContent = isOpen ? '展開 ▾' : '收起 ▴';
     });
     el.appendChild(btn);
-    // 加詳細內容 div（插在 sc-price 後面）
     const detail = document.createElement('div');
     detail.id = detailId;
     detail.style.cssText = 'display:none;margin-top:4px;padding:5px 8px;background:rgba(45,43,31,.04);border-radius:6px';
@@ -7117,6 +7115,15 @@ function initPriceExpand(container){
     el.parentNode.insertBefore(detail, el.nextSibling);
   });
 }
+
+// 監聽 shows-grid 的變化，自動初始化新卡片的價格展開
+function _startPriceExpandObserver(){
+  const grid = document.getElementById('shows-grid');
+  if(!grid) return;
+  const obs = new MutationObserver(()=>initPriceExpand(grid));
+  obs.observe(grid, {childList:true, subtree:true});
+}
+document.addEventListener('DOMContentLoaded', _startPriceExpandObserver);
 function toggleFaq(el){
   const q=el;
   const a=el.nextElementSibling;
