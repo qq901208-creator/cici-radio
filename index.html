@@ -2645,6 +2645,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <option value="taichung">台中</option>
         <option value="tainan">台南</option>
         <option value="kaohsiung">高雄</option>
+        <option value="pingtung">屏東</option>
+        <option value="keelung">基隆</option>
+        <option value="taitung">台東</option>
         <option value="other">其他</option>
       </select>
     </div>
@@ -4179,7 +4182,7 @@ function renderHomeUpcoming() {
   } else {
     // 桌機：簡化卡片（無票價、無演員、地點改地區）
     el.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 0';
-    const AREA_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'};
+    const AREA_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',pingtung:'屏東',custom_1779090022232:'屏東',other:'其他'};
     el.innerHTML = upcoming.map(s => {
       const types = Array.isArray(s.types) ? s.types : (s.type ? [s.type] : ['other']);
       const typeTags = types.map(t=>{ const m=TYPE_META[t]||TYPE_META.other; return `<span style="font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:var(--r-pill);background:${m.bg};color:${m.color}">${m.label}</span>`; }).join('');
@@ -4942,7 +4945,7 @@ function renderMicTable() {
   const DAY_EN = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'];
 
   tbody.innerHTML=rows.map(m=>{
-    const cityLblZh = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'}[m.city||'other']||'';
+    const cityLblZh = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',pingtung:'屏東',custom_1779090022232:'屏東',other:'其他'}[m.city||'other']||'';
     const cityLblEn = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'}[m.city||'other']||'';
     const venueDisplay = lang==='en' ? getMicVenueEn(m) : getMicVenueZh(m);
     const cityLbl = lang==='en' ? cityLblEn : cityLblZh;
@@ -5521,7 +5524,7 @@ function renderMicCards(rows, isAdmin, lang, isIrregular) {
     container.innerHTML = `<div style="text-align:center;padding:32px;color:var(--ts);font-family:var(--f-zh)">${msg}</div>`;
     return;
   }
-  const CITY_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'};
+  const CITY_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',pingtung:'屏東',custom_1779090022232:'屏東',other:'其他'};
   const CITY_EN = {taipei:'Taipei',newtaipei:'New Taipei',taoyuan:'Taoyuan',hsinchu:'Hsinchu',taichung:'Taichung',tainan:'Tainan',kaohsiung:'Kaohsiung',other:'Other'};
   container.innerHTML = rows.map(m => {
     const venueDisplay = lang==='en' ? getMicVenueEn(m) : getMicVenueZh(m);
@@ -7181,7 +7184,7 @@ function _renderGuideShows(){
   if(!upcoming.length){ el.style.display='none'; return; }
   if(isMobile){ elDesktop.style.display='none'; elMobile.style.display='flex'; }
   else { elMobile.style.display='none'; elDesktop.style.display='grid'; }
-  const AREA_ZH2={taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',other:'其他'};
+  const AREA_ZH2={taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',pingtung:'屏東',custom_1779090022232:'屏東',other:'其他'};
   el.innerHTML=upcoming.map(s=>{
     const types=Array.isArray(s.types)?s.types:(s.type?[s.type]:['other']);
     const typeTags=types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span style="font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:var(--r-pill);background:${m.bg};color:${m.color}">${m.label}</span>`;}).join('');
