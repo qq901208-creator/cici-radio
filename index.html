@@ -3896,6 +3896,7 @@ function renderShows() {
   grid.innerHTML = fil.length
     ? paged.map(showCardHTML).join('')
     : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">${q?'查無符合搜尋的演出':'查無符合條件的演出'}</div>`;
+  initPriceExpand(grid);
 
   renderPagination('shows-pagination', showsPage, totalPages, 'goShowsPage');
 }
