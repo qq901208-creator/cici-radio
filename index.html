@@ -4390,6 +4390,7 @@ function parseFeeRange(fee){
   const forRange = lines.filter(l=>!EXCLUDE_RANGE.some(kw=>l.includes(kw)));
   const target = forRange.length ? forRange : lines;
   const nums = target.map(l=>{
+    if(/免費|free/i.test(l)) return 0;
     const m = l.match(/NT\$\s*([\d,]+)/);
     return m ? parseInt(m[1].replace(/,/g,'')) : null;
   }).filter(n=>n!==null);
@@ -4397,10 +4398,12 @@ function parseFeeRange(fee){
   if(nums.length===0){
     range = lines[0];
   } else if(nums.length===1){
-    range = `NT$ ${nums[0].toLocaleString()}`;
+    range = nums[0]===0 ? '免費' : `NT$ ${nums[0].toLocaleString()}`;
   } else {
     const min=Math.min(...nums), max=Math.max(...nums);
-    range = min===max ? `NT$ ${min.toLocaleString()}` : `NT$ ${min.toLocaleString()} – ${max.toLocaleString()}`;
+    const minStr = min===0 ? '免費' : `NT$ ${min.toLocaleString()}`;
+    const maxStr = `NT$ ${max.toLocaleString()}`;
+    range = min===max ? minStr : `${minStr} ～ ${maxStr}`;
   }
   return {range, lines};
 }
