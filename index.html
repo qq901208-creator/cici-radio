@@ -173,6 +173,12 @@ body.ready{visibility:visible}
 .fc-body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
 .fc-title{font-size:.86rem;font-weight:800;font-family:var(--f-zh);color:var(--sd);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .fc-meta{font-size:.72rem;color:var(--ts);font-family:var(--f-zh)}
+/* 合作推薦：多場次選擇清單 */
+.session-pick-item{padding:12px 14px;border:1.5px solid rgba(45,43,31,.1);border-radius:var(--r-md);margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s}
+.session-pick-item:hover{border-color:var(--or);background:rgba(239,111,32,.05)}
+.session-pick-item:last-child{margin-bottom:0}
+.spi-date{font-size:.85rem;font-weight:700;font-family:var(--f-zh);color:var(--sd)}
+.spi-venue{font-size:.76rem;color:var(--ts);font-family:var(--f-zh);margin-top:2px}
 /* 手機無 hover：改為卡片「滑入畫面時漂浮一次再停下」，避免持續晃動干擾滑動瀏覽 */
 @keyframes fcFloatOnce{0%{transform:translateY(0)}25%{transform:translateY(-9px)}50%{transform:translateY(2px)}75%{transform:translateY(-4px)}100%{transform:translateY(0)}}
 @media(max-width:768px){
@@ -2659,6 +2665,13 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <div id="show-detail-body"></div>
 </div></div>
 
+<!-- 合作推薦：多場次選擇清單 -->
+<div class="modal-ov" id="modal-session-picker" style="z-index:515"><div class="modal" style="max-width:480px">
+  <button class="modal-close" onclick="closeModal('session-picker')">✕</button>
+  <div class="modal-title"><span class="zh-text">選擇場次</span><span class="en-text">Choose a date</span></div>
+  <div id="session-picker-body"></div>
+</div></div>
+
 <!-- Show Edit Modal (admin only) -->
 <div class="modal-ov" id="modal-show"><div class="modal">
   <button class="modal-close" onclick="closeModal('show')">✕</button>
@@ -4325,16 +4338,25 @@ function renderHomeFeatured() {
     const key = normTitle(s.title) || (s.title || '').trim();
     (groupsMap[key] = groupsMap[key] || []).push(s);
   });
+  const sessionsMap = {};
   const featuredGroups = Object.values(groupsMap)
     .map(list => {
       list.sort((a, b) => showSortKey(a).localeCompare(showSortKey(b)));
       const rep = list[0];
       const repKey = normTitle(rep.title) || (rep.title || '').trim();
       const autoCount = allUpcoming.filter(s => (normTitle(s.title) || (s.title || '').trim()) === repKey).length;
+      // 多場次時記錄完整場次清單，點卡片可以先選場次再進詳情頁
+      sessionsMap[rep.id] = list.map(x => ({
+        id: x.id,
+        date: String(x.date || '').split(',')[0].trim(),
+        time: x.time || '',
+        venue: (typeof getShowVenueLabelById === 'function' ? getShowVenueLabelById(x.venue) : '') || x.venueLabel || x.venue || ''
+      }));
       return { rep, checkedCount: list.length, autoCount };
     })
     .sort((a, b) => showSortKey(a.rep).localeCompare(showSortKey(b.rep)))
     .slice(0, 3);
+  window._featuredSessionsMap = sessionsMap;
 
   if (!featuredGroups.length) {
     el.innerHTML = `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:16px 4px;text-align:center">
@@ -4362,7 +4384,7 @@ function renderHomeFeatured() {
     const adminCheckNote = adminMode && autoCount !== checkedCount
       ? `<div style="font-size:.66rem;color:var(--or);font-family:var(--f-zh);margin-top:2px">⚠️ 已勾${checkedCount}場・同標題偵測共${autoCount}場，請確認</div>`
       : '';
-    return `<div class="featured-card" data-id="${s.id}" onclick="openShowDetail('${s.id}', true)">
+    return `<div class="featured-card" data-id="${s.id}" onclick="openFeaturedCard('${s.id}')">
       <div class="fc-ribbon"><span class="zh-text">合作推薦</span><span class="en-text">Partner Pick</span></div>
       <div class="fc-img">${posterEl}</div>
       <div class="fc-body">
@@ -4386,6 +4408,31 @@ function renderHomeFeatured() {
     }, { root: el, threshold: 0.6 });
     cards.forEach(c => io.observe(c));
   }
+}
+
+// 合作推薦卡片點擊：只有一場直接開詳情，多場先跳場次選擇清單
+function openFeaturedCard(id) {
+  const sessions = (window._featuredSessionsMap && window._featuredSessionsMap[id]) || [];
+  if (sessions.length > 1) {
+    openSessionPicker(sessions);
+  } else {
+    openShowDetail(id, true);
+  }
+}
+
+function openSessionPicker(sessions) {
+  const body = document.getElementById('session-picker-body');
+  if (!body) return;
+  const DOW_ZH3 = ['日','一','二','三','四','五','六'];
+  body.innerHTML = sessions.map(sess => {
+    const d = new Date(sess.date + 'T00:00');
+    const dow = isNaN(d) ? '' : DOW_ZH3[d.getDay()];
+    return `<div class="session-pick-item" onclick="closeModal('session-picker');openShowDetail('${sess.id}', true)">
+      <div class="spi-date">📅 ${sess.date}${dow?`（${dow}）`:''} ${sess.time||''}</div>
+      <div class="spi-venue">📍 ${sess.venue||''}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('modal-session-picker').classList.add('open');
 }
 
 function getTodayStr(){
