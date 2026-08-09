@@ -3879,10 +3879,16 @@ function calcPerPage(gridId, mobilePerPage) {
 }
 
 // resize 時重新計算並重繪
+// 只在「手機／電腦版面切換」時才重繪，避免 iOS Safari 上下滑動時
+// 網址列收合/展開觸發 resize、造成合作推薦卡片一直重播漂浮動畫閃爍
 let _resizeTimer;
+let _lastIsMobileLayout = window.innerWidth <= 768;
 window.addEventListener('resize', () => {
   clearTimeout(_resizeTimer);
   _resizeTimer = setTimeout(() => {
+    const isMobileNow = window.innerWidth <= 768;
+    if (isMobileNow === _lastIsMobileLayout) return; // 版面沒變，只是高度變化，不重繪
+    _lastIsMobileLayout = isMobileNow;
     const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
     if(activePage === 'home' && typeof renderHomeShows === 'function') renderHomeShows();
     if(activePage === 'home' && typeof renderHomeUpcoming === 'function') renderHomeUpcoming();
