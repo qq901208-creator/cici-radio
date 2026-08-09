@@ -40,11 +40,25 @@ function extractMeta(html) {
   const image = gm('og:image');
   const desc = gm('og:description');
 
-  const searchText = `${title} ${desc} ${html.slice(0, 8000)}`;
-  const dateMatch = searchText.match(/(\d{4})[\/\-年](\d{1,2})[\/\-月](\d{1,2})/);
-  const date = dateMatch
-    ? `${dateMatch[1]}-${dateMatch[2].padStart(2, '0')}-${dateMatch[3].padStart(2, '0')}`
-    : '';
+  // 只用「標題＋描述」猜日期，不再整包塞前 8000 字元的原始 HTML ──
+  // 圖片網址、資源 ID 等雜訊數字常常長得很像日期（例如圖片 ID 571924
+  // 會被誤判成「1924」年），把搜尋範圍限縮在真正的文字內容可以大幅降低誤判。
+  // 同時加上「年份要落在合理範圍」的防呆，就算誤入雜訊也會被擋掉、
+  // 並繼續往下找下一個候選，而不是直接採用第一個匹配。
+  const searchText = `${title} ${desc}`;
+  const CURRENT_YEAR = new Date().getFullYear();
+  const isPlausibleYear = (y) => y >= CURRENT_YEAR - 1 && y <= CURRENT_YEAR + 3;
+
+  let date = '';
+  const dateRe = /(\d{4})[\/\-年](\d{1,2})[\/\-月](\d{1,2})/g;
+  let dm;
+  while ((dm = dateRe.exec(searchText)) !== null) {
+    const y = +dm[1];
+    if (isPlausibleYear(y)) {
+      date = `${dm[1]}-${dm[2].padStart(2, '0')}-${dm[3].padStart(2, '0')}`;
+      break;
+    }
+  }
 
   const timeMatch = searchText.match(/(\d{1,2}):(\d{2})/);
   const time = timeMatch ? `${timeMatch[1].padStart(2, '0')}:${timeMatch[2]}` : '';
@@ -53,6 +67,7 @@ function extractMeta(html) {
 }
 
 // 從頁面裡「加入 Google 日曆」連結解析出精確的起訖時間（比在自由文字裡猜日期可靠很多）
+// KKTIX、Accupass 的活動頁都會產生這種連結，優先用這個來源
 // 同時用起訖天數差，偵測「一頁多場次」這種無法自動解析的活動，回傳警告而不是猜錯的日期
 function parseGCalDates(html) {
   const m = html.match(/dates=(\d{8}T\d{6}Z)%2F(\d{8}T\d{6}Z)/);
@@ -146,8 +161,9 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    // Accupass：改用「加入日曆」連結取得精確時間，並偵測多場次活動
-    if (platform === 'accupass') {
+    // KKTIX／Accupass：優先用「加入日曆」連結取得精確時間（比正文猜日期可靠很多），
+    // 並偵測多場次活動（起訖天數差 ≥2 天，代表同頁合併了不同日期／地點的場次）
+    if (platform === 'kktix' || platform === 'accupass') {
       const gcal = parseGCalDates(html);
       if (gcal && gcal.dayDiff >= 2) {
         res.status(200).json({
@@ -167,6 +183,7 @@ module.exports = async function handler(req, res) {
         meta.date = gcal.start.dateStr;
         meta.time = gcal.start.timeStr;
       }
+      // 找不到日曆連結的話，就沿用 extractMeta() 從標題／描述猜出的日期（已加防呆）
     }
 
     // OPENTIX：只信任系統套版的日期範圍，時間一律不自動填（無法可靠取得）
