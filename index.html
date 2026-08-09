@@ -179,6 +179,7 @@ body.ready{visibility:visible}
 .session-pick-item:last-child{margin-bottom:0}
 .spi-date{font-size:.85rem;font-weight:700;font-family:var(--f-zh);color:var(--sd)}
 .spi-venue{font-size:.76rem;color:var(--ts);font-family:var(--f-zh);margin-top:2px}
+#session-picker-body{max-height:60vh;overflow-y:auto}
 /* 手機無 hover：改為卡片「滑入畫面時漂浮一次再停下」，避免持續晃動干擾滑動瀏覽 */
 @keyframes fcFloatOnce{0%{transform:translateY(0)}25%{transform:translateY(-9px)}50%{transform:translateY(2px)}75%{transform:translateY(-4px)}100%{transform:translateY(0)}}
 @media(max-width:768px){
@@ -419,7 +420,11 @@ body.edit #page-shows .sc-title{font-size:.94rem;line-height:1.36}
   .filter-dropdown-lbl{display:none}
   .filter-dropdown{width:100%!important;min-width:0!important;padding:8px 20px 8px 8px;font-size:.78rem;text-overflow:ellipsis;overflow:hidden;background-position:right 6px center;background-size:10px}
   /* 手機版首頁全寬 */
-  .home-podcast-inner,.home-board-header,.home-board-grid,.home-board-cta{max-width:100%}
+  .home-podcast-inner,.home-board-header,.home-board-cta{max-width:100%}
+  /* 手機版留言板：改成左右滑動瀏覽，而不是擠成 4 欄小格子 */
+  .home-board-grid{display:flex!important;grid-template-columns:none;max-width:100%;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 8px;margin:0 0 20px;-webkit-overflow-scrolling:touch}
+  .home-board-grid::-webkit-scrollbar{display:none}
+  .home-board-grid .fp-item{flex:0 0 82%;scroll-snap-align:start}
 
   /* 手機版演出列表 */
   .shows-grid{grid-template-columns:1fr;gap:10px;background:transparent;border-radius:0;border:none;overflow:visible}
@@ -4260,7 +4265,7 @@ function renderHomeUpcoming() {
   const upcoming = shows
     .filter(s => (s.status || 'published') === 'published' && !isExpired(s.date, s.time))
     .sort((a, b) => showSortKey(a).localeCompare(showSortKey(b)))
-    .slice(0, 4);
+    .slice(0, isMobile ? 3 : 4);
 
   if (!upcoming.length) {
     el.innerHTML = `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:12px 0;text-align:center">
@@ -7229,9 +7234,9 @@ function renderHomeComments(){
   });
   if(!all.length){ g.innerHTML=''; return; }
 
-  // 手機版：只顯示前 4 則，不輪播
+  // 手機版：改成左右滑動瀏覽（CSS 已設成橫向 scroll），一次多放幾則供滑動
   if(window.innerWidth <= 768){
-    g.innerHTML = all.slice(0,4).map(c=>_commentCardHTML(c)).join('');
+    g.innerHTML = all.slice(0,10).map(c=>_commentCardHTML(c)).join('');
     return;
   }
 
