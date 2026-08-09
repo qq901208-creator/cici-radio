@@ -4410,17 +4410,23 @@ function renderHomeFeatured() {
 
   // 卡片滑入畫面時漂浮一次，之後停下（不重複）——電腦、手機都套用，
   // 電腦版不用等滑鼠移上去才有動態感，一進首頁就會自己浮動一次
+  // 用兩層 requestAnimationFrame 等瀏覽器真的排版、畫完一幀之後再偵測，
+  // 避免 render 當下卡片還沒有實際版面位置，導致偵測器誤判「沒有進入畫面」
   if (typeof IntersectionObserver === 'function') {
-    const cards = el.querySelectorAll('.featured-card');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('fc-inview');
-          io.unobserve(entry.target);
-        }
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const cards = el.querySelectorAll('.featured-card');
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('fc-inview');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { root: isMobile ? el : null, threshold: 0.6 });
+        cards.forEach(c => io.observe(c));
       });
-    }, { root: isMobile ? el : null, threshold: 0.6 });
-    cards.forEach(c => io.observe(c));
+    });
   }
 }
 
