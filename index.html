@@ -132,8 +132,8 @@ body.ready{visibility:visible}
 .home-quick-nav h3{font-family:var(--f-zh);font-weight:900;font-size:1.1rem;color:var(--sd);margin-bottom:14px;display:flex;align-items:center;gap:6px}
 .home-quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 #home-upcoming-list .show-card{display:flex;flex-direction:column}
-#home-upcoming-list .sc-img{height:120px!important;min-height:120px}
-#home-upcoming-list .sc-img img.sc-poster{height:120px!important;width:100%;object-fit:contain}
+#home-upcoming-list .sc-img{height:140px!important;min-height:140px}
+#home-upcoming-list .sc-img img.sc-poster{height:140px!important;width:100%;object-fit:contain}
 #home-upcoming-list{flex:1}
 #home-upcoming-list .show-card{font-size:.82rem;height:100%}
 #home-upcoming-list .sc-title{font-size:.82rem}
@@ -143,6 +143,10 @@ body.ready{visibility:visible}
 #home-upcoming-list .sc-performers{font-size:.74rem}
 #home-upcoming-list .sc-price{display:none!important}
 #home-upcoming-list .sc-meta-performers{display:none!important}
+/* 最近一場演出：獨立全寬區塊（桌機 4 欄） */
+.home-recent-sec{background:var(--cr);padding:28px 5vw 6px}
+.home-recent-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.home-recent-header h3{font-family:var(--f-zh);font-weight:900;font-size:1.1rem;color:var(--sd)}
 .home-quick-card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px 10px;background:var(--cr);border-radius:var(--r-lg);cursor:pointer;transition:background .15s,transform .15s,border-color .15s;border:2px solid transparent;font-family:var(--f-zh)}
 @media(max-width:768px){.desktop-only{display:none!important}}
 .home-quick-card:hover{background:var(--py);transform:translateY(-3px);border-color:var(--or)}
@@ -153,6 +157,30 @@ body.ready{visibility:visible}
 .home-upcoming-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .home-upcoming-header h3{font-family:var(--f-zh);font-weight:900;font-size:1.1rem;color:var(--sd)}
 .home-upcoming-more{font-size:.68rem;color:var(--or);font-weight:600;cursor:pointer;text-decoration:none;font-family:var(--f-zh)}
+/* ── 合作推薦演出（home-featured）：比最近一場演出更 fancy／顯眼 ── */
+.home-featured{position:relative;background:linear-gradient(160deg,#fff 55%,rgba(245,213,88,.16) 100%);border-radius:var(--r-xl);padding:22px 20px 16px;box-shadow:0 6px 28px rgba(239,111,32,.16);display:flex;flex-direction:column;overflow:hidden;height:100%;border:1.5px solid rgba(239,111,32,.22)}
+.home-featured::before{content:'';position:absolute;top:-40%;right:-20%;width:70%;height:140%;background:radial-gradient(circle,rgba(239,111,32,.10),transparent 70%);pointer-events:none}
+.home-featured-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative;z-index:1}
+.home-featured-header h3{font-family:var(--f-zh);font-weight:900;font-size:1.1rem;color:var(--sd);display:flex;align-items:center;gap:4px}
+#home-featured-list{flex:1;position:relative;z-index:1}
+.featured-card{position:relative;background:#fff;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;box-shadow:0 3px 14px rgba(45,43,31,.10);border:1.5px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(135deg,var(--or),var(--y));background-origin:border-box;background-clip:padding-box,border-box;transition:box-shadow .18s;display:flex;flex-direction:column}
+@keyframes fcFloatHover{0%,100%{transform:translateY(-6px) scale(1.02)}50%{transform:translateY(-11px) scale(1.02)}}
+.featured-card:hover{box-shadow:0 16px 32px rgba(239,111,32,.32);animation:fcFloatHover 1.6s ease-in-out infinite}
+.fc-ribbon{position:absolute;top:9px;left:-28px;transform:rotate(-40deg);background:linear-gradient(90deg,var(--or),#ff9248);color:#fff;font-size:.6rem;font-weight:800;font-family:var(--f-zh);padding:3px 32px;box-shadow:0 2px 6px rgba(0,0,0,.18);z-index:3;letter-spacing:.02em}
+.fc-img{position:relative;width:100%;height:150px;overflow:hidden;background:linear-gradient(135deg,var(--py),var(--y))}
+.fc-img img.sc-poster{width:100%;height:150px;object-fit:contain;display:block;background:#fff;transition:transform .25s}
+.featured-card:hover .fc-img img.sc-poster{transform:scale(1.05)}
+.fc-body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.fc-title{font-size:.86rem;font-weight:800;font-family:var(--f-zh);color:var(--sd);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fc-meta{font-size:.72rem;color:var(--ts);font-family:var(--f-zh)}
+/* 手機無 hover：改為卡片「滑入畫面時漂浮一次再停下」，避免持續晃動干擾滑動瀏覽 */
+@keyframes fcFloatOnce{0%{transform:translateY(0)}25%{transform:translateY(-9px)}50%{transform:translateY(2px)}75%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+@media(max-width:768px){
+  #home-featured-list{scroll-snap-type:x mandatory}
+  #home-featured-list .featured-card{flex:0 0 78%;scroll-snap-align:start}
+  #home-featured-list .featured-card.fc-inview{animation:fcFloatOnce 1.1s ease-out}
+  #home-featured-list::-webkit-scrollbar{display:none}
+}
 .home-show-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(45,43,31,.06);cursor:pointer;border-radius:6px;transition:background .1s}
 .home-show-row:last-child{border-bottom:none;padding-bottom:0}
 .home-show-row:hover{background:rgba(45,43,31,.04);border-radius:6px}
@@ -1110,6 +1138,8 @@ body.edit .edit-bar{display:flex!important}
   .home-mid{display:block!important;padding:12px 4vw 24px;width:100%;box-sizing:border-box}
   .home-quick-nav{width:100%;box-sizing:border-box;margin-bottom:10px}
   .home-upcoming{width:100%;box-sizing:border-box}
+  .home-featured{width:100%;box-sizing:border-box;padding:18px 16px 14px}
+  .home-recent-sec{padding:20px 4vw 4px;width:100%;box-sizing:border-box}
   /* podcast + board 全寬 */
   .home-podcast-sec,.home-board-sec{width:100%;box-sizing:border-box;overflow:hidden}
   .home-podcast-inner{grid-template-columns:1fr!important;max-width:100%}
@@ -1357,17 +1387,28 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         </button>
       </div>
     </div>
-    <!-- 最近一場演出 -->
-    <div class="home-upcoming">
-      <div class="home-upcoming-header">
-        <h3><span class="zh-text">最近一場演出</span><span class="en-text">Upcoming Shows</span><span style="color:var(--or);margin-left:6px">✦</span></h3>
-        <a class="home-upcoming-more" href="#" onclick="showPage('shows');return false">
+    <!-- 合作推薦演出 -->
+    <div class="home-featured">
+      <div class="home-featured-header">
+        <h3><span class="zh-text">合作推薦演出</span><span class="en-text">Partner Picks</span><span style="color:var(--or);margin-left:6px">✦</span></h3>
+        <a class="home-upcoming-more" href="#" onclick="goToFeaturedShows();return false">
           <span class="zh-text">查看更多 →</span><span class="en-text">See all →</span>
         </a>
       </div>
-      <div id="home-upcoming-list"></div>
+      <div id="home-featured-list"></div>
     </div>
   </div>
+
+  <!-- 最近一場演出 -->
+  <section class="home-recent-sec">
+    <div class="home-recent-header">
+      <h3><span class="zh-text">最近一場演出</span><span class="en-text">Upcoming Shows</span><span style="color:var(--or);margin-left:6px">✦</span></h3>
+      <a class="home-upcoming-more" href="#" onclick="showPage('shows');return false">
+        <span class="zh-text">查看更多 →</span><span class="en-text">See all →</span>
+      </a>
+    </div>
+    <div id="home-upcoming-list"></div>
+  </section>
 
   <!-- PODCAST 區塊 -->
   <section class="home-podcast-sec" style="padding-top:20px">
@@ -1572,6 +1613,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         </div>
       </div>
     </div>
+        <!-- 合作推薦篩選提示 banner -->
+        <div id="featured-filter-banner" style="display:none;align-items:center;justify-content:space-between;background:rgba(239,111,32,.12);border:1px solid rgba(239,111,32,.3);border-radius:var(--r-lg);padding:9px 14px;margin-bottom:14px;font-size:.82rem;font-family:var(--f-zh);color:var(--sd)">
+          <span>🤝 <span class="zh-text">目前只顯示合作推薦演出</span><span class="en-text">Showing partner picks only</span></span>
+          <button onclick="clearFeaturedFilter()" style="background:none;border:none;color:var(--or);font-weight:700;cursor:pointer;font-size:.82rem;padding:0">✕ <span class="zh-text">清除</span><span class="en-text">Clear</span></button>
+        </div>
         <!-- 演出列表 -->
         <div id="view-cards">
           <div class="shows-grid" id="shows-grid"></div>
@@ -2713,6 +2759,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g full"><label class="fl">製作團隊 Production Team</label><textarea class="fta" id="s-production" placeholder="e.g. 卡米地俱樂部&#10;Two Three Comedy&#10;嘻嘻哪哩唷 × 某某單位"></textarea></div>
     <div class="fg-g"><label class="fl">狀態</label><select class="fs" id="s-status"><option value="published">已發布</option><option value="postponed">延期</option><option value="hidden">隱藏</option><option value="archived">封存</option><option value="cancelled">取消</option></select></div>
     <div class="fg-g"><label class="fl">是否售完</label><select class="fs" id="s-soldout"><option value="0">尚有票券</option><option value="1">已售完</option></select></div>
+    <div class="fg-g full">
+      <label class="fl" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="s-featured" style="width:16px;height:16px;accent-color:var(--or);cursor:pointer">
+        🤝 於首頁「合作推薦演出」區塊顯示
+      </label>
+    </div>
   </div>
   <div class="fa">
     <button class="fa-cancel" onclick="closeModal('show')">取消</button>
@@ -3190,6 +3242,7 @@ async function loadAllData(retryCount = 0) {
     if(typeof renderHeroStats==='function') try{renderHeroStats();}catch(e){console.error('renderHeroStats:',e);}
     if(typeof renderHomeShows==='function') try{renderHomeShows();}catch(e){console.error('renderHomeShows:',e);}
     if(typeof renderHomeUpcoming==='function') try{renderHomeUpcoming();}catch(e){console.error('renderHomeUpcoming:',e);}
+    if(typeof renderHomeFeatured==='function') try{renderHomeFeatured();}catch(e){console.error('renderHomeFeatured:',e);}
     if(typeof renderHomeComments==='function') try{renderHomeComments();}catch(e){console.error('renderHomeComments:',e);}
     if(typeof renderShows==='function') try{renderShows();}catch(e){console.error('renderShows:',e);}
     if(typeof renderCalendar==='function') try{renderCalendar();}catch(e){}
@@ -3419,6 +3472,7 @@ window._syncData = function(){
 let editMode = false;
 let eShowId=null, eMicId=null, eVenueId=null, eCourseId=null;
 let fType='all', fVenue='all', fArea='all', fDay='all', fCtype='all', fCity='all', fFormat='all';
+let fFeatured=false;
 let micDay = 1;
 
 // ── 篩選條件 URL 同步 ──
@@ -3431,6 +3485,7 @@ function syncFiltersToURL(){
   if(fDay!=='all')    params.set('day',   fDay);
   if(fCtype!=='all')  params.set('ctype', fCtype);
   if(fCity!=='all')   params.set('city',  fCity);
+  if(fFeatured)        params.set('featured', '1');
   const q = document.getElementById('shows-search')?.value?.trim();
   if(q) params.set('q', q);
   const qs = params.toString();
@@ -3439,8 +3494,9 @@ function syncFiltersToURL(){
 
 // ── 重置所有篩選 ──
 function resetAllFilters(){
-  fType='all'; fVenue='all'; fArea='all'; fDay='all'; fFormat='all';
+  fType='all'; fVenue='all'; fArea='all'; fDay='all'; fFormat='all'; fFeatured=false;
   showsPage=1;
+  showFeaturedFilterBanner();
   // 重置 type chip
   document.querySelectorAll(`.chip[data-f="type"]`).forEach(c=>c.classList.toggle('on', c.dataset.v==='all'));
   // 重置 format chip
@@ -3478,6 +3534,8 @@ function restoreFiltersFromURL(){
   if(params.get('day'))   { fDay   = params.get('day');   const el=document.getElementById('sel-day');   if(el){el.value=fDay;  el.classList.toggle('active',fDay!=='all');} }
   if(params.get('ctype')) { fCtype = params.get('ctype'); setChip('ctype', fCtype); }
   if(params.get('city'))  { fCity  = params.get('city');  setChip('city',  fCity); }
+  if(params.get('featured')==='1'){ fFeatured = true; }
+  showFeaturedFilterBanner();
   if(params.get('q')) {
     const el = document.getElementById('shows-search');
     if(el) el.value = params.get('q');
@@ -3488,6 +3546,26 @@ function setChip(filterName, value){
   document.querySelectorAll(`.chip[data-f="${filterName}"]`).forEach(c=>{
     c.classList.toggle('on', c.dataset.v === value);
   });
+}
+
+// ── 合作推薦演出篩選（來自首頁「合作推薦演出」查看更多）──
+function showFeaturedFilterBanner(){
+  const b = document.getElementById('featured-filter-banner');
+  if(b) b.style.display = fFeatured ? 'flex' : 'none';
+}
+function clearFeaturedFilter(){
+  fFeatured = false;
+  showsPage = 1;
+  showFeaturedFilterBanner();
+  renderShows();
+  syncFiltersToURL();
+}
+function goToFeaturedShows(){
+  fFeatured = true;
+  showsPage = 1;
+  showPage('shows');
+  showFeaturedFilterBanner();
+  syncFiltersToURL();
 }
 
 const AREA_ORDER = ['taipei','newtaipei','taoyuan','hsinchu','taichung','tainan','kaohsiung','other'];
@@ -3786,6 +3864,8 @@ window.addEventListener('resize', () => {
   _resizeTimer = setTimeout(() => {
     const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
     if(activePage === 'home' && typeof renderHomeShows === 'function') renderHomeShows();
+    if(activePage === 'home' && typeof renderHomeUpcoming === 'function') renderHomeUpcoming();
+    if(activePage === 'home' && typeof renderHomeFeatured === 'function') renderHomeFeatured();
     if(activePage === 'shows' && typeof renderShows === 'function') renderShows();
     if(activePage === 'courses' && typeof renderCourses === 'function') renderCourses();
   }, 120);
@@ -3848,6 +3928,7 @@ function renderShows() {
     const types = s.types||(s.type?[s.type]:[]);
     if (fType!=='all' && !types.includes(fType)) return false;
     if (fFormat!=='all' && !types.includes(fFormat)) return false;
+    if (fFeatured && !s.featured) return false;
     if (!venueMatchesFilter(s, fVenue)) return false;
     const KNOWN_AREAS = ['taipei','newtaipei','taoyuan','hsinchu','taichung','tainan','kaohsiung'];
     if (fArea!=='all'){
@@ -4165,7 +4246,7 @@ function renderHomeUpcoming() {
   const upcoming = shows
     .filter(s => (s.status || 'published') === 'published' && !isExpired(s.date, s.time))
     .sort((a, b) => showSortKey(a).localeCompare(showSortKey(b)))
-    .slice(0, 3);
+    .slice(0, 4);
 
   if (!upcoming.length) {
     el.innerHTML = `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:12px 0;text-align:center">
@@ -4181,7 +4262,7 @@ function renderHomeUpcoming() {
     el.innerHTML = upcoming.map(s => showCardHTML(s)).join('');
   } else {
     // 桌機：簡化卡片（無票價、無演員、地點改地區）
-    el.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 0';
+    el.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:4px 0';
     const AREA_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',pingtung:'屏東',custom_1779090022232:'屏東',other:'其他'};
     el.innerHTML = upcoming.map(s => {
       const types = Array.isArray(s.types) ? s.types : (s.type ? [s.type] : ['other']);
@@ -4190,7 +4271,7 @@ function renderHomeUpcoming() {
       const d = new Date(rawDate+'T00:00');
       const DOW_ZH2=['日','一','二','三','四','五','六'];
       const dow = isNaN(d)?'':DOW_ZH2[d.getDay()];
-      const posterEl = (s.image&&s.image.trim()) ? `<img loading="lazy" class="sc-poster" src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:100%;height:120px;object-fit:contain;display:block;background:#fff">` : `<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
+      const posterEl = (s.image&&s.image.trim()) ? `<img loading="lazy" class="sc-poster" src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:100%;height:140px;object-fit:contain;display:block;background:#fff">` : `<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
       const areaLabel = AREA_ZH[s.area||'other']||'';
       const expiredStyle = isExpired(s.date,s.time) ? 'opacity:.7;' : '';
       const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
@@ -4202,7 +4283,7 @@ function renderHomeUpcoming() {
             ? `<a class="sc-ticket" href="${s.ticketUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">馬上購票</a>`
             : `<span></span>`;
       return `<div class="show-card" data-id="${s.id}" onclick="openShowDetail('${s.id}', true)" style="${expiredStyle}cursor:pointer">
-        <div class="sc-img" style="width:100%;height:120px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--py),var(--y))">
+        <div class="sc-img" style="width:100%;height:140px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--py),var(--y))">
           ${posterEl}
           <div style="position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-wrap:wrap;z-index:3">${typeTags}</div>
         </div>
@@ -4214,6 +4295,95 @@ function renderHomeUpcoming() {
         </div>
       </div>`;
     }).join('');
+  }
+}
+
+// ── HOME 合作推薦演出（Partner Picks）──
+function renderHomeFeatured() {
+  const el = document.getElementById('home-featured-list');
+  if (!el) return;
+  const shows = window._SHOWS || SHOWS || [];
+  const isMobile = window.innerWidth <= 768;
+  const DOW_ZH2 = ['日','一','二','三','四','五','六'];
+  const AREA_ZH = {taipei:'台北',newtaipei:'新北',taoyuan:'桃園',hsinchu:'新竹',taichung:'台中',tainan:'台南',kaohsiung:'高雄',pingtung:'屏東',custom_1779090022232:'屏東',other:'其他'};
+
+  // 同一檔演出可能排很多場、標題還會加註記（例如【加演場】），
+  // 先把常見括號內的註記拿掉再比對，合併成一張卡。
+  // 「共幾場」對外顯示的是你有打勾合作推薦的場次數（你自己認定的場次），
+  // 另外用系統自動比對標題算出的總場次數，只在 admin 編輯模式下顯示，
+  // 給你雙重確認用——如果兩個數字對不上，代表可能漏勾或標題沒對上。
+  const normTitle = t => (t || '')
+    .replace(/[【\[［(（][^】\]］)）]*[】\]］)）]/g, '')
+    .replace(/\s+/g, '')
+    .trim();
+  const adminMode = isLoggedIn() && editMode;
+  const allUpcoming = shows.filter(s => (s.status || 'published') === 'published' && !isExpired(s.date, s.time));
+  const pool = allUpcoming.filter(s => s.featured);
+  const groupsMap = {};
+  pool.forEach(s => {
+    const key = normTitle(s.title) || (s.title || '').trim();
+    (groupsMap[key] = groupsMap[key] || []).push(s);
+  });
+  const featuredGroups = Object.values(groupsMap)
+    .map(list => {
+      list.sort((a, b) => showSortKey(a).localeCompare(showSortKey(b)));
+      const rep = list[0];
+      const repKey = normTitle(rep.title) || (rep.title || '').trim();
+      const autoCount = allUpcoming.filter(s => (normTitle(s.title) || (s.title || '').trim()) === repKey).length;
+      return { rep, checkedCount: list.length, autoCount };
+    })
+    .sort((a, b) => showSortKey(a.rep).localeCompare(showSortKey(b.rep)))
+    .slice(0, 3);
+
+  if (!featuredGroups.length) {
+    el.innerHTML = `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:16px 4px;text-align:center">
+      <span class="zh-text">合作推薦演出整理中，敬請期待！</span>
+      <span class="en-text">Partner picks coming soon!</span>
+    </div>`;
+    return;
+  }
+
+  el.style.cssText = isMobile
+    ? 'display:flex;gap:12px;overflow-x:auto;padding:6px 2px 8px;-webkit-overflow-scrolling:touch'
+    : 'display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:4px 0';
+
+  el.innerHTML = featuredGroups.map(({ rep: s, checkedCount, autoCount }) => {
+    const types = Array.isArray(s.types) ? s.types : (s.type ? [s.type] : ['other']);
+    const rawDate = String(s.date||'').split(',')[0].trim();
+    const d = new Date(rawDate+'T00:00');
+    const dow = isNaN(d) ? '' : DOW_ZH2[d.getDay()];
+    const posterEl = (s.image && s.image.trim())
+      ? `<img loading="lazy" class="sc-poster" src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
+      : `<span style="font-size:2.2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
+    const areaLabel = AREA_ZH[s.area||'other'] || '';
+    const countNote = checkedCount > 1 ? `<span class="zh-text">・共${checkedCount}場</span><span class="en-text">・${checkedCount} dates</span>` : '';
+    // admin 專用雙重確認：勾選數跟系統自動比對標題算出的場次數對不上時提醒
+    const adminCheckNote = adminMode && autoCount !== checkedCount
+      ? `<div style="font-size:.66rem;color:var(--or);font-family:var(--f-zh);margin-top:2px">⚠️ 已勾${checkedCount}場・同標題偵測共${autoCount}場，請確認</div>`
+      : '';
+    return `<div class="featured-card" data-id="${s.id}" onclick="openShowDetail('${s.id}', true)">
+      <div class="fc-ribbon"><span class="zh-text">合作推薦</span><span class="en-text">Partner Pick</span></div>
+      <div class="fc-img">${posterEl}</div>
+      <div class="fc-body">
+        <div class="fc-title">${s.title}</div>
+        <div class="fc-meta">${rawDate}${dow?`（${dow}）`:''} ${s.time||''}・${areaLabel}${countNote}</div>
+        ${adminCheckNote}
+      </div>
+    </div>`;
+  }).join('');
+
+  // 手機：卡片滑入畫面時漂浮一次，之後停下（不重複），避免整排持續晃動
+  if (isMobile && typeof IntersectionObserver === 'function') {
+    const cards = el.querySelectorAll('.featured-card');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fc-inview');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { root: el, threshold: 0.6 });
+    cards.forEach(c => io.observe(c));
   }
 }
 
@@ -5805,6 +5975,7 @@ function openShowModal(id){
   if(imgPrev)imgPrev.style.display='none';
   if(imgHint){imgHint.textContent='';imgHint.className='img-url-hint';}
   setPS('show','','');
+  const sFeaturedEl=document.getElementById('s-featured'); if(sFeaturedEl) sFeaturedEl.checked=false;
   document.querySelectorAll('#s-types input').forEach(cb=>{cb.checked=false;cb.closest('.type-cb-lbl').classList.remove('checked');});
   // 填入動態場地/地區選單
   populateShowSelects(s?.venue||'', s?.area||'');
@@ -5829,6 +6000,7 @@ function openShowModal(id){
     if(prodEl) prodEl.value=s.production||'';
     document.getElementById('s-status').value=s.status;
     document.getElementById('s-soldout').value=s.soldOut?'1':'0';
+    if(sFeaturedEl) sFeaturedEl.checked=!!s.featured;
     if(s.image)livePreview('s-img-prev','s-img-hint',s.image);
     const types=s.types||(s.type?[s.type]:[]);
     document.querySelectorAll('#s-types input').forEach(cb=>{if(types.includes(cb.value)){cb.checked=true;cb.closest('.type-cb-lbl').classList.add('checked');}});
@@ -5870,12 +6042,15 @@ function saveShow(status){
     description:document.getElementById('s-desc').value,
     production:document.getElementById('s-production')?.value?.trim()||'',
     status:finalStatus,soldOut:document.getElementById('s-soldout').value==='1',
+    featured:!!document.getElementById('s-featured')?.checked,
   };
   window.FB.save('shows', eShowId||null, item).then(newId=>{
     if(eShowId){const i=SHOWS.findIndex(x=>x.id===eShowId);if(i>=0)SHOWS[i]={id:eShowId,...item};}
     else SHOWS.push({id:newId,...item});
     window._SHOWS = SHOWS;
     closeModal('show');renderShows();renderHomeShows();renderHeroStats();
+    if(typeof renderHomeUpcoming==='function') try{renderHomeUpcoming();}catch(e){}
+    if(typeof renderHomeFeatured==='function') try{renderHomeFeatured();}catch(e){}
     if(document.getElementById('view-cal').style.display!=='none')renderCalendar();
     showToast(finalStatus==='published'?'✅ 演出已發布':finalStatus==='pending'?'⏳ 已設為待確認':'📝 草稿已儲存','ok');
   }).catch(e=>{console.error(e);showToast('❌ 儲存失敗，請再試一次','err');});
@@ -6719,7 +6894,7 @@ function restorePageFromHash(){
   // 還原篩選條件（chips 已存在）
   restoreFiltersFromURL();
   // render 一次（opmic 等 Firebase 載完才 render，避免空資料閃爍）
-  if(page==='home'){renderHomeShows();renderHomeUpcoming();renderHomeComments();renderHeroStats();}
+  if(page==='home'){renderHomeShows();renderHomeUpcoming();renderHomeFeatured();renderHomeComments();renderHeroStats();}
   if(page==='shows'){
     renderShows();
     if(window.innerWidth >= 769){
@@ -7238,7 +7413,7 @@ function showPage(page, skipHistory){
   } else {
     history.replaceState({page},'','#'+page);
   }
-  if(page==='home'){renderHomeShows();renderHomeUpcoming();renderHomeComments();renderHeroStats();}
+  if(page==='home'){renderHomeShows();renderHomeUpcoming();renderHomeFeatured();renderHomeComments();renderHeroStats();}
   if(page==='shows'){
     renderShows();
     if(window.innerWidth >= 769){
