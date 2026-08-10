@@ -3021,6 +3021,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g"><label class="fl">地點</label><input class="fi" type="text" id="c-location" placeholder="e.g. 台北市 / 線上 Online"></div>
     <div class="fg-g full"><label class="fl">地址</label><input class="fi" type="text" id="c-address" placeholder="e.g. 台北市中山區復興北路480號"></div>
     <div class="fg-g"><label class="fl">費用</label><input class="fi" type="text" id="c-fee" placeholder="e.g. NT$2,800"></div>
+    <div class="fg-g full"><label class="fl">優惠（選填，展開價位時會一起顯示）</label><input class="fi" type="text" id="c-discount" placeholder="e.g. 兩人同行每人折NT$1,000、早鳥優惠..."></div>
     <div class="fg-g"><label class="fl">平台</label><select class="fs" id="c-platform"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="google-form">Google 表單</option><option value="other">其他</option></select></div>
     <div class="fg-g full"><label class="fl">報名連結</label><input class="fi" type="url" id="c-signupurl" placeholder="https://..."></div>
     <div class="fg-g full">
@@ -4737,11 +4738,12 @@ function courseCardHTML(c) {
       </div>
       ${c.fee?(()=>{
         const {range,lines}=parseFeeRange(c.fee);
-        const multiLine=lines.length>1;
+        const hasDiscount = !!(c.discount||'').trim();
+        const expandable = lines.length>1 || hasDiscount;
         const detailId=`fee-detail-${c.id}`;
         return `<div style="font-size:.79rem;font-weight:700;color:var(--or)">
-          ${range}${multiLine?`<button onclick="event.stopPropagation();var d=document.getElementById('${detailId}');var isOpen=d.style.display!=='none';d.style.display=isOpen?'none':'block';this.textContent=isOpen?'展開 ▾':'收起 ▴'" style="font-size:.72rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:6px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button>`:''}
-          ${multiLine?`<div id="${detailId}" style="display:none;margin-top:4px;padding:6px 8px;background:rgba(45,43,31,.04);border-radius:6px">${lines.map(l=>`<div style="font-size:.74rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">${l}</div>`).join('')}</div>`:''}
+          ${range}${expandable?`<button onclick="event.stopPropagation();var d=document.getElementById('${detailId}');var isOpen=d.style.display!=='none';d.style.display=isOpen?'none':'block';this.textContent=isOpen?'展開 ▾':'收起 ▴'" style="font-size:.72rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:6px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button>`:''}
+          ${expandable?`<div id="${detailId}" style="display:none;margin-top:4px;padding:6px 8px;background:rgba(45,43,31,.04);border-radius:6px">${lines.map(l=>`<div style="font-size:.74rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">${l}</div>`).join('')}${hasDiscount?`<div style="font-size:.74rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7;margin-top:${lines.length?'4px':'0'};padding-top:${lines.length?'4px':'0'};${lines.length?'border-top:1px solid rgba(45,43,31,.08)':''}">🏷️ ${c.discount}</div>`:''}</div>`:''}
         </div>`;
       })():''}
       <p class="cc-desc" style="flex:1">${c.description||''}</p>
@@ -4875,7 +4877,8 @@ function openCourseDetail(id){
       ${c.organizer?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${lang==='en'?'Organizer':'主辦'}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06)">${c.organizer}</td></tr>`:''}
       ${c.fee?(()=>{
         const {lines}=parseFeeRange(c.fee);
-        return `<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top">${lang==='en'?'Fee':'費用'}</td><td style="padding:7px 0;font-weight:700;color:var(--or)">${lines.map(l=>`<div>${l}</div>`).join('')}</td></tr>`;
+        const hasDiscount = !!(c.discount||'').trim();
+        return `<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top">${lang==='en'?'Fee':'費用'}</td><td style="padding:7px 0;font-weight:700;color:var(--or)">${lines.map(l=>`<div>${l}</div>`).join('')}${hasDiscount?`<div style="font-weight:400;font-size:.82rem;color:var(--tm);margin-top:4px">🏷️ ${c.discount}</div>`:''}</td></tr>`;
       })():''}
     </table>
     <div style="margin-top:10px">
@@ -6337,7 +6340,7 @@ function openCourseModal(id){
   eCourseId=id||null;
   const c=id?COURSES.find(x=>x.id===id):null;
   document.getElementById('modal-course-title').textContent=c?'編輯課程':'新增課程';
-  ['c-title','c-date','c-time-start','c-time-end','c-date2','c-time2-start','c-time2-end','c-date3','c-time3-start','c-time3-end','c-stage1-name','c-stage2-name','c-stage3-name','c-organizer','c-location','c-address','c-fee','c-signupurl','c-image','c-image-id','c-imgsrc','c-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  ['c-title','c-date','c-time-start','c-time-end','c-date2','c-time2-start','c-time2-end','c-date3','c-time3-start','c-time3-end','c-stage1-name','c-stage2-name','c-stage3-name','c-organizer','c-location','c-address','c-fee','c-discount','c-signupurl','c-image','c-image-id','c-imgsrc','c-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
   const imgPrev=document.getElementById('c-img-prev');if(imgPrev)imgPrev.style.display='none';
   const imgHint=document.getElementById('c-img-hint');if(imgHint){imgHint.textContent='';imgHint.className='img-url-hint';}
   if(c){
@@ -6412,6 +6415,7 @@ function openCourseModal(id){
     document.getElementById('c-location').value=c.location||'';
     document.getElementById('c-address').value=c.address||'';
     document.getElementById('c-fee').value=c.fee||'';
+    const cDiscEl=document.getElementById('c-discount'); if(cDiscEl) cDiscEl.value=c.discount||'';
     document.getElementById('c-platform').value=c.platform||'kktix';
     document.getElementById('c-signupurl').value=c.url||'';
     document.getElementById('c-image').value=c.image||'';
@@ -6470,7 +6474,7 @@ function saveCourse(status){
     return;
   }
   const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
-  const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,date3:date3Val,time3:time3Str,stage1Name:stage1NameVal,stage2Name:stage2NameVal,stage3Name:stage3NameVal,type:ctype,types:ctypes,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
+  const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,date3:date3Val,time3:time3Str,stage1Name:stage1NameVal,stage2Name:stage2NameVal,stage3Name:stage3NameVal,type:ctype,types:ctypes,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,discount:(document.getElementById('c-discount')?.value||'').trim(),platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
   window.FB.save('courses', eCourseId||null, item).then(newId=>{
     if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
     else COURSES.push({id:newId,...item});
