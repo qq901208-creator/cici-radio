@@ -162,8 +162,8 @@ body.ready{visibility:visible}
 .home-featured::before{content:'';position:absolute;top:-40%;right:-20%;width:70%;height:140%;background:radial-gradient(circle,rgba(239,111,32,.16),transparent 70%);pointer-events:none}
 .home-featured-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative;z-index:1}
 .home-featured-header h3{font-family:var(--f-zh);font-weight:900;font-size:1.1rem;color:var(--sd);display:flex;align-items:center;gap:4px}
-#home-featured-list{flex:1;position:relative;z-index:1;scroll-snap-type:x mandatory}
-#home-featured-list::-webkit-scrollbar{display:none}
+#home-featured-list,#featured-courses-list{flex:1;position:relative;z-index:1;scroll-snap-type:x mandatory}
+#home-featured-list::-webkit-scrollbar,#featured-courses-list::-webkit-scrollbar{display:none}
 .featured-card{position:relative;background:#fff;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;box-shadow:0 3px 14px rgba(45,43,31,.10);border:1.5px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(135deg,var(--or),var(--y));background-origin:border-box;background-clip:padding-box,border-box;transition:box-shadow .18s;display:flex;flex-direction:column;flex:0 0 220px;scroll-snap-align:start}
 @keyframes fcFloatHover{0%,100%{transform:translateY(-6px) scale(1.02)}50%{transform:translateY(-11px) scale(1.02)}}
 .featured-card:hover{box-shadow:0 16px 32px rgba(239,111,32,.32);animation:fcFloatHover 1.6s ease-in-out infinite}
@@ -185,7 +185,7 @@ body.ready{visibility:visible}
 @keyframes fcFloatOnce{0%{transform:translateY(0)}25%{transform:translateY(-9px)}50%{transform:translateY(2px)}75%{transform:translateY(-4px)}100%{transform:translateY(0)}}
 #home-featured-list .featured-card.fc-inview{animation:fcFloatOnce 1.1s ease-out}
 @media(max-width:768px){
-  #home-featured-list .featured-card{flex:0 0 78%}
+  #home-featured-list .featured-card,#featured-courses-list .featured-card{flex:0 0 78%}
 }
 .home-show-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(45,43,31,.06);cursor:pointer;border-radius:6px;transition:background .1s}
 .home-show-row:last-child{border-bottom:none;padding-bottom:0}
@@ -1924,6 +1924,13 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="sec-label"><span class="zh-text">課程講座</span><span class="en-text">Courses & Talks</span></div>
     <h2 class="sec-title"><span class="zh-text">喜劇課程與講座</span><span class="en-text">Comedy Courses & Workshops</span></h2>
     <p class="sec-desc" style="margin-bottom:14px"><span class="zh-text">想學習不知道怎麼入手嗎？<br>去找吧！所有課程都在這，一起加入喜劇的大家庭～<br><a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">發現資訊有誤或想補充課程？歡迎回報 →</a></span><span class="en-text">Not sure where to start?<br>Come find out! All the courses you need are right here — join the comedy family!<br><a href="https://forms.gle/w1woJw7yCDFwg2dr7" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found something missing or incorrect? Let us know →</a></span></p>
+    <!-- 合作推薦課程：跟首頁合作推薦演出同一套邏輯，放課程頁最上方，只有存在合作推薦課程時才顯示 -->
+    <div id="featured-courses-sec" style="display:none;margin-bottom:24px">
+      <div class="home-featured-header" style="margin-bottom:10px">
+        <h3><span class="zh-text">合作推薦課程</span><span class="en-text">Partner Picks</span><span style="color:var(--or);margin-left:6px">✦</span></h3>
+      </div>
+      <div id="featured-courses-list"></div>
+    </div>
     <div class="filter-row" style="margin-bottom:14px">
       <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
       <button class="chip on" data-f="ctype" data-v="all"><span class="zh-text">全部</span><span class="en-text">All</span></button>
@@ -3022,6 +3029,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g full"><label class="fl">地址</label><input class="fi" type="text" id="c-address" placeholder="e.g. 台北市中山區復興北路480號"></div>
     <div class="fg-g"><label class="fl">費用</label><input class="fi" type="text" id="c-fee" placeholder="e.g. NT$2,800"></div>
     <div class="fg-g full"><label class="fl">優惠（選填，展開價位時會一起顯示）</label><input class="fi" type="text" id="c-discount" placeholder="e.g. 兩人同行每人折NT$1,000、早鳥優惠..."></div>
+    <div class="fg-g full">
+      <label class="fl" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="c-featured" style="width:16px;height:16px;accent-color:var(--or);cursor:pointer">
+        🤝 於課程頁最上方「合作推薦課程」區塊顯示
+      </label>
+    </div>
     <div class="fg-g"><label class="fl">平台</label><select class="fs" id="c-platform"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="google-form">Google 表單</option><option value="other">其他</option></select></div>
     <div class="fg-g full"><label class="fl">報名連結</label><input class="fi" type="url" id="c-signupurl" placeholder="https://..."></div>
     <div class="fg-g full">
@@ -4830,6 +4843,62 @@ function renderCourses() {
 
   renderPagination('courses-pagination', coursesPage, totalPages, 'goCoursesPage');
   renderExpiredCourses();
+  renderFeaturedCourses();
+}
+
+// ── 合作推薦課程（課程頁最上方，跟首頁合作推薦演出同一套邏輯） ──
+function renderFeaturedCourses() {
+  const wrap = document.getElementById('featured-courses-sec');
+  const el = document.getElementById('featured-courses-list');
+  if (!wrap || !el) return;
+  const isMobile = window.innerWidth <= 768;
+  const courses = window._COURSES || COURSES || [];
+  const featured = courses
+    .filter(c => c.featured && (c.status || 'published') === 'published' && !isExpired(c.date, c.time))
+    .sort((a, b) => String(a.date||'').split(',')[0].trim().localeCompare(String(b.date||'').split(',')[0].trim()));
+
+  if (!featured.length) {
+    wrap.style.display = 'none';
+    el.innerHTML = '';
+    return;
+  }
+  wrap.style.display = 'block';
+
+  el.style.cssText = 'display:flex;gap:12px;overflow-x:auto;padding:6px 2px 8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch';
+
+  el.innerHTML = featured.map(c => {
+    const rawDate = String(c.date||'').split(',')[0].trim();
+    const posterEl = (c.image && c.image.trim())
+      ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(c.image.trim(),500)}" alt="${c.title}" onerror="this.style.display='none'">`
+      : `<span style="font-size:2.2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">📚</span>`;
+    const metaLine = [rawDate + (c.time?` ${c.time}`:''), c.location||''].filter(Boolean).join('・');
+    return `<div class="featured-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')">
+      <div class="fc-ribbon"><span class="zh-text">合作推薦</span><span class="en-text">Partner Pick</span></div>
+      <div class="fc-img">${posterEl}</div>
+      <div class="fc-body">
+        <div class="fc-title">${c.title}</div>
+        <div class="fc-meta">${metaLine}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // 卡片滑入畫面時漂浮一次，之後停下（電腦、手機都適用），做法跟首頁合作推薦演出一致
+  if (typeof IntersectionObserver === 'function') {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const cards = el.querySelectorAll('.featured-card');
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('fc-inview');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { root: isMobile ? el : null, threshold: 0.6 });
+        cards.forEach(c => io.observe(c));
+      });
+    });
+  }
 }
 
 function renderExpiredCourses(){
@@ -6389,6 +6458,7 @@ function openCourseModal(id){
   const c=id?COURSES.find(x=>x.id===id):null;
   document.getElementById('modal-course-title').textContent=c?'編輯課程':'新增課程';
   ['c-title','c-date','c-time-start','c-time-end','c-date2','c-time2-start','c-time2-end','c-date3','c-time3-start','c-time3-end','c-stage1-name','c-stage2-name','c-stage3-name','c-organizer','c-location','c-address','c-fee','c-discount','c-signupurl','c-image','c-image-id','c-imgsrc','c-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  const cFeaturedResetEl=document.getElementById('c-featured'); if(cFeaturedResetEl) cFeaturedResetEl.checked=false;
   const imgPrev=document.getElementById('c-img-prev');if(imgPrev)imgPrev.style.display='none';
   const imgHint=document.getElementById('c-img-hint');if(imgHint){imgHint.textContent='';imgHint.className='img-url-hint';}
   if(c){
@@ -6464,6 +6534,7 @@ function openCourseModal(id){
     document.getElementById('c-address').value=c.address||'';
     document.getElementById('c-fee').value=c.fee||'';
     const cDiscEl=document.getElementById('c-discount'); if(cDiscEl) cDiscEl.value=c.discount||'';
+    const cFeaturedEl=document.getElementById('c-featured'); if(cFeaturedEl) cFeaturedEl.checked=!!c.featured;
     document.getElementById('c-platform').value=c.platform||'kktix';
     document.getElementById('c-signupurl').value=c.url||'';
     document.getElementById('c-image').value=c.image||'';
@@ -6522,7 +6593,7 @@ function saveCourse(status){
     return;
   }
   const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
-  const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,date3:date3Val,time3:time3Str,stage1Name:stage1NameVal,stage2Name:stage2NameVal,stage3Name:stage3NameVal,type:ctype,types:ctypes,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,discount:(document.getElementById('c-discount')?.value||'').trim(),platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
+  const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,date3:date3Val,time3:time3Str,stage1Name:stage1NameVal,stage2Name:stage2NameVal,stage3Name:stage3NameVal,type:ctype,types:ctypes,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,discount:(document.getElementById('c-discount')?.value||'').trim(),featured:!!document.getElementById('c-featured')?.checked,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
   window.FB.save('courses', eCourseId||null, item).then(newId=>{
     if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
     else COURSES.push({id:newId,...item});
