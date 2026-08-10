@@ -4847,6 +4847,25 @@ function renderCourses() {
 }
 
 // ── 合作推薦課程（課程頁最上方，跟首頁合作推薦演出同一套邏輯） ──
+// 課程可能有多階段（不同日期），找出「離現在最近、還沒開始」的那個階段來顯示，
+// 而不是永遠只看第一階段——避免第一階段已經上完，但第二三階段還沒開始時，
+// 卡片顯示過期日期、甚至整張卡片被誤判成過期而消失。
+function courseNextStage(c) {
+  const stages = [
+    { date: c.date, time: c.time },
+    { date: c.date2, time: c.time2 },
+    { date: c.date3, time: c.time3 },
+  ].filter(s => s.date && String(s.date).trim());
+  const withStatus = stages.map(s => ({
+    date: s.date, time: s.time,
+    firstDay: String(s.date).split(',')[0].trim(),
+    isPast: isExpired(s.date, s.time),
+  }));
+  const upcoming = withStatus.filter(s => !s.isPast);
+  const chosen = upcoming.length ? upcoming[0] : (withStatus[withStatus.length - 1] || null);
+  return { chosen, totalStages: stages.length, isFullyPast: stages.length > 0 && upcoming.length === 0 };
+}
+
 function renderFeaturedCourses() {
   const wrap = document.getElementById('featured-courses-sec');
   const el = document.getElementById('featured-courses-list');
@@ -4854,8 +4873,12 @@ function renderFeaturedCourses() {
   const isMobile = window.innerWidth <= 768;
   const courses = window._COURSES || COURSES || [];
   const featured = courses
-    .filter(c => c.featured && (c.status || 'published') === 'published' && !isExpired(c.date, c.time))
-    .sort((a, b) => String(a.date||'').split(',')[0].trim().localeCompare(String(b.date||'').split(',')[0].trim()));
+    .filter(c => c.featured && (c.status || 'published') === 'published' && !courseNextStage(c).isFullyPast)
+    .sort((a, b) => {
+      const da = courseNextStage(a).chosen?.firstDay || '';
+      const db_ = courseNextStage(b).chosen?.firstDay || '';
+      return da.localeCompare(db_);
+    });
 
   if (!featured.length) {
     wrap.style.display = 'none';
@@ -4867,11 +4890,14 @@ function renderFeaturedCourses() {
   el.style.cssText = 'display:flex;gap:12px;overflow-x:auto;padding:6px 2px 8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch';
 
   el.innerHTML = featured.map(c => {
-    const rawDate = String(c.date||'').split(',')[0].trim();
+    const { chosen, totalStages } = courseNextStage(c);
+    const rawDate = chosen ? chosen.firstDay : '';
     const posterEl = (c.image && c.image.trim())
       ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(c.image.trim(),500)}" alt="${c.title}" onerror="this.style.display='none'">`
       : `<span style="font-size:2.2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">📚</span>`;
-    const metaLine = [rawDate + (c.time?` ${c.time}`:''), c.location||''].filter(Boolean).join('・');
+    const stageNote = totalStages > 1 ? `<span class="zh-text">・共${totalStages}階段</span><span class="en-text">・${totalStages} stages</span>` : '';
+    const dateTimeStr = rawDate + (chosen && chosen.time ? ` ${chosen.time}` : '');
+    const metaLine = [dateTimeStr, c.location||''].filter(Boolean).join('・') + stageNote;
     return `<div class="featured-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')">
       <div class="fc-ribbon"><span class="zh-text">合作推薦</span><span class="en-text">Partner Pick</span></div>
       <div class="fc-img">${posterEl}</div>
