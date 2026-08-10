@@ -3649,6 +3649,18 @@ function isExpired(dateStr, timeStr){
 }
 const _today = new Date();
 let calYear = _today.getFullYear(), calMonth = _today.getMonth(), calSel = null;
+
+// 圖片載入優化：海報都是貼 Google Drive 連結（lh3.googleusercontent.com），
+// Google 圖床支援用網址參數請求縮小版本，不用每次都下載原始解析度的完整圖檔。
+// width：想要的圖片寬度（px），會依畫面實際顯示大小挑對應數值，
+// 非 Google 圖床網址（例如使用者自己貼的其他外部連結）原樣返回，不做處理。
+function gImgUrl(url, width){
+  if(!url) return url;
+  const u = String(url).trim();
+  if(!u.includes('googleusercontent.com')) return u;
+  if(/=(w|s)\d/.test(u)) return u; // 網址已經帶尺寸參數就不重複疊加
+  return u + '=w' + width;
+}
 </script>
 
 <!-- ═══════════════════════════════════════
@@ -3798,7 +3810,7 @@ function showCardHTML(s) {
   const emojiMap = {opmic:'🎤',standup:'🎙️',improv:'🎭',sketch:'🎬',mancai:'🥢',crosstalk:'📯',rakugo:'🎎',ogiri:'🀄',musicom:'🎵',gameshow:'🎮',mixed:'🎪',special:'⭐',english:'🇬🇧',podcast:'📻',other:'🎬'};
   const emoji = emojiMap[types[0]] || '🎭';
   const posterEl = (s.image && s.image.trim())
-    ? `<img loading="lazy" class="sc-poster" src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
+    ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
     : '';
   const featuredTag = s.featured ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde3d2;color:#993c1d;border-radius:var(--r-pill);margin-left:4px">🤝 合作</span>` : '';
   const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
@@ -3859,7 +3871,7 @@ function openShowDetail(id, skipPageSwitch) {
   const dowEn2 = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'][d.getDay()];
   const dow = lang==='en' ? dowEn2 : `${dowZh2}`;
   const imgEl = s.image
-    ? `<img src="${s.image}" alt="${s.title}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
+    ? `<img src="${gImgUrl(s.image,900)}" alt="${s.title}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
     : '';
   document.getElementById('show-detail-body').innerHTML = `
     <div class="sd-hero" style="background:${gradientForTypes(types)}">
@@ -4331,7 +4343,7 @@ function renderHomeUpcoming() {
       const d = new Date(rawDate+'T00:00');
       const DOW_ZH2=['日','一','二','三','四','五','六'];
       const dow = isNaN(d)?'':DOW_ZH2[d.getDay()];
-      const posterEl = (s.image&&s.image.trim()) ? `<img loading="lazy" class="sc-poster" src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:100%;height:140px;object-fit:contain;display:block;background:#fff">` : `<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
+      const posterEl = (s.image&&s.image.trim()) ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:100%;height:140px;object-fit:contain;display:block;background:#fff">` : `<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
       const areaLabel = AREA_ZH[s.area||'other']||'';
       const expiredStyle = isExpired(s.date,s.time) ? 'opacity:.7;' : '';
       const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
@@ -4403,8 +4415,8 @@ function renderHomeFeatured() {
       const areaSet = new Set(list.map(x => x.area || 'other'));
       return { rep, checkedCount: list.length, autoCount, areaCount: areaSet.size };
     })
-    .sort((a, b) => showSortKey(a.rep).localeCompare(showSortKey(b.rep)))
-    .slice(0, 6);
+    .sort((a, b) => showSortKey(a.rep).localeCompare(showSortKey(b.rep)));
+  // 不設上限：有幾檔合作推薦就放幾檔，電腦、手機都是左右滑動瀏覽
   window._featuredSessionsMap = sessionsMap;
 
   if (!featuredGroups.length) {
@@ -4423,7 +4435,7 @@ function renderHomeFeatured() {
     const d = new Date(rawDate+'T00:00');
     const dow = isNaN(d) ? '' : DOW_ZH2[d.getDay()];
     const posterEl = (s.image && s.image.trim())
-      ? `<img loading="lazy" class="sc-poster" src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
+      ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
       : `<span style="font-size:2.2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
     const areaLabel = AREA_ZH[s.area||'other'] || '';
     const countNote = checkedCount > 1 ? `<span class="zh-text">・共${checkedCount}場</span><span class="en-text">・${checkedCount} dates</span>` : '';
@@ -4710,7 +4722,7 @@ function courseCardHTML(c) {
   const allTypes = (c.types&&c.types.length) ? c.types : [c.type||'other'];
   const m = COURSE_META[allTypes[0]] || COURSE_META.other;
   const emj = {standup:'🎙️',improv:'🎭',mancai:'🥢',other:'📚'};
-  const imgEl = c.image ? `<img loading="lazy" src="${c.image}" alt="" onerror="this.style.display='none'">` : '';
+  const imgEl = c.image ? `<img loading="lazy" src="${gImgUrl(c.image,500)}" alt="" onerror="this.style.display='none'">` : '';
   const expiredOverlay = isExpired(c.date, c.time) ? `style="opacity:.7"` : '';
   const typeTags = allTypes.map(t=>{const mt=COURSE_META[t]||COURSE_META.other;const lbl=getLang()==='en'?mt.labelEn:mt.label;return `<span class="cc-cat" style="background:${mt.tag};color:${mt.tagC};margin-right:3px">${lbl}</span>`;}).join('');
   // 卡片日期：多堂課只顯示「首日 ～ 尾日」
@@ -4850,7 +4862,7 @@ function openCourseDetail(id){
   history.replaceState(null,'', location.hash.split('?')[0] + '?course=' + id);
   const lang = getLang();
   const m=COURSE_META[c.type]||COURSE_META.other;
-  const imgHtml=c.image?`<div style="width:100%;max-height:280px;overflow:hidden;border-radius:var(--r-md);background:${m.bg};margin-bottom:18px;display:flex;align-items:center;justify-content:center"><img src="${c.image}" alt="${c.title}" style="width:100%;max-height:280px;object-fit:contain;display:block;background:var(--cr)" onerror="this.style.display='none'"></div>`:'';
+  const imgHtml=c.image?`<div style="width:100%;max-height:280px;overflow:hidden;border-radius:var(--r-md);background:${m.bg};margin-bottom:18px;display:flex;align-items:center;justify-content:center"><img src="${gImgUrl(c.image,900)}" alt="${c.title}" style="width:100%;max-height:280px;object-fit:contain;display:block;background:var(--cr)" onerror="this.style.display='none'"></div>`:'';
   const catLbl = lang==='en' ? m.labelEn : m.label;
   const prodLbl = lang==='en' ? 'Organizers & Co-organizers' : '主辦與協辦單位';
   document.getElementById('course-detail-body').innerHTML=`
@@ -5641,7 +5653,7 @@ function renderPerformers(){
       return `<span class="performer-type-tag" style="background:${m.bg};color:${m.color}">${lang==='en'?(m.labelEn||m.label):m.label}</span>`;
     }).join('');
     const avatar = p.photoUrl
-      ? `<img class="performer-avatar" src="${p.photoUrl}" alt="${p.name}" onerror="this.style.display='none';document.getElementById('pf-${p.id}').style.display='flex'">`
+      ? `<img loading="lazy" class="performer-avatar" src="${gImgUrl(p.photoUrl,260)}" alt="${p.name}" onerror="this.style.display='none';document.getElementById('pf-${p.id}').style.display='flex'">`
       : '';
     const fallback = `<div class="performer-avatar-fallback" id="pf-${p.id}" ${p.photoUrl?'style="display:none"':''}>${(p.name||'?')[0]}</div>`;
     return `<div class="performer-card" onclick="openPerformerDetail('${p.id}')" style="position:relative">
@@ -5761,7 +5773,7 @@ function openPerformerDetail(id){
   const socialLinks = (socialGroup1?`<div style="display:flex;align-items:center;gap:2px">${socialGroup1}</div>`:'') + (socialGroup2?`<div style="word-break:keep-all;margin-top:${socialGroup1?'6px':'0'}">${socialGroup2}</div>`:'');
   const shareBtn = ``;
   const heroAvatar = p.photoUrl
-    ? `<img src="${p.photoUrl}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:2px solid rgba(45,43,31,.1);flex-shrink:0">`
+    ? `<img src="${gImgUrl(p.photoUrl,260)}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;border:2px solid rgba(45,43,31,.1);flex-shrink:0">`
     : `<div style="width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,var(--or),#f5a623);display:flex;align-items:center;justify-content:center;font-size:3.2rem;color:#fff;font-weight:700;flex-shrink:0">${(p.name||'?')[0]}</div>`;
   document.getElementById('performer-detail-body').innerHTML = `
     <div style="display:flex;gap:16px;align-items:center;margin-bottom:16px">
@@ -5932,8 +5944,8 @@ function initTodayTab() {
 function renderAbout() {
   const cg=document.getElementById('current-members-grid');
   const fg=document.getElementById('former-members-grid');
-  if(cg) cg.innerHTML=MEMBERS.current.map(m=>`<div class="member-card"><div class="member-photo">${m.photo?`<img src="${m.photo}" alt="${m.name}" onerror="this.outerHTML='<span style=font-size:1.6rem>${m.emoji}</span>'">`:`<span>${m.emoji}</span>`}</div><div class="member-name">${m.name}</div><div class="member-role">${m.role}</div></div>`).join('');
-  if(fg) fg.innerHTML=MEMBERS.former.map(m=>`<div class="member-card former"><div class="member-photo">${m.photo?`<img src="${m.photo}" alt="${m.name}" onerror="this.outerHTML='<span style=font-size:1.6rem>${m.emoji}</span>'">`:`<span>${m.emoji}</span>`}</div><div class="member-name">${m.name}</div><div class="member-role">${m.role}</div></div>`).join('');
+  if(cg) cg.innerHTML=MEMBERS.current.map(m=>`<div class="member-card"><div class="member-photo">${m.photo?`<img loading="lazy" src="${gImgUrl(m.photo,260)}" alt="${m.name}" onerror="this.outerHTML='<span style=font-size:1.6rem>${m.emoji}</span>'">`:`<span>${m.emoji}</span>`}</div><div class="member-name">${m.name}</div><div class="member-role">${m.role}</div></div>`).join('');
+  if(fg) fg.innerHTML=MEMBERS.former.map(m=>`<div class="member-card former"><div class="member-photo">${m.photo?`<img loading="lazy" src="${gImgUrl(m.photo,260)}" alt="${m.name}" onerror="this.outerHTML='<span style=font-size:1.6rem>${m.emoji}</span>'">`:`<span>${m.emoji}</span>`}</div><div class="member-name">${m.name}</div><div class="member-role">${m.role}</div></div>`).join('');
   const pg=document.getElementById('team-photos-grid');
   if(pg) pg.innerHTML=TEAM_PHOTOS.map(p=>p.src?`<div class="photo-slot"><img src="${p.src}" alt="${p.alt}" onerror="this.parentElement.innerHTML='<span>📷</span><span>${p.alt}</span>'"></div>`:`<div class="photo-slot"><span style="font-size:1.8rem;opacity:.3">📷</span><span>${p.alt}</span></div>`).join('');
 }
@@ -7543,7 +7555,7 @@ function _renderGuideShows(){
   el.innerHTML=upcoming.map(s=>{
     const types=Array.isArray(s.types)?s.types:(s.type?[s.type]:['other']);
     const typeTags=types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span style="font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:var(--r-pill);background:${m.bg};color:${m.color}">${m.label}</span>`;}).join('');
-    const posterEl=(s.image&&s.image.trim())?`<img loading="lazy" src="${s.image.trim()}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" class="sc-poster">`:`<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
+    const posterEl=(s.image&&s.image.trim())?`<img loading="lazy" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" class="sc-poster">`:`<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
     const rawDate=String(s.date||'').split(',')[0].trim();
     const d=new Date(rawDate+'T00:00');
     const DOW=['日','一','二','三','四','五','六'];
