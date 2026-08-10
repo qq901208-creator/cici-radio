@@ -2925,7 +2925,10 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g full"><label class="fl">課程名稱 <span class="req">*</span></label><input class="fi" type="text" id="c-title"></div>
     <!-- 第一階段 -->
     <div class="fg-g full" style="background:rgba(245,213,88,.08);border-radius:var(--r-md);padding:12px 14px;border:1px solid rgba(239,111,32,.15)">
-      <div style="font-size:.72rem;font-weight:700;color:var(--or);font-family:var(--f-bo);margin-bottom:8px">📅 第一階段 Phase 1</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:.72rem;font-weight:700;color:var(--or);font-family:var(--f-bo)">📅</span>
+        <input class="fi" type="text" id="c-stage1-name" placeholder="第一階段（不填則自動用此名稱）" style="flex:1;font-size:.78rem;padding:5px 9px;font-weight:700;color:var(--or)">
+      </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
         <div class="fg-g" style="grid-column:1/-1">
           <label class="fl">日期（可多選，逗號分隔）</label>
@@ -2949,7 +2952,10 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <!-- 第二階段 -->
     <div class="fg-g full" style="background:rgba(184,240,208,.18);border-radius:var(--r-md);padding:12px 14px;border:1px solid rgba(13,92,48,.12)">
-      <div style="font-size:.72rem;font-weight:700;color:#0d5c30;font-family:var(--f-bo);margin-bottom:8px">📅 第二階段 Phase 2（選填）</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:.72rem;font-weight:700;color:#0d5c30;font-family:var(--f-bo)">📅</span>
+        <input class="fi" type="text" id="c-stage2-name" placeholder="第二階段（選填，不填則自動用此名稱）" style="flex:1;font-size:.78rem;padding:5px 9px;font-weight:700;color:#0d5c30">
+      </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
         <div class="fg-g" style="grid-column:1/-1">
           <label class="fl">日期（可多選，逗號分隔）</label>
@@ -2967,6 +2973,33 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <div style="display:flex;gap:5px">
             <select class="fs" id="c-time2-end-ampm" style="width:76px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
             <input class="fi" type="text" id="c-time2-end" placeholder="6:00" style="flex:1">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 第三階段 -->
+    <div class="fg-g full" style="background:rgba(200,220,255,.2);border-radius:var(--r-md);padding:12px 14px;border:1px solid rgba(30,60,140,.14)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:.72rem;font-weight:700;color:#1e3c8c;font-family:var(--f-bo)">📅</span>
+        <input class="fi" type="text" id="c-stage3-name" placeholder="第三階段（選填，不填則自動用此名稱）" style="flex:1;font-size:.78rem;padding:5px 9px;font-weight:700;color:#1e3c8c">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
+        <div class="fg-g" style="grid-column:1/-1">
+          <label class="fl">日期（可多選，逗號分隔）</label>
+          <input class="fi" type="text" id="c-date3" placeholder="e.g. 2026-07-01, 2026-07-08">
+        </div>
+        <div class="fg-g">
+          <label class="fl">開始時間</label>
+          <div style="display:flex;gap:5px">
+            <select class="fs" id="c-time3-start-ampm" style="width:76px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
+            <input class="fi" type="text" id="c-time3-start" placeholder="2:00" style="flex:1">
+          </div>
+        </div>
+        <div class="fg-g">
+          <label class="fl">結束時間</label>
+          <div style="display:flex;gap:5px">
+            <select class="fs" id="c-time3-end-ampm" style="width:76px"><option value="上午">上午</option><option value="下午" selected>下午</option></select>
+            <input class="fi" type="text" id="c-time3-end" placeholder="6:00" style="flex:1">
           </div>
         </div>
       </div>
@@ -4660,6 +4693,18 @@ function isCourseOngoing(c){
   return first<=today && last>=today;
 }
 // ── COURSES ──
+// 課程階段名稱：有自訂名稱就用自訂的，沒填就用「第一/第二/第三階段」預設值
+function stageLabelHTML(customName, defaultZh, defaultEn) {
+  if (customName && customName.trim()) {
+    const n = customName.trim();
+    return `<span class="zh-text">${n}</span><span class="en-text">${n}</span>`;
+  }
+  return `<span class="zh-text">${defaultZh}</span><span class="en-text">${defaultEn}</span>`;
+}
+function stageLabelText(customName, defaultZh, defaultEn, lang) {
+  if (customName && customName.trim()) return customName.trim();
+  return lang === 'en' ? defaultEn : defaultZh;
+}
 function courseCardHTML(c) {
   const allTypes = (c.types&&c.types.length) ? c.types : [c.type||'other'];
   const m = COURSE_META[allTypes[0]] || COURSE_META.other;
@@ -4683,8 +4728,9 @@ function courseCardHTML(c) {
       <div class="cc-title">${c.title}</div>
       <div class="cc-meta">
         <div style="display:flex;flex-direction:column;gap:3px">
-          <span>📅 ${cardDate}${c.time?` · ${c.time}`:''}</span>
-          ${(c.date2||c.time2)?`<span style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-top:3px;padding-top:4px;border-top:1px solid rgba(45,43,31,.08)"><span class="zh-text">第二階段</span><span class="en-text">Phase 2</span></span><span style="color:var(--tm)">📅 ${c.date2||''}${c.time2?` · ${c.time2}`:''}</span>`:'' }
+          ${(c.date2||c.time2||c.date3||c.time3)?`<span style="font-size:.75rem;font-weight:700;color:var(--or);font-family:var(--f-bo)">${stageLabelHTML(c.stage1Name,'第一階段','Phase 1')}</span><span style="color:var(--tm)">📅 ${cardDate}${c.time?` · ${c.time}`:''}</span>`:`<span>📅 ${cardDate}${c.time?` · ${c.time}`:''}</span>`}
+          ${(c.date2||c.time2)?`<span style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-top:3px;padding-top:4px;border-top:1px solid rgba(45,43,31,.08)">${stageLabelHTML(c.stage2Name,'第二階段','Phase 2')}</span><span style="color:var(--tm)">📅 ${c.date2||''}${c.time2?` · ${c.time2}`:''}</span>`:'' }
+          ${(c.date3||c.time3)?`<span style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-top:3px;padding-top:4px;border-top:1px solid rgba(45,43,31,.08)">${stageLabelHTML(c.stage3Name,'第三階段','Phase 3')}</span><span style="color:var(--tm)">📅 ${c.date3||''}${c.time3?` · ${c.time3}`:''}</span>`:'' }
         </div>
         <span>📍 ${c.location||''}</span>
         ${c.organizer?`<span>${c.organizer}</span>`:''}
@@ -4810,8 +4856,9 @@ function openCourseDetail(id){
     <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;color:var(--or);margin-bottom:6px;font-family:var(--f-bo)">${catLbl}</div>
     <div style="font-size:1.3rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:14px;line-height:1.3">${c.title}</div>
     <table style="width:100%;font-size:.85rem;font-family:var(--f-zh);border-collapse:collapse">
-      ${(c.dateDisplay||c.date)?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);width:70px;vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${lang==='en'?'Phase 1':'第一階段'}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06);word-break:break-word">${c.dateDisplay||c.date}${c.time?`<br><span style="color:var(--ts)">${c.time}</span>`:''}</td></tr>`:''}
-      ${(c.date2||c.time2)?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${lang==='en'?'Phase 2':'第二階段'}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06);word-break:break-word;color:var(--tm)">${c.date2||''}${c.time2?`<br><span style="color:var(--ts)">${c.time2}</span>`:''}</td></tr>`:''}
+      ${(c.dateDisplay||c.date)?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);width:70px;vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${stageLabelText(c.stage1Name,'第一階段','Phase 1',lang)}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06);word-break:break-word">${c.dateDisplay||c.date}${c.time?`<br><span style="color:var(--ts)">${c.time}</span>`:''}</td></tr>`:''}
+      ${(c.date2||c.time2)?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${stageLabelText(c.stage2Name,'第二階段','Phase 2',lang)}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06);word-break:break-word;color:var(--tm)">${c.date2||''}${c.time2?`<br><span style="color:var(--ts)">${c.time2}</span>`:''}</td></tr>`:''}
+      ${(c.date3||c.time3)?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${stageLabelText(c.stage3Name,'第三階段','Phase 3',lang)}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06);word-break:break-word;color:var(--tm)">${c.date3||''}${c.time3?`<br><span style="color:var(--ts)">${c.time3}</span>`:''}</td></tr>`:''}
       ${c.location?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${lang==='en'?'Location':'地點'}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06)">${c.location}</td></tr>`:''}
       ${c.address?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${lang==='en'?'Address':'地址'}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06)"><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address)}" target="_blank" rel="noopener" style="color:var(--or);text-decoration:none">${c.address} ↗</a></td></tr>`:''}
       ${c.organizer?`<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top;border-bottom:1px solid rgba(45,43,31,.06)">${lang==='en'?'Organizer':'主辦'}</td><td style="padding:7px 0;border-bottom:1px solid rgba(45,43,31,.06)">${c.organizer}</td></tr>`:''}
@@ -6279,7 +6326,7 @@ function openCourseModal(id){
   eCourseId=id||null;
   const c=id?COURSES.find(x=>x.id===id):null;
   document.getElementById('modal-course-title').textContent=c?'編輯課程':'新增課程';
-  ['c-title','c-date','c-time-start','c-time-end','c-date2','c-time2-start','c-time2-end','c-organizer','c-location','c-address','c-fee','c-signupurl','c-image','c-image-id','c-imgsrc','c-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
+  ['c-title','c-date','c-time-start','c-time-end','c-date2','c-time2-start','c-time2-end','c-date3','c-time3-start','c-time3-end','c-stage1-name','c-stage2-name','c-stage3-name','c-organizer','c-location','c-address','c-fee','c-signupurl','c-image','c-image-id','c-imgsrc','c-desc'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
   const imgPrev=document.getElementById('c-img-prev');if(imgPrev)imgPrev.style.display='none';
   const imgHint=document.getElementById('c-img-hint');if(imgHint){imgHint.textContent='';imgHint.className='img-url-hint';}
   if(c){
@@ -6326,6 +6373,31 @@ function openCourseModal(id){
       if(el2e) el2e.value=isAM2?'上午':'下午';
       if(el2ev) el2ev.value=e2.replace(/^(上午|下午)/,'').trim();
     }
+    // 第三階段日期與時間
+    const d3El=document.getElementById('c-date3');
+    if(d3El) d3El.value=c.date3||'';
+    const time3Str=c.time3||'';
+    const time3Parts=time3Str.split('–');
+    if(time3Parts[0]&&time3Parts[0].trim()){
+      const s3=time3Parts[0].trim();
+      const isAM3=s3.startsWith('上午');
+      const el3s=document.getElementById('c-time3-start-ampm');
+      const el3sv=document.getElementById('c-time3-start');
+      if(el3s) el3s.value=isAM3?'上午':'下午';
+      if(el3sv) el3sv.value=s3.replace(/^(上午|下午)/,'').trim();
+    }
+    if(time3Parts[1]&&time3Parts[1].trim()){
+      const e3=time3Parts[1].trim();
+      const isAM3=e3.startsWith('上午');
+      const el3e=document.getElementById('c-time3-end-ampm');
+      const el3ev=document.getElementById('c-time3-end');
+      if(el3e) el3e.value=isAM3?'上午':'下午';
+      if(el3ev) el3ev.value=e3.replace(/^(上午|下午)/,'').trim();
+    }
+    // 自訂階段名稱（沒填就留空，畫面上會自動用「第一/二/三階段」）
+    const s1nEl=document.getElementById('c-stage1-name'); if(s1nEl) s1nEl.value=c.stage1Name||'';
+    const s2nEl=document.getElementById('c-stage2-name'); if(s2nEl) s2nEl.value=c.stage2Name||'';
+    const s3nEl=document.getElementById('c-stage3-name'); if(s3nEl) s3nEl.value=c.stage3Name||'';
     document.getElementById('c-location').value=c.location||'';
     document.getElementById('c-address').value=c.address||'';
     document.getElementById('c-fee').value=c.fee||'';
@@ -6366,6 +6438,18 @@ function saveCourse(status){
   if(start2Time) time2Str=start2Ampm+start2Time;
   if(start2Time&&end2Time) time2Str+=('–'+end2Ampm+end2Time);
   const date2Val=(document.getElementById('c-date2')?.value||'').trim();
+  // 組合第三階段時間字串
+  const start3Ampm=(document.getElementById('c-time3-start-ampm')?.value)||'下午';
+  const start3Time=(document.getElementById('c-time3-start')?.value||'').trim();
+  const end3Ampm=(document.getElementById('c-time3-end-ampm')?.value)||'下午';
+  const end3Time=(document.getElementById('c-time3-end')?.value||'').trim();
+  let time3Str='';
+  if(start3Time) time3Str=start3Ampm+start3Time;
+  if(start3Time&&end3Time) time3Str+=('–'+end3Ampm+end3Time);
+  const date3Val=(document.getElementById('c-date3')?.value||'').trim();
+  const stage1NameVal=(document.getElementById('c-stage1-name')?.value||'').trim();
+  const stage2NameVal=(document.getElementById('c-stage2-name')?.value||'').trim();
+  const stage3NameVal=(document.getElementById('c-stage3-name')?.value||'').trim();
   const dateVal=document.getElementById('c-date').value.trim();
   const dateParts=(dateVal.split(',').map(s=>s.trim()).filter(Boolean));
   const firstDate=dateParts[0]||'';
@@ -6375,7 +6459,7 @@ function saveCourse(status){
     return;
   }
   const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
-  const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,type:ctype,types:ctypes,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
+  const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,date3:date3Val,time3:time3Str,stage1Name:stage1NameVal,stage2Name:stage2NameVal,stage3Name:stage3NameVal,type:ctype,types:ctypes,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
   window.FB.save('courses', eCourseId||null, item).then(newId=>{
     if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
     else COURSES.push({id:newId,...item});
