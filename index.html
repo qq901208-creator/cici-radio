@@ -3901,9 +3901,25 @@ function showCardHTML(s) {
 }
 
 // ── SHOW DETAIL MODAL ──
+// 合作推薦成效追蹤：判斷這次點擊的演出，是否來自合作推薦卡片（含場次選擇清單），
+// 用來在 GA4 比較「合作推薦」跟「一般演出」卡片的點擊率有沒有差
+function isFeaturedShowClick(id) {
+  const map = window._featuredSessionsMap;
+  if (!map) return false;
+  for (const repId in map) {
+    if (Array.isArray(map[repId]) && map[repId].some(sess => sess.id === id)) return true;
+  }
+  return false;
+}
 function openShowDetail(id, skipPageSwitch) {
   const allShows = window._SHOWS || SHOWS || [];
   const s = allShows.find(x=>x.id===id); if (!s) return;
+  if (typeof gtag === 'function') {
+    gtag('event', 'card_click', {
+      card_type: isFeaturedShowClick(id) ? 'featured_show' : 'regular_show',
+      show_title: (s.title || '').slice(0, 80),
+    });
+  }
   // 若不在演出資訊頁，先切換過去再開 Modal（除非明確要求不切頁）
   const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
   if(!skipPageSwitch && activePage !== 'shows' && typeof showPage==='function') showPage('shows');
@@ -4986,6 +5002,12 @@ function renderExpiredCourses(){
 function openCourseDetail(id){
   const allCourses = window._COURSES || COURSES || [];
   const c=allCourses.find(x=>x.id===id); if(!c)return;
+  if (typeof gtag === 'function') {
+    gtag('event', 'card_click', {
+      card_type: c.featured ? 'featured_course' : 'regular_course',
+      course_title: (c.title || '').slice(0, 80),
+    });
+  }
   // 更新 URL，方便分享
   history.replaceState(null,'', location.hash.split('?')[0] + '?course=' + id);
   const lang = getLang();
