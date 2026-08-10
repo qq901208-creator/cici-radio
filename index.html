@@ -3189,7 +3189,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/fireba
 import {
   getFirestore, collection, doc,
   getDocs, getDoc, addDoc, setDoc, deleteDoc, updateDoc,
-  query, orderBy, onSnapshot
+  query, where, orderBy, onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
   getAuth, signInWithCredential, GoogleAuthProvider, signOut
@@ -3227,12 +3227,45 @@ window._orderBy = orderBy;
 window._onSnapshot = onSnapshot;
 
 // ── Load all data from Firestore on startup ──
+// shows collection 資料量會一直累積（封存機制不會刪除舊資料），
+// 一般訪客只需要「過去 31 天內～未來」的演出，不用整包 987+ 筆歷史資料都下載。
+// admin（已登入）維持抓全部，編輯、封存列表、月曆往回翻都不受影響。
+window._showsScoped = false;
+function _showsQueryForLoad() {
+  const isAdminSession = (typeof isLoggedIn === 'function') && isLoggedIn();
+  if (isAdminSession) return collection(db, 'shows');
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 31);
+  const cutoffStr = cutoff.toISOString().slice(0, 10); // YYYY-MM-DD，跟 date 欄位格式一致
+  window._showsScoped = true;
+  return query(collection(db, 'shows'), where('date', '>=', cutoffStr));
+}
+// 需要看更久以前資料時（月曆往回翻超過範圍、admin 進入編輯模式）才補抓完整歷史
+window._ensureFullShowsLoaded = async function () {
+  if (!window._showsScoped) return; // 本來就是完整資料，不用再抓
+  window._showsScoped = false; // 先設 false 避免重複觸發
+  try {
+    const snap = await getDocs(collection(db, 'shows'));
+    const full = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const existingIds = new Set((window._SHOWS || []).map(s => s.id));
+    const toAdd = full.filter(s => !existingIds.has(s.id));
+    if (toAdd.length) {
+      window._SHOWS = [...(window._SHOWS || []), ...toAdd];
+      if (typeof window._syncData === 'function') try { window._syncData(); } catch (e) {}
+    }
+    if (typeof renderArchivedShows === 'function') try { renderArchivedShows(); } catch (e) {}
+    if (typeof renderCalendar === 'function') try { renderCalendar(); } catch (e) {}
+  } catch (e) {
+    console.error('ensureFullShowsLoaded failed:', e);
+    window._showsScoped = true; // 失敗的話還原狀態，下次還能重試
+  }
+};
 async function loadAllData(retryCount = 0) {
   const safe = p => p.catch(()=>null);
   const MAX_RETRIES = 3;
   try {
     const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, performersSnap, metaSnap, showVenuesSnap, showAreasSnap] = await Promise.all([
-      safe(getDocs(collection(db,'shows'))),
+      safe(getDocs(_showsQueryForLoad())),
       safe(getDocs(collection(db,'mics'))),
       safe(getDocs(collection(db,'venues'))),
       safe(getDocs(collection(db,'courses'))),
@@ -6034,6 +6067,8 @@ function changeMonth(dir){
   if(calMonth<0){calMonth=11;calYear--;}
   if(calMonth>11){calMonth=0;calYear++;}
   renderCalendar();
+  // 往回翻月曆時，順便確保歷史資料已經補齊（一般訪客初始只抓近 31 天）
+  if(dir<0 && typeof window._ensureFullShowsLoaded==='function') window._ensureFullShowsLoaded();
 }
 
 function selectCalDay(ds){
@@ -6101,6 +6136,7 @@ function toggleEdit(){
   document.querySelectorAll('.editable').forEach(el=>el.contentEditable=editMode?'true':'false');if(editMode)updateExpiredBadge();
   document.querySelectorAll('.edit-add-btn').forEach(btn=>btn.style.display=editMode?'flex':'none');
   renderMicTable();
+  if(editMode && typeof window._ensureFullShowsLoaded==='function') window._ensureFullShowsLoaded();
   if(typeof renderFpList==='function') renderFpList();
   if(typeof renderArchivedShows==='function') renderArchivedShows();
   if(typeof renderVenues==='function') renderVenues();
