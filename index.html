@@ -4743,7 +4743,7 @@ function courseCardHTML(c) {
         const detailId=`fee-detail-${c.id}`;
         return `<div style="font-size:.79rem;font-weight:700;color:var(--or)">
           ${range}${expandable?`<button onclick="event.stopPropagation();var d=document.getElementById('${detailId}');var isOpen=d.style.display!=='none';d.style.display=isOpen?'none':'block';this.textContent=isOpen?'展開 ▾':'收起 ▴'" style="font-size:.72rem;font-weight:700;color:var(--or);background:none;border:none;cursor:pointer;margin-left:6px;font-family:var(--f-zh);padding:0;text-decoration:underline;text-underline-offset:2px">展開 ▾</button>`:''}
-          ${expandable?`<div id="${detailId}" style="display:none;margin-top:4px;padding:6px 8px;background:rgba(45,43,31,.04);border-radius:6px">${lines.map(l=>`<div style="font-size:.74rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">${l}</div>`).join('')}${hasDiscount?`<div style="font-size:.74rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7;margin-top:${lines.length?'4px':'0'};padding-top:${lines.length?'4px':'0'};${lines.length?'border-top:1px solid rgba(45,43,31,.08)':''}">🏷️ ${c.discount}</div>`:''}</div>`:''}
+          ${expandable?`<div id="${detailId}" style="display:none;margin-top:4px;padding:6px 8px;background:rgba(45,43,31,.04);border-radius:6px">${lines.map(l=>`<div style="font-size:.74rem;color:var(--tm);font-family:var(--f-zh);line-height:1.7">${l}</div>`).join('')}${hasDiscount?`<div style="font-size:.7rem;font-weight:400;color:var(--ts);font-family:var(--f-zh);line-height:1.6;margin-top:${lines.length?'5px':'0'};padding-top:${lines.length?'5px':'0'};${lines.length?'border-top:1px solid rgba(45,43,31,.08)':''}">※ ${c.discount}</div>`:''}</div>`:''}
         </div>`;
       })():''}
       <p class="cc-desc" style="flex:1">${c.description||''}</p>
@@ -4878,7 +4878,7 @@ function openCourseDetail(id){
       ${c.fee?(()=>{
         const {lines}=parseFeeRange(c.fee);
         const hasDiscount = !!(c.discount||'').trim();
-        return `<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top">${lang==='en'?'Fee':'費用'}</td><td style="padding:7px 0;font-weight:700;color:var(--or)">${lines.map(l=>`<div>${l}</div>`).join('')}${hasDiscount?`<div style="font-weight:400;font-size:.82rem;color:var(--tm);margin-top:4px">🏷️ ${c.discount}</div>`:''}</td></tr>`;
+        return `<tr><td style="padding:7px 12px 7px 0;color:var(--ts);vertical-align:top">${lang==='en'?'Fee':'費用'}</td><td style="padding:7px 0;font-weight:700;color:var(--or)">${lines.map(l=>`<div>${l}</div>`).join('')}${hasDiscount?`<div style="font-weight:400;font-size:.78rem;color:var(--ts);margin-top:5px">※ ${c.discount}</div>`:''}</td></tr>`;
       })():''}
     </table>
     <div style="margin-top:10px">
