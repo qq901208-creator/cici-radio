@@ -4806,6 +4806,14 @@ function stageLabelText(customName, defaultZh, defaultEn, lang) {
   if (customName && customName.trim()) return customName.trim();
   return lang === 'en' ? defaultEn : defaultZh;
 }
+// 卡片日期：多堂課只顯示「首日 ～ 尾日」（拉到全域，courseCardHTML 跟 renderExpiredCourses 都要用）
+function courseCardDateRange(dateStr) {
+  if(!dateStr) return '';
+  const parts = dateStr.split(',').map(s=>s.trim()).filter(Boolean);
+  if(parts.length <= 2) return dateStr;
+  const sorted = parts.slice().sort();
+  return sorted[0] + ' ～ ' + sorted[sorted.length-1];
+}
 function courseCardHTML(c) {
   const allTypes = (c.types&&c.types.length) ? c.types : [c.type||'other'];
   const m = COURSE_META[allTypes[0]] || COURSE_META.other;
@@ -4814,13 +4822,6 @@ function courseCardHTML(c) {
   const expiredOverlay = courseNextStage(c).isFullyPast ? `style="opacity:.7"` : '';
   const typeTags = allTypes.map(t=>{const mt=COURSE_META[t]||COURSE_META.other;const lbl=getLang()==='en'?mt.labelEn:mt.label;return `<span class="cc-cat" style="background:${mt.tag};color:${mt.tagC};margin-right:3px">${lbl}</span>`;}).join('');
   // 卡片日期：多堂課只顯示「首日 ～ 尾日」
-  function courseCardDateRange(dateStr) {
-    if(!dateStr) return '';
-    const parts = dateStr.split(',').map(s=>s.trim()).filter(Boolean);
-    if(parts.length <= 2) return dateStr;
-    const sorted = parts.slice().sort();
-    return sorted[0] + ' ～ ' + sorted[sorted.length-1];
-  }
   const cardDate = courseCardDateRange(c.dateDisplay || c.date);
   return `<div class="course-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')" ${expiredOverlay} style="display:flex;flex-direction:column">
     <div style="display:flex;gap:4px;flex-wrap:wrap;padding:8px 10px 0">${typeTags}</div>
