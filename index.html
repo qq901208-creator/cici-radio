@@ -4986,7 +4986,9 @@ function renderExpiredCourses(){
   const courses = window._COURSES||[];
   const q = (document.getElementById('expired-courses-search')?.value||'').trim().toLowerCase();
   let expired = courses.filter(c=>{
-    return courseNextStage(c).isFullyPast;
+    // 跟「過期演出」同樣的邏輯：狀態是封存的話，不管日期直接列進來，
+    // 避免課程被誤封存後、日期又還沒過期，卡在兩邊都找不到的死角
+    return c.status === 'archived' || courseNextStage(c).isFullyPast;
   });
   if(q) expired = expired.filter(c=>
     (c.title||'').toLowerCase().includes(q)||
@@ -5011,8 +5013,13 @@ function renderExpiredCourses(){
     const m = COURSE_META[c.type]||COURSE_META.other;
     const lbl = lang==='en' ? m.labelEn : m.label;
     const cardDate = courseCardDateRange(c.dateDisplay||c.date);
+    // 封存但日期其實還沒過的，特別標出來，方便你檢查是不是誤封存
+    const archivedNote = (c.status === 'archived' && !courseNextStage(c).isFullyPast)
+      ? `<span style="font-size:.68rem;font-weight:800;padding:2px 8px;background:#fde3d2;color:#993c1d;border-radius:var(--r-pill);white-space:nowrap">⚠️ 已封存但未過期</span>`
+      : '';
     return `<div onclick="openCourseDetail('${c.id}')" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--ww);border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.09);flex-wrap:wrap;cursor:pointer;opacity:.7" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.7'">
       <span style="font-size:.7rem;font-weight:700;padding:2px 8px;background:${m.bg};color:${m.tag};border-radius:var(--r-pill);white-space:nowrap">${lbl}</span>
+      ${archivedNote}
       <div style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo);white-space:nowrap;min-width:90px">${cardDate||'—'}</div>
       <div style="font-weight:700;font-family:var(--f-zh);font-size:.88rem;flex:1;min-width:120px">${c.title||'—'}</div>
       <div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh)">${c.organizer||c.location||''}</div>
