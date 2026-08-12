@@ -163,6 +163,15 @@ body.ready{visibility:visible}
 .home-featured-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative;z-index:1}
 .home-featured-header h3{font-family:var(--f-zh);font-weight:900;font-size:1.1rem;color:var(--sd);display:flex;align-items:center;gap:4px}
 #home-featured-list,#featured-courses-list{flex:1;position:relative;z-index:1;scroll-snap-type:x mandatory}
+.fc-carousel-wrap{position:relative}
+.fc-nav{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(45,43,31,.12);background:#fff;box-shadow:0 3px 10px rgba(45,43,31,.18);color:var(--or);font-size:1.3rem;font-weight:900;line-height:1;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;transition:transform .15s,box-shadow .15s}
+.fc-nav:hover{transform:translateY(-50%) scale(1.08);box-shadow:0 5px 14px rgba(239,111,32,.32)}
+.fc-nav:active{transform:translateY(-50%) scale(.96)}
+.fc-nav-prev{left:2px}
+.fc-nav-next{right:2px}
+@media(max-width:768px){
+  .fc-nav{display:none} /* 手機用手指滑動瀏覽，不需要箭頭按鈕 */
+}
 #home-featured-list::-webkit-scrollbar,#featured-courses-list::-webkit-scrollbar{display:none}
 .featured-card{position:relative;background:#fff;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;box-shadow:0 3px 14px rgba(45,43,31,.10);border:1.5px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(135deg,var(--or),var(--y));background-origin:border-box;background-clip:padding-box,border-box;transition:box-shadow .18s;display:flex;flex-direction:column;flex:0 0 220px;scroll-snap-align:start}
 @keyframes fcFloatHover{0%,100%{transform:translateY(-6px) scale(1.02)}50%{transform:translateY(-11px) scale(1.02)}}
@@ -1407,7 +1416,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <span class="zh-text">查看更多 →</span><span class="en-text">See all →</span>
         </a>
       </div>
-      <div id="home-featured-list"></div>
+      <div class="fc-carousel-wrap">
+        <button type="button" class="fc-nav fc-nav-prev" onclick="scrollFeaturedList('home-featured-list',-1)" aria-label="Previous">‹</button>
+        <div id="home-featured-list"></div>
+        <button type="button" class="fc-nav fc-nav-next" onclick="scrollFeaturedList('home-featured-list',1)" aria-label="Next">›</button>
+      </div>
     </div>
   </div>
 
@@ -1582,7 +1595,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
             <option value="ponwo">月半窩Cafe</option>
             <option value="fakers">飛客劇樂部 - basis coffee.</option>
             <option value="beitou">北投喜劇 - 山峸二手書店</option>
-            <option value="humorbeing">Humorbeing - 遊牧計畫 Project Nomad</option>
+            <option value="humorbeing">Humorbeing 笑場歐噴麥</option>
             <option value="ginting">樂君亭</option>
             <option value="windcity">站立風城 - 現場馬拉桑餐酒館</option>
             <option value="smo">思MIC歐 - 不染酒吧</option>
@@ -1847,7 +1860,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ponwo" style="accent-color:var(--or)"> 月半窩</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="beitou" style="accent-color:var(--or)"> 北投喜劇 - 山峸二手書店</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="dikia" style="accent-color:var(--or)"> 底加書店</label>
-        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="humorbeing" style="accent-color:var(--or)"> Humorbeing - 遊牧計畫 Project Nomad</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="humorbeing" style="accent-color:var(--or)"> Humorbeing 笑場歐噴麥</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="goldens" style="accent-color:var(--or)"> 劍潭金手套 Golden's Bar</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="papsximen" style="accent-color:var(--or)"> Pap's Ximen</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="otwoofour" style="accent-color:var(--or)"> 人文工坊</label>
@@ -1929,7 +1942,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="home-featured-header" style="margin-bottom:10px">
         <h3><span class="zh-text">合作推薦課程</span><span class="en-text">Partner Picks</span><span style="color:var(--or);margin-left:6px">✦</span></h3>
       </div>
-      <div id="featured-courses-list"></div>
+      <div class="fc-carousel-wrap">
+        <button type="button" class="fc-nav fc-nav-prev" onclick="scrollFeaturedList('featured-courses-list',-1)" aria-label="Previous">‹</button>
+        <div id="featured-courses-list"></div>
+        <button type="button" class="fc-nav fc-nav-next" onclick="scrollFeaturedList('featured-courses-list',1)" aria-label="Next">›</button>
+      </div>
     </div>
     <div class="filter-row" style="margin-bottom:14px">
       <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
@@ -3811,7 +3828,7 @@ const VENUE_GROUPS = {
   'tainan':      ['府城喜劇', 'tainan comedy', 'sasadra'],
   'takao':       ['喜劇開港', 'takao comedy', '鸚鵡螺'],
   'ponwo':       ['月半窩', 'ponwo', 'ponwo cafe', '月半窩cafe', '月半窩Cafe'],
-  'humorbeing':  ['humorbeing', '遊牧計畫', 'project nomad', 'humorbeing project nomad'],
+  'humorbeing':  ['humorbeing', '遊牧計畫', 'project nomad', 'humorbeing project nomad', '笑場歐噴麥'],
   'stage':       ['stage', 'stage時代劇', '時代劇'],
   'goldens':     ['金手套', '劍潭', "golden's bar", 'goldens'],
 };
@@ -4542,6 +4559,15 @@ function renderHomeFeatured() {
 }
 
 // 合作推薦卡片點擊：只有一場直接開詳情，多場先跳場次選擇清單
+// 合作推薦輪播：電腦版滑鼠沒有直覺的左右滑動手勢，加箭頭按鈕點擊切換
+function scrollFeaturedList(listId, dir) {
+  const el = document.getElementById(listId);
+  if (!el) return;
+  const card = el.querySelector('.featured-card');
+  const cardWidth = card ? card.offsetWidth : 220;
+  const gap = 12;
+  el.scrollBy({ left: dir * (cardWidth + gap) * 2, behavior: 'smooth' });
+}
 function openFeaturedCard(id) {
   const sessions = (window._featuredSessionsMap && window._featuredSessionsMap[id]) || [];
   if (sessions.length > 1) {
@@ -4785,7 +4811,7 @@ function courseCardHTML(c) {
   const m = COURSE_META[allTypes[0]] || COURSE_META.other;
   const emj = {standup:'🎙️',improv:'🎭',mancai:'🥢',other:'📚'};
   const imgEl = c.image ? `<img loading="lazy" src="${gImgUrl(c.image,500)}" alt="" onerror="this.style.display='none'">` : '';
-  const expiredOverlay = isExpired(c.date, c.time) ? `style="opacity:.7"` : '';
+  const expiredOverlay = courseNextStage(c).isFullyPast ? `style="opacity:.7"` : '';
   const typeTags = allTypes.map(t=>{const mt=COURSE_META[t]||COURSE_META.other;const lbl=getLang()==='en'?mt.labelEn:mt.label;return `<span class="cc-cat" style="background:${mt.tag};color:${mt.tagC};margin-right:3px">${lbl}</span>`;}).join('');
   // 卡片日期：多堂課只顯示「首日 ～ 尾日」
   function courseCardDateRange(dateStr) {
@@ -4842,7 +4868,7 @@ function renderCourses() {
     const st=c.status||'published';
     if(st==='hidden'||st==='archived') return false;
     if(!adminMode && st==='pending') return false;
-    if(adminMode && hideExpiredCourses && isExpired(c.date, c.time)) return false;
+    if(adminMode && hideExpiredCourses && courseNextStage(c).isFullyPast) return false;
     if(fCtype!=='all'){const ct=c.types&&c.types.length?c.types:[c.type];if(!ct.includes(fCtype))return false;}
     return true;
   }).sort((a,b)=>String(a.date||'').split(',')[0].trim().localeCompare(String(b.date||'').split(',')[0].trim()));
@@ -4953,7 +4979,7 @@ function renderExpiredCourses(){
   const courses = window._COURSES||[];
   const q = (document.getElementById('expired-courses-search')?.value||'').trim().toLowerCase();
   let expired = courses.filter(c=>{
-    return isExpired(c.date, c.time);
+    return courseNextStage(c).isFullyPast;
   });
   if(q) expired = expired.filter(c=>
     (c.title||'').toLowerCase().includes(q)||
@@ -6256,6 +6282,7 @@ function toggleEdit(){
   if(editMode && typeof window._ensureFullShowsLoaded==='function') window._ensureFullShowsLoaded();
   if(typeof renderFpList==='function') renderFpList();
   if(typeof renderArchivedShows==='function') renderArchivedShows();
+  if(typeof renderExpiredCourses==='function') renderExpiredCourses();
   if(typeof renderVenues==='function') renderVenues();
   if(typeof renderPerformers==='function') renderPerformers();
   showToast(editMode?'✏️ 編輯模式已啟用':'✅ 編輯模式已關閉',editMode?'':'ok');
@@ -6674,7 +6701,7 @@ async function migrateHiddenToArchived(){
 // ── 一鍵封存過期演出與課程 ──
 async function archiveAllExpired(){
   const expiredShows = SHOWS.filter(s => isExpired(s.date, s.time) && s.status === 'published');
-  const expiredCourses = COURSES.filter(c => isExpired(c.date, c.time) && c.status === 'published');
+  const expiredCourses = COURSES.filter(c => courseNextStage(c).isFullyPast && c.status === 'published');
   const total = expiredShows.length + expiredCourses.length;
   if(total === 0){ showToast('目前沒有需要封存的過期資料','ok'); return; }
   if(!confirm(`確定要封存 ${expiredShows.length} 筆過期演出 + ${expiredCourses.length} 筆過期課程？\n封存後將從前台隱藏，管理模式仍可查看。`)) return;
@@ -6809,7 +6836,7 @@ const DEFAULT_SHOW_VENUES = [
   {id:'ponwo',             labelZh:'月半窩Cafe',                             labelEn:'Ponwo Cafe'},
   {id:'beitou',            labelZh:'北投喜劇 - 山峸二手書店',                labelEn:'Beitou Comedy - Ridge Books'},
   {id:'dikia',             labelZh:'底加書店',                               labelEn:'Titsia Bookstore'},
-  {id:'humorbeing',        labelZh:'Humorbeing - 遊牧計畫 Project Nomad',    labelEn:'Humorbeing - Project Nomad'},
+  {id:'humorbeing',        labelZh:'Humorbeing 笑場歐噴麥',    labelEn:'Humorbeing - Project Nomad'},
   {id:'goldens',           labelZh:'劍潭金手套',                                 labelEn:"Golden's Bar"},
   {id:'papsximen',         labelZh:"Pap's Ximen",                            labelEn:"Pap's Ximen"},
   {id:'otwoofour',         labelZh:'人文工坊',                               labelEn:'O Two O Four'},
