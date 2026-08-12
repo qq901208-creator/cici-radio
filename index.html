@@ -4819,12 +4819,14 @@ function courseCardHTML(c) {
   const m = COURSE_META[allTypes[0]] || COURSE_META.other;
   const emj = {standup:'🎙️',improv:'🎭',mancai:'🥢',other:'📚'};
   const imgEl = c.image ? `<img loading="lazy" src="${gImgUrl(c.image,500)}" alt="" onerror="this.style.display='none'">` : '';
-  const expiredOverlay = courseNextStage(c).isFullyPast ? `style="opacity:.7"` : '';
+  const stageInfo = courseNextStage(c);
+  const expiredOverlay = stageInfo.isFullyPast ? `style="opacity:.7"` : '';
+  const inProgressBadge = stageInfo.inProgress ? `<span class="cc-cat" style="background:#b8f0d0;color:#0d5c30;margin-right:3px;font-weight:800">🟢 <span class="zh-text">進行中</span><span class="en-text">In Progress</span></span>` : '';
   const typeTags = allTypes.map(t=>{const mt=COURSE_META[t]||COURSE_META.other;const lbl=getLang()==='en'?mt.labelEn:mt.label;return `<span class="cc-cat" style="background:${mt.tag};color:${mt.tagC};margin-right:3px">${lbl}</span>`;}).join('');
   // 卡片日期：多堂課只顯示「首日 ～ 尾日」
   const cardDate = courseCardDateRange(c.dateDisplay || c.date);
   return `<div class="course-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')" ${expiredOverlay} style="display:flex;flex-direction:column">
-    <div style="display:flex;gap:4px;flex-wrap:wrap;padding:8px 10px 0">${typeTags}</div>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;padding:8px 10px 0">${inProgressBadge}${typeTags}</div>
     <div class="cc-img" style="background:${m.bg}">${imgEl}${c.image?'':` <span style="font-size:2.4rem;position:relative;z-index:1">${emj[allTypes[0]]||'📚'}</span>`}</div>
     <div class="cc-body" style="flex:1;display:flex;flex-direction:column;gap:5px">
       <div class="cc-title">${c.title}</div>
@@ -4906,7 +4908,11 @@ function courseNextStage(c) {
   }));
   const upcoming = withStatus.filter(s => !s.isPast);
   const chosen = upcoming.length ? upcoming[0] : (withStatus[withStatus.length - 1] || null);
-  return { chosen, totalStages: stages.length, isFullyPast: stages.length > 0 && upcoming.length === 0 };
+  const isFullyPast = stages.length > 0 && upcoming.length === 0;
+  // 進行中：有兩個以上階段、其中至少一個階段已經結束，但還沒到最後一天（不是全部結束）
+  const hasPastStage = withStatus.some(s => s.isPast);
+  const inProgress = stages.length > 1 && hasPastStage && !isFullyPast;
+  return { chosen, totalStages: stages.length, isFullyPast, inProgress };
 }
 
 function renderFeaturedCourses() {
@@ -5042,9 +5048,14 @@ function openCourseDetail(id){
   const imgHtml=c.image?`<div style="width:100%;max-height:280px;overflow:hidden;border-radius:var(--r-md);background:${m.bg};margin-bottom:18px;display:flex;align-items:center;justify-content:center"><img src="${gImgUrl(c.image,900)}" alt="${c.title}" style="width:100%;max-height:280px;object-fit:contain;display:block;background:var(--cr)" onerror="this.style.display='none'"></div>`:'';
   const catLbl = lang==='en' ? m.labelEn : m.label;
   const prodLbl = lang==='en' ? 'Organizers & Co-organizers' : '主辦與協辦單位';
+  const detailStageInfo = courseNextStage(c);
+  const inProgressBadgeDetail = detailStageInfo.inProgress
+    ? `<span style="display:inline-block;font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:var(--r-pill);background:#b8f0d0;color:#0d5c30;margin-bottom:10px">🟢 <span class="zh-text">進行中</span><span class="en-text">In Progress</span></span><br>`
+    : '';
   document.getElementById('course-detail-body').innerHTML=`
     ${imgHtml}
     <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;color:var(--or);margin-bottom:6px;font-family:var(--f-bo)">${catLbl}</div>
+    ${inProgressBadgeDetail}
     <div style="font-size:1.3rem;font-weight:900;font-family:var(--f-zh);color:var(--tm);margin-bottom:14px;line-height:1.3">${c.title}</div>
     <div style="margin-bottom:6px">
       ${(c.dateDisplay||c.date)?`<div style="padding:9px 0;border-bottom:1px solid rgba(45,43,31,.08)">
