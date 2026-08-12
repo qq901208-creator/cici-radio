@@ -4897,7 +4897,7 @@ function renderCourses() {
 // 卡片顯示過期日期、甚至整張卡片被誤判成過期而消失。
 function courseNextStage(c) {
   const stages = [
-    { date: c.date, time: c.time },
+    { date: c.dateDisplay || c.date, time: c.time },
     { date: c.date2, time: c.time2 },
     { date: c.date3, time: c.time3 },
   ].filter(s => s.date && String(s.date).trim());
@@ -4909,9 +4909,11 @@ function courseNextStage(c) {
   const upcoming = withStatus.filter(s => !s.isPast);
   const chosen = upcoming.length ? upcoming[0] : (withStatus[withStatus.length - 1] || null);
   const isFullyPast = stages.length > 0 && upcoming.length === 0;
-  // 進行中：有兩個以上階段、其中至少一個階段已經結束，但還沒到最後一天（不是全部結束）
-  const hasPastStage = withStatus.some(s => s.isPast);
-  const inProgress = stages.length > 1 && hasPastStage && !isFullyPast;
+  // 進行中：整堂課最早的那一天（第一階段的第一個日期）已經到了或過了，但還沒全部結束。
+  // 不管是「分好幾個階段」還是「同一階段裡塞好幾個逗號分隔的日期」，都適用同一套判斷。
+  const veryFirstDay = withStatus.length ? withStatus[0].firstDay : null;
+  const hasStarted = veryFirstDay ? (new Date(veryFirstDay + 'T00:00') <= new Date()) : false;
+  const inProgress = hasStarted && !isFullyPast;
   return { chosen, totalStages: stages.length, isFullyPast, inProgress };
 }
 
