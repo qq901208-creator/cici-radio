@@ -1643,7 +1643,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
         <!-- 合作推薦篩選提示 banner -->
         <div id="featured-filter-banner" style="display:none;align-items:center;justify-content:space-between;background:rgba(239,111,32,.12);border:1px solid rgba(239,111,32,.3);border-radius:var(--r-lg);padding:9px 14px;margin-bottom:14px;font-size:.82rem;font-family:var(--f-zh);color:var(--sd)">
-          <span>🤝 <span class="zh-text">目前只顯示合作推薦演出</span><span class="en-text">Showing partner picks only</span></span>
+          <span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span> <span class="zh-text">目前只顯示合作推薦演出</span><span class="en-text">Showing partner picks only</span></span>
           <button onclick="clearFeaturedFilter()" style="background:none;border:none;color:var(--or);font-weight:700;cursor:pointer;font-size:.82rem;padding:0">✕ <span class="zh-text">清除</span><span class="en-text">Clear</span></button>
         </div>
         <!-- 演出列表 -->
@@ -2808,7 +2808,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g full">
       <label class="fl" style="display:flex;align-items:center;gap:8px;cursor:pointer">
         <input type="checkbox" id="s-featured" style="width:16px;height:16px;accent-color:var(--or);cursor:pointer">
-        🤝 於首頁「合作推薦演出」區塊顯示
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span> 於首頁「合作推薦演出」區塊顯示
       </label>
     </div>
   </div>
@@ -3052,7 +3052,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="fg-g full">
       <label class="fl" style="display:flex;align-items:center;gap:8px;cursor:pointer">
         <input type="checkbox" id="c-featured" style="width:16px;height:16px;accent-color:var(--or);cursor:pointer">
-        🤝 於課程頁最上方「合作推薦課程」區塊顯示
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span> 於課程頁最上方「合作推薦課程」區塊顯示
       </label>
     </div>
     <div class="fg-g"><label class="fl">平台</label><select class="fs" id="c-platform"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="google-form">Google 表單</option><option value="other">其他</option></select></div>
@@ -3878,7 +3878,7 @@ function showCardHTML(s) {
   const posterEl = (s.image && s.image.trim())
     ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
     : '';
-  const featuredTag = s.featured ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde3d2;color:#993c1d;border-radius:var(--r-pill);margin-left:4px">🤝 合作</span>` : '';
+  const featuredTag = s.featured ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde3d2;color:#993c1d;border-radius:var(--r-pill);margin-left:4px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span> 合作</span>` : '';
   const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
   const expiredTag = isExpired(s.date, s.time) ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">已過期</span>` : '';
   const hiddenTag = isLoggedIn()&&editMode ? (s.status==='postponed'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fff0cc;color:#cc7700;border-radius:var(--r-pill);margin-left:4px">延期</span>`:(s.status==='hidden'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">隱藏</span>`:(s.status==='archived'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8d0ff;color:#6600cc;border-radius:var(--r-pill);margin-left:4px">封存</span>`:(s.status==='cancelled'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#ffcccc;color:#cc0000;border-radius:var(--r-pill);margin-left:4px">取消</span>`:'')))): '';
@@ -5117,7 +5117,7 @@ function venueCardHTML(v) {
     <div class="venue-name">${nameDisplay}<small>${nameAlt}</small></div>
     <div class="venue-city-lbl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${CITY_LBL[v.city]||v.city}</div>
     ${v.tagline?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin:5px 0 2px;line-height:1.5">「${v.tagline}」</div>`:''}
-    ${v.partner?`<div style="margin-top:2px"><span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:600;background:rgba(45,43,31,.06);color:var(--ts);border:1px solid rgba(45,43,31,.14);border-radius:var(--r-pill);padding:2px 8px;font-family:var(--f-zh)">🤝 ${v.partner}</span></div>`:''}
+    ${v.partner?`<div style="margin-top:2px"><span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:600;background:rgba(45,43,31,.06);color:var(--ts);border:1px solid rgba(45,43,31,.14);border-radius:var(--r-pill);padding:2px 8px;font-family:var(--f-zh)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span> ${v.partner}</span></div>`:''}
     ${(v.tags&&v.tags.length)?`<div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div>`:''}
     <div class="venue-links" onclick="event.stopPropagation()" style="margin-top:auto">
       ${v.fb?`<a class="vlb vlb-fb" href="${v.fb}" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> FB</a>`:''}
@@ -5235,13 +5235,13 @@ function showVenueDetail(id) {
     <table style="width:100%;border-collapse:collapse;font-size:.88rem;font-family:var(--f-zh);margin-bottom:18px">
       <tr><td style="padding:10px 12px 10px 0;color:var(--ts);font-size:.88rem;font-weight:600;width:72px;min-width:72px;vertical-align:top;border-bottom:1px solid rgba(45,43,31,.07)">${lang==='en'?'City':'城市'}</td><td style="padding:10px 0;border-bottom:1px solid rgba(45,43,31,.07)">${CITY_LBL[v.city]||v.city}</td></tr>
       <tr><td style="padding:10px 12px 10px 0;color:var(--ts);font-size:.88rem;font-weight:600;width:72px;min-width:72px;vertical-align:top;border-bottom:1px solid rgba(45,43,31,.07)">${lang==='en'?'Address':'地址'}</td><td style="padding:10px 0;border-bottom:1px solid rgba(45,43,31,.07)">${v.address?`<a href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank" rel="noopener" style="color:var(--or);text-decoration:underline;text-underline-offset:2px">${v.address}</a>`:'—'}</td></tr>
-      ${v.partner?`<tr><td style="padding:10px 12px 10px 0;color:var(--ts);font-size:.88rem;font-weight:600;vertical-align:top;border-bottom:1px solid rgba(45,43,31,.07)">${lang==='en'?'Partner':'合作場地'}</td><td style="padding:10px 0;border-bottom:1px solid rgba(45,43,31,.07)"><span style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:700;background:rgba(239,111,32,.1);color:var(--or);border:1px solid rgba(239,111,32,.25);border-radius:var(--r-pill);padding:3px 10px">🤝 ${v.partner}</span></td></tr>`:''}
+      ${v.partner?`<tr><td style="padding:10px 12px 10px 0;color:var(--ts);font-size:.88rem;font-weight:600;vertical-align:top;border-bottom:1px solid rgba(45,43,31,.07)">${lang==='en'?'Partner':'合作場地'}</td><td style="padding:10px 0;border-bottom:1px solid rgba(45,43,31,.07)"><span style="display:inline-flex;align-items:center;gap:4px;font-size:.8rem;font-weight:700;background:rgba(239,111,32,.1);color:var(--or);border:1px solid rgba(239,111,32,.25);border-radius:var(--r-pill);padding:3px 10px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span> ${v.partner}</span></td></tr>`:''}
       ${(v.tags&&v.tags.length)?`<tr><td style="padding:10px 12px 10px 0;color:var(--ts);font-size:.88rem;font-weight:600;vertical-align:top;border-bottom:1px solid rgba(45,43,31,.07)">${lang==='en'?'Tags':'標籤'}</td><td style="padding:10px 0;border-bottom:1px solid rgba(45,43,31,.07)"><div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div></td></tr>`:''}
       <tr><td style="padding:10px 12px 10px 0;color:var(--ts);font-size:.88rem;font-weight:600;vertical-align:top">${lang==='en'?'About':'簡介'}</td><td style="padding:10px 0;white-space:pre-line;line-height:1.75">${v.description||'—'}</td></tr>
     </table>
     ${v.tip?`<div style="padding:10px 14px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;margin-bottom:14px"><div style="font-size:.78rem;font-weight:700;color:var(--or);margin-bottom:4px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> 嘻嘻小建議</div><div style="font-size:.85rem;font-family:var(--f-zh);color:var(--tm);line-height:1.65;white-space:pre-line">${v.tip}</div></div>`:''}
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-      ${v.fb?`<a href="${v.fb}" target="_blank" class="btn-or" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">FB ↗</a>`:`<span></span>`}
+      ${v.fb?`<a href="${v.fb}" target="_blank" class="btn-ww" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">FB ↗</a>`:`<span></span>`}
       ${v.ig?`<a href="${v.ig}" target="_blank" class="btn-ww" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">IG ↗</a>`:`<span></span>`}
       ${v.address||v.mapUrl?`<a href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank" class="btn-ww" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">Maps ↗</a>`:`<span></span>`}
     </div>`;
