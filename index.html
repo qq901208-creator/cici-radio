@@ -246,6 +246,19 @@ body.ready{visibility:visible}
 .home-board-more-btn:hover{background:var(--y)}
 .home-board-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1100px;margin:0 auto 24px}
 .home-board-grid .fp-item{background:var(--cr);border-radius:var(--r-lg)!important;padding:16px 18px;border-bottom:none!important;display:flex;flex-direction:column;height:100%}
+/* 留言板跑馬燈：兩排反方向自動捲動，滑鼠移上去暫停 */
+.marquee-wrap{position:relative;overflow:hidden;max-width:1100px;margin:0 auto 16px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.marquee-row{display:flex;gap:14px;width:max-content;margin-bottom:14px;animation:marqueeScroll 34s linear infinite}
+.marquee-row--reverse{animation-name:marqueeScrollRev;animation-duration:38s;margin-bottom:0}
+.marquee-wrap:hover .marquee-row{animation-play-state:paused}
+@keyframes marqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes marqueeScrollRev{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.marquee-card{flex:0 0 260px;background:var(--ww);border-radius:var(--r-lg);padding:16px 18px;border:1.5px solid rgba(45,43,31,.08);box-shadow:var(--sc);cursor:default}
+@media(max-width:768px){
+  .marquee-card{flex:0 0 220px}
+  .marquee-row{animation-duration:22s}
+  .marquee-row--reverse{animation-duration:26s}
+}
 .home-board-cta{text-align:center;max-width:1100px;margin:16px auto 0}
 /* BOARD comment card (used in home grid too) */
 .fp-card{background:var(--cr);border-radius:var(--r-lg);padding:18px 20px;display:flex;flex-direction:column;gap:10px;border:1.5px solid rgba(45,43,31,.06)}
@@ -974,6 +987,11 @@ body.edit .edit-bar{display:flex!important}
 /* 卡片 hover 提升感 */
 .show-card,.course-card,.venue-card{transition:transform .2s ease,box-shadow .2s ease;animation:cardIn .35s ease both}
 .mic-card{animation:cardIn .35s ease both}
+/* 卡片列表交錯進場：前幾張依序慢一點點浮現，不是同時彈出 */
+#shows-grid>*:nth-child(1),#courses-grid>*:nth-child(1),#venues-grid>*:nth-child(1),#mic-cards>*:nth-child(1),#performers-grid>*:nth-child(1){animation-delay:.01s}
+#shows-grid>*:nth-child(2),#courses-grid>*:nth-child(2),#venues-grid>*:nth-child(2),#mic-cards>*:nth-child(2),#performers-grid>*:nth-child(2){animation-delay:.03s}
+#shows-grid>*:nth-child(3),#courses-grid>*:nth-child(3),#venues-grid>*:nth-child(3),#mic-cards>*:nth-child(3),#performers-grid>*:nth-child(3){animation-delay:.05s}
+#shows-grid>*:nth-child(4),#courses-grid>*:nth-child(4),#venues-grid>*:nth-child(4),#mic-cards>*:nth-child(4),#performers-grid>*:nth-child(4){animation-delay:.07s}
 .desk-br{display:block}
 @media(max-width:768px){.desk-br{display:none}}
 .guide-subtitle{font-size:1.1rem;font-weight:900;color:var(--or);font-family:var(--f-zh);margin-bottom:24px;margin-top:2px}
@@ -1151,6 +1169,7 @@ body.edit .edit-bar{display:flex!important}
   /* stats bar mobile */
   .hero-stats-bar{flex-wrap:wrap;gap:8px;padding:14px 16px;margin:0 4vw;border-radius:var(--r-xl);box-shadow:0 4px 16px rgba(45,43,31,.06)}
   .hst-item{flex:0 0 calc(50% - 8px);border-right:none;padding:0;gap:6px;align-items:flex-start}
+  .hst-item:first-child{padding-left:0}
   .hst-cta{flex:0 0 100%;justify-content:center;padding:10px 20px;margin-left:0;margin-top:4px}
   .hst-num{font-size:.95rem}
   .hst-lbl{font-size:.62rem}
@@ -1490,8 +1509,10 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <span class="zh-text">前往留言板 →</span><span class="en-text">Go to Board →</span>
       </button>
     </div>
-    <div id="home-comments-grid" class="home-board-grid"></div>
-    <div id="home-comment-dots" style="display:flex;justify-content:center;gap:6px;margin-top:12px;margin-bottom:8px;min-height:10px"></div>
+    <div id="home-comments-marquee" class="marquee-wrap">
+      <div class="marquee-row" id="marquee-row-1"></div>
+      <div class="marquee-row marquee-row--reverse" id="marquee-row-2"></div>
+    </div>
     <div class="home-board-cta">
       <button class="hero-browse-btn" onclick="showPage('board')" style="background:var(--sd)">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> <span class="zh-text">留下你的回饋</span><span class="en-text">Leave Feedback</span>
@@ -7269,7 +7290,7 @@ function initReveal(){
   const obs = new IntersectionObserver(entries=>{
     entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('revealed'); });
   },{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
-  document.querySelectorAll('.sec-label,.sec-title,.sec-desc,.feat-card,.about-card').forEach(el=>{
+  document.querySelectorAll('.sec-label,.sec-title,.sec-desc,.feat-card,.about-card,.home-featured,.home-recent-sec,.home-podcast-sec,.home-board-sec').forEach(el=>{
     el.classList.add('reveal');
     obs.observe(el);
   });
@@ -7567,74 +7588,28 @@ let _homeCommentTimer = null;
 let _homeCommentPage = 0;
 
 function renderHomeComments(){
-  const g = document.getElementById('home-comments-grid');
-  if(!g) return;
+  const row1 = document.getElementById('marquee-row-1');
+  const row2 = document.getElementById('marquee-row-2');
+  const wrap = document.getElementById('home-comments-marquee');
+  if(!row1 || !row2 || !wrap) return;
   const all = COMMENTS.filter(c=>!c.hidden).sort((a,b)=>{
     if(a.pinned && !b.pinned) return -1;
     if(!a.pinned && b.pinned) return 1;
     return (b.time||0)-(a.time||0);
   });
-  if(!all.length){ g.innerHTML=''; return; }
+  if(!all.length){ wrap.style.display='none'; return; }
+  wrap.style.display='block';
 
-  // 手機版：改成左右滑動瀏覽（CSS 已設成橫向 scroll），一次多放幾則供滑動
-  if(window.innerWidth <= 768){
-    g.innerHTML = all.slice(0,10).map(c=>_commentCardHTML(c)).join('');
-    return;
-  }
-
-  // 桌機版：輪播
-  const PER = 4;
-  const totalPages = Math.ceil(all.length / PER);
-  if(_homeCommentPage >= totalPages) _homeCommentPage = 0;
-
-  const start = _homeCommentPage * PER;
-  const show = all.slice(start, start + PER);
-
-  // 淡出 → 換內容 → 淡入
-  g.style.transition = 'opacity .4s';
-  g.style.opacity = '0';
-  setTimeout(()=>{
-    g.innerHTML = show.map(c=>_commentCardHTML(c)).join('');
-    g.style.opacity = '1';
-    // 更新頁碼點點
-    const dots = document.getElementById('home-comment-dots');
-    if(dots && totalPages > 1){
-      dots.innerHTML = Array.from({length:totalPages},(_,i)=>
-        `<span onclick="_goCommentPage(${i})" style="width:8px;height:8px;border-radius:50%;background:${i===_homeCommentPage?'var(--or)':'rgba(45,43,31,.2)'};display:inline-block;cursor:pointer;transition:background .3s;flex-shrink:0"></span>`
-      ).join('');
-    } else if(dots){
-      dots.innerHTML='';
-    }
-  }, 400);
-
-  // 清舊 timer 再設新的
-  if(_homeCommentTimer) clearInterval(_homeCommentTimer);
-  if(totalPages > 1){
-    _homeCommentTimer = setInterval(()=>{
-      _homeCommentPage = (_homeCommentPage + 1) % totalPages;
-      renderHomeComments();
-    }, 6000);
-
-    // hover 暫停
-    g.onmouseenter = ()=>{ if(_homeCommentTimer){ clearInterval(_homeCommentTimer); _homeCommentTimer=null; } };
-    g.onmouseleave = ()=>{
-      if(_homeCommentTimer) clearInterval(_homeCommentTimer);
-      _homeCommentTimer = setInterval(()=>{
-        _homeCommentPage = (_homeCommentPage + 1) % totalPages;
-        renderHomeComments();
-      }, 6000);
-    };
-  }
-}
-
-function _goCommentPage(i){
-  _homeCommentPage = i;
-  if(_homeCommentTimer){ clearInterval(_homeCommentTimer); _homeCommentTimer=null; }
-  renderHomeComments();
+  // 分兩排，各排內容重複兩次，跑馬燈才能無縫接軌捲動
+  const mid = Math.ceil(all.length / 2);
+  const firstRow = all.slice(0, mid);
+  const secondRow = all.slice(mid).length ? all.slice(mid) : all.slice(0, mid); // 資料太少時，第二排就用同一批，避免空白
+  row1.innerHTML = (firstRow.concat(firstRow)).map(c=>_commentCardHTML(c)).join('');
+  row2.innerHTML = (secondRow.concat(secondRow)).map(c=>_commentCardHTML(c)).join('');
 }
 
 function _commentCardHTML(c){
-  return `<div style="background:var(--ww);border-radius:var(--r-lg);padding:20px;border:1.5px solid rgba(45,43,31,.08);box-shadow:var(--sc)"><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><div style="width:34px;height:34px;border-radius:50%;background:hsl(${c.avatar.charCodeAt(0)*13%360},55%,82%);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;font-family:var(--f-bo)">${c.avatar}</div><div><div style="font-weight:700;font-size:.85rem;font-family:var(--f-zh)">${c.name}</div><div style="font-size:.68rem;color:var(--ts)">${'⭐'.repeat(c.rating||0)} ${relTime(c.time)}</div></div>${c.pinned?`<span style="margin-left:auto;background:var(--y);color:var(--sd);font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:var(--r-pill)">📌</span>`:''}</div><div style="font-size:.85rem;color:var(--tm);font-family:var(--f-zh);line-height:1.62;white-space:pre-line">${c.text}</div></div>`;
+  return `<div class="marquee-card"><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><div style="width:34px;height:34px;border-radius:50%;background:hsl(${c.avatar.charCodeAt(0)*13%360},55%,82%);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;font-family:var(--f-bo);flex-shrink:0">${c.avatar}</div><div><div style="font-weight:700;font-size:.85rem;font-family:var(--f-zh)">${c.name}</div><div style="font-size:.68rem;color:var(--ts)">${'⭐'.repeat(c.rating||0)} ${relTime(c.time)}</div></div>${c.pinned?`<span style="margin-left:auto;background:var(--y);color:var(--sd);font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:var(--r-pill);flex-shrink:0"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span> 精選</span>`:''}</div><div style="font-size:.85rem;color:var(--tm);font-family:var(--f-zh);line-height:1.62;white-space:pre-line;overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical">${c.text}</div></div>`;
 }
 function updFbBadge(){const cnt=COMMENTS.filter(c=>!c.hidden).length;const b=document.getElementById('fbBadge');if(!b)return;b.textContent=cnt;b.classList.toggle('show',cnt>0);}
 </script>
