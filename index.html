@@ -36,6 +36,9 @@
   --nav:70px;--sc:0 2px 16px rgba(45,43,31,.09);--sh:0 12px 40px rgba(45,43,31,.14);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* 線條圖示：取代 emoji，跟文字同尺寸、同色、對齊基線 */
+.ic{width:1em;height:1em;display:inline-block;vertical-align:-0.125em;flex-shrink:0}
+.ic svg{width:100%;height:100%;display:block}
 html{scroll-behavior:smooth;font-size:17px}
 body{font-family:var(--f-bo);background:var(--cr);color:var(--tm);line-height:1.65;overflow-x:hidden;visibility:hidden;animation:revealBody 0s 3s forwards}
 body.ready{visibility:visible;animation:none}
@@ -1341,28 +1344,28 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <!-- STATS BAR：數字統計 -->
   <div class="hero-stats-bar" id="hero-stats">
     <div class="hst-item">
-      <div class="hst-icon">📅</div>
+      <div class="hst-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span></div>
       <div>
         <div class="hst-num" id="stat-shows">8</div>
         <div class="hst-lbl"><span class="zh-text">近一個月演出</span><span class="en-text">Shows (30 days)</span></div>
       </div>
     </div>
     <div class="hst-item">
-      <div class="hst-icon">👥</div>
+      <div class="hst-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span></div>
       <div>
         <div class="hst-num" id="stat-performers">10</div>
         <div class="hst-lbl"><span class="zh-text">喜劇演員</span><span class="en-text">Performers</span></div>
       </div>
     </div>
     <div class="hst-item">
-      <div class="hst-icon">📍</div>
+      <div class="hst-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span></div>
       <div>
         <div class="hst-num" id="stat-venues">13</div>
         <div class="hst-lbl"><span class="zh-text">喜劇據點</span><span class="en-text">Venues</span></div>
       </div>
     </div>
     <div class="hst-item">
-      <div class="hst-icon">🎤</div>
+      <div class="hst-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span></div>
       <div>
         <div class="hst-num" id="stat-mics">30</div>
         <div class="hst-lbl"><span class="zh-text">每月 Open Mic</span><span class="en-text">Monthly Open Mics</span></div>
@@ -1387,22 +1390,22 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </h3>
       <div class="home-quick-grid">
         <button class="home-quick-card" onclick="showPage('shows')">
-          <div class="qc-icon">📅</div>
+          <div class="qc-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span></div>
           <div class="qc-title"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></div>
           <div class="qc-sub"><span class="zh-text">找演出</span><span class="en-text">Find shows</span></div>
         </button>
         <button class="home-quick-card" onclick="showPage('opmic')">
-          <div class="qc-icon">🎤</div>
+          <div class="qc-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span></div>
           <div class="qc-title">Open Mic</div>
           <div class="qc-sub"><span class="zh-text">報名資訊</span><span class="en-text">Sign-up info</span></div>
         </button>
         <button class="home-quick-card" onclick="showPage('venues')">
-          <div class="qc-icon">📍</div>
+          <div class="qc-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span></div>
           <div class="qc-title"><span class="zh-text">全台喜劇據點</span><span class="en-text">Venues</span></div>
           <div class="qc-sub"><span class="zh-text">場地資訊</span><span class="en-text">Venue info</span></div>
         </button>
         <button class="home-quick-card" onclick="showPage('performers')">
-          <div class="qc-icon">🎭</div>
+          <div class="qc-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span></div>
           <div class="qc-title"><span class="zh-text">認識演員</span><span class="en-text">Performers</span></div>
           <div class="qc-sub"><span class="zh-text">演員資料庫</span><span class="en-text">Directory</span></div>
         </button>
@@ -1441,8 +1444,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="home-podcast-inner">
       <div class="home-podcast-text">
         <div class="home-pod-eyebrow">
-          <span class="zh-text">🎙 Podcast</span>
-          <span class="en-text">🎙 Podcast</span>
+          <span class="zh-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span> Podcast</span>
+          <span class="en-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span> Podcast</span>
         </div>
         <h2 class="home-pod-title">
           <span class="zh-text">看喜劇，也聽聽<br>喜劇與我們的故事</span>
@@ -1477,7 +1480,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <section class="home-board-sec">
     <div class="home-board-header">
       <div>
-        <div class="home-pod-eyebrow" style="color:var(--or)">💬 <span class="zh-text">留言板</span><span class="en-text">Board</span></div>
+        <div class="home-pod-eyebrow" style="color:var(--or)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> <span class="zh-text">留言板</span><span class="en-text">Board</span></div>
         <h2 class="home-pod-title" style="font-size:1.4rem;margin-top:6px">
           <span class="zh-text">大家怎麼說？</span>
           <span class="en-text">What People Say</span>
@@ -1491,7 +1494,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div id="home-comment-dots" style="display:flex;justify-content:center;gap:6px;margin-top:12px;margin-bottom:8px;min-height:10px"></div>
     <div class="home-board-cta">
       <button class="hero-browse-btn" onclick="showPage('board')" style="background:var(--sd)">
-        💬 <span class="zh-text">留下你的回饋</span><span class="en-text">Leave Feedback</span>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> <span class="zh-text">留下你的回饋</span><span class="en-text">Leave Feedback</span>
       </button>
     </div>
   </section>
@@ -1548,7 +1551,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <!-- 手機版月曆/列表切換（桌機隱藏） -->
         <div class="view-toggle shows-mobile-toggle">
           <button class="view-btn on" id="vcards" onclick="setShowsView('cards')"><span class="zh-text">演出列表</span><span class="en-text">List</span></button>
-          <button class="view-btn" id="vcal" onclick="setShowsView('cal')">📅 <span class="zh-text">月曆</span><span class="en-text">Calendar</span></button>
+          <button class="view-btn" id="vcal" onclick="setShowsView('cal')"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> <span class="zh-text">月曆</span><span class="en-text">Calendar</span></button>
         </div>
     <!-- 搜尋欄 -->
     <div class="shows-search-wrap">
@@ -1783,7 +1786,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="sec-label"><span class="zh-text">認識他們</span><span class="en-text">Meet the Comedians</span></div>
     <h2 class="sec-title"><span class="zh-text">現場喜劇演員資料庫 <span style="font-size:.5em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo);white-space:nowrap;display:inline-block">新功能更新中</span></span><span class="en-text">Performer Directory <span style="font-size:.5em;background:var(--or);color:#fff;padding:2px 8px;border-radius:var(--r-pill);font-weight:700;vertical-align:middle;font-family:var(--f-bo);white-space:nowrap;display:inline-block">New</span></span></h2>
     <p class="sec-desc"><span class="zh-text">台灣現場喜劇演員都有誰呢？點擊卡片查看他們的詳細資料和近期演出吧！<br><a href="https://docs.google.com/forms/d/e/1FAIpQLSczttWuxCd3nGvrRfIsMeh_wJ4uftg3rGL7jEJEHo-MpSToog/viewform" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem"><span class="zh-text">發現資訊錯誤或想放上自己的資料嗎？歡迎填寫表單！</span></a></span><span class="en-text">Who are the live comedy performers in Taiwan? Click on a card to learn more and see their upcoming shows!<br><a href="https://docs.google.com/forms/d/e/1FAIpQLSczttWuxCd3nGvrRfIsMeh_wJ4uftg3rGL7jEJEHo-MpSToog/viewform" target="_blank" rel="noopener" style="color:var(--or);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-size:.88rem">Found an error or want to add yourself? Let us know →</a></span></p>
-    <p style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-bottom:16px;margin-top:4px;opacity:.7"><span class="zh-text">本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義❤️‍🔥</span><span class="en-text">Sorted by stroke order / alphabet — the order means nothing ❤️‍🔥</span></p>
+    <p style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-bottom:16px;margin-top:4px;opacity:.7"><span class="zh-text">本資料庫依照中文筆畫／字母排序排列，排序沒有任何意義<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></span></span><span class="en-text">Sorted by stroke order / alphabet — the order means nothing <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></span></span></p>
     <!-- 篩選列 -->
     <div id="performers-filter-row" style="display:flex;gap:8px;flex-wrap:nowrap;margin-bottom:18px;align-items:center">
       <input id="performers-search" type="text" placeholder="搜尋演員…" maxlength="30"
@@ -1993,13 +1996,13 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   </div>
   <section class="sec" style="background:var(--cr)"><div style="max-width:1100px;margin:0 auto">
     <div class="about-card">
-      <h3>📖 <span class="zh-text">成立背景</span><span class="en-text">Our Origin</span></h3>
+      <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span> <span class="zh-text">成立背景</span><span class="en-text">Our Origin</span></h3>
       <div class="about-timeline">
         <div class="about-tl-item">
           <div class="about-tl-dot"></div>
           <div class="about-tl-year">2022</div>
           <div class="about-tl-content">
-            <div class="about-tl-title"><span class="zh-text">🎙️ Podcast 誕生</span><span class="en-text">🎙️ Podcast Launched</span></div>
+            <div class="about-tl-title"><span class="zh-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span> Podcast 誕生</span><span class="en-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span> Podcast Launched</span></div>
             <div class="about-tl-summary"><span class="zh-text">六位世新大學的大學生，因對台灣現場喜劇的熱愛，共同創立了「嘻嘻哪哩唷」，並推出同名 Podcast 節目。</span><span class="en-text">Six students from Shih Hsin University co-founded "Cici Radio" and launched the namesake podcast.</span></div>
             <div class="about-tl-more" style="display:none"><span class="zh-text">六位就讀世新大學廣播電視電影學系的大學生，因爲對台灣現場喜劇有著滿腔的熱情！共同催生了「嘻嘻哪哩唷」這個品牌/頻道，製作了以採訪喜劇演員為題的同名 Podcast 節目。</span><span class="en-text">Six students from the Department of Radio, Television and Film at Shih Hsin University, driven by an overflowing passion for live comedy in Taiwan, came together to create the brand and channel "Cici Radio" — producing a podcast of the same name featuring interviews with comedians.</span></div>
             <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
@@ -2009,7 +2012,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <div class="about-tl-dot"></div>
           <div class="about-tl-year">2023</div>
           <div class="about-tl-content">
-            <div class="about-tl-title"><span class="zh-text">📊 開始整理</span><span class="en-text">📊 Spreadsheet Era</span></div>
+            <div class="about-tl-title"><span class="zh-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span> 開始整理</span><span class="en-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span> Spreadsheet Era</span></div>
             <div class="about-tl-summary"><span class="zh-text">推出「台灣現場喜劇時間表」Google 試算表，整理演出資訊，讓更多人找到今晚該去哪。</span><span class="en-text">Launched the "Taiwan Live Comedy Schedule" spreadsheet to help people find shows happening tonight.</span></div>
             <div class="about-tl-more" style="display:none"><span class="zh-text">我們開始了漫長的「台灣現場喜劇時間表」Google 試算表製作，整理了所有這個網站包含、又不完全包含的眾多喜劇內容。在我們一度停更的空窗期中，喜劇演員 Pete 也大力協助，一人扛起了資訊更新的重要工作。</span><span class="en-text">We began maintaining a "Taiwan Live Comedy Schedule" Google Spreadsheet. During a period when we went on hiatus, comedian Pete stepped up and single-handedly kept the information updated.</span></div>
             <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
@@ -2019,7 +2022,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <div class="about-tl-dot"></div>
           <div class="about-tl-year">2025/4</div>
           <div class="about-tl-content">
-            <div class="about-tl-title"><span class="zh-text">💛 重新出發</span><span class="en-text">💛 A New Beginning</span></div>
+            <div class="about-tl-title"><span class="zh-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></span> 重新出發</span><span class="en-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></span> A New Beginning</span></div>
             <div class="about-tl-summary"><span class="zh-text">一場憾事讓成員鼻猴、Kooky、Yumi 決定重拾嘻嘻哪哩唷，開始每週在 Instagram 整理喜劇演出資訊。</span><span class="en-text">A heartbreaking event prompted the team to revive Cici Radio — sharing weekly comedy show updates on Instagram.</span></div>
             <div class="about-tl-more" style="display:none"><span class="zh-text">2025 年 4 月份發生的憾事，讓成員鼻猴、Kooky、Yumi 決定重拾嘻嘻哪哩唷的經營。從此開始每週手動整理全台喜劇演出資訊，並在 Instagram 上發布，持續陪伴喜劇圈。</span><span class="en-text">Following a heartbreaking event in April 2025, members Bíhóu, Kooky, and Yumi decided to revive Cici Radio. They began manually curating Taiwan's comedy show information every week, sharing it on Instagram to stay connected with the comedy community.</span></div>
             <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
@@ -2029,7 +2032,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <div class="about-tl-dot about-tl-dot-now"></div>
           <div class="about-tl-year" style="color:var(--or)">2026/5</div>
           <div class="about-tl-content">
-            <div class="about-tl-title"><span class="zh-text">🎉 網站誕生</span><span class="en-text">🎉 Website Launched</span></div>
+            <div class="about-tl-title"><span class="zh-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"></path><path d="M19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15z"></path></svg></span> 網站誕生</span><span class="en-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"></path><path d="M19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15z"></path></svg></span> Website Launched</span></div>
             <div class="about-tl-summary"><span class="zh-text">嘻嘻哪哩唷網站正式上線！希望透過更方便的介面與功能，讓更多人認識台灣喜劇。</span><span class="en-text">Cici Radio website goes live — a better way to explore Taiwan's comedy scene.</span></div>
             <div class="about-tl-more" style="display:none"><span class="zh-text">鼻猴決定將「台灣現場喜劇時間表」的精神繼承下去，透過 AI 學習網站架設，也因此誕生了現在你所看到的「嘻嘻哪哩唷｜台灣喜劇演出資訊站」。希望透過更方便的介面與功能，讓更多人認識並走進台灣現場喜劇。</span><span class="en-text">Bíhóu resolved to carry on the spirit of the spreadsheet — learning web development with the help of AI — and so was born the site you're looking at now: Cici Radio | Taiwan Comedy Show Guide.</span></div>
             <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
@@ -2038,10 +2041,10 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </div>
     </div>
     <div class="about-card">
-      <h3>🎯 <span class="zh-text">我們的目標</span><span class="en-text">Our Mission</span></h3>
+      <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></span> <span class="zh-text">我們的目標</span><span class="en-text">Our Mission</span></h3>
       <div class="about-goals">
         <div class="about-goal-card">
-          <div class="about-goal-icon">🎟️</div>
+          <div class="about-goal-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"></path><line x1="13" y1="5" x2="13" y2="19" stroke-dasharray="2,2"></line></svg></span></div>
           <div class="about-goal-title"><span class="zh-text">讓觀眾更輕鬆找到想看的演出</span><span class="en-text">Help audiences find shows they love</span></div>
           <div class="about-goal-summary"><span class="zh-text">整合全台演出資訊，打造一站式喜劇資訊站。</span><span class="en-text">A one-stop guide to comedy shows across Taiwan.</span></div>
           <div class="about-goal-more" style="display:none">
@@ -2050,7 +2053,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
         </div>
         <div class="about-goal-card">
-          <div class="about-goal-icon">🎤</div>
+          <div class="about-goal-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span></div>
           <div class="about-goal-title"><span class="zh-text">讓新人不孤單，有資料可循</span><span class="en-text">Support newcomers in live comedy</span></div>
           <div class="about-goal-summary"><span class="zh-text">提供 Open Mic、課程、據點等資訊，讓新手也能安心踏出第一步。</span><span class="en-text">Open Mic listings, courses, and venue info — so beginners always have somewhere to start.</span></div>
           <div class="about-goal-more" style="display:none">
@@ -2059,7 +2062,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <button class="about-goal-toggle" onclick="toggleGoal(this)"><span class="zh-text">展開 ↓</span><span class="en-text">Read more ↓</span></button>
         </div>
         <div class="about-goal-card">
-          <div class="about-goal-icon">❤️‍🔥</div>
+          <div class="about-goal-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></span></div>
           <div class="about-goal-title"><span class="zh-text">永遠支持台灣喜劇演員</span><span class="en-text">Always rooting for Taiwan's comedians</span></div>
           <div class="about-goal-summary"><span class="zh-text">演員資訊整合，讓更多人認識每一位在台灣努力的喜劇人。</span><span class="en-text">Helping more people discover every comedian working hard in Taiwan.</span></div>
           <div class="about-goal-more" style="display:none">
@@ -2069,11 +2072,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         </div>
       </div>
     </div>
-    <div class="about-card"><h3>📡 <span class="zh-text">關於本站</span><span class="en-text">About This Site</span></h3><p class="editable" contenteditable="false"><span class="zh-text">本站以推廣台灣現場喜劇文化、整理演出資訊為出發點，目前不涉及商業營利行為。<br>網站資訊皆由人類（鼻猴本人）手動整理與更新。若有錯誤、遺漏，或想補充演出資訊，歡迎透過「聯絡我們」告訴我！</span><span class="en-text">This site is dedicated to promoting live comedy culture in Taiwan and curating show information — with no commercial involvement.<br>All content is manually updated by a human (Bíhóu, in person). If you spot any errors, missing info, or shows you'd like to add, feel free to reach out via "Contact Us"!</span></p></div>
+    <div class="about-card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-8.49a6 6 0 0 0 0 8.49m11.31-11.31a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg></span> <span class="zh-text">關於本站</span><span class="en-text">About This Site</span></h3><p class="editable" contenteditable="false"><span class="zh-text">本站以推廣台灣現場喜劇文化、整理演出資訊為出發點，目前不涉及商業營利行為。<br>網站資訊皆由人類（鼻猴本人）手動整理與更新。若有錯誤、遺漏，或想補充演出資訊，歡迎透過「聯絡我們」告訴我！</span><span class="en-text">This site is dedicated to promoting live comedy culture in Taiwan and curating show information — with no commercial involvement.<br>All content is manually updated by a human (Bíhóu, in person). If you spot any errors, missing info, or shows you'd like to add, feel free to reach out via "Contact Us"!</span></p></div>
 
     <!-- 網站統計區塊 -->
     <div class="about-card" id="about-stats-card">
-      <h3>📊 <span class="zh-text">網站成績單</span><span class="en-text">By the Numbers</span></h3>
+      <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span> <span class="zh-text">網站成績單</span><span class="en-text">By the Numbers</span></h3>
       <p style="font-size:.8rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:18px"><span class="zh-text">自 2026/5/22 網站上線以來，嘻嘻哪哩唷收錄的資料 ↓</span><span class="en-text">Since launch on 2026/5/22 ↓</span></p>
       <!-- 總計數字 -->
       <div id="about-stats-nums" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px"></div>
@@ -2093,7 +2096,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     </div>
     <!-- 版權聲明區塊 -->
     <div class="about-card" style="border:1.5px solid rgba(45,43,31,.2);background:rgba(45,43,31,.04)">
-      <h3 style="font-size:.9rem;letter-spacing:.03em">📋 <span class="zh-text">內容使用與版權聲明</span><span class="en-text">Content & Copyright Notice</span></h3>
+      <h3 style="font-size:.9rem;letter-spacing:.03em"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"></path><line x1="8" y1="11" x2="16" y2="11"></line><line x1="8" y1="15" x2="16" y2="15"></line></svg></span> <span class="zh-text">內容使用與版權聲明</span><span class="en-text">Content & Copyright Notice</span></h3>
       <div style="font-size:.8rem;line-height:1.85;color:var(--ts);font-family:var(--f-zh)">
         <p style="margin-bottom:14px;line-height:1.85"><span class="zh-text">本站（嘻嘻哪哩唷）為非營利之台灣現場喜劇文化資訊整理平台，致力於演出資訊彙整與文化推廣。</span><span class="en-text">Cici Radio is a non-profit platform dedicated to curating live comedy information and promoting comedy culture in Taiwan.</span></p>
         <p style="margin-bottom:14px;line-height:1.85"><span class="zh-text">站內使用之演出海報、活動主視覺與相關圖片，其著作權皆屬原主辦單位、設計者或創作者所有。本站使用相關素材僅作演出資訊識別、觀眾查閱與導流購票之用途，並於頁面中標示圖片來源與相關購票連結。本站不對上述圖片與素材主張任何權利。</span><span class="en-text">All show posters, event visuals, and related images remain the property of their respective organizers, designers, or creators. Materials are used solely for show identification, audience reference, and ticket referral, with image credits and links provided. We make no claim of ownership over any such materials.</span></p>
@@ -2101,7 +2104,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </div>
     </div>
 
-    <div class="about-card"><h3>👥 <span class="zh-text">成員</span><span class="en-text">Team</span></h3>
+    <div class="about-card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span> <span class="zh-text">成員</span><span class="en-text">Team</span></h3>
       <div style="font-size:.76rem;font-weight:700;color:var(--ts);letter-spacing:.05em;margin-bottom:12px"><span class="zh-text">現有成員</span><span class="en-text">CURRENT MEMBERS</span></div>
       <!-- Member data is driven by MEMBERS array in JS — easy to update -->
       <div class="member-grid" id="current-members-grid" style="margin-bottom:20px"></div>
@@ -2114,7 +2117,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <!-- Venue/Area Manager Modal (admin only) -->
 <div class="modal-ov" id="modal-venue-manager"><div class="modal" style="max-width:640px">
   <button class="modal-close" onclick="closeModal('venue-manager')">✕</button>
-  <div class="modal-title">⚙️ 管理場地與地區</div>
+  <div class="modal-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span> 管理場地與地區</div>
   <p style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo);margin:-8px 0 14px">拖曳可排序。排序結果同步至篩選器及新增／編輯演出下拉選單。修改名稱後點「儲存」以同步所有顯示。</p>
   <div class="vm-tabs">
     <button class="vm-tab on" onclick="switchVmTab('venue',this)">場地</button>
@@ -2487,7 +2490,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
     <!-- 留言小提醒 -->
     <div id="comment-guidelines" style="background:rgba(245,213,88,.18);border:1.5px solid rgba(239,111,32,.2);border-radius:var(--r-md);padding:14px 18px;margin-bottom:18px;font-family:var(--f-zh);transition:box-shadow .3s">
-      <div style="font-size:.78rem;font-weight:700;color:var(--or);margin-bottom:6px;letter-spacing:.04em;font-family:var(--f-bo)"><span class="zh-text">💬 留言小提醒</span><span class="en-text">💬 Comment Guidelines</span></div>
+      <div style="font-size:.78rem;font-weight:700;color:var(--or);margin-bottom:6px;letter-spacing:.04em;font-family:var(--f-bo)"><span class="zh-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> 留言小提醒</span><span class="en-text"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> Comment Guidelines</span></div>
       <div style="font-size:.84rem;color:var(--ts);line-height:1.8">
         <span class="zh-text"><strong>請避免仇恨言論、人身攻擊、歧視內容、惡意挑釁、洗版與騷擾。</strong><br>一起讓嘻嘻哪哩唷成為一個舒服、友善的喜劇交流空間 :)</span>
         <span class="en-text"><strong>Please avoid hate speech, personal attacks, discriminatory content, malicious provocation, spamming or harassment.</strong><br>Let's keep Cici Radio a welcoming and friendly space for comedy discussions.</span>
@@ -2505,7 +2508,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           <textarea class="fp-ta" id="fpTA" placeholder="留言… / Comment…" oninput="updCC()" maxlength="300" rows="4" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();}"></textarea>
           <!-- 防灌水問答 -->
           <div style="margin-top:10px;padding:10px 14px;background:var(--py);border-radius:var(--r-md);border:1.5px solid rgba(239,111,32,.2)">
-            <label style="font-size:.78rem;font-weight:700;color:var(--tm);font-family:var(--f-zh);display:block;margin-bottom:6px">🎭 <span class="zh-text">快速驗證：本站的品牌名稱叫做？（中文或英文擇一回答）</span><span class="en-text">Quick check: What is the name of this platform? (Chinese or English both accepted)</span></label>
+            <label style="font-size:.78rem;font-weight:700;color:var(--tm);font-family:var(--f-zh);display:block;margin-bottom:6px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span> <span class="zh-text">快速驗證：本站的品牌名稱叫做？（中文或英文擇一回答）</span><span class="en-text">Quick check: What is the name of this platform? (Chinese or English both accepted)</span></label>
             <input type="text" id="fpCaptcha" placeholder="請輸入答案… / Enter answer…" maxlength="20"
               style="width:100%;padding:7px 11px;border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.15);font-size:.84rem;font-family:var(--f-zh);background:#fff;outline:none"
               onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='rgba(45,43,31,.15)'">
@@ -2644,7 +2647,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div style="flex:1;position:relative;margin:0 4%;z-index:1;min-height:0;max-height:33%">
       <div style="width:100%;height:100%;overflow:hidden;border-radius:3%;box-shadow:0 2px 12px rgba(45,43,31,0.15);background:transparent;display:flex;align-items:center;justify-content:center">
         <img id="sc-new-poster" src="" alt="" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:none">
-        <div id="sc-new-poster-placeholder" style="width:100%;height:100%;background:linear-gradient(160deg,#f5d558 0%,#ef6f20 100%);display:flex;align-items:center;justify-content:center;font-size:32px">🎭</div>
+        <div id="sc-new-poster-placeholder" style="width:100%;height:100%;background:linear-gradient(160deg,#f5d558 0%,#ef6f20 100%);display:flex;align-items:center;justify-content:center;font-size:32px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span></div>
       </div>
     </div>
 
@@ -2660,15 +2663,15 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div id="sc-new-performers" style="font-size:.67em;color:rgba(45,43,31,0.6);line-height:1.5;letter-spacing:0;padding-bottom:1%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:1%"></div>
       <div style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;padding:1.4% 0">
-          <span style="font-size:.62em;flex-shrink:0;width:1.6em;text-align:center;line-height:1;display:flex;align-items:center;justify-content:center">📅</span>
+          <span style="font-size:.62em;flex-shrink:0;width:1.6em;text-align:center;line-height:1;display:flex;align-items:center;justify-content:center"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span></span>
           <span id="sc-new-date" style="font-size:.67em;font-weight:500;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0;line-height:1.3;font-family:'DM Sans','Helvetica Neue',sans-serif"></span>
         </div>
         <div style="display:flex;align-items:center;padding:1.4% 0;border-top:1px solid rgba(45,43,31,0.06)">
-          <span style="font-size:.62em;flex-shrink:0;width:1.6em;text-align:center;line-height:1;display:flex;align-items:center;justify-content:center">📍</span>
+          <span style="font-size:.62em;flex-shrink:0;width:1.6em;text-align:center;line-height:1;display:flex;align-items:center;justify-content:center"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span></span>
           <span id="sc-new-venue" style="font-size:.67em;font-weight:500;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0;line-height:1.3"></span>
         </div>
         <div style="display:flex;align-items:center;padding:1.4% 0;border-top:1px solid rgba(45,43,31,0.06)">
-          <span style="font-size:.62em;flex-shrink:0;width:1.6em;text-align:center;line-height:1;display:flex;align-items:center;justify-content:center">🎟</span>
+          <span style="font-size:.62em;flex-shrink:0;width:1.6em;text-align:center;line-height:1;display:flex;align-items:center;justify-content:center"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"></path><line x1="13" y1="5" x2="13" y2="19" stroke-dasharray="2,2"></line></svg></span></span>
           <span id="sc-new-price" style="font-size:.67em;font-weight:500;color:rgba(45,43,31,0.88);margin-left:0.4em;letter-spacing:0;line-height:1.3;font-family:'DM Sans','Helvetica Neue',sans-serif"></span>
         </div>
       </div>
@@ -2933,7 +2936,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <input class="fi" type="text" id="v-tags" placeholder="e.g. Stand-up, Open Mic, 即興">
       <div style="font-size:.72rem;color:var(--ts);font-family:var(--f-bo);margin-top:4px">用逗號分隔多個標籤，例如：Stand-up, Open Mic, 即興</div>
     </div>
-    <div class="fg-g full"><label class="fl">嘻嘻小建議 💬</label><textarea class="fta" id="v-tip" placeholder="e.g. 建議提早到場，停車可到附近的XX停車場"></textarea></div>
+    <div class="fg-g full"><label class="fl">嘻嘻小建議 <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span></label><textarea class="fta" id="v-tip" placeholder="e.g. 建議提早到場，停車可到附近的XX停車場"></textarea></div>
   </div>
   <div class="fa">
     <button class="fa-cancel" onclick="closeModal('venue')">取消</button>
@@ -2950,7 +2953,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <!-- 第一階段 -->
     <div class="fg-g full" style="background:rgba(245,213,88,.08);border-radius:var(--r-md);padding:12px 14px;border:1px solid rgba(239,111,32,.15)">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <span style="font-size:.72rem;font-weight:700;color:var(--or);font-family:var(--f-bo)">📅</span>
+        <span style="font-size:.72rem;font-weight:700;color:var(--or);font-family:var(--f-bo)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span></span>
         <input class="fi" type="text" id="c-stage1-name" placeholder="第一階段（不填則自動用此名稱）" style="flex:1;font-size:.78rem;padding:5px 9px;font-weight:700;color:var(--or)">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
@@ -2977,7 +2980,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <!-- 第二階段 -->
     <div class="fg-g full" style="background:rgba(184,240,208,.18);border-radius:var(--r-md);padding:12px 14px;border:1px solid rgba(13,92,48,.12)">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <span style="font-size:.72rem;font-weight:700;color:#0d5c30;font-family:var(--f-bo)">📅</span>
+        <span style="font-size:.72rem;font-weight:700;color:#0d5c30;font-family:var(--f-bo)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span></span>
         <input class="fi" type="text" id="c-stage2-name" placeholder="第二階段（選填，不填則自動用此名稱）" style="flex:1;font-size:.78rem;padding:5px 9px;font-weight:700;color:#0d5c30">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
@@ -3004,7 +3007,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <!-- 第三階段 -->
     <div class="fg-g full" style="background:rgba(200,220,255,.2);border-radius:var(--r-md);padding:12px 14px;border:1px solid rgba(30,60,140,.14)">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <span style="font-size:.72rem;font-weight:700;color:#1e3c8c;font-family:var(--f-bo)">📅</span>
+        <span style="font-size:.72rem;font-weight:700;color:#1e3c8c;font-family:var(--f-bo)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span></span>
         <input class="fi" type="text" id="c-stage3-name" placeholder="第三階段（選填，不填則自動用此名稱）" style="flex:1;font-size:.78rem;padding:5px 9px;font-weight:700;color:#1e3c8c">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
@@ -3117,14 +3120,14 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 
 <!-- 資訊回報浮動按鈕 -->
 <button class="report-fab" onclick="document.getElementById('modal-report').classList.add('open')">
-  💬 <span class="zh-text">聯絡我們</span><span class="en-text">Contact</span>
+  <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> <span class="zh-text">聯絡我們</span><span class="en-text">Contact</span>
 </button>
 
 <!-- 資訊回報 Modal -->
 <div class="modal-ov" id="modal-report">
   <div class="modal" style="max-width:420px">
     <button class="modal-close" onclick="document.getElementById('modal-report').classList.remove('open')">✕</button>
-    <div class="modal-title">🎭 <span class="zh-text">演員資料新增申請</span><span class="en-text">Performer Profile Application</span></div>
+    <div class="modal-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span> <span class="zh-text">演員資料新增申請</span><span class="en-text">Performer Profile Application</span></div>
     <p style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);margin-bottom:14px;line-height:1.6"><span class="zh-text">想把自己的演員資料放上嘻嘻哪哩唷嗎？填寫申請表單，或透過以下管道與我們聯繫！</span><span class="en-text">Want to be listed in the performer directory? Fill out the form, or reach us through the channels below!</span></p>
     <a class="report-channel" href="https://www.instagram.com/cici._.radio/" target="_blank" rel="noopener">
       <div class="report-ch-icon" style="background:radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);color:#fff;font-size:.7rem;display:flex;align-items:center;justify-content:center">
@@ -3179,7 +3182,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <div class="modal-ov" id="modal-copyright">
   <div class="modal" style="max-width:560px">
     <button class="modal-close" onclick="document.getElementById('modal-copyright').classList.remove('open')">✕</button>
-    <div class="modal-title" style="font-size:1rem">📋 內容使用與版權聲明</div>
+    <div class="modal-title" style="font-size:1rem"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"></path><line x1="8" y1="11" x2="16" y2="11"></line><line x1="8" y1="15" x2="16" y2="15"></line></svg></span> 內容使用與版權聲明</div>
     <div style="font-size:.85rem;line-height:1.85;color:var(--tm);font-family:var(--f-zh)">
       <p style="margin-bottom:10px">嘻嘻哪哩唷為台灣現場喜劇資訊整理平台，致力於推廣台灣現場喜劇文化。</p>
       <p style="margin-bottom:10px">本站刊載之演出資訊、演出海報、活動主視覺及相關素材，其智慧財產權均屬原權利人所有。</p>
@@ -3870,8 +3873,8 @@ function showCardHTML(s) {
   const types = s.types || (s.type ? [s.type] : ['opmic']);
   const typeTags = types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color}">${typeLabel(t)}</span>`;}).join('');
   // Image: show poster if URL available, fallback to emoji
-  const emojiMap = {opmic:'🎤',standup:'🎙️',improv:'🎭',sketch:'🎬',mancai:'🥢',crosstalk:'📯',rakugo:'🎎',ogiri:'🀄',musicom:'🎵',gameshow:'🎮',mixed:'🎪',special:'⭐',english:'🇬🇧',podcast:'📻',other:'🎬'};
-  const emoji = emojiMap[types[0]] || '🎭';
+  const emojiMap = {opmic:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>',standup:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>',improv:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>',sketch:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"></path><path d="m6.2 5.3 3.1 5.4"></path><path d="m12.4 3.4 3.1 5.4"></path><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path></svg></span>',mancai:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1v3l4-3"></path><path d="M18 8h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-2 2v-2"></path></svg></span>',crosstalk:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1v3l4-3"></path><path d="M18 8h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-2 2v-2"></path></svg></span>',rakugo:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span>',ogiri:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span>',musicom:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></span>',gameshow:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1"></circle><circle cx="18" cy="11" r="1"></circle><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.544-.604-6.584-.685-7.258A4 4 0 0 0 17.32 5z"></path></svg></span>',mixed:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"></path><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"></path><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"></path></svg></span>',special:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>',english:'🇬🇧',podcast:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-8.49a6 6 0 0 0 0 8.49m11.31-11.31a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg></span>',other:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"></path><path d="m6.2 5.3 3.1 5.4"></path><path d="m12.4 3.4 3.1 5.4"></path><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path></svg></span>'};
+  const emoji = emojiMap[types[0]] || '<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>';
   const posterEl = (s.image && s.image.trim())
     ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
     : '';
@@ -3891,10 +3894,10 @@ function showCardHTML(s) {
     </div>
     <div class="sc-body">
       <div class="sc-types sc-types-mobile">${typeTags}</div>
-      <div class="sc-date">📅 ${s.date} (${dow}) ${s.time||''}${featuredTag}${soldTag}${expiredTag}${hiddenTag}</div>
+      <div class="sc-date"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${s.date} (${dow}) ${s.time||''}${featuredTag}${soldTag}${expiredTag}${hiddenTag}</div>
       <div class="sc-title">${s.title}</div>
-      <div class="sc-meta">📍 ${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</div>
-      ${s.performer?`<div class="sc-meta sc-meta-performers">🎙 ${s.performer}</div>`:''}
+      <div class="sc-meta"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${getShowVenueLabelById(s.venue)||s.venueLabel||s.venue}</div>
+      ${s.performer?`<div class="sc-meta sc-meta-performers"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span> ${s.performer}</div>`:''}
       ${s.price ? `<div class="sc-price" data-fullprice="${s.price.replace(/"/g,'&quot;').replace(/`/g,'&#96;')}" data-showid="${s.id}">💰 ${parseFeeRange(s.price).range.replace(/</g,'&lt;')}</div>` : ''}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">
         ${s.soldOut
@@ -4274,10 +4277,10 @@ function renderAboutStats(){
   const LAUNCH = new Date('2026-05-22T00:00');
   const totalShows = shows.filter(s=>{ const d=new Date((s.date||'').split(',')[0].trim()+'T00:00'); return d>=LAUNCH; }).length;
   const statItems = [
-    {n: totalShows,       label: lang==='en'?'Shows Listed':'收錄演出場數', emoji:'🎭'},
-    {n: performers.length,label: lang==='en'?'Performers':'演員資料庫人數', emoji:'🎤'},
-    {n: venues.length,    label: lang==='en'?'Venues':'喜劇據點', emoji:'📍'},
-    {n: courses.length,   label: lang==='en'?'Courses':'課程講座', emoji:'📚'},
+    {n: totalShows,       label: lang==='en'?'Shows Listed':'收錄演出場數', emoji:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>'},
+    {n: performers.length,label: lang==='en'?'Performers':'演員資料庫人數', emoji:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>'},
+    {n: venues.length,    label: lang==='en'?'Venues':'喜劇據點', emoji:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>'},
+    {n: courses.length,   label: lang==='en'?'Courses':'課程講座', emoji:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span>'},
   ];
   numsEl.style.gridTemplateColumns = 'repeat(4,1fr)';
   numsEl.innerHTML = statItems.map(({n,label,emoji})=>`
@@ -4375,7 +4378,7 @@ function renderHomeShows() {
       .sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b))).slice(0, count);
     g.innerHTML = fil.length
       ? fil.map(showCardHTML).join('')
-      : `<div class="empty-state"><div class="empty-state-icon">🎭</div><div class="empty-state-title"><span class="zh-text">近期資訊整理中，敬請期待！</span><span class="en-text">More comedy events coming soon!</span></div><button class="empty-state-btn" onclick="showPage('opmic')"><span class="zh-text">查看本週 Open Mic 場次</span><span class="en-text">Browse This Week's Open Mics</span></button></div>`;
+      : `<div class="empty-state"><div class="empty-state-icon"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span></div><div class="empty-state-title"><span class="zh-text">近期資訊整理中，敬請期待！</span><span class="en-text">More comedy events coming soon!</span></div><button class="empty-state-btn" onclick="showPage('opmic')"><span class="zh-text">查看本週 Open Mic 場次</span><span class="en-text">Browse This Week's Open Mics</span></button></div>`;
   };
 
   // 讓瀏覽器先完成 layout 再讀取欄數
@@ -4422,7 +4425,7 @@ function renderHomeUpcoming() {
       const d = new Date(rawDate+'T00:00');
       const DOW_ZH2=['日','一','二','三','四','五','六'];
       const dow = isNaN(d)?'':DOW_ZH2[d.getDay()];
-      const posterEl = (s.image&&s.image.trim()) ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:100%;height:140px;object-fit:contain;display:block;background:#fff">` : `<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
+      const posterEl = (s.image&&s.image.trim()) ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:100%;height:140px;object-fit:contain;display:block;background:#fff">` : `<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>',standup:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>',improv:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"></path><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"></path><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"></path></svg></span>',mancai:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1v3l4-3"></path><path d="M18 8h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-2 2v-2"></path></svg></span>',musicom:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></span>',english:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></span>'})[types[0]]||'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>'}</span>`;
       const areaLabel = AREA_ZH[s.area||'other']||'';
       const expiredStyle = isExpired(s.date,s.time) ? 'opacity:.7;' : '';
       const soldTag = s.soldOut ? `<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fde8e8;color:#8b1a1a;border-radius:var(--r-pill);margin-left:4px">售完</span>` : '';
@@ -4439,9 +4442,9 @@ function renderHomeUpcoming() {
           <div style="position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-wrap:wrap;z-index:3">${typeTags}</div>
         </div>
         <div class="sc-body">
-          <div class="sc-date">📅 ${rawDate} (${dow}) ${s.time||''}${soldTag}</div>
+          <div class="sc-date"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${rawDate} (${dow}) ${s.time||''}${soldTag}</div>
           <div class="sc-title">${s.title}</div>
-          <div class="sc-meta">📍 ${areaLabel}</div>
+          <div class="sc-meta"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${areaLabel}</div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid rgba(45,43,31,.07)">${ticketBtn}</div>
         </div>
       </div>`;
@@ -4515,7 +4518,7 @@ function renderHomeFeatured() {
     const dow = isNaN(d) ? '' : DOW_ZH2[d.getDay()];
     const posterEl = (s.image && s.image.trim())
       ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
-      : `<span style="font-size:2.2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
+      : `<span style="font-size:2.2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>',standup:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>',improv:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"></path><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"></path><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"></path></svg></span>',mancai:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1v3l4-3"></path><path d="M18 8h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-2 2v-2"></path></svg></span>',musicom:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></span>',english:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></span>'})[types[0]]||'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>'}</span>`;
     const areaLabel = AREA_ZH[s.area||'other'] || '';
     const countNote = checkedCount > 1 ? `<span class="zh-text">・共${checkedCount}場</span><span class="en-text">・${checkedCount} dates</span>` : '';
     // 巡演提示：同一檔演出在不同城市都有場次時，標明「共 N 地」，
@@ -4585,8 +4588,8 @@ function openSessionPicker(sessions) {
     const d = new Date(sess.date + 'T00:00');
     const dow = isNaN(d) ? '' : DOW_ZH3[d.getDay()];
     return `<div class="session-pick-item" onclick="closeModal('session-picker');openShowDetail('${sess.id}', true)">
-      <div class="spi-date">📅 ${sess.date}${dow?`（${dow}）`:''} ${sess.time||''}</div>
-      <div class="spi-venue">📍 ${sess.venue||''}</div>
+      <div class="spi-date"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${sess.date}${dow?`（${dow}）`:''} ${sess.time||''}</div>
+      <div class="spi-venue"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${sess.venue||''}</div>
     </div>`;
   }).join('');
   document.getElementById('modal-session-picker').classList.add('open');
@@ -4606,8 +4609,8 @@ function updateShowsDateBar(ds, count){
   const DOW_ZH=['日','一','二','三','四','五','六'];
   const DOW_EN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const label = lang==='en'
-    ? `📅 ${CAL_MONTHS_EN[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()} (${DOW_EN[d.getDay()]})`
-    : `📅 ${ds.replace(/-/g,'/')}（${DOW_ZH[d.getDay()]}）`;
+    ? `<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${CAL_MONTHS_EN[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()} (${DOW_EN[d.getDay()]})`
+    : `<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${ds.replace(/-/g,'/')}（${DOW_ZH[d.getDay()]}）`;
   const countLabel = lang==='en' ? `${count} shows` : `共有 ${count} 場演出`;
   bar.innerHTML = `<span>${label}</span><span class="sdb-count">${countLabel}</span>`;
 }
@@ -4656,8 +4659,8 @@ function selectCalDayDesk(ds){
   if(bar){
     const d2 = new Date(ds+'T00:00');
     const dateLabel = lang2==='en'
-      ? `📅 ${CAL_MONTHS_EN[d2.getMonth()]} ${d2.getDate()}, ${d2.getFullYear()} (${DOW_EN2[d2.getDay()]})`
-      : `📅 ${ds.replace(/-/g,'/')}（${DOW_ZH2[d2.getDay()]}）`;
+      ? `<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${CAL_MONTHS_EN[d2.getMonth()]} ${d2.getDate()}, ${d2.getFullYear()} (${DOW_EN2[d2.getDay()]})`
+      : `<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${ds.replace(/-/g,'/')}（${DOW_ZH2[d2.getDay()]}）`;
     const pastBadge = isPast ? `<span style="font-size:.7rem;color:var(--ts);background:rgba(45,43,31,.08);padding:2px 8px;border-radius:var(--r-pill);font-weight:600">${lang2==='en'?'Ended':'已結束'}</span>` : '';
     const countLabel = lang2==='en' ? `${dayShows.length} shows` : `共有 ${dayShows.length} 場演出`;
     bar.innerHTML = `<span>${dateLabel}</span>${pastBadge}<span class="sdb-count">${countLabel}</span>`;
@@ -4729,7 +4732,7 @@ function selectWeekDesk(range, e){
       rangeText = `<span style="font-size:.76rem;color:var(--ts);font-weight:400">${fmt(first)} ～ ${fmt(last)}</span>`;
     }
     const countLabel = lang3==='en' ? `${rangeShows.length} shows` : `共有 ${rangeShows.length} 場演出`;
-    bar.innerHTML = `<span>📅 ${label}</span>${rangeText}<span class="sdb-count">${countLabel}</span>`;
+    bar.innerHTML = `<span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${label}</span>${rangeText}<span class="sdb-count">${countLabel}</span>`;
   }
   const grid = document.getElementById('shows-grid');
   if(grid){
@@ -4817,7 +4820,7 @@ function courseCardDateRange(dateStr) {
 function courseCardHTML(c) {
   const allTypes = (c.types&&c.types.length) ? c.types : [c.type||'other'];
   const m = COURSE_META[allTypes[0]] || COURSE_META.other;
-  const emj = {standup:'🎙️',improv:'🎭',mancai:'🥢',other:'📚'};
+  const emj = {standup:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>',improv:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>',mancai:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1v3l4-3"></path><path d="M18 8h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-2 2v-2"></path></svg></span>',other:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span>'};
   const imgEl = c.image ? `<img loading="lazy" src="${gImgUrl(c.image,500)}" alt="" onerror="this.style.display='none'">` : '';
   const stageInfo = courseNextStage(c);
   const expiredOverlay = stageInfo.isFullyPast ? `style="opacity:.7"` : '';
@@ -4826,16 +4829,16 @@ function courseCardHTML(c) {
   const cardDate = courseCardDateRange(c.dateDisplay || c.date);
   return `<div class="course-card" data-id="${c.id}" onclick="openCourseDetail('${c.id}')" ${expiredOverlay} style="display:flex;flex-direction:column">
     <div style="display:flex;gap:4px;flex-wrap:wrap;padding:8px 10px 0">${typeTags}</div>
-    <div class="cc-img" style="background:${m.bg}">${imgEl}${c.image?'':` <span style="font-size:2.4rem;position:relative;z-index:1">${emj[allTypes[0]]||'📚'}</span>`}</div>
+    <div class="cc-img" style="background:${m.bg}">${imgEl}${c.image?'':` <span style="font-size:2.4rem;position:relative;z-index:1">${emj[allTypes[0]]||'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span>'}</span>`}</div>
     <div class="cc-body" style="flex:1;display:flex;flex-direction:column;gap:5px">
       <div class="cc-title">${c.title}</div>
       <div class="cc-meta">
         <div style="display:flex;flex-direction:column;gap:3px">
-          ${(c.date2||c.time2||c.date3||c.time3)?`<span style="font-size:.75rem;font-weight:700;color:var(--or);font-family:var(--f-bo)">${stageLabelHTML(c.stage1Name,'第一階段','Phase 1')}</span><span style="color:var(--tm)">📅 ${cardDate}${c.time?` · ${c.time}`:''}</span>`:`<span>📅 ${cardDate}${c.time?` · ${c.time}`:''}</span>`}
-          ${(c.date2||c.time2)?`<span style="font-size:.75rem;font-weight:700;color:var(--or);font-family:var(--f-bo);margin-top:3px;padding-top:4px;border-top:1px solid rgba(45,43,31,.08)">${stageLabelHTML(c.stage2Name,'第二階段','Phase 2')}</span><span style="color:var(--tm)">📅 ${c.date2||''}${c.time2?` · ${c.time2}`:''}</span>`:'' }
-          ${(c.date3||c.time3)?`<span style="font-size:.75rem;font-weight:700;color:var(--or);font-family:var(--f-bo);margin-top:3px;padding-top:4px;border-top:1px solid rgba(45,43,31,.08)">${stageLabelHTML(c.stage3Name,'第三階段','Phase 3')}</span><span style="color:var(--tm)">📅 ${c.date3||''}${c.time3?` · ${c.time3}`:''}</span>`:'' }
+          ${(c.date2||c.time2||c.date3||c.time3)?`<span style="font-size:.75rem;font-weight:700;color:var(--or);font-family:var(--f-bo)">${stageLabelHTML(c.stage1Name,'第一階段','Phase 1')}</span><span style="color:var(--tm)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${cardDate}${c.time?` · ${c.time}`:''}</span>`:`<span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${cardDate}${c.time?` · ${c.time}`:''}</span>`}
+          ${(c.date2||c.time2)?`<span style="font-size:.75rem;font-weight:700;color:var(--or);font-family:var(--f-bo);margin-top:3px;padding-top:4px;border-top:1px solid rgba(45,43,31,.08)">${stageLabelHTML(c.stage2Name,'第二階段','Phase 2')}</span><span style="color:var(--tm)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${c.date2||''}${c.time2?` · ${c.time2}`:''}</span>`:'' }
+          ${(c.date3||c.time3)?`<span style="font-size:.75rem;font-weight:700;color:var(--or);font-family:var(--f-bo);margin-top:3px;padding-top:4px;border-top:1px solid rgba(45,43,31,.08)">${stageLabelHTML(c.stage3Name,'第三階段','Phase 3')}</span><span style="color:var(--tm)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${c.date3||''}${c.time3?` · ${c.time3}`:''}</span>`:'' }
         </div>
-        <span>📍 ${c.location||''}</span>
+        <span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${c.location||''}</span>
         ${c.organizer?`<span>${c.organizer}</span>`:''}
       </div>
       ${c.fee?(()=>{
@@ -4951,7 +4954,7 @@ function renderFeaturedCourses() {
     const rawDate = nextSession ? nextSession.date : '';
     const posterEl = (c.image && c.image.trim())
       ? `<img loading="lazy" class="sc-poster" src="${gImgUrl(c.image.trim(),500)}" alt="${c.title}" onerror="this.style.display='none'">`
-      : `<span style="font-size:2.2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">📚</span>`;
+      : `<span style="font-size:2.2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span></span>`;
     const stageNote = totalStages > 1 ? `<span class="zh-text">・共${totalStages}階段</span><span class="en-text">・${totalStages} stages</span>` : '';
     const dateTimeStr = rawDate + (nextSession && nextSession.time ? ` ${nextSession.time}` : '');
     const metaLine = [dateTimeStr, c.location||''].filter(Boolean).join('・') + stageNote;
@@ -5108,20 +5111,20 @@ function venueCardHTML(v) {
   const lang = getLang();
   const nameDisplay = lang==='en' ? (v.nameEn||v.nameZh) : (v.nameZh||v.nameEn);
   const nameAlt = lang==='en' ? (v.nameZh||'') : (v.nameEn||'');
-  const logo = v.logoUrl ? `<img src="${v.logoUrl}" alt="${nameDisplay}" style="width:50px;height:50px;object-fit:contain;display:block;flex-shrink:0" onerror="this.outerHTML='<span>📍</span>'">` : '<span>📍</span>';
+  const logo = v.logoUrl ? `<img src="${v.logoUrl}" alt="${nameDisplay}" style="width:50px;height:50px;object-fit:contain;display:block;flex-shrink:0" onerror="this.outerHTML='<span>📍</span>'">` : '<span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span></span>';
   return `<div class="venue-card" data-id="${v.id}" onclick="showVenueDetail('${v.id}')" style="display:flex;flex-direction:column">
     <div class="venue-logo">${logo}</div>
     <div class="venue-name">${nameDisplay}<small>${nameAlt}</small></div>
-    <div class="venue-city-lbl">📍 ${CITY_LBL[v.city]||v.city}</div>
+    <div class="venue-city-lbl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${CITY_LBL[v.city]||v.city}</div>
     ${v.tagline?`<div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);margin:5px 0 2px;line-height:1.5">「${v.tagline}」</div>`:''}
     ${v.partner?`<div style="margin-top:2px"><span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:600;background:rgba(45,43,31,.06);color:var(--ts);border:1px solid rgba(45,43,31,.14);border-radius:var(--r-pill);padding:2px 8px;font-family:var(--f-zh)">🤝 ${v.partner}</span></div>`:''}
     ${(v.tags&&v.tags.length)?`<div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div>`:''}
     <div class="venue-links" onclick="event.stopPropagation()" style="margin-top:auto">
       ${v.fb?`<a class="vlb vlb-fb" href="${v.fb}" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> FB</a>`:''}
       ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> Instagram</a>`:''}
-      ${v.address||v.mapUrl?`<a class="vlb vlb-map" href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank">📍 Map</a>`:''}
+      ${v.address||v.mapUrl?`<a class="vlb vlb-map" href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> Map</a>`:''}
     </div>
-    ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(45,43,31,.04);border-left:2px solid rgba(45,43,31,.18);border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55;white-space:pre-line"><span style="font-weight:700;color:var(--tm)">💬 嘻嘻小建議</span><br>${v.tip}</div>`:''}
+    ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(45,43,31,.04);border-left:2px solid rgba(45,43,31,.18);border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55;white-space:pre-line"><span style="font-weight:700;color:var(--tm)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> 嘻嘻小建議</span><br>${v.tip}</div>`:''}
     <div class="card-eo">
       <button class="ca-btn ca-edit" onclick="event.stopPropagation();openVenueModal('${v.id}')">✏️</button>
       <button class="ca-btn ca-del" onclick="event.stopPropagation();delVenue('${v.id}')">🗑</button>
@@ -5137,7 +5140,7 @@ function renderVenues() {
   const fil=venues
     .filter(v=>fCity==='all'||v.city===fCity)
     .sort((a,b)=>(a._order??999)-(b._order??999));
-  g.innerHTML=fil.map(venueCardHTML).join('')+`<div class="venue-card" style="border-style:dashed;align-items:center;justify-content:center;text-align:center;cursor:default;min-height:100px"><div style="color:var(--ts);font-size:.85rem;font-family:var(--f-zh)">期待更多場地陸續加入❤️‍🔥</div></div>`;
+  g.innerHTML=fil.map(venueCardHTML).join('')+`<div class="venue-card" style="border-style:dashed;align-items:center;justify-content:center;text-align:center;cursor:default;min-height:100px"><div style="color:var(--ts);font-size:.85rem;font-family:var(--f-zh)">期待更多場地陸續加入<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></span></div></div>`;
   
 
   // 拖曳排序（僅管理員編輯模式）
@@ -5223,7 +5226,7 @@ function showVenueDetail(id) {
   const lang = getLang();
   const nameMain = lang==='en' ? (v.nameEn||v.nameZh) : (v.nameZh||v.nameEn);
   const nameAlt  = lang==='en' ? (v.nameZh||'') : (v.nameEn||'');
-  const logo=v.logoUrl?`<img src="${v.logoUrl}" alt="" style="width:52px;height:52px;object-fit:contain;border-radius:9px" onerror="this.outerHTML='<span style=font-size:1.6rem>📍</span>'">`:'<span style="font-size:1.6rem">📍</span>';
+  const logo=v.logoUrl?`<img src="${v.logoUrl}" alt="" style="width:52px;height:52px;object-fit:contain;border-radius:9px" onerror="this.outerHTML='<span style=font-size:1.6rem>📍</span>'">`:'<span style="font-size:1.6rem"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span></span>';
   document.getElementById('venue-detail-body').innerHTML=`
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
       <div class="venue-logo" style="width:54px;height:54px;border-radius:11px">${logo}</div>
@@ -5236,7 +5239,7 @@ function showVenueDetail(id) {
       ${(v.tags&&v.tags.length)?`<tr><td style="padding:10px 12px 10px 0;color:var(--ts);font-size:.88rem;font-weight:600;vertical-align:top;border-bottom:1px solid rgba(45,43,31,.07)">${lang==='en'?'Tags':'標籤'}</td><td style="padding:10px 0;border-bottom:1px solid rgba(45,43,31,.07)"><div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div></td></tr>`:''}
       <tr><td style="padding:10px 12px 10px 0;color:var(--ts);font-size:.88rem;font-weight:600;vertical-align:top">${lang==='en'?'About':'簡介'}</td><td style="padding:10px 0;white-space:pre-line;line-height:1.75">${v.description||'—'}</td></tr>
     </table>
-    ${v.tip?`<div style="padding:10px 14px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;margin-bottom:14px"><div style="font-size:.78rem;font-weight:700;color:var(--or);margin-bottom:4px">💬 嘻嘻小建議</div><div style="font-size:.85rem;font-family:var(--f-zh);color:var(--tm);line-height:1.65;white-space:pre-line">${v.tip}</div></div>`:''}
+    ${v.tip?`<div style="padding:10px 14px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;margin-bottom:14px"><div style="font-size:.78rem;font-weight:700;color:var(--or);margin-bottom:4px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> 嘻嘻小建議</div><div style="font-size:.85rem;font-family:var(--f-zh);color:var(--tm);line-height:1.65;white-space:pre-line">${v.tip}</div></div>`:''}
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
       ${v.fb?`<a href="${v.fb}" target="_blank" class="btn-or" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">FB ↗</a>`:`<span></span>`}
       ${v.ig?`<a href="${v.ig}" target="_blank" class="btn-ww" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">IG ↗</a>`:`<span></span>`}
@@ -5258,7 +5261,7 @@ function showVenueDetail(id) {
     return (vNameZh && hay.includes(vNameZh)) || (vNameEn && hay.includes(vNameEn));
   }).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
   if(venueShows.length){
-    const showsHtml = venueShows.map(s=>`<div onclick="openShowDetail('${s.id}',true)" style="padding:8px 12px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px" onmouseover="this.style.background='var(--py)'" onmouseout="this.style.background='var(--cr)'"><div><div style="font-size:.82rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)">${s.title}</div><div style="font-size:.72rem;color:var(--ts);font-family:var(--f-zh);margin-top:2px">📅 ${s.date}${s.time?' · '+s.time:''}</div></div><span style="font-size:.68rem;color:var(--or);font-family:var(--f-bo);white-space:nowrap">查看 →</span></div>`).join('');
+    const showsHtml = venueShows.map(s=>`<div onclick="openShowDetail('${s.id}',true)" style="padding:8px 12px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px" onmouseover="this.style.background='var(--py)'" onmouseout="this.style.background='var(--cr)'"><div><div style="font-size:.82rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)">${s.title}</div><div style="font-size:.72rem;color:var(--ts);font-family:var(--f-zh);margin-top:2px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${s.date}${s.time?' · '+s.time:''}</div></div><span style="font-size:.68rem;color:var(--or);font-family:var(--f-bo);white-space:nowrap">查看 →</span></div>`).join('');
     document.getElementById('venue-detail-body').innerHTML += `<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:8px">近期演出</div>${showsHtml}</div>`;
   }
   document.getElementById('modal-venue-detail').classList.add('open');
@@ -5473,7 +5476,7 @@ function renderMicTable() {
     return `<tr>
       <td>
         <strong style="font-family:var(--f-zh)">${venueDisplay}</strong>
-        ${cityLbl?`<div style="font-size:.7rem;color:var(--ts);margin-top:2px">📍 ${cityLbl}</div>`:''}
+        ${cityLbl?`<div style="font-size:.7rem;color:var(--ts);margin-top:2px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${cityLbl}</div>`:''}
       </td>
       <td style="font-family:var(--f-zh);font-weight:700">${m.name||'—'}</td>
       <td style="font-family:var(--f-zh);color:var(--or);font-weight:600">${signupDisplay||'—'}</td>
@@ -5527,7 +5530,7 @@ function renderArchivedShows(){
     <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--ww);border-radius:var(--r-md);border:1.5px solid rgba(45,43,31,.09);flex-wrap:wrap">
       <div style="font-size:.78rem;color:var(--ts);font-family:var(--f-bo);white-space:nowrap;min-width:90px">${s.date||'—'}</div>
       <div style="font-weight:700;font-family:var(--f-zh);font-size:.88rem;flex:1;min-width:120px">${s.title||'—'}</div>
-      <div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);min-width:100px">📍 ${s.venueLabel||s.venue||'—'}</div>
+      <div style="font-size:.78rem;color:var(--ts);font-family:var(--f-zh);min-width:100px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${s.venueLabel||s.venue||'—'}</div>
       <div style="font-size:.78rem;color:var(--or);font-family:var(--f-zh)">💰 ${s.price||'—'}</div>
       <span style="font-size:.68rem;font-weight:700;padding:2px 8px;background:rgba(45,43,31,.08);border-radius:var(--r-pill);color:var(--ts)">封存</span>
       <button onclick="restoreShow('${s.id}')" style="padding:4px 12px;border-radius:var(--r-pill);border:1.5px solid var(--or);background:transparent;color:var(--or);font-size:.74rem;font-family:var(--f-zh);cursor:pointer;white-space:nowrap">恢復顯示</button>
@@ -5855,7 +5858,7 @@ function renderPerformers(){
       : '';
     const fallback = `<div class="performer-avatar-fallback" id="pf-${p.id}" ${p.photoUrl?'style="display:none"':''}>${(p.name||'?')[0]}</div>`;
     return `<div class="performer-card" onclick="openPerformerDetail('${p.id}')" style="position:relative">
-      ${p.featured ? `<span style="position:absolute;top:8px;right:8px;font-size:.6rem;font-weight:700;padding:2px 7px;background:var(--or);color:#fff;border-radius:var(--r-pill);font-family:var(--f-bo)">🎭 近期專場</span>` : ''}
+      ${p.featured ? `<span style="position:absolute;top:8px;right:8px;font-size:.6rem;font-weight:700;padding:2px 7px;background:var(--or);color:#fff;border-radius:var(--r-pill);font-family:var(--f-bo)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span> 近期專場</span>` : ''}
       ${isAdmin ? `<div style="position:absolute;top:8px;left:8px;display:flex;gap:4px;z-index:2">
         <button onclick="event.stopPropagation();openPerformerModal('${p.id}')" style="padding:3px 8px;font-size:.68rem;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);cursor:pointer;font-family:var(--f-bo)">✏️</button>
       </div>` : ''}
@@ -5932,7 +5935,7 @@ function openPerformerDetail(id){
   }).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
   const showsList = upcoming.length
     ? upcoming.map(s=>`<div onclick="openShowDetail('${s.id}', true)" style="padding:8px 12px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px" onmouseover="this.style.background='var(--py)'" onmouseout="this.style.background='var(--cr)'">
-      <div><div style="font-size:.82rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)">${s.title}</div><div style="font-size:.72rem;color:var(--ts);font-family:var(--f-zh);margin-top:2px">📅 ${s.date} · 📍 ${s.venueLabel||s.venue||''}</div></div>
+      <div><div style="font-size:.82rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)">${s.title}</div><div style="font-size:.72rem;color:var(--ts);font-family:var(--f-zh);margin-top:2px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${s.date} · <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${s.venueLabel||s.venue||''}</div></div>
       <span style="font-size:.68rem;color:var(--or);font-family:var(--f-bo);white-space:nowrap">查看 →</span>
     </div>`).join('')
     : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">近期暫無演出資訊</div>`;
@@ -6077,17 +6080,17 @@ function renderMicCards(rows, isAdmin, lang, isIrregular) {
         }).join('')}</div>`;
       })()}
       <div class="mic-card-venue">${venueDisplay}</div>
-      ${cityLbl ? `<div class="mic-card-city">📍 ${cityLbl}</div>` : ''}
+      ${cityLbl ? `<div class="mic-card-city"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${cityLbl}</div>` : ''}
       ${m.name ? `<div class="mic-card-name">${m.name}</div>` : ''}
       <div class="mic-card-rows">
         ${row('📝','報名時間','Sign-up Opens', signupDisplay, true)}
         ${row('🕗','演出時間','Show Time', showTimeDisplay)}
         ${row('🚪','報到時間','Check-in', checkinDisplay)}
-        ${row('🎭','演出限制','Time Limit', m.timeLimit||'')}
+        ${row('<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>','演出限制','Time Limit', m.timeLimit||'')}
         ${row('💰','報名費用','Sign-up Fee', m.signupFee||'')}
       </div>
       ${methodHtml ? `<div class="mic-card-method">📌 <strong>${lang==='en'?'How to Sign Up':'報名方式'}：</strong>${methodHtml}</div>` : ''}
-      ${m.notes ? `<div class="mic-card-notes" style="white-space:pre-line">📋 <strong>${lang==='en'?'Notes':'備註'}：</strong>${m.notes}</div>` : ''}
+      ${m.notes ? `<div class="mic-card-notes" style="white-space:pre-line"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"></path><line x1="8" y1="11" x2="16" y2="11"></line><line x1="8" y1="15" x2="16" y2="15"></line></svg></span> <strong>${lang==='en'?'Notes':'備註'}：</strong>${m.notes}</div>` : ''}
       <div class="mic-card-footer">
         ${signupBtn}
         ${isAdmin ? `<div class="mic-card-admin"><button class="ca-btn ca-edit" onclick="openMicModal('${m.id}')">✏️</button><button class="ca-btn ca-del" onclick="delMic('${m.id}')">🗑</button></div>` : ''}
@@ -6255,11 +6258,11 @@ function selectCalDay(ds){
   const result=document.getElementById('cal-result');
   banner.classList.add('show');
   if(dayShows.length){
-    banner.textContent=`📅 ${ds} 的演出（${dayShows.length} 場）`;
+    banner.textContent=`<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${ds} 的演出（${dayShows.length} 場）`;
     result.innerHTML=`<div class="shows-layout">${dayShows.map(showCardHTML).join('')}</div>`;
     initPriceExpand(result);
   }else{
-    banner.textContent=`📅 ${ds} — 這天暫無演出資訊`;
+    banner.textContent=`<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${ds} — 這天暫無演出資訊`;
     result.innerHTML='';
   }
 }
@@ -7765,7 +7768,7 @@ function _renderGuideShows(){
   el.innerHTML=upcoming.map(s=>{
     const types=Array.isArray(s.types)?s.types:(s.type?[s.type]:['other']);
     const typeTags=types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span style="font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:var(--r-pill);background:${m.bg};color:${m.color}">${m.label}</span>`;}).join('');
-    const posterEl=(s.image&&s.image.trim())?`<img loading="lazy" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" class="sc-poster">`:`<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'🎤',standup:'🎭',improv:'🎪',mancai:'🥢',musicom:'🎵',english:'🌏'})[types[0]]||'🎭'}</span>`;
+    const posterEl=(s.image&&s.image.trim())?`<img loading="lazy" src="${gImgUrl(s.image.trim(),500)}" alt="${s.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" class="sc-poster">`:`<span style="font-size:2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${({opmic:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>',standup:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>',improv:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"></path><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"></path><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"></path></svg></span>',mancai:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1v3l4-3"></path><path d="M18 8h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-2 2v-2"></path></svg></span>',musicom:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></span>',english:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></span>'})[types[0]]||'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>'}</span>`;
     const rawDate=String(s.date||'').split(',')[0].trim();
     const d=new Date(rawDate+'T00:00');
     const DOW=['日','一','二','三','四','五','六'];
@@ -7780,9 +7783,9 @@ function _renderGuideShows(){
         <div class="sc-types sc-types-desktop">${typeTags}</div>
       </div>
       <div class="sc-body">
-        <div class="sc-date">📅 ${dateStr}</div>
+        <div class="sc-date"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${dateStr}</div>
         <div class="sc-title">${s.title||''}</div>
-        <div class="sc-meta">📍 ${areaLabel}</div>
+        <div class="sc-meta"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${areaLabel}</div>
         ${s.price?`<div class="sc-price">💰 ${s.price}</div>`:''}
       </div>
     </div>`;
@@ -7951,7 +7954,7 @@ function renderThreadsPreview(){
   const posterUrl = (document.getElementById('sc-poster-url')?.value||'').trim();
   const posterHtml = posterUrl
     ? `<img src="${posterUrl}" style="width:100%;height:auto;display:block" crossorigin="anonymous" onerror="this.style.display='none'">`
-    : `<div style="width:100%;padding:15% 0;background:linear-gradient(160deg,#2a2000,#1a1000);display:flex;align-items:center;justify-content:center;font-size:40px">🎭</div>`;
+    : `<div style="width:100%;padding:15% 0;background:linear-gradient(160deg,#2a2000,#1a1000);display:flex;align-items:center;justify-content:center;font-size:40px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span></div>`;
 
   preview.innerHTML = `
     <div style="padding:14px 16px 0;display:flex;align-items:center;gap:8px">
