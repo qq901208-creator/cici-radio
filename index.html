@@ -6689,12 +6689,14 @@ function saveCourse(status){
   const imgSrcVal=(document.getElementById('c-imgsrc').value||'').trim();
   const item={title,date:firstDate,dateDisplay:dateVal,time:timeStr,date2:date2Val,time2:time2Str,date3:date3Val,time3:time3Str,stage1Name:stage1NameVal,stage2Name:stage2NameVal,stage3Name:stage3NameVal,type:ctype,types:ctypes,organizer:document.getElementById('c-organizer').value,location:document.getElementById('c-location').value,address:document.getElementById('c-address').value,fee:document.getElementById('c-fee').value,discount:(document.getElementById('c-discount')?.value||'').trim(),featured:!!document.getElementById('c-featured')?.checked,platform:document.getElementById('c-platform').value,url:document.getElementById('c-signupurl').value,image:document.getElementById('c-image')?.value?.trim()||'',imgSrc:imgSrcVal?'圖片來源：'+imgSrcVal:'',description:document.getElementById('c-desc').value,production:document.getElementById('c-production')?.value?.trim()||'',status};
   window.FB.save('courses', eCourseId||null, item).then(newId=>{
-    if(eCourseId){const i=COURSES.findIndex(x=>x.id===eCourseId);if(i>=0)COURSES[i]={id:eCourseId,...item};}
-    else COURSES.push({id:newId,...item});
+    const liveCourses = window._COURSES || COURSES;
+    if(eCourseId){const i=liveCourses.findIndex(x=>x.id===eCourseId);if(i>=0)liveCourses[i]={id:eCourseId,...item};}
+    else liveCourses.push({id:newId,...item});
+    window._COURSES = liveCourses;
     closeModal('course');renderCourses();showToast(status==='published'?'✅ 課程已發布':'📝 草稿已儲存','ok');
   }).catch(()=>showToast('❌ 儲存失敗','err'));
 }
-function delCourse(id){if(!confirm('確定刪除？'))return;window.FB.del('courses',id).then(()=>{COURSES=COURSES.filter(x=>x.id!==id);renderCourses();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
+function delCourse(id){if(!confirm('確定刪除？'))return;window.FB.del('courses',id).then(()=>{window._COURSES=(window._COURSES||COURSES).filter(x=>x.id!==id);COURSES=window._COURSES;renderCourses();showToast('已刪除','ok');}).catch(()=>showToast('❌ 刪除失敗','err'));}
 
 function saveAll(){showToast('✅ 所有變更已儲存','ok');}
 
@@ -6731,8 +6733,10 @@ async function archiveAllExpired(){
   for(const s of expiredShows){
     try{
       await window.FB.save('shows', s.id, {...s, status:'archived'});
-      const i = SHOWS.findIndex(x=>x.id===s.id);
-      if(i>=0) SHOWS[i].status = 'archived';
+      const liveShows = window._SHOWS || SHOWS;
+      const i = liveShows.findIndex(x=>x.id===s.id);
+      if(i>=0) liveShows[i].status = 'archived';
+      window._SHOWS = liveShows;
       done++;
     } catch(e){ errors.push(s.title); }
   }
@@ -6740,8 +6744,10 @@ async function archiveAllExpired(){
   for(const c of expiredCourses){
     try{
       await window.FB.save('courses', c.id, {...c, status:'archived'});
-      const i = COURSES.findIndex(x=>x.id===c.id);
-      if(i>=0) COURSES[i].status = 'archived';
+      const liveCourses = window._COURSES || COURSES;
+      const i = liveCourses.findIndex(x=>x.id===c.id);
+      if(i>=0) liveCourses[i].status = 'archived';
+      window._COURSES = liveCourses;
       done++;
     } catch(e){ errors.push(c.title); }
   }
