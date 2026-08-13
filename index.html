@@ -80,34 +80,36 @@ body.ready{visibility:visible}
 #page-opmic .sec-desc,#page-venues .sec-desc,#page-performers .sec-desc,#page-courses .sec-desc{font-size:.84rem;margin-bottom:18px}
 
 /* HERO */
-.hero{background:var(--py);padding:20px 6vw 18px;display:block;position:relative;overflow:hidden}
+.hero-banner-wrap{background:linear-gradient(to bottom,#fffdf0 0%,var(--py) 30%,var(--py) 45%,var(--cr) 85%);position:relative;overflow:hidden;padding-bottom:0}
+.hero{background:transparent;padding:44px 6vw 40px;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden;text-align:center}
 .hero::before{display:none}
 .hero::after{display:none}
-/* 右側幾何裝飾 SVG */
-.hero-deco{position:absolute;top:0;right:0;bottom:0;width:55%;pointer-events:none;z-index:0;opacity:1}
-.hero-left{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+.hero-blob{position:absolute;border-radius:50%;background:var(--y);pointer-events:none;z-index:0}
+.hero-blob-tr{top:-90px;right:-90px;width:280px;height:280px;opacity:.55}
+.hero-blob-bl{top:20px;left:-100px;width:220px;height:220px;opacity:.35}
+.hero-deco{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:1}
+.hero-left{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;max-width:640px;margin:0 auto}
 .hero-right{display:none}
 .hero-logo{display:none}
 .hero-tag{display:none}
 .hero-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--or);animation:pulse 2s infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.6)}}
-.hero-h1{font-family:var(--f-zh);font-weight:900;font-size:clamp(2.6rem,4.2vw,3.8rem);color:var(--sd);line-height:1.04;letter-spacing:-.01em;margin-bottom:10px}
+.hero-h1{font-family:var(--f-zh);font-weight:900;font-size:clamp(2.2rem,4vw,3.4rem);color:var(--sd);line-height:1.15;letter-spacing:-.01em;margin-bottom:16px}
 .hero-h1 .hl{color:var(--or);position:relative;display:inline-block}
 .hero-h1 .hl::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:5px;background:var(--y);border-radius:3px;z-index:-1}
 .hero-sub{display:none}
-.hero-platform{font-family:var(--f-zh);font-size:.96rem;color:var(--tm);font-weight:500;margin-bottom:20px;letter-spacing:.04em;opacity:.7;padding-left:12px;border-left:2.5px solid var(--or)}
-@media(max-width:768px){.hero-platform{font-size:.74rem}}
-.hero-desc{font-size:.95rem;color:var(--ts);line-height:1.8;margin-bottom:16px;font-family:var(--f-zh);opacity:.85}
-.hero-ctas{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.hero-platform{font-family:var(--f-zh);font-size:.86rem;color:var(--or);font-weight:800;margin-bottom:14px;letter-spacing:.03em}
+@media(max-width:768px){.hero-platform{font-size:.66rem}}
+.hero-desc{font-size:.92rem;color:var(--ts);line-height:1.7;margin-bottom:26px;font-family:var(--f-zh)}
+.hero-ctas{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
 .hero-next{display:none!important}
-.hero-browse-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:var(--or);color:#fff;font-weight:700;font-size:.9rem;border:none;border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh);box-shadow:0 4px 14px rgba(239,111,32,.28)}
+.hero-browse-btn{display:inline-flex;align-items:center;gap:6px;padding:13px 26px;background:var(--or);color:#fff;font-weight:800;font-size:.9rem;border:none;border-radius:var(--r-pill);cursor:pointer;text-decoration:none;transition:all .15s;font-family:var(--f-zh);box-shadow:0 6px 18px rgba(239,111,32,.3)}
 .hero-browse-btn:hover{background:#d45c10;transform:translateY(-2px)}
-@keyframes underlinePulse{0%,100%{opacity:1}50%{opacity:.35}}
-.hero-guide-btn{display:inline-flex;align-items:center;gap:6px;padding:4px 0;background:transparent;color:var(--or);font-weight:500;font-size:.88rem;border:none;cursor:pointer;text-decoration:none;font-family:var(--f-zh);position:relative;transition:transform .3s cubic-bezier(.4,0,.2,1)}
-.hero-guide-btn::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1.5px;background:var(--or);animation:underlinePulse 2.4s ease-in-out infinite;transition:none}
-.hero-guide-btn:hover{color:var(--or);transform:translateY(-2px)}
-.hero-guide-btn:hover::after{animation:none;opacity:1}
+.hero-guide-btn{display:inline-flex;align-items:center;gap:6px;padding:13px 26px;background:#fff;color:var(--or);font-weight:700;font-size:.9rem;border:1.5px solid var(--y);border-radius:var(--r-pill);cursor:pointer;text-decoration:none;font-family:var(--f-zh);transition:all .15s}
+.hero-guide-btn:hover{border-color:var(--or);transform:translateY(-2px)}
+.hero-guide-btn .btn-arrow{display:inline-block;transition:transform .2s}
 .hero-guide-btn:hover .btn-arrow{transform:translateX(5px)}
+.hero-guide-short{display:none}
 .hero-quick-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;background:#fff;color:var(--sd);font-weight:600;font-size:.82rem;border:2px solid rgba(45,43,31,.13);border-radius:var(--r-pill);cursor:pointer;font-family:var(--f-zh);transition:all .15s}
 .hero-quick-btn:hover{border-color:var(--or);color:var(--or)}
 .hero-quick-btn svg{width:13px;height:13px;flex-shrink:0}
@@ -1158,17 +1160,25 @@ body.edit .edit-bar{display:flex!important}
   .fp-inner{width:100%}
   .fp-nr{flex-direction:column;gap:6px}
   .fp-ni{width:100%}
-  /* hero mobile: 單欄 */
-  .hero{display:block;padding:20px 5vw 18px;overflow:hidden}
-  .hero-deco{display:block;width:55%;opacity:.8}
+  /* hero mobile: 壓矮，盡快露出下面內容 */
+  .hero{display:flex;padding:26px 6vw 22px;overflow:hidden}
+  .hero-banner-wrap{padding-bottom:0}
+  .hero-deco{opacity:.7}
+  .hero-blob-tr{top:-60px;right:-60px;width:160px;height:160px}
+  .hero-blob-bl{top:16px;left:-70px;width:130px;height:130px}
   .hero-right{display:none}
   .hero-tag{margin-bottom:8px;font-size:.7rem;padding:4px 12px}
-  .hero-h1{font-size:1.95rem;margin-bottom:8px}
-  .hero-desc{margin-bottom:20px;font-size:.86rem}
-  .hero-ctas{gap:8px}
+  .hero-platform{font-size:.62rem;margin-bottom:8px}
+  .hero-h1{font-size:1.5rem;margin-bottom:8px;line-height:1.25}
+  .hero-desc{margin-bottom:16px;font-size:.72rem;line-height:1.55}
+  .hero-desc-l2{display:none}
+  .hero-ctas{gap:8px;flex-wrap:nowrap}
+  .hero-browse-btn,.hero-guide-btn{padding:10px 14px;font-size:.72rem;flex:1;justify-content:center;white-space:nowrap}
+  .hero-guide-full{display:none}
+  .hero-guide-short{display:inline}
   .hero-next{font-size:.78rem}
   /* stats bar mobile */
-  .hero-stats-bar{flex-wrap:wrap;gap:8px;padding:14px 16px;margin:0 4vw;border-radius:var(--r-xl);box-shadow:0 4px 16px rgba(45,43,31,.06)}
+  .hero-stats-bar{flex-wrap:wrap;gap:8px;padding:14px 16px;margin:16px 4vw 0;border-radius:var(--r-xl);box-shadow:0 4px 16px rgba(45,43,31,.06)}
   .hst-item{flex:0 0 calc(50% - 8px);border-right:none;padding:0;gap:6px;align-items:flex-start}
   .hst-item:first-child{padding-left:0}
   .hst-cta{flex:0 0 100%;justify-content:center;padding:10px 20px;margin-left:0;margin-top:4px}
@@ -1179,7 +1189,7 @@ body.edit .edit-bar{display:flex!important}
   #home-upcoming-list .shows-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:0}
   #home-upcoming-list .show-card{flex-direction:row;border-radius:var(--r-lg)!important;border:1.5px solid rgba(45,43,31,.09)!important;box-shadow:none!important;align-items:stretch}
   /* home-mid mobile：強制單欄全寬 */
-  .home-mid{display:block!important;padding:12px 4vw 24px;width:100%;box-sizing:border-box}
+  .home-mid{display:block!important;padding:16px 4vw 24px;width:100%;box-sizing:border-box}
   .home-quick-nav{width:100%;box-sizing:border-box;margin-bottom:10px}
   .home-upcoming{width:100%;box-sizing:border-box}
   .home-featured{width:100%;box-sizing:border-box;padding:18px 16px 14px}
@@ -1262,37 +1272,44 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <!-- HOME -->
 <div class="page" id="page-home">
 
+  <div class="hero-banner-wrap">
   <!-- HERO -->
   <section class="hero">
-    <!-- 背景裝飾 -->
-    <svg class="hero-deco" viewBox="0 0 600 300" preserveAspectRatio="xMaxYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- 右側大橢圓 -->
-      <ellipse cx="530" cy="150" rx="210" ry="170" fill="#f5d558" opacity="0.2"/>
-      <!-- 四角星 ✦ -->
-      <path d="M370 90 L373 100 L383 103 L373 106 L370 116 L367 106 L357 103 L367 100 Z" fill="#ef6f20" opacity="0.3"/>
-      <path d="M530 55 L532 61 L538 63 L532 65 L530 71 L528 65 L522 63 L528 61 Z" fill="#f5d558" opacity="0.7"/>
-      <!-- 小圓點 -->
-      <circle cx="470" cy="38"  r="4" fill="#ef6f20" opacity="0.22"/>
-      <circle cx="570" cy="105" r="5" fill="#f5d558" opacity="0.4"/>
-      <circle cx="420" cy="210" r="3.5" fill="#ef6f20" opacity="0.18"/>
+    <!-- 背景裝飾：角落色塊、星星、右下角小點陣 -->
+    <div class="hero-blob hero-blob-tr"></div>
+    <div class="hero-blob hero-blob-bl"></div>
+    <svg class="hero-deco" viewBox="0 0 900 320" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M120 60 L123 70 L133 73 L123 76 L120 86 L117 76 L107 73 L117 70 Z" fill="#ef6f20" opacity="0.55"/>
+      <path d="M770 90 L772 96 L778 98 L772 100 L770 106 L768 100 L762 98 L768 96 Z" fill="#ef6f20" opacity="0.5"/>
+      <circle cx="90" cy="230" r="4" fill="#ef6f20" opacity="0.45"/>
+      <circle cx="820" cy="60" r="3.5" fill="#ef6f20" opacity="0.35"/>
+      <circle cx="60" cy="130" r="3" fill="#ef6f20" opacity="0.3"/>
+      <g opacity="0.5">
+        <circle cx="820" cy="260" r="2.2" fill="#ef6f20"/><circle cx="838" cy="260" r="2.2" fill="#ef6f20"/><circle cx="856" cy="260" r="2.2" fill="#ef6f20"/>
+        <circle cx="820" cy="278" r="2.2" fill="#ef6f20"/><circle cx="838" cy="278" r="2.2" fill="#ef6f20"/><circle cx="856" cy="278" r="2.2" fill="#ef6f20"/>
+      </g>
     </svg>
     <div class="hero-left">
+      <p class="hero-platform">
+        <span class="zh-text">〵 全台現場喜劇資訊整理平台 〳</span>
+        <span class="en-text">〵 Taiwan's live comedy event guide 〳</span>
+      </p>
       <h1 class="hero-h1">
-        <span class="zh-text">嘻嘻，<br><span class="hl">喜劇</span>在哪裡？</span>
-        <span class="en-text">Find Your<br><span class="hl">Comedy</span> Night</span>
+        <span class="zh-text">嘻嘻，喜劇在哪裡？</span>
+        <span class="en-text">Find Your Comedy Night</span>
       </h1>
       <!-- 隱藏 SEO 文字 -->
       <div style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none" aria-hidden="true">提供全台 Stand-up Comedy 站立喜劇、Open Mic 歐噴麥、漫才、即興劇、短劇與喜劇專場資訊，整理現場喜劇演出、Open Mic 報名、喜劇場地、課程講座等內容，快速找到最新現場喜劇演出資訊。</div>
-      <p class="hero-platform">
-        <span class="zh-text">全台現場喜劇資訊整理平台</span>
-        <span class="en-text">Taiwan's live comedy event guide</span>
+      <p class="hero-desc">
+        <span class="zh-text">整理全台喜劇演出、Open Mic、課程、場地資訊<span class="hero-desc-l2"><br>讓你輕鬆找到想看的喜劇！</span></span>
+        <span class="en-text">All Taiwan comedy shows, Open Mics, courses and venues<span class="hero-desc-l2"><br>in one place.</span></span>
       </p>
       <div class="hero-ctas">
         <a href="#" class="hero-browse-btn" onclick="showPage('shows');return false">
           <span class="zh-text">查看演出資訊 →</span><span class="en-text">Browse Shows →</span>
         </a>
         <a href="#" class="hero-guide-btn" onclick="showPage('guide');return false">
-          <span class="zh-text">第一次看喜劇嗎？從這裡開始<span class="btn-arrow">→</span></span><span class="en-text">First time? Start here<span class="btn-arrow">→</span></span>
+          <span class="zh-text"><span class="hero-guide-full">第一次看喜劇嗎？從這裡開始</span><span class="hero-guide-short">第一次看喜劇？</span> <span class="btn-arrow">→</span></span><span class="en-text"><span class="hero-guide-full">First time? Start here</span><span class="hero-guide-short">First time?</span> <span class="btn-arrow">→</span></span>
         </a>
       </div>
       <div id="hero-next-show" class="hero-next" style="display:none"></div>
@@ -1398,6 +1415,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       </div>
       <div class="hst-cta-arr">→</div>
     </a>
+  </div>
   </div>
 
   <!-- MID：快速前往 + 最近演出 -->
