@@ -960,7 +960,11 @@ body.edit .edit-bar{display:flex!important}
 
 /* Hero 各元素依序進場 */
 .hero-tag{animation:fadeUp .5s .05s ease both}
-.hero-h1{animation:fadeUp .5s .15s ease both}
+.hero-h1{transition:-webkit-text-stroke .15s ease}
+.hero-h1:hover{-webkit-text-stroke:.6px currentColor}
+.hero-h1 .kchar{display:inline-block;opacity:0;animation:kCharIn .5s cubic-bezier(.34,1.56,.64,1) both}
+.hero-h1 .kchar-hl{color:var(--or)}
+@keyframes kCharIn{from{opacity:0;transform:translateY(22px) scale(.8)}to{opacity:1;transform:translateY(0) scale(1)}}
 .hero-sub{animation:fadeUp .5s .22s ease both}
 .hero-desc{animation:fadeUp .5s .3s ease both}
 .hero-btns{animation:fadeUp .5s .38s ease both}
@@ -4579,23 +4583,22 @@ function renderHomeFeatured() {
     </div>`;
   }).join('');
 
-  // 卡片滑入畫面時漂浮一次，之後停下（不重複）——電腦、手機都套用，
-  // 電腦版不用等滑鼠移上去才有動態感，一進首頁就會自己浮動一次
-  // 用兩層 requestAnimationFrame 等瀏覽器真的排版、畫完一幀之後再偵測，
-  // 避免 render 當下卡片還沒有實際版面位置，導致偵測器誤判「沒有進入畫面」
-  if (typeof IntersectionObserver === 'function') {
+  // 卡片一起漂浮一次，之後不再重複（不是每張各自分開跳）
+  if (typeof IntersectionObserver === 'function' && !window._featuredShowsBounced) {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         const cards = el.querySelectorAll('.featured-card');
+        if (!cards.length) return;
         const io = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              entry.target.classList.add('fc-inview');
-              io.unobserve(entry.target);
+              window._featuredShowsBounced = true;
+              cards.forEach(c => c.classList.add('fc-inview'));
+              io.disconnect();
             }
           });
-        }, { root: isMobile ? el : null, threshold: 0.6 });
-        cards.forEach(c => io.observe(c));
+        }, { root: isMobile ? el : null, threshold: 0.3 });
+        io.observe(cards[0]);
       });
     });
   }
@@ -5008,20 +5011,22 @@ function renderFeaturedCourses() {
     </div>`;
   }).join('');
 
-  // 卡片滑入畫面時漂浮一次，之後停下（電腦、手機都適用），做法跟首頁合作推薦演出一致
-  if (typeof IntersectionObserver === 'function') {
+  // 卡片一起漂浮一次，之後不再重複，跟首頁合作推薦演出做法一致
+  if (typeof IntersectionObserver === 'function' && !window._featuredCoursesBounced) {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         const cards = el.querySelectorAll('.featured-card');
+        if (!cards.length) return;
         const io = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              entry.target.classList.add('fc-inview');
-              io.unobserve(entry.target);
+              window._featuredCoursesBounced = true;
+              cards.forEach(c => c.classList.add('fc-inview'));
+              io.disconnect();
             }
           });
-        }, { root: isMobile ? el : null, threshold: 0.6 });
-        cards.forEach(c => io.observe(c));
+        }, { root: isMobile ? el : null, threshold: 0.3 });
+        io.observe(cards[0]);
       });
     });
   }
@@ -7305,6 +7310,27 @@ window.ciciLogout = function() {
 };
 
 // ── SCROLL REVEAL ──
+// ── HERO 標題逐字彈入，「喜劇」保持橘色 ──
+function kineticHeroTitle(){
+  const h1 = document.querySelector('.hero-h1');
+  if(!h1) return;
+  const wrap = (el, hlRange) => {
+    if(!el || el.dataset.kinetic) return;
+    el.dataset.kinetic = '1';
+    const text = el.textContent;
+    el.textContent = '';
+    [...text].forEach((ch,i)=>{
+      const span = document.createElement('span');
+      span.className = 'kchar' + (hlRange && i>=hlRange[0] && i<hlRange[1] ? ' kchar-hl' : '');
+      span.textContent = ch === ' ' ? '\u00A0' : ch;
+      span.style.animationDelay = (i*0.045)+'s';
+      el.appendChild(span);
+    });
+  };
+  wrap(h1.querySelector('.zh-text'), [3,5]); // 嘻嘻，喜劇在哪裡？→「喜劇」在第 3-4 個字
+  wrap(h1.querySelector('.en-text'), null);
+}
+
 function initReveal(){
   const obs = new IntersectionObserver(entries=>{
     entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('revealed'); });
@@ -7356,6 +7382,7 @@ function restorePageFromHash(){
 
 window.addEventListener('load', ()=>{
   try { initReveal(); } catch(e){ console.error('initReveal:', e); }
+  try { kineticHeroTitle(); } catch(e){ console.error('kineticHeroTitle:', e); }
   try { restorePageFromHash(); } catch(e){ console.error('restorePageFromHash:', e); }
   document.body.classList.add('ready');
   try {
