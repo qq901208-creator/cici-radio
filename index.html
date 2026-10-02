@@ -5298,9 +5298,9 @@ function renderTcfPage(){
   }
   renderTcfCoursesGrid();
   renderTcfPerformersGrid();
-  // 官方網站連結：先讀 window._TCF_OFFICIAL_URL（之後可存進 Firestore meta 文件），沒有就先隱藏連結文字目標
+  // 官方網站連結：先讀 window._TCF_OFFICIAL_URL（之後可存進 Firestore meta 文件），沒有就用預設的官方網址
   const officialLinkEl = document.getElementById('tcf-official-link');
-  if(officialLinkEl) officialLinkEl.href = window._TCF_OFFICIAL_URL || 'https://www.taipeicomedyfestival.com/';
+  if(officialLinkEl) officialLinkEl.href = window._TCF_OFFICIAL_URL || 'https://tpcomedyfestival.com';
 }
 
 function renderCourses() {
@@ -8269,7 +8269,7 @@ function showPage(page, skipHistory){
   const reportFabEl = document.getElementById('report-fab-btn');
   if(tcfFabEl && reportFabEl){
     if(page==='tcf'){
-      tcfFabEl.href = window._TCF_OFFICIAL_URL || 'https://www.taipeicomedyfestival.com/';
+      tcfFabEl.href = window._TCF_OFFICIAL_URL || 'https://tpcomedyfestival.com';
       tcfFabEl.classList.add('show');
       reportFabEl.style.display = 'none';
     } else {
