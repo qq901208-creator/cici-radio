@@ -1329,6 +1329,17 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-perf-marquee.run:hover .tcf-perf-track,.tcf-perf-marquee.run:active .tcf-perf-track{animation-play-state:paused}
 @keyframes tcfPerfScroll{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 7px))}}
 @media(prefers-reduced-motion:reduce){.tcf-perf-marquee.run{overflow-x:auto;-webkit-mask-image:none;mask-image:none}.tcf-perf-marquee.run .tcf-perf-track{animation:none}}
+/* 喜劇節 hero：官方網站／參演演員／第一次看喜劇 三顆同一行（手機版放不下時自動換行） */
+.tcf-hero-actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;margin-top:18px}
+.tcf-hero-actions .tcf-hero-official{margin-top:0}
+.tcf-hero-actions .tcf-hero-shortcuts{display:contents}
+@media(min-width:769px){.tcf-hero-actions{flex-wrap:nowrap}.tcf-hero-actions a{white-space:nowrap}}
+/* 日期 pill 列與下方搜尋欄同寬、同左右邊界：演出列表容器左右留 5vw，標題區比照（不再用 1160px／24px），桌機 pill 平均撐滿 */
+.tcf-shows-head{max-width:none;padding-left:5vw;padding-right:5vw}
+@media(min-width:769px){
+  .tcf-date-row{flex-wrap:wrap;padding-left:0;padding-right:0}
+  .tcf-date-chip{flex:1 1 auto;justify-content:center}
+}
 @media(max-width:768px){.sc-age-badge{top:5px;right:5px;font-size:.56rem;padding:1px 5px}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -2169,10 +2180,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <h1 class="zh-only">2026台北喜劇節</h1>
       <div class="tcf-hero-date">11.26-12.06</div>
       <p class="zh-only">嘻嘻幫你整理好演出、課程與參演演員，快速找到今年喜劇節想看的場次！</p>
+      <div class="tcf-hero-actions">
       <a href="#" id="tcf-official-link" class="tcf-hero-official" target="_blank" rel="noopener">↗ <span class="zh-text">台北喜劇節官方網站</span><span class="en-text">Official Website</span></a>
       <div class="tcf-hero-shortcuts">
         <a onclick="tcfScrollTo('tcf-performers-section')"><span class="zh-text">參演演員</span><span class="en-text">Performers</span></a>
         <a onclick="showPage('guide')"><span class="zh-text">第一次看喜劇？</span><span class="en-text">First time?</span></a>
+      </div>
       </div>
       <div class="tcf-explore-tags" id="tcf-explore-tags"></div>
     </div>
