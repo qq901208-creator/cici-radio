@@ -1320,6 +1320,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 /* 區塊間距：演出列表 ↔ 課程／參演演員 */
 .tcf-shows-host{padding-bottom:12px}
 #tcf-courses-section,#tcf-performers-section{margin-top:36px}
+/* 課程／參演演員／最後更新 與上方演出區同一條左右邊界（5vw） */
+#tcf-courses-section,#tcf-performers-section{max-width:none;margin-left:5vw;margin-right:5vw;padding-left:0;padding-right:0}
+#page-tcf .tcf-updated{max-width:none;margin:0 5vw;padding:0 0 28px}
 /* 參演演員輪播 */
 .tcf-perf-marquee{margin-top:16px;overflow:hidden;padding:6px 0 10px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .tcf-perf-track{display:flex;gap:14px;width:max-content}
@@ -2210,7 +2213,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="tcf-perf-marquee" id="tcf-performers-grid"></div>
   </div>
 
-  <p style="text-align:right;font-size:.68rem;color:rgba(45,43,31,.28);font-family:var(--f-bo);max-width:1160px;margin:0 auto;padding:0 24px 28px"><span id="last-updated-tcf"></span></p>
+  <p class="tcf-updated" style="text-align:right;font-size:.68rem;color:rgba(45,43,31,.28);font-family:var(--f-bo)"><span id="last-updated-tcf"></span></p>
 
 </div>
 
@@ -3617,6 +3620,7 @@ async function loadAllData(retryCount = 0) {
     if(typeof renderVenues==='function') try{renderVenues();}catch(e){console.error('renderVenues:',e);}
     if(typeof renderPerformers==='function') try{renderPerformers();}catch(e){console.error('renderPerformers:',e);}
     if(typeof renderCourses==='function') try{renderCourses();}catch(e){console.error('renderCourses:',e);}
+    if(typeof renderTcfPage==='function' && document.getElementById('page-tcf')?.classList.contains('active')) try{renderTcfPage();}catch(e){console.error('renderTcfPage:',e);}
     if(typeof renderAbout==='function') try{renderAbout();}catch(e){console.error('renderAbout:',e);}
     if(typeof renderAboutStats==='function') try{renderAboutStats();}catch(e){console.error('renderAboutStats:',e);}
     if(typeof renderFpList==='function') try{renderFpList();}catch(e){console.error('renderFpList:',e);}
@@ -7833,6 +7837,11 @@ function restorePageFromHash(){
     }
   }
   if(page==='courses') renderCourses();
+  if(page==='tcf'){
+    try{ renderTcfPage(); }catch(e){ console.error('renderTcfPage:',e); }
+    const fab = document.getElementById('tcf-official-fab'), rfab = document.getElementById('report-fab-btn');
+    if(fab && rfab){ fab.href = window._TCF_OFFICIAL_URL || 'https://tpcomedyfestival.com'; fab.classList.add('show'); rfab.style.display = 'none'; }
+  }
   if(page==='about') renderAbout();
   if(page==='board'){renderFpList();renderRatBar();renderStars(selRating);}
   // venues + opmic：資料等 Firebase callback 後才 render，保持 loading 狀態
