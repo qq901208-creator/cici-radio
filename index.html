@@ -1265,11 +1265,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-entry{background:var(--ww);border-radius:var(--r-xl);padding:24px 26px;display:flex;align-items:center;gap:20px;box-shadow:var(--sc);border:1.5px solid transparent;background-image:linear-gradient(var(--ww),var(--ww)),linear-gradient(135deg,var(--tcf-pink),var(--tcf-cyan));background-origin:border-box;background-clip:padding-box,border-box}
 .tcf-entry-badge{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--tcf-pink),var(--tcf-pink2));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem}
 .tcf-entry-txt{flex:1;font-family:var(--f-zh)}
-.tcf-entry-txt .tag{font-size:.7rem;font-weight:700;color:var(--tcf-pink);letter-spacing:.04em}
-.tcf-entry-txt h3{font-size:1.1rem;font-weight:900;margin:3px 0 4px;color:var(--tm)}
+.tcf-entry-txt .tag{font-size:1.5rem;font-weight:900;color:var(--tcf-pink);letter-spacing:.02em;line-height:1.25}
+.tcf-entry-txt h3{font-size:.92rem;font-weight:600;margin:6px 0 0;color:var(--ts)}
 .tcf-entry-txt p{font-size:.82rem;color:var(--ts)}
 .tcf-entry-btn{flex-shrink:0;padding:10px 20px;border-radius:var(--r-pill);background:linear-gradient(135deg,var(--tcf-pink),var(--tcf-pink2));color:#fff;font-family:var(--f-zh);font-weight:700;font-size:.84rem;border:none;cursor:pointer}
-@media(max-width:600px){.tcf-entry{flex-direction:column;text-align:center;padding:20px 18px}}
+@media(max-width:600px){.tcf-entry{flex-direction:column;text-align:center;padding:20px 18px}.tcf-entry-txt .tag{font-size:1.3rem}}
 .tcf-hero{background:linear-gradient(135deg,var(--tcf-pink) 0%,var(--tcf-pink2) 55%,var(--tcf-cyan) 120%);padding:52px 24px 44px;position:relative;overflow:hidden}
 .tcf-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.35) 1.5px,transparent 1.5px);background-size:16px 16px;opacity:.4}
 .tcf-hero-inner{max-width:900px;margin:0 auto;text-align:center;position:relative;color:#fff}
@@ -1342,6 +1342,20 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 @media(min-width:769px){
   .tcf-date-row{flex-wrap:wrap;padding-left:0;padding-right:0}
   .tcf-date-chip{flex:1 1 auto;justify-content:center}
+}
+/* 手機版 hero：官方網站自成一行，「參演演員」「第一次看喜劇？」並排在下一行 */
+@media(max-width:768px){
+  .tcf-hero-actions{flex-direction:column}
+  .tcf-hero-actions .tcf-hero-shortcuts{display:flex;gap:10px;justify-content:center}
+}
+/* 手機版橫式卡片：斜標籤改貼卡片最右上角（不再貼在左側圖片區），卡片自行裁切圓角 */
+@media(max-width:768px){
+  .show-card.tcf{overflow:hidden}
+  .show-card.tcf .sc-img{position:static}
+  /* sc-img 改為 static 後，絕對定位的 emoji 圖示會以整張卡片為基準，這裡把水平中心拉回左側 100px 圖片欄的中央 */
+  .show-card.tcf .sc-img .sc-emoji{left:50px}
+  .show-card.tcf .sc-tcf-ribbon{top:11px;right:-34px;width:120px;z-index:4}
+  .show-card.tcf .sc-date,.show-card.tcf .sc-title{padding-right:26px}
 }
 @media(max-width:768px){.sc-age-badge{top:5px;right:5px;font-size:.56rem;padding:1px 5px}}
 </style>
@@ -1591,9 +1605,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <!-- 台北喜劇節 期間限定入口（獨立區塊，比照首頁其他區塊固定間距 28px 5vw，避開 .home-mid 的 2 欄 grid） -->
   <section class="tcf-entry-sec">
     <div class="tcf-entry">
-      <div class="tcf-entry-badge">🎪</div>
       <div class="tcf-entry-txt">
-        <div class="tag zh-only">台北喜劇節　11.26-12.06</div>
+        <div class="tag"><span class="zh-text">台北喜劇節　11.26-12.06</span><span class="en-text">Taipei Comedy Festival　11.26-12.06</span></div>
         <h3><span class="zh-text">今年有哪些演出？嘻嘻幫你整理好了！</span><span class="en-text">This year's Taipei Comedy Festival, all in one place</span></h3>
       </div>
       <button class="tcf-entry-btn" onclick="showPage('tcf')"><span class="zh-text">查看喜劇節 →</span><span class="en-text">Explore →</span></button>
@@ -2182,7 +2195,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <div class="eyebrow">TAIPEI INTERNATIONAL COMEDY FESTIVAL</div>
       <h1 class="zh-only">2026台北喜劇節</h1>
       <div class="tcf-hero-date">11.26-12.06</div>
-      <p class="zh-only">嘻嘻幫你整理好演出、課程與參演演員，快速找到今年喜劇節想看的場次！</p>
       <div class="tcf-hero-actions">
       <a href="#" id="tcf-official-link" class="tcf-hero-official" target="_blank" rel="noopener">↗ <span class="zh-text">台北喜劇節官方網站</span><span class="en-text">Official Website</span></a>
       <div class="tcf-hero-shortcuts">
