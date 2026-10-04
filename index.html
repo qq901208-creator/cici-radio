@@ -1251,12 +1251,15 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 /* 右上角 pill 已改由斜標籤取代：只用 CSS 隱藏，render function 不動 */
 .sc-tcf-label{display:none!important}
 .sc-age-badge{position:absolute;top:8px;right:8px;background:var(--tcf-ink);color:#fff;font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:6px;font-family:var(--f-bo);letter-spacing:.02em;z-index:2}
-.sc-tcf-ribbon{position:absolute;top:16px;right:-38px;width:150px;transform:rotate(45deg);background:linear-gradient(60deg,var(--tcf-pink),var(--tcf-pink2));border-top:1.5px solid var(--tcf-yellow);border-bottom:1.5px solid var(--tcf-yellow);color:#fff;font-size:.64rem;font-weight:800;text-align:center;padding:3px 0;font-family:var(--f-zh);letter-spacing:.04em;box-shadow:0 2px 8px rgba(0,0,0,.28);z-index:4;pointer-events:none}
-.course-card.tcf .cc-img{overflow:hidden;border-radius:var(--r-lg) var(--r-lg) 0 0}
-/* 圖片區圓角 = 卡片圓角 − 邊框寬(2.5px)，才不會頂出漸層邊框外 */
-.show-card.tcf .sc-img{border-radius:calc(var(--r-lg) - 2.5px) calc(var(--r-lg) - 2.5px) 0 0}
-@media(max-width:768px){.show-card.tcf .sc-img-col{border-radius:calc(var(--r-lg) - 2.5px) 0 0 calc(var(--r-lg) - 2.5px);overflow:hidden}.show-card.tcf .sc-img{border-radius:0}}
-@media(max-width:768px){.sc-tcf-ribbon{top:10px;right:-36px;width:130px;font-size:.56rem;padding:2px 0}}
+/* 舊的斜標籤改由卡片頂端橫幅（::before）取代；markup 不動，只隱藏 */
+.sc-tcf-ribbon{display:none!important}
+/* 台北喜劇節頂端橫幅：卡片最上方一條 24px 藍色漸層橫條＋底下細黃線，不蓋住海報。
+   用 ::before 讓它是卡片內的第一個 flex 項目：直式卡片自然在圖片上方；橫式卡片（手機列表／首頁）靠 flex-wrap + width:100% 獨占第一行 */
+.show-card.tcf,.course-card.tcf{flex-wrap:wrap}
+.show-card.tcf::before,.course-card.tcf::before{content:'台北喜劇節';flex:0 0 auto;width:100%;height:24px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,var(--tcf-pink),var(--tcf-pink2));border-bottom:2px solid var(--tcf-yellow);border-radius:calc(var(--r-lg) - 2.5px) calc(var(--r-lg) - 2.5px) 0 0;color:#fff;font-family:var(--f-zh);font-size:.7rem;font-weight:800;letter-spacing:.16em;text-indent:.16em}
+[data-lang="en"] .show-card.tcf::before,[data-lang="en"] .course-card.tcf::before{content:'Taipei Comedy Festival';letter-spacing:.08em;text-indent:.08em}
+.show-card.tcf .sc-img,.course-card.tcf .cc-img{border-radius:0}
+@media(max-width:768px){.show-card.tcf .sc-img-col{border-radius:0 0 0 calc(var(--r-lg) - 2.5px);overflow:hidden}}
 .tcf-navbadge{font-size:.56rem;background:linear-gradient(135deg,var(--tcf-pink),var(--tcf-pink2));color:#fff;padding:1px 6px;border-radius:var(--r-pill);font-weight:700;font-family:var(--f-bo);letter-spacing:.02em;margin-left:2px;vertical-align:middle}
 .tcf-quickfilter{padding:7px 16px;border-radius:var(--r-pill);border:1.5px solid var(--tcf-pink);background:#fff;color:var(--tcf-pink);font-size:.82rem;font-weight:700;font-family:var(--f-zh);display:inline-flex;align-items:center;gap:6px;transition:.15s;cursor:pointer}
 .tcf-quickfilter.on{background:linear-gradient(135deg,var(--tcf-pink),var(--tcf-pink2));color:#fff;border-color:transparent}
@@ -1347,15 +1350,6 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 @media(max-width:768px){
   .tcf-hero-actions{flex-direction:column}
   .tcf-hero-actions .tcf-hero-shortcuts{display:flex;gap:10px;justify-content:center}
-}
-/* 手機版橫式卡片：斜標籤改貼卡片最右上角（不再貼在左側圖片區），卡片自行裁切圓角 */
-@media(max-width:768px){
-  .show-card.tcf{overflow:hidden}
-  .show-card.tcf .sc-img{position:static}
-  /* sc-img 改為 static 後，絕對定位的 emoji 圖示會以整張卡片為基準，這裡把水平中心拉回左側 100px 圖片欄的中央 */
-  .show-card.tcf .sc-img .sc-emoji{left:50px}
-  .show-card.tcf .sc-tcf-ribbon{top:11px;right:-34px;width:120px;z-index:4}
-  .show-card.tcf .sc-date,.show-card.tcf .sc-title{padding-right:26px}
 }
 @media(max-width:768px){.sc-age-badge{top:5px;right:5px;font-size:.56rem;padding:1px 5px}}
 </style>
