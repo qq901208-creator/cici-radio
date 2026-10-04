@@ -1333,10 +1333,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-ag-venue{flex:0 0 120px;font-family:var(--f-zh);font-size:.8rem;font-weight:700;color:var(--or)}
 .tcf-ag-main{flex:1;min-width:0}
 .tcf-ag-title{font-family:var(--f-zh);font-weight:800;font-size:.95rem;color:var(--tm);line-height:1.4}
-.tcf-ag-sub{font-family:var(--f-zh);font-size:.76rem;color:var(--ts);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tcf-ag-sub{font-family:var(--f-zh);font-size:.76rem;color:var(--ts);margin-top:2px;line-height:1.6;white-space:normal;overflow-wrap:anywhere}
 .tcf-ag-st{margin-left:8px;font-size:.62rem;font-weight:700;background:var(--tcf-ink);color:#fff;padding:1px 6px;border-radius:6px;vertical-align:middle}
 .tcf-ag-side{flex:0 0 auto;display:flex;align-items:center;gap:12px;font-family:var(--f-bo)}
-.tcf-ag-price{font-size:.82rem;font-weight:800;color:var(--or);white-space:nowrap}
+.tcf-ag-pricebox{display:flex;flex-direction:column;align-items:flex-end;max-width:260px;min-width:0}
+.tcf-ag-pricebox .sc-price{font-size:.82rem;font-weight:800;color:var(--or);text-align:right;line-height:1.5}
+.tcf-ag-pricebox .sc-price+div{align-self:stretch;text-align:left}
 .tcf-ag-buy{text-decoration:none;font-family:var(--f-zh);font-size:.76rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--tcf-pink),var(--tcf-pink2));padding:5px 12px;border-radius:var(--r-pill);white-space:nowrap}
 .tcf-ag-sold,.tcf-ag-door{font-family:var(--f-zh);font-size:.74rem;font-weight:700;color:var(--ts);white-space:nowrap}
 @media(max-width:768px){
@@ -1346,7 +1348,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   .tcf-ag-row{flex-wrap:wrap;gap:6px 10px;padding:10px 12px}
   .tcf-ag-venue{flex:0 0 100%}
   .tcf-ag-main{flex:1 1 60%}
-  .tcf-ag-side{flex:0 0 auto}
+  .tcf-ag-side{flex:1 1 100%;justify-content:space-between;align-items:flex-start}
+  .tcf-ag-pricebox{align-items:flex-start;flex:1;max-width:none}
+  .tcf-ag-pricebox .sc-price{text-align:left}
 }
 .tcf-date-chip.on{background:linear-gradient(135deg,var(--tcf-pink),var(--tcf-pink2));color:#fff;border-color:transparent}
 /* 演出資訊月曆：喜劇節期間標色 */
@@ -4289,7 +4293,7 @@ function openShowDetail(id, skipPageSwitch) {
   }
   // 若不在演出資訊頁，先切換過去再開 Modal（除非明確要求不切頁）
   const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
-  if(!skipPageSwitch && activePage !== 'shows' && typeof showPage==='function') showPage('shows');
+  if(!skipPageSwitch && activePage !== 'shows' && activePage !== 'tcf' && typeof showPage==='function') showPage('shows');
   // 更新 URL，方便分享
   history.pushState({ showId: id }, '', `/show/${id}`);
   const types = s.types || (s.type ? [s.type] : []);
@@ -5367,7 +5371,7 @@ function renderTcfAgenda(){
       <div class="tcf-ag-items">${g.items.map(s=>{
         const st = s.status || 'published';
         const stTag = (adminMode && st!=='published') ? `<span class="tcf-ag-st">${st==='postponed'?'延期':st==='hidden'?'隱藏':tcfEsc(st)}</span>` : '';
-        const price = s.price ? tcfEsc(String(s.price).split(/[\n、,，;；]/)[0].trim().slice(0,18)) : '';
+        const price = s.price ? `<div class="tcf-ag-pricebox"><div class="sc-price" data-fullprice="${String(s.price).replace(/"/g,'&quot;').replace(/`/g,'&#96;')}" data-showid="ag-${tcfEsc(s.id)}">${tcfEsc(parseFeeRange(s.price).range)}</div></div>` : '';
         let act = '';
         if(s.soldOut) act = `<span class="tcf-ag-sold">${en?'Sold out':'已售完'}</span>`;
         else if(s.platform==='door') act = `<span class="tcf-ag-door">${en?'Pay at door':'現場付費'}</span>`;
@@ -5375,10 +5379,11 @@ function renderTcfAgenda(){
         return `<div class="tcf-ag-row" onclick="openShowDetail('${tcfEsc(s.id)}')">
           <div class="tcf-ag-venue">${tcfEsc(s.venueLabel||s.venue||'')}</div>
           <div class="tcf-ag-main"><div class="tcf-ag-title">${tcfEsc(s.title)}${stTag}</div>${s.performer?`<div class="tcf-ag-sub">${tcfEsc(s.performer)}</div>`:''}</div>
-          <div class="tcf-ag-side">${price?`<span class="tcf-ag-price">${price}</span>`:''}${act}</div>
+          <div class="tcf-ag-side">${price}${act}</div>
         </div>`;
       }).join('')}</div>
     </div>`).join('');
+  if(typeof initPriceExpand==='function') initPriceExpand(box); // 票價展開：沿用演出卡片同一套
 }
 // 演出資訊月曆：喜劇節期間的日期上色（MutationObserver 後置標記，不更動 renderCalendar 系列函式）
 (function(){
@@ -9040,7 +9045,8 @@ function closeModal(id){
   document.getElementById('modal-'+id).classList.remove('open');
   if(id==='show-detail'||id==='course-detail'){
     const base = location.hash.split('?')[0];
-    history.replaceState(null,'', base || '/#shows');
+    const _act = document.querySelector('.page.active')?.id;
+    history.replaceState(null,'', base || (_act==='page-tcf' ? '/#tcf' : '/#shows'));
   }
   if(id==='performer-detail'){
     history.pushState(null,'', '/#performers');
