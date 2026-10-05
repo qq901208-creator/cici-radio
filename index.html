@@ -1278,7 +1278,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-hero-inner{max-width:900px;margin:0 auto;text-align:center;position:relative;color:#fff}
 .tcf-hero-inner .eyebrow{font-family:var(--f-bo);font-size:.76rem;font-weight:700;letter-spacing:.1em;color:var(--tcf-yellow)}
 .tcf-hero-inner h1{font-family:var(--f-zh);font-size:1.9rem;font-weight:900;margin:6px 0 10px;text-shadow:0 2px 12px rgba(0,0,0,.15)}
-.tcf-hero-date{font-family:var(--f-di);font-size:1.35rem;font-weight:800;letter-spacing:.06em;color:var(--tcf-yellow);margin:-2px 0 12px;text-shadow:0 2px 10px rgba(0,0,0,.18)}
+.tcf-hero-date{font-family:var(--f-bo);font-size:1.5rem;font-weight:800;letter-spacing:.05em;color:var(--tcf-yellow);margin:-2px 0 12px;text-shadow:0 2px 10px rgba(0,0,0,.18)}
 .tcf-hero-inner p{font-family:var(--f-zh);font-size:.88rem;opacity:.92;max-width:520px;margin:0 auto}
 .tcf-hero-official{display:inline-flex;align-items:center;gap:6px;margin-top:18px;padding:10px 22px;border-radius:var(--r-pill);background:#fff;color:var(--tcf-pink);font-family:var(--f-zh);font-weight:700;font-size:.86rem;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.14);transition:transform .15s}
 .tcf-hero-official:hover{transform:translateY(-2px)}
@@ -1315,12 +1315,16 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-date-bar{position:sticky;top:var(--nav);z-index:50;background:var(--cr);padding:8px 5vw 8px;border-bottom:1px solid rgba(45,43,31,.07)}
 .tcf-date-bar .tcf-date-row{margin-top:0;padding-bottom:0}
 @media(min-width:769px){.tcf-date-bar .tcf-date-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:6px}.tcf-date-bar .tcf-date-row::-webkit-scrollbar{display:none}}
-.tcf-view-toggle{display:inline-flex;margin-top:8px;background:#fff;border:1.5px solid var(--tcf-pink);border-radius:var(--r-pill);overflow:hidden}
-.tcf-view-toggle[hidden]{display:none}
+.tcf-view-row{padding:6px 5vw 10px}
+.tcf-view-toggle{display:inline-flex;background:#fff;border:1.5px solid var(--tcf-pink);border-radius:var(--r-pill);overflow:hidden}
 .tcf-view-toggle button{border:0;background:transparent;color:var(--tcf-pink);font-family:var(--f-zh);font-size:.78rem;font-weight:700;padding:5px 14px;cursor:pointer}
 .tcf-view-toggle button.on{background:linear-gradient(135deg,var(--tcf-pink),var(--tcf-pink2));color:#fff}
-/* 當日行程 */
+/* 當日／檔期演出時刻表 */
 .tcf-agenda{padding:18px 5vw 8px}
+.tcf-ag-summary{display:flex;align-items:baseline;gap:10px;font-family:var(--f-bo);font-size:1.35rem;font-weight:800;color:var(--tcf-pink);margin-bottom:6px}
+.tcf-ag-summary span{font-family:var(--f-zh);font-size:.82rem;font-weight:600;color:var(--ts)}
+.tcf-ag-day+.tcf-ag-day{margin-top:26px}
+.tcf-ag-day .tcf-ag-head{padding-top:6px}
 .tcf-agenda[hidden]{display:none}
 .tcf-ag-head{display:flex;align-items:baseline;gap:10px;font-family:var(--f-bo);font-size:1.15rem;font-weight:800;color:var(--tcf-pink);margin-bottom:12px}
 .tcf-ag-head span{font-family:var(--f-zh);font-size:.8rem;font-weight:600;color:var(--ts)}
@@ -1343,6 +1347,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-ag-sold,.tcf-ag-door{font-family:var(--f-zh);font-size:.74rem;font-weight:700;color:var(--ts);white-space:nowrap}
 @media(max-width:768px){
   .tcf-date-bar{padding:6px 5vw 6px}
+  .tcf-view-toggle button{font-size:.72rem;padding:5px 10px}
   .tcf-ag-group{flex-direction:column;gap:8px}
   .tcf-ag-time{flex:none}
   .tcf-ag-row{flex-wrap:wrap;gap:6px 10px;padding:10px 12px}
@@ -1361,6 +1366,14 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 #page-tcf .shows-cal-col{display:none!important}
 #page-tcf .shows-layout{grid-template-columns:1fr}
 #page-tcf .shows-mobile-toggle{display:none!important}
+/* 喜劇節頁專用元素：只在喜劇節頁顯示（場地 pills） */
+.tcf-only{display:none!important}
+#page-tcf .tcf-only{display:flex!important}
+#tcf-venue-chips .chip.on{background:var(--tcf-pink);border-color:var(--tcf-pink);color:#fff}
+#tcf-venue-chips .chip:hover{border-color:var(--tcf-pink);color:var(--tcf-pink)}
+#tcf-venue-chips .chip.on:hover{color:#fff}
+/* 喜劇節頁不提供：Open Mic 形式、地區、星期篩選 */
+#page-tcf .tcf-hide{display:none!important}
 /* 演出資訊自帶的「最後更新」在喜劇節頁不顯示，改放頁面最下方 */
 #tcf-shows-host p:has(#last-updated-shows){display:none}
 #tcf-shows-host #last-updated-shows{display:none}
@@ -1375,10 +1388,13 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-perf-track{display:flex;gap:14px;width:max-content}
 .tcf-perf-marquee.static{-webkit-mask-image:none;mask-image:none}
 .tcf-perf-marquee.static .tcf-perf-track{width:auto;flex-wrap:wrap;justify-content:center}
-.tcf-perf-marquee.run .tcf-perf-track{animation:tcfPerfScroll var(--tcf-perf-dur,40s) linear infinite}
-.tcf-perf-marquee.run:hover .tcf-perf-track,.tcf-perf-marquee.run:active .tcf-perf-track{animation-play-state:paused}
-@keyframes tcfPerfScroll{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 7px))}}
-@media(prefers-reduced-motion:reduce){.tcf-perf-marquee.run{overflow-x:auto;-webkit-mask-image:none;mask-image:none}.tcf-perf-marquee.run .tcf-perf-track{animation:none}}
+.tcf-perf-track{will-change:transform}
+.tcf-perf-wrap{position:relative}
+.tcf-perf-arrow{display:none;position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--tcf-pink);background:#fff;color:var(--tcf-pink);font-size:1.4rem;line-height:1;cursor:pointer;box-shadow:0 4px 12px rgba(30,71,218,.18);align-items:center;justify-content:center;padding:0 0 3px;transition:.15s}
+.tcf-perf-arrow.prev{left:6px}.tcf-perf-arrow.next{right:6px}
+.tcf-perf-wrap.has-arrows .tcf-perf-arrow{display:flex}
+.tcf-perf-arrow:hover{background:var(--tcf-pink);color:#fff}
+@media(max-width:768px){.tcf-perf-arrow{width:32px;height:32px;font-size:1.2rem}.tcf-perf-arrow.prev{left:2px}.tcf-perf-arrow.next{right:2px}}
 /* 喜劇節 hero：官方網站／參演演員／第一次看喜劇 三顆同一行（手機版放不下時自動換行） */
 .tcf-hero-actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;margin-top:18px}
 .tcf-hero-actions .tcf-hero-official{margin-top:0}
@@ -1795,7 +1811,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <span class="filter-lbl"><span class="zh-text">形式</span><span class="en-text">Format</span></span>
         <div class="filter-chips">
         <button class="chip on" data-f="format" data-v="all"><span class="zh-text">全部<span class="mob-text">形式</span></span><span class="en-text">All<span class="mob-text"> Formats</span></span></button>
-        <button class="chip" data-f="format" data-v="opmic"><span class="zh-text">Open Mic</span><span class="en-text">Open Mic</span></button>
+        <button class="chip tcf-hide" data-f="format" data-v="opmic"><span class="zh-text">Open Mic</span><span class="en-text">Open Mic</span></button>
         <button class="chip" data-f="format" data-v="mixed"><span class="zh-text">拼盤秀</span><span class="en-text">Mixed-bill Show</span></button>
         <button class="chip" data-f="format" data-v="special"><span class="zh-text">喜劇專場</span><span class="en-text">Comedy Special</span></button>
         <button class="chip" data-f="format" data-v="spevent"><span class="zh-text">特殊企劃</span><span class="en-text">Special Event</span></button>
@@ -1819,9 +1835,14 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button class="chip" data-f="type" data-v="podcast">Live Podcast</button>
         </div>
       </div>
+      <!-- 喜劇節頁專用：場地 pills（取代下拉；演出資訊頁不顯示） -->
+      <div class="filter-row tcf-only" style="margin-top:8px">
+        <span class="filter-lbl"><span class="zh-text">場地</span><span class="en-text">Venue</span></span>
+        <div class="filter-chips" id="tcf-venue-chips"></div>
+      </div>
       <!-- 場地、地區、星期：下拉選單 -->
       <div class="filter-dropdowns">
-        <div class="filter-dropdown-wrap">
+        <div class="filter-dropdown-wrap tcf-hide">
           <label class="filter-dropdown-lbl"><span class="zh-text">場地</span><span class="en-text">Venue</span></label>
           <select id="sel-venue" class="filter-dropdown" onchange="fVenue=this.value;this.classList.toggle('active',this.value!=='all');showsPage=1;renderShows();syncFiltersToURL()">
             <option value="all"><span class="zh-text">全部場地</span></option>
@@ -1841,7 +1862,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
             <option value="other">其他</option>
           </select>
         </div>
-        <div class="filter-dropdown-wrap">
+        <div class="filter-dropdown-wrap tcf-hide">
           <label class="filter-dropdown-lbl"><span class="zh-text">地區</span><span class="en-text">Area</span></label>
           <select id="sel-area" class="filter-dropdown" onchange="fArea=this.value;this.classList.toggle('active',this.value!=='all');showsPage=1;renderShows();syncFiltersToURL()">
             <option value="all">全部地區</option>
@@ -1854,7 +1875,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
             <option value="other">其他</option>
           </select>
         </div>
-        <div class="filter-dropdown-wrap">
+        <div class="filter-dropdown-wrap tcf-hide">
           <label class="filter-dropdown-lbl"><span class="zh-text">星期</span><span class="en-text">Day</span></label>
           <select id="sel-day" class="filter-dropdown" onchange="fDay=this.value;this.classList.toggle('active',this.value!=='all');showsPage=1;renderShows();syncFiltersToURL()">
             <option value="all">全部星期</option>
@@ -2249,12 +2270,15 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <h2 class="sec-title zh-only" style="font-size:1.25rem">台北喜劇節演出</h2>
   </div>
   <div class="tcf-shows-zone">
+    <div class="tcf-view-row">
+      <div class="tcf-view-toggle" id="tcf-view-toggle">
+        <button type="button" data-view="cards" class="on" onclick="setTcfView('cards')"><span class="zh-text">卡片檢視</span><span class="en-text">Cards</span></button>
+        <button type="button" data-view="agenda" onclick="setTcfView('agenda')"><span class="zh-text">當日演出時刻表</span><span class="en-text">Day timetable</span></button>
+        <button type="button" data-view="period" onclick="setTcfView('period')"><span class="zh-text">檔期演出時刻表</span><span class="en-text">Festival timetable</span></button>
+      </div>
+    </div>
     <div class="tcf-date-bar" id="tcf-date-bar">
       <div class="tcf-date-row" id="tcf-date-row"></div>
-      <div class="tcf-view-toggle" id="tcf-view-toggle" hidden>
-        <button type="button" data-view="cards" class="on" onclick="setTcfView('cards')"><span class="zh-text">卡片檢視</span><span class="en-text">Cards</span></button>
-        <button type="button" data-view="agenda" onclick="setTcfView('agenda')"><span class="zh-text">當日行程</span><span class="en-text">Day schedule</span></button>
-      </div>
     </div>
     <div class="tcf-agenda" id="tcf-agenda" hidden></div>
     <div class="tcf-shows-host" id="tcf-shows-host"></div>
@@ -2269,7 +2293,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <div class="tcf-section" id="tcf-performers-section">
     <div class="sec-label zh-only">參演演員</div>
     <h2 class="sec-title zh-only" style="font-size:1.25rem">誰會出現在台北喜劇節？</h2>
-    <div class="tcf-perf-marquee" id="tcf-performers-grid"></div>
+    <div class="tcf-perf-wrap" id="tcf-perf-wrap">
+      <button type="button" class="tcf-perf-arrow prev" onclick="tcfPerfNudge(-1)" aria-label="上一組">‹</button>
+      <div class="tcf-perf-marquee" id="tcf-performers-grid"></div>
+      <button type="button" class="tcf-perf-arrow next" onclick="tcfPerfNudge(1)" aria-label="下一組">›</button>
+    </div>
   </div>
 
   <p class="tcf-updated" style="text-align:right;font-size:.68rem;color:rgba(45,43,31,.28);font-family:var(--f-bo)"><span id="last-updated-tcf"></span></p>
@@ -3906,6 +3934,7 @@ let fType='all', fVenue='all', fArea='all', fDay='all', fCtype='all', fCity='all
 let fFeatured=false;
 let fTcfTag='all'; // 喜劇節頁的探索標籤（附加）
 let fTcfDate='all'; // 喜劇節頁的日期篩選：'all' 或 'YYYY-MM-DD'（附加）
+let fTcfVenue='all'; // 喜劇節頁的場地 pills 篩選：'all' 或 TCF_VENUES 的 id（附加，與演出資訊頁的 fVenue 互相獨立）
 let fTcf=false; // 台北喜劇節快捷篩選（附加，不影響既有 fFeatured/fType 等邏輯）
 let micDay = 1;
 
@@ -3930,6 +3959,8 @@ function syncFiltersToURL(){
 // ── 重置所有篩選 ──
 function resetAllFilters(){
   fType='all'; fVenue='all'; fArea='all'; fDay='all'; fFormat='all'; fFeatured=false; fTcf=!!window._tcfMounted;
+  fTcfVenue='all'; if(typeof renderTcfVenueChips==='function') try{ renderTcfVenueChips(); }catch(e){}
+  if(window._tcfMounted && fTcfDate!=='all'){ fTcfDate='all'; tcfView='cards'; try{ renderTcfDateChips(); applyTcfView(); }catch(e){} } // 喜劇節頁：重置一併清掉日期
   showsPage=1;
   showFeaturedFilterBanner();
   showTcfFilterBanner();
@@ -4351,7 +4382,7 @@ function getGridCols(gridId) {
 
 function calcPerPage(gridId, mobilePerPage) {
   if(window.innerWidth <= 768) return mobilePerPage || 10;
-  if(gridId === 'shows-grid' && !document.body.classList.contains('edit')) return 12;
+  if(gridId === 'shows-grid' && !document.body.classList.contains('edit') && !window._tcfMounted) return 12; // 喜劇節頁比照管理模式：欄數 × 3
   const cols = getGridCols(gridId);
   return cols * 3;
 }
@@ -4401,7 +4432,8 @@ function goShowsPage(p){
   // 滾動到演出卡片區頂部，扣除固定 nav bar 高度
   const grid = document.getElementById('shows-grid');
   if(grid){
-    const top = grid.getBoundingClientRect().top + window.scrollY - 80;
+    const tcfBar = window._tcfMounted ? document.getElementById('tcf-date-bar') : null; // 喜劇節頁：再扣掉黏頂的日期列高度
+    const top = grid.getBoundingClientRect().top + window.scrollY - 80 - (tcfBar ? tcfBar.offsetHeight : 0);
     window.scrollTo({top: Math.max(0, top), behavior:'smooth'});
   }
 }
@@ -4437,6 +4469,7 @@ function renderShows() {
     if (fTcf && !s.isTaipeiComedyFestival) return false; // 台北喜劇節快捷篩選（附加條件）
     if (fTcf && fTcfTag!=='all' && !(s.taipeiComedyFestivalTags||[]).includes(fTcfTag)) return false; // 喜劇節探索標籤（附加條件）
     if (fTcf && fTcfDate!=='all' && !tcfShowHasDate(s, fTcfDate)) return false; // 喜劇節日期篩選（附加條件）
+    if (fTcf && fTcfVenue!=='all' && !tcfVenueMatch(s, fTcfVenue)) return false; // 喜劇節場地篩選（附加條件）
     if (!venueMatchesFilter(s, fVenue)) return false;
     const KNOWN_AREAS = ['taipei','newtaipei','taoyuan','hsinchu','taichung','tainan','kaohsiung'];
     if (fArea!=='all'){
@@ -4466,7 +4499,7 @@ function renderShows() {
   });
 
   // 桌機版非管理模式：lazy load
-  if(window.innerWidth >= 769 && !adminMode){
+  if(window.innerWidth >= 769 && !adminMode && !fTcf){
     window._showsFiltered = fil;
     window._showsLoaded = 12;
     grid.innerHTML = fil.length
@@ -5238,6 +5271,10 @@ function tcfMountShows(){
   if(layout.parentNode !== host) host.appendChild(layout);
   window._tcfMounted = true;
   fTcf = true; showsPage = 1;
+  // 喜劇節頁沒有地區／星期／Open Mic 篩選：進頁時清掉，避免演出資訊頁留下的條件在這裡被隱形套用
+  fArea = 'all'; fDay = 'all'; fVenue = 'all'; if(fFormat === 'opmic') fFormat = 'all';
+  ['sel-venue','sel-area','sel-day'].forEach(id=>{ const el = document.getElementById(id); if(el){ el.value = 'all'; el.classList.remove('active'); } });
+  document.querySelectorAll('.chip[data-f="format"]').forEach(c=>c.classList.toggle('on', c.dataset.v === fFormat));
   showTcfFilterBanner();
 }
 function tcfUnmountShows(){
@@ -5245,12 +5282,17 @@ function tcfUnmountShows(){
   const layout = document.querySelector('#tcf-shows-host .shows-layout');
   if(layout && window._tcfShowsHome) window._tcfShowsHome.appendChild(layout);
   window._tcfMounted = false;
-  fTcf = false; fTcfTag = 'all'; fTcfDate = 'all'; tcfView = 'cards'; tcfExploreTag = 'all'; showsPage = 1;
+  fTcf = false; fTcfTag = 'all'; fTcfDate = 'all'; fTcfVenue = 'all'; tcfView = 'cards'; tcfExploreTag = 'all'; showsPage = 1;
   showTcfFilterBanner();
 }
 function tcfScrollTo(id){
-  const el = document.getElementById(id);
-  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  const OFFSET = 90; // 扣掉固定導覽列
+  const topOf = () => { const el = document.getElementById(id); return el ? el.getBoundingClientRect().top : null; };
+  if(topOf()===null) return;
+  const go = behavior => window.scrollTo({top: Math.max(0, topOf() + window.scrollY - OFFSET), behavior});
+  go('smooth');
+  // 捲動途中演出列表可能還在載入／展開、把目標推下去：捲動結束前後再校正幾次
+  [450, 900, 1500].forEach(ms => setTimeout(()=>{ const d = topOf(); if(d!==null && Math.abs(d - OFFSET) > 12) go('auto'); }, ms));
 }
 let tcfExploreTag = 'all';
 const TCF_EXPLORE_TAGS = ['遊戲企劃','觀眾互動','親子','國際演出']; // 官方標籤每年可能不同，之後可改從 window._TCF_TAGS 讀取
@@ -5316,8 +5358,43 @@ function renderTcfDateChips(){
       return `<button class="tcf-date-chip${fTcfDate===x.ds?' on':''}${dim}" onclick="setTcfDate('${x.ds}')"><b>${x.mm}.${x.dd}</b><small>${DOW[x.dow]}${n>0?' · '+cnt(n):''}</small></button>`;
     }).join('');
 }
+// ── 喜劇節頁專用場地 pills（獨立於全站場地資料，只用在喜劇節頁）──
+// 合作場地尚未完整公開：之後要增減，只要改這份清單。kws = 比對 venueLabel／venue 的關鍵字；id 與全站場地相同者也會用 s.venue 精準比對
+const TCF_VENUES = [
+  {id:'comedy-plus', zh:'卡米地＋',       en:'Comedy Plus',      kws:['卡米地','comedy plus']},
+  {id:'two-three',   zh:'23喜劇',         en:'Two Three Comedy', kws:['23喜劇','two three']},
+  {id:'ponwo',       zh:'月半窩',         en:'Ponwo Cafe',       kws:['月半窩','ponwo']},
+  {id:'dikia',       zh:'底加書店',       en:'Titsia Bookstore', kws:['底加','titsia']},
+  {id:'fakers',      zh:'飛客劇樂部',     en:'Fakers Club',      kws:['飛客','fakers']},
+  {id:'tcf-zhongying-bade', zh:'中影八德大樓', en:'Auditorium Room - Central Motion Picture Corporation', kws:['中影','八德']},
+  {id:'tcf-redhouse',       zh:'西門紅樓',       en:'The Red House 2F Theater', kws:['西門紅樓','紅樓','red house']},
+];
+function tcfVenueMatch(s, id){
+  const lbl = ((s.venueLabel||'') + ' ' + (s.venue||'')).toLowerCase();
+  const hit = v => s.venue===v.id || v.kws.some(k=>lbl.includes(k.toLowerCase()));
+  if(id==='other') return !TCF_VENUES.some(hit);
+  const v = TCF_VENUES.find(x=>x.id===id);
+  return v ? hit(v) : false;
+}
+function renderTcfVenueChips(){
+  const box = document.getElementById('tcf-venue-chips');
+  if(!box) return;
+  const en = (typeof getLang==='function' && getLang()==='en');
+  const chip = (id, label) => `<button type="button" class="chip${fTcfVenue===id?' on':''}" onclick="setTcfVenue('${id}')">${label}</button>`;
+  box.innerHTML = chip('all', en?'All':'全部') +
+    TCF_VENUES.map(v=>chip(v.id, en?v.en:v.zh)).join('') +
+    chip('other', en?'Other':'其他');
+}
+function setTcfVenue(id){
+  fTcfVenue = (id==='all' || fTcfVenue===id) ? 'all' : id; // 再點一次同一個 = 取消
+  showsPage = 1;
+  renderTcfVenueChips();
+  renderShows();
+}
 let tcfView = 'cards'; // 'cards' | 'agenda'（agenda 只在選了單一日期時有效）
 function setTcfDate(ds){
+  // 檔期時刻表：日期 chip 變成「跳到那一天」，不做篩選
+  if(tcfView==='period'){ tcfScrollToDay(ds); return; }
   fTcfDate = (fTcfDate===ds) ? 'all' : ds; // 再點一次同一天 = 取消
   if(fTcfDate==='all') tcfView = 'cards';
   showsPage = 1;
@@ -5325,39 +5402,64 @@ function setTcfDate(ds){
   renderShows();
   applyTcfView();
 }
-function setTcfView(v){ tcfView = v; applyTcfView(); }
-function applyTcfView(){
-  const agendaOn = (tcfView==='agenda' && fTcfDate!=='all');
-  const host = document.getElementById('tcf-shows-host'), ag = document.getElementById('tcf-agenda'), tg = document.getElementById('tcf-view-toggle');
-  if(tg){
-    tg.hidden = (fTcfDate==='all');
-    tg.querySelectorAll('button').forEach(b=>b.classList.toggle('on', b.dataset.view === (agendaOn?'agenda':'cards')));
+function setTcfView(v){
+  if(v==='agenda' && fTcfDate==='all'){
+    // 當日時刻表需要一個日期：預設第一個有演出的日子，都沒有就第一天
+    const base = tcfBaseList(), days = tcfDateList();
+    const first = days.find(x=>base.some(s=>tcfShowHasDate(s, x.ds))) || days[0];
+    fTcfDate = first.ds; showsPage = 1;
+    renderTcfDateChips(); renderShows();
   }
-  if(host) host.style.display = agendaOn ? 'none' : '';
-  if(ag){ ag.hidden = !agendaOn; if(agendaOn) renderTcfAgenda(); }
+  if(v==='period' && fTcfDate!=='all'){
+    fTcfDate = 'all'; showsPage = 1;
+    renderTcfDateChips(); renderShows();
+  }
+  tcfView = v;
+  applyTcfView();
+  if(v==='period') window.scrollTo({top: Math.max(0, (document.getElementById('tcf-agenda')?.getBoundingClientRect().top||0) + window.scrollY - 140), behavior:'smooth'});
+}
+function applyTcfView(){
+  if(tcfView==='agenda' && fTcfDate==='all') tcfView = 'cards';
+  const agendaOn = tcfView==='agenda', periodOn = tcfView==='period';
+  const host = document.getElementById('tcf-shows-host'), ag = document.getElementById('tcf-agenda'), tg = document.getElementById('tcf-view-toggle');
+  if(tg) tg.querySelectorAll('button').forEach(b=>b.classList.toggle('on', b.dataset.view === tcfView));
+  if(host) host.style.display = (agendaOn||periodOn) ? 'none' : '';
+  if(ag){
+    ag.hidden = !(agendaOn||periodOn);
+    if(agendaOn) renderTcfAgenda(); else if(periodOn) renderTcfPeriod();
+  }
 }
 function tcfEsc(v){ return String(v==null?'':v).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function tcfStartTime(s){
   const m = String(s.time||'').match(/(\d{1,2}):(\d{2})/);
   return m ? m[1].padStart(2,'0')+':'+m[2] : '';
 }
-// 當日行程：選定日期的所有喜劇節演出，依開演時間分組、同時段依場地排序（不需要結束時間）
-function renderTcfAgenda(){
-  const box = document.getElementById('tcf-agenda');
-  if(!box) return;
-  const en = (typeof getLang==='function' && getLang()==='en');
-  const adminMode = isLoggedIn() && editMode;
-  const d = tcfDateList().find(x=>x.ds===fTcfDate);
-  const DOW = en ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : ['日','一','二','三','四','五','六'];
-  const list = tcfBaseList().filter(s=>tcfShowHasDate(s, fTcfDate)).sort((a,b)=>{
+function tcfSortByTime(list){
+  return list.sort((a,b)=>{
     const ta = tcfStartTime(a) || '99:99', tb = tcfStartTime(b) || '99:99';
     return ta.localeCompare(tb) || String(a.venueLabel||a.venue||'').localeCompare(String(b.venueLabel||b.venue||''), 'zh-Hant');
   });
-  const head = `<div class="tcf-ag-head">${d?`${d.mm}/${d.dd} (${DOW[d.dow]})`:''}<span>${en?`${list.length} shows`:`共 ${list.length} 場`}</span></div>`;
-  if(!list.length){
-    box.innerHTML = head + `<div class="tcf-ag-empty">${en?'No shows announced for this day yet.':'這天還沒有公布的演出'}</div>`;
-    return;
-  }
+}
+// 一場演出一列（當日／檔期時刻表共用）；票價沿用演出卡片的展開元件
+function tcfAgendaRowHTML(s, ds, en, adminMode){
+  const st = s.status || 'published';
+  const stTag = (adminMode && st!=='published') ? `<span class="tcf-ag-st">${st==='postponed'?'延期':st==='hidden'?'隱藏':tcfEsc(st)}</span>` : '';
+  const price = s.price ? `<div class="tcf-ag-pricebox"><div class="sc-price" data-fullprice="${String(s.price).replace(/"/g,'&quot;').replace(/`/g,'&#96;')}" data-showid="ag-${tcfEsc(s.id)}-${ds}">${tcfEsc(parseFeeRange(s.price).range)}</div></div>` : '';
+  let act = '';
+  if(s.soldOut) act = `<span class="tcf-ag-sold">${en?'Sold out':'已售完'}</span>`;
+  else if(s.platform==='door') act = `<span class="tcf-ag-door">${en?'Pay at door':'現場付費'}</span>`;
+  else if(s.ticketUrl && s.ticketUrl!=='#') act = `<a class="tcf-ag-buy" href="${tcfEsc(s.ticketUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${en?'Tickets':'購票'} →</a>`;
+  return `<div class="tcf-ag-row" onclick="openShowDetail('${tcfEsc(s.id)}')">
+    <div class="tcf-ag-venue">${tcfEsc(s.venueLabel||s.venue||'')}</div>
+    <div class="tcf-ag-main"><div class="tcf-ag-title">${tcfEsc(s.title)}${stTag}</div>${s.performer?`<div class="tcf-ag-sub">${tcfEsc(s.performer)}</div>`:''}</div>
+    <div class="tcf-ag-side">${price}${act}</div>
+  </div>`;
+}
+// 一天的時刻表區塊：標題（日期＋場數）＋依開演時間分組的演出列
+function tcfDayBlockHTML(d, list, en, adminMode){
+  const DOW = en ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : ['日','一','二','三','四','五','六'];
+  const head = `<div class="tcf-ag-head" id="tcf-day-${d.ds}">${d.mm}/${d.dd} (${DOW[d.dow]})<span>${en?`${list.length} shows`:`共 ${list.length} 場`}</span></div>`;
+  if(!list.length) return head + `<div class="tcf-ag-empty">${en?'No shows announced for this day yet.':'這天還沒有公布的演出'}</div>`;
   const groups = [];
   list.forEach(s=>{
     const k = tcfStartTime(s) || (en?'TBA':'時間未定');
@@ -5365,25 +5467,47 @@ function renderTcfAgenda(){
     if(!g || g.k!==k){ g = {k, items:[]}; groups.push(g); }
     g.items.push(s);
   });
-  box.innerHTML = head + groups.map(g=>`
+  return head + groups.map(g=>`
     <div class="tcf-ag-group">
       <div class="tcf-ag-time">${tcfEsc(g.k)}</div>
-      <div class="tcf-ag-items">${g.items.map(s=>{
-        const st = s.status || 'published';
-        const stTag = (adminMode && st!=='published') ? `<span class="tcf-ag-st">${st==='postponed'?'延期':st==='hidden'?'隱藏':tcfEsc(st)}</span>` : '';
-        const price = s.price ? `<div class="tcf-ag-pricebox"><div class="sc-price" data-fullprice="${String(s.price).replace(/"/g,'&quot;').replace(/`/g,'&#96;')}" data-showid="ag-${tcfEsc(s.id)}">${tcfEsc(parseFeeRange(s.price).range)}</div></div>` : '';
-        let act = '';
-        if(s.soldOut) act = `<span class="tcf-ag-sold">${en?'Sold out':'已售完'}</span>`;
-        else if(s.platform==='door') act = `<span class="tcf-ag-door">${en?'Pay at door':'現場付費'}</span>`;
-        else if(s.ticketUrl && s.ticketUrl!=='#') act = `<a class="tcf-ag-buy" href="${tcfEsc(s.ticketUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${en?'Tickets':'購票'} →</a>`;
-        return `<div class="tcf-ag-row" onclick="openShowDetail('${tcfEsc(s.id)}')">
-          <div class="tcf-ag-venue">${tcfEsc(s.venueLabel||s.venue||'')}</div>
-          <div class="tcf-ag-main"><div class="tcf-ag-title">${tcfEsc(s.title)}${stTag}</div>${s.performer?`<div class="tcf-ag-sub">${tcfEsc(s.performer)}</div>`:''}</div>
-          <div class="tcf-ag-side">${price}${act}</div>
-        </div>`;
-      }).join('')}</div>
+      <div class="tcf-ag-items">${g.items.map(s=>tcfAgendaRowHTML(s, d.ds, en, adminMode)).join('')}</div>
     </div>`).join('');
+}
+// 當日演出時刻表：選定的那一天
+function renderTcfAgenda(){
+  const box = document.getElementById('tcf-agenda');
+  if(!box) return;
+  const en = (typeof getLang==='function' && getLang()==='en');
+  const adminMode = isLoggedIn() && editMode;
+  const d = tcfDateList().find(x=>x.ds===fTcfDate);
+  if(!d){ box.innerHTML = ''; return; }
+  const list = tcfSortByTime(tcfBaseList().filter(s=>tcfShowHasDate(s, d.ds)));
+  box.innerHTML = tcfDayBlockHTML(d, list, en, adminMode);
   if(typeof initPriceExpand==='function') initPriceExpand(box); // 票價展開：沿用演出卡片同一套
+}
+// 檔期演出時刻表：整個喜劇節檔期，逐日排列（沒有演出的日子標示尚未公布）
+function renderTcfPeriod(){
+  const box = document.getElementById('tcf-agenda');
+  if(!box) return;
+  const en = (typeof getLang==='function' && getLang()==='en');
+  const adminMode = isLoggedIn() && editMode;
+  const base = tcfBaseList();
+  const days = tcfDateList();
+  const fmt = ds => ds.slice(5).replace('-','.');
+  const summary = `<div class="tcf-ag-summary">${fmt(TCF_DATE_START)}–${fmt(TCF_DATE_END)}<span>${en?`${base.length} shows`:`共 ${base.length} 場`}</span></div>`;
+  box.innerHTML = `<div id="tcf-period-top">${summary}</div>` + days.map(d=>
+    `<section class="tcf-ag-day">${tcfDayBlockHTML(d, tcfSortByTime(base.filter(s=>tcfShowHasDate(s, d.ds))), en, adminMode)}</section>`
+  ).join('');
+  if(typeof initPriceExpand==='function') initPriceExpand(box);
+}
+// 檔期時刻表：日期 chip 的「跳到那一天」
+function tcfScrollToDay(ds){
+  const el = ds==='all' ? document.getElementById('tcf-period-top') : document.getElementById('tcf-day-'+ds);
+  if(!el) return;
+  const bar = document.getElementById('tcf-date-bar');
+  const stickyTop = bar ? (parseFloat(getComputedStyle(bar).top) || 0) : 0;
+  const offset = stickyTop + (bar ? bar.offsetHeight : 0) + 10;
+  window.scrollTo({top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - offset), behavior:'smooth'});
 }
 // 演出資訊月曆：喜劇節期間的日期上色（MutationObserver 後置標記，不更動 renderCalendar 系列函式）
 (function(){
@@ -5450,18 +5574,55 @@ function deriveTcfPerformers(){
   });
   return allPerformers.filter(p=>matchedIds.has(p.id));
 }
+// ── 參演演員輪播：持續自動輪播＋左右按鈕（JS 驅動，按鈕與自動播放共用同一個位置）──
+let _tcfPerf = null;
+function tcfPerfStop(){ if(_tcfPerf){ cancelAnimationFrame(_tcfPerf.raf); _tcfPerf = null; } }
+function tcfPerfStart(box, track){
+  tcfPerfStop();
+  const st = _tcfPerf = {x:0, half:track.scrollWidth/2, hover:false, target:null, last:performance.now(), raf:0,
+    reduce: !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)};
+  const SPEED = 38; // 每秒移動的像素
+  box.onmouseenter = ()=>{ st.hover = true; };
+  box.onmouseleave = ()=>{ st.hover = false; };
+  box.ontouchstart = ()=>{ st.hover = true; };
+  box.ontouchend = box.ontouchcancel = ()=>{ setTimeout(()=>{ st.hover = false; }, 1200); };
+  const tick = now=>{
+    const pg = document.getElementById('page-tcf');
+    if(!pg || !pg.classList.contains('active') || !document.body.contains(track)){ _tcfPerf = null; return; } // 離開喜劇節頁就停；回來時 renderTcfPage 會重啟
+    const dt = Math.min(64, now - st.last); st.last = now;
+    if(st.target!=null){
+      const diff = st.target - st.x;
+      if(Math.abs(diff) < 0.5){ st.x = st.target; st.target = null; }
+      else st.x += diff * Math.min(1, dt/140);
+    } else if(!st.hover && !st.reduce){ st.x -= SPEED*dt/1000; }
+    while(st.x <= -st.half){ st.x += st.half; if(st.target!=null) st.target += st.half; }
+    while(st.x > 0){ st.x -= st.half; if(st.target!=null) st.target -= st.half; }
+    track.style.transform = `translateX(${st.x}px)`;
+    st.raf = requestAnimationFrame(tick);
+  };
+  st.raf = requestAnimationFrame(tick);
+}
+function tcfPerfNudge(dir){
+  const st = _tcfPerf, track = document.querySelector('#tcf-performers-grid .tcf-perf-track');
+  if(!st || !track) return;
+  const card = track.querySelector('.tcf-performer-mini');
+  const step = ((card ? card.offsetWidth : 110) + 14) * 3; // 一次移動 3 張
+  st.target = (st.target!=null ? st.target : st.x) + (dir<0 ? step : -step); // 左鍵＝看前面的人（內容往右）
+}
 function renderTcfPerformersGrid(){
   const box = document.getElementById('tcf-performers-grid');
   if(!box) return;
   const performers = deriveTcfPerformers();
   if(!performers.length){
     box.className = 'tcf-perf-marquee';
+    tcfPerfStop();
+    const w0 = document.getElementById('tcf-perf-wrap'); if(w0) w0.classList.remove('has-arrows');
     box.innerHTML = `<div style="text-align:center;padding:20px;color:var(--ts);font-family:var(--f-zh)">目前尚無參演演員資訊</div>`;
     return;
   }
   const cards = performers.map(p=>{
     const av = p.photoUrl ? `<img src="${gImgUrl(p.photoUrl,120)}" alt="">` : (p.name||'?')[0];
-    return `<div class="tcf-performer-mini" onclick="showPage('performers');setTimeout(()=>openPerformerDetail('${p.id}'),50)">
+    return `<div class="tcf-performer-mini" onclick="openPerformerDetail('${p.id}')">
       <div class="av">${av}</div>
       <div class="nm">${p.name||''}</div>
     </div>`;
@@ -5470,11 +5631,14 @@ function renderTcfPerformersGrid(){
   box.className = 'tcf-perf-marquee';
   box.innerHTML = `<div class="tcf-perf-track">${cards}</div>`;
   const track = box.firstElementChild;
+  const wrap = document.getElementById('tcf-perf-wrap');
+  tcfPerfStop();
   requestAnimationFrame(()=>{
-    if(track.scrollWidth <= box.clientWidth){ box.classList.add('static'); return; }
+    if(track.scrollWidth <= box.clientWidth){ box.classList.add('static'); if(wrap) wrap.classList.remove('has-arrows'); return; }
     track.insertAdjacentHTML('beforeend', cards);
-    track.style.setProperty('--tcf-perf-dur', Math.max(20, performers.length*3.2)+'s');
     box.classList.add('run');
+    if(wrap) wrap.classList.add('has-arrows');
+    tcfPerfStart(box, track);
   });
 }
 function renderTcfPage(){
@@ -5483,6 +5647,7 @@ function renderTcfPage(){
   fTcfTag = tcfExploreTag;
   renderTcfExploreTags();
   renderTcfDateChips();
+  renderTcfVenueChips();
   renderShows();
   applyTcfView();
   if(window.innerWidth >= 769){
@@ -9049,7 +9214,7 @@ function closeModal(id){
     history.replaceState(null,'', base || (_act==='page-tcf' ? '/#tcf' : '/#shows'));
   }
   if(id==='performer-detail'){
-    history.pushState(null,'', '/#performers');
+    history.pushState(null,'', document.querySelector('.page.active')?.id==='page-tcf' ? '/#tcf' : '/#performers'); // 喜劇節頁開的演員 modal：關閉後留在喜劇節頁
     // 恢復預設 OG
     document.title = '嘻嘻哪哩唷 Cici Radio';
     const resetMeta = (prop, content, isName=false) => {
