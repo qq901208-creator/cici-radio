@@ -1324,6 +1324,30 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-ag-summary{display:flex;align-items:baseline;gap:10px;font-family:var(--f-bo);font-size:1.35rem;font-weight:800;color:var(--tcf-pink);margin-bottom:6px}
 .tcf-ag-summary span{font-family:var(--f-zh);font-size:.82rem;font-weight:600;color:var(--ts)}
 .tcf-ag-day+.tcf-ag-day{margin-top:26px}
+/* 檔期演出時刻表（電腦版表格）：列＝日期、欄＝場地 */
+.tcf-tt-wrap{margin-top:10px}
+.tcf-tt{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;font-family:var(--f-zh);background:#fff;border:1.5px solid rgba(30,71,218,.2);border-radius:14px}
+.tcf-tt thead th{position:sticky;top:calc(var(--nav) + var(--tcf-bar-h,57px));z-index:5;background:linear-gradient(90deg,var(--tcf-pink),var(--tcf-pink2));color:#fff;font-size:.78rem;font-weight:800;line-height:1.3;padding:9px 6px;text-align:center;border-left:1px solid rgba(255,255,255,.22);border-bottom:2px solid var(--tcf-yellow)}
+.tcf-tt thead th:first-child{border-top-left-radius:12px;border-left:0}
+.tcf-tt thead th:last-child{border-top-right-radius:12px}
+.tcf-tt th.tcf-tt-date{width:78px}
+.tcf-tt tbody th.tcf-tt-date{background:#f6f7ff;color:var(--tcf-pink);padding:10px 6px;text-align:center;font-weight:800;border-top:1px solid rgba(45,43,31,.08)}
+.tcf-tt tbody th.tcf-tt-date b{display:block;font-family:var(--f-bo);font-size:.92rem}
+.tcf-tt tbody th.tcf-tt-date small{font-size:.68rem;font-weight:700;opacity:.8}
+.tcf-tt tbody th.tcf-tt-date.is-weekend{color:var(--or);background:#fff8f0}
+.tcf-tt td{vertical-align:top;padding:6px;border-top:1px solid rgba(45,43,31,.08);border-left:1px solid rgba(45,43,31,.06);background:#fff}
+.tcf-tt td.is-empty{background:rgba(45,43,31,.025)}
+.tcf-tt tr.tcf-tt-emptyrow td{text-align:center;color:var(--ts);font-size:.76rem;padding:9px;background:rgba(45,43,31,.025)}
+.tcf-tt tbody tr:last-child th.tcf-tt-date{border-bottom-left-radius:12px}
+.tcf-tt-item{display:block;background:rgba(30,71,218,.07);border-left:3px solid var(--tcf-pink);border-radius:7px;padding:5px 7px;margin-bottom:5px;cursor:pointer;transition:.15s;font-size:.74rem;line-height:1.35}
+.tcf-tt-item:last-child{margin-bottom:0}
+.tcf-tt-item:hover{background:rgba(30,71,218,.14);box-shadow:0 3px 10px rgba(30,71,218,.16)}
+.tcf-tt-item b{display:block;font-family:var(--f-bo);font-size:.76rem;color:var(--tcf-pink)}
+.tcf-tt-item span{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--tm);font-weight:700;word-break:break-word}
+.tcf-tt-item.is-sold{opacity:.6}
+.tcf-tt-sold,.tcf-tt-tag{display:inline-block;margin-top:3px;font-style:normal;font-size:.62rem;font-weight:700;padding:1px 6px;border-radius:6px;background:rgba(45,43,31,.1);color:var(--ts)}
+.tcf-tt-tag{background:var(--tcf-ink);color:#fff;margin-left:4px}
+@media(max-width:1000px){.tcf-tt thead th{font-size:.7rem;padding:7px 3px}.tcf-tt th.tcf-tt-date{width:62px}.tcf-tt td{padding:4px}.tcf-tt-item{padding:4px 5px;font-size:.68rem}}
 .tcf-ag-day .tcf-ag-head{padding-top:6px}
 .tcf-agenda[hidden]{display:none}
 .tcf-ag-head{display:flex;align-items:baseline;gap:10px;font-family:var(--f-bo);font-size:1.15rem;font-weight:800;color:var(--tcf-pink);margin-bottom:12px}
@@ -5402,6 +5426,15 @@ function setTcfDate(ds){
   renderShows();
   applyTcfView();
 }
+let _tcfPeriodWasMobile = window.innerWidth <= 768;
+window.addEventListener('resize', ()=>{
+  clearTimeout(window._tcfPT);
+  window._tcfPT = setTimeout(()=>{
+    const m = window.innerWidth <= 768;
+    if(m !== _tcfPeriodWasMobile){ _tcfPeriodWasMobile = m; if(tcfView==='period' && document.getElementById('page-tcf')?.classList.contains('active')) renderTcfPeriod(); }
+    tcfBarHeightSync();
+  }, 150);
+});
 function setTcfView(v){
   if(v==='agenda' && fTcfDate==='all'){
     // 當日時刻表需要一個日期：預設第一個有演出的日子，都沒有就第一天
@@ -5485,7 +5518,12 @@ function renderTcfAgenda(){
   box.innerHTML = tcfDayBlockHTML(d, list, en, adminMode);
   if(typeof initPriceExpand==='function') initPriceExpand(box); // 票價展開：沿用演出卡片同一套
 }
-// 檔期演出時刻表：整個喜劇節檔期，逐日排列（沒有演出的日子標示尚未公布）
+// 檔期演出時刻表：整個喜劇節檔期。
+// 電腦版＝表格（列＝日期、欄＝場地，格子裡依開演時間列出該場地當天的演出）；手機版＝逐日條列（表格放不下 8 欄）
+function tcfBarHeightSync(){
+  const bar = document.getElementById('tcf-date-bar');
+  if(bar) document.documentElement.style.setProperty('--tcf-bar-h', bar.offsetHeight + 'px');
+}
 function renderTcfPeriod(){
   const box = document.getElementById('tcf-agenda');
   if(!box) return;
@@ -5494,11 +5532,39 @@ function renderTcfPeriod(){
   const base = tcfBaseList();
   const days = tcfDateList();
   const fmt = ds => ds.slice(5).replace('-','.');
-  const summary = `<div class="tcf-ag-summary">${fmt(TCF_DATE_START)}–${fmt(TCF_DATE_END)}<span>${en?`${base.length} shows`:`共 ${base.length} 場`}</span></div>`;
-  box.innerHTML = `<div id="tcf-period-top">${summary}</div>` + days.map(d=>
-    `<section class="tcf-ag-day">${tcfDayBlockHTML(d, tcfSortByTime(base.filter(s=>tcfShowHasDate(s, d.ds))), en, adminMode)}</section>`
-  ).join('');
-  if(typeof initPriceExpand==='function') initPriceExpand(box);
+  const summary = `<div class="tcf-ag-summary" id="tcf-period-top">${fmt(TCF_DATE_START)}–${fmt(TCF_DATE_END)}<span>${en?`${base.length} shows`:`共 ${base.length} 場`}</span></div>`;
+  tcfBarHeightSync();
+  if(window.innerWidth <= 768){
+    box.innerHTML = summary + days.map(d=>
+      `<section class="tcf-ag-day">${tcfDayBlockHTML(d, tcfSortByTime(base.filter(s=>tcfShowHasDate(s, d.ds))), en, adminMode)}</section>`
+    ).join('');
+    if(typeof initPriceExpand==='function') initPriceExpand(box);
+    return;
+  }
+  // ── 電腦版：日期 × 場地 表格 ──
+  const DOW = en ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : ['日','一','二','三','四','五','六'];
+  const colOf = s => { const v = TCF_VENUES.find(x=>tcfVenueMatch(s, x.id)); return v ? v.id : 'other'; };
+  const cols = TCF_VENUES.map(v=>({id:v.id, label: en ? v.en : v.zh}));
+  if(base.some(s=>colOf(s)==='other')) cols.push({id:'other', label: en ? 'Other' : '其他'});
+  const item = s => {
+    const st = s.status || 'published';
+    const tag = (adminMode && st!=='published') ? `<em class="tcf-tt-tag">${st==='postponed'?'延期':st==='hidden'?'隱藏':tcfEsc(st)}</em>` : '';
+    const sold = s.soldOut ? `<em class="tcf-tt-sold">${en?'Sold out':'已售完'}</em>` : '';
+    const tip = tcfEsc(s.title + (s.performer ? '｜' + s.performer : ''));
+    return `<div class="tcf-tt-item${s.soldOut?' is-sold':''}" onclick="openShowDetail('${tcfEsc(s.id)}')" title="${tip}"><b>${tcfEsc(tcfStartTime(s) || (en?'TBA':'時間未定'))}</b><span>${tcfEsc(s.title)}</span>${sold}${tag}</div>`;
+  };
+  const head = `<thead><tr><th class="tcf-tt-date"></th>${cols.map(c=>`<th>${tcfEsc(c.label)}</th>`).join('')}</tr></thead>`;
+  const rows = days.map(d=>{
+    const list = tcfSortByTime(base.filter(s=>tcfShowHasDate(s, d.ds)));
+    const wk = (d.dow===0 || d.dow===6) ? ' is-weekend' : '';
+    const dateCell = `<th class="tcf-tt-date${wk}"><b>${d.mm}/${d.dd}</b><small>${DOW[d.dow]}</small></th>`;
+    if(!list.length) return `<tr id="tcf-day-${d.ds}" class="tcf-tt-emptyrow">${dateCell}<td colspan="${cols.length}">${en?'No shows announced yet':'尚未公布演出'}</td></tr>`;
+    return `<tr id="tcf-day-${d.ds}">${dateCell}${cols.map(c=>{
+      const here = list.filter(s=>colOf(s)===c.id);
+      return `<td${here.length?'':' class="is-empty"'}>${here.map(item).join('')}</td>`;
+    }).join('')}</tr>`;
+  }).join('');
+  box.innerHTML = summary + `<div class="tcf-tt-wrap"><table class="tcf-tt">${head}<tbody>${rows}</tbody></table></div>`;
 }
 // 檔期時刻表：日期 chip 的「跳到那一天」
 function tcfScrollToDay(ds){
@@ -5506,7 +5572,8 @@ function tcfScrollToDay(ds){
   if(!el) return;
   const bar = document.getElementById('tcf-date-bar');
   const stickyTop = bar ? (parseFloat(getComputedStyle(bar).top) || 0) : 0;
-  const offset = stickyTop + (bar ? bar.offsetHeight : 0) + 10;
+  const thead = document.querySelector('#tcf-agenda .tcf-tt thead');
+  const offset = stickyTop + (bar ? bar.offsetHeight : 0) + (thead ? thead.offsetHeight : 0) + 10;
   window.scrollTo({top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - offset), behavior:'smooth'});
 }
 // 演出資訊月曆：喜劇節期間的日期上色（MutationObserver 後置標記，不更動 renderCalendar 系列函式）
