@@ -6140,7 +6140,7 @@ function tcfMoney(n){ return '$' + Math.round(Number(n)||0).toLocaleString('en-U
 //   badgeEnabled:false,   // 預留：喜劇徽章官方規則公布後才會啟用，目前不做任何徽章試算
 //   share:{ price:false, people:false } }
 // 只存人數與選擇，不存姓名、證件、障礙類別或程度等任何個資
-function tcfPlanDefault(){ return {version:TCF_PLAN_VERSION, selectedShowIds:[], shows:{}, badgeEnabled:false, share:{price:false, people:false, wide:null}}; } // share.wide：null＝依場次多寡自動、true＝雙欄、false＝單欄
+function tcfPlanDefault(){ return {version:TCF_PLAN_VERSION, selectedShowIds:[], shows:{}, day:null, badgeEnabled:false, share:{price:false, people:false, wide:null}}; } // share.wide：null＝依場次多寡自動、true＝雙欄、false＝單欄
 function tcfPlanClamp(v, lo, hi, d){ const n = parseInt(v, 10); return isFinite(n) ? Math.min(hi, Math.max(lo, n)) : d; }
 function tcfPlanSanitizeEntry(e){
   e = (e && typeof e === 'object') ? e : {};
@@ -6166,6 +6166,7 @@ function tcfPlanLoad(){
         o.selectedShowIds.slice(0, 300).forEach(k=>{
           if(typeof k === 'string' && k.length < 120 && !st.shows[k]){ st.selectedShowIds.push(k); st.shows[k] = tcfPlanSanitizeEntry(o.shows && o.shows[k]); }
         });
+        st.day = (typeof o.day === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(o.day)) ? o.day : null;
         st.share.price = !!(o.share && o.share.price);
         st.share.people = !!(o.share && o.share.people);
         st.share.wide = (o.share && typeof o.share.wide === 'boolean') ? o.share.wide : null;
@@ -6446,7 +6447,7 @@ function tcfPlanCombo(key, idx, d){
   tcfPlanRefresh();
 }
 function tcfPlanComboReset(key){ const e = tcfPlanState().shows[key]; if(e){ tcfPlanPush(); e.selectedTicketCombination = null; tcfPlanSyncBundle(key); tcfPlanRefresh(); } }
-function tcfPlanDay(ds){ _tcfPlanUI.day = ds; tcfPlanRender(); }
+function tcfPlanDay(ds){ _tcfPlanUI.day = ds; const st = tcfPlanState(); st.day = ds; tcfPlanSave(); tcfPlanRender({top:true, center:true}); }
 function tcfPlanTab(tab){
   _tcfPlanUI.tab = tab; tcfPlanRender();
   const el = document.getElementById('tcf-plan');
@@ -6555,9 +6556,10 @@ function tcfPlanSummaryHTML(ctx, compact){
 }
 function tcfPlanPickHTML(ctx){
   const days = tcfDateList(), sessions = ctx.sessions;
+  if(!_tcfPlanUI.day && ctx.st.day) _tcfPlanUI.day = ctx.st.day; // 重新整理後回到上次看的那一天
   if(!_tcfPlanUI.day || !days.some(d=>d.ds === _tcfPlanUI.day)){
     const now = new Date(), today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-    const first = days.find(d=>d.ds === today && sessions.some(s=>s.ds === d.ds)) || days.find(d=>sessions.some(s=>s.ds === d.ds)) || days[0];
+    const first = days.find(d=>ctx.selected.some(x=>x.ds === d.ds)) || days.find(d=>d.ds === today && sessions.some(s=>s.ds === d.ds)) || days.find(d=>sessions.some(s=>s.ds === d.ds)) || days[0];
     _tcfPlanUI.day = first ? first.ds : null;
   }
   const selDays = new Set(ctx.selected.map(s=>s.ds));
@@ -6583,11 +6585,12 @@ function tcfPlanMineHTML(ctx){
     <div class="pl-final"><button type="button" class="pl-cta" onclick="tcfPlanOpenShare()">產生我的觀演表</button></div>
     <p class="pl-fine">票價依目前公開資訊與販售期間估算，實際票價、剩餘票券與購票規則請以官方售票頁面為準。特殊票種可能有資格、證件、席位或購票方式限制，實際規定請以官方售票頁面為準。</p>`;
 }
-function tcfPlanRender(){
+function tcfPlanRender(opts){
   const box = document.getElementById('tcf-plan'); if(!box) return;
   if(!window._dataReady){ box.innerHTML = tcfLoadingHTML(); tcfPlanBarSync(null); return; }
   const ctx = tcfPlanBuildCtx();
   const tab = _tcfPlanUI.tab;
+  const prevY = window.scrollY, prevStrip = box.querySelector('.pl-days'), prevLeft = prevStrip ? prevStrip.scrollLeft : 0;
   box.innerHTML = `<div class="pl-wrap">
     <div class="pl-top"><button type="button" class="pl-back" onclick="setTcfView('cards')">← 返回全部一覽</button><div class="pl-top-r"><button type="button" class="pl-bak" onclick="tcfPlanOpenBackup()">備份／還原</button><button type="button" class="pl-undo" onclick="tcfPlanUndo()"${_tcfPlanHist.length ? '' : ' disabled'}>↩ 上一步</button><button type="button" class="pl-reset" onclick="tcfPlanClear()"${ctx.selected.length ? '' : ' disabled'}>重置</button></div></div>
     <div class="pl-heading">客製化我的喜劇節行程</div>
@@ -6596,6 +6599,22 @@ function tcfPlanRender(){
     <div class="pl-tabs"><button type="button" class="${tab === 'pick' ? 'on' : ''}" onclick="tcfPlanTab('pick')">選演出</button><button type="button" class="${tab === 'mine' ? 'on' : ''}" onclick="tcfPlanTab('mine')">已選行程${ctx.selected.length ? `（${ctx.selected.length}）` : ''}</button></div>
     <div class="pl-grid"><div class="pl-mainc">${tab === 'pick' ? tcfPlanPickHTML(ctx) : tcfPlanMineHTML(ctx)}</div><aside class="pl-side">${tcfPlanSummaryHTML(ctx)}</aside></div></div>`;
   tcfPlanBarSync(ctx);
+  // 日期列：保留橫向捲動位置；目前選的日期若不在可視範圍（或剛切換日期）就置中
+  const strip = box.querySelector('.pl-days');
+  if(strip){
+    strip.scrollLeft = prevLeft;
+    const chip = strip.querySelector('.tcf-m-dchip.on');
+    if(chip){ const l = chip.offsetLeft, r = l + chip.offsetWidth; if((opts && opts.center) || l < strip.scrollLeft || r > strip.scrollLeft + strip.clientWidth) strip.scrollLeft = l - (strip.clientWidth - chip.offsetWidth) / 2; }
+  }
+  // 頁面捲動：切換日期＝回到這個區塊最上方；其他操作（加入場次、改張數…）＝停在原本的位置，不跳動
+  const root = document.documentElement, oldSB = root.style.scrollBehavior;
+  if(opts && opts.top){
+    root.style.scrollBehavior = 'auto'; window.scrollTo(0, prevY); root.style.scrollBehavior = oldSB;
+    const y = Math.max(0, box.getBoundingClientRect().top + window.scrollY - 150);
+    window.scrollTo({top:y, behavior:'smooth'});
+  } else if(Math.abs(window.scrollY - prevY) > 1){
+    root.style.scrollBehavior = 'auto'; window.scrollTo(0, prevY); root.style.scrollBehavior = oldSB; // 網站全域是平滑捲動，還原位置時要暫時關掉，不然會看到畫面滑動
+  }
 }
 // 手機版底部摘要列（放在頁面外層，避免被頁面進場動畫的 transform 影響 fixed 定位）
 function tcfPlanBarSync(ctx){
