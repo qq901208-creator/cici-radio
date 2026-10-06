@@ -1319,12 +1319,12 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-view-toggle{display:inline-flex;background:#fff;border:1.5px solid var(--tcf-pink);border-radius:var(--r-pill);overflow:hidden}
 .tcf-view-toggle button{border:0;background:transparent;color:var(--tcf-pink);font-family:var(--f-zh);font-size:.78rem;font-weight:700;padding:5px 14px;cursor:pointer}
 .tcf-view-toggle button.on{background:linear-gradient(135deg,var(--tcf-pink),var(--tcf-pink2));color:#fff}
-/* 當日／檔期演出時刻表 */
+/* 每日時刻表／全活動時刻表 */
 .tcf-agenda{padding:18px 5vw 8px}
 .tcf-ag-summary{display:flex;align-items:baseline;gap:10px;font-family:var(--f-bo);font-size:1.35rem;font-weight:800;color:var(--tcf-pink);margin-bottom:6px}
 .tcf-ag-summary span{font-family:var(--f-zh);font-size:.82rem;font-weight:600;color:var(--ts)}
 .tcf-ag-day+.tcf-ag-day{margin-top:26px}
-/* 檔期演出時刻表（電腦版表格）：列＝日期、欄＝場地 */
+/* 全活動時刻表（總表）：列＝日期、欄＝場地 */
 .tcf-tt-wrap{margin-top:10px}
 .tcf-tt{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;font-family:var(--f-zh);background:#fff;border:1.5px solid rgba(30,71,218,.2);border-radius:14px}
 .tcf-tt thead th{position:sticky;top:calc(var(--nav) + var(--tcf-bar-h,57px));z-index:5;background:linear-gradient(90deg,var(--tcf-pink),var(--tcf-pink2));color:#fff;font-size:.78rem;font-weight:800;line-height:1.3;padding:9px 6px;text-align:center;border-left:1px solid rgba(255,255,255,.22);border-bottom:2px solid var(--tcf-yellow)}
@@ -1438,35 +1438,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 }
 @media(max-width:768px){.sc-age-badge{top:5px;right:5px;font-size:.56rem;padding:1px 5px}}
 
-/* ── Phase 2：檔期演出時刻表＝每個日期一張獨立表格（時間／場地／演出），列色交錯 ── */
-.tcf-dt-day{margin-top:22px}
-.tcf-dt-head{display:flex;align-items:baseline;gap:10px;padding:0 2px 8px;font-family:var(--f-zh)}
-.tcf-dt-head b{font-family:'Big Shoulders Display',var(--f-di),sans-serif;font-weight:900;font-size:1.9rem;line-height:1;letter-spacing:.01em;color:var(--tcf-pink)}
-.tcf-dt-head em{font-style:normal;font-weight:800;font-size:.9rem;color:var(--tcf-pink)}
-.tcf-dt-head span{margin-left:auto;font-size:.78rem;font-weight:600;color:var(--ts)}
-.tcf-dt-head.is-weekend b,.tcf-dt-head.is-weekend em{color:var(--or)}
-.tcf-dt-day .tcf-tt-wrap{margin-top:0;border-radius:14px;overflow:hidden;border:1.5px solid rgba(30,71,218,.2);background:#fff}
-.tcf-dt{width:100%;table-layout:fixed;border-collapse:collapse;font-family:var(--f-zh)}
-.tcf-dt thead th{background:linear-gradient(90deg,var(--tcf-pink),var(--tcf-pink2));color:#fff;font-size:.76rem;font-weight:800;letter-spacing:.06em;padding:8px 12px;text-align:left;border-bottom:2px solid var(--tcf-yellow)}
-.tcf-dt .c-time{width:86px}
-.tcf-dt .c-venue{width:27%}
-.tcf-dt td{padding:11px 12px;vertical-align:top;border-top:1px solid rgba(45,43,31,.07);background:#fff;font-size:.86rem;line-height:1.45}
-.tcf-dt tbody tr:first-child td{border-top:0}
-.tcf-dt tbody tr:nth-child(even) td{background:#eaf0ff}
-.tcf-dt tbody tr{cursor:pointer;transition:background .15s}
-.tcf-dt tbody tr:hover td{background:#dbe5ff}
-.tcf-dt td.c-time{font-family:var(--f-bo);font-weight:700;color:var(--tcf-pink);white-space:nowrap}
-.tcf-dt td.c-venue{font-weight:700;font-size:.8rem;color:var(--ts);word-break:break-word}
-.tcf-dt td.c-title{font-weight:700;color:var(--tm);word-break:break-word}
-.tcf-dt tr.is-sold td{opacity:.6}
-.tcf-dt-empty{padding:12px 14px;font-size:.8rem;color:var(--ts);background:rgba(45,43,31,.04);border-radius:12px}
-@media(max-width:768px){
-  .tcf-dt-head b{font-size:1.6rem}
-  .tcf-dt .c-time{width:62px}.tcf-dt .c-venue{width:31%}
-  .tcf-dt thead th{padding:7px 8px}
-  .tcf-dt td{padding:9px 8px;font-size:.8rem}
-  .tcf-dt td.c-venue{font-size:.72rem}
-}
+
 /* ── Phase 2：手機版「重置」改到搜尋欄右側（搜尋欄縮短）；桌機維持原本位置 ── */
 .shows-search-reset{display:none}
 @media(max-width:768px){
@@ -2371,9 +2343,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   <div class="tcf-shows-zone">
     <div class="tcf-view-row">
       <div class="tcf-view-toggle" id="tcf-view-toggle">
-        <button type="button" data-view="cards" class="on" onclick="setTcfView('cards')"><span class="zh-text">卡片檢視</span><span class="en-text">Cards</span></button>
-        <button type="button" data-view="agenda" onclick="setTcfView('agenda')"><span class="zh-text">當日演出時刻表</span><span class="en-text">Day timetable</span></button>
-        <button type="button" data-view="period" onclick="setTcfView('period')"><span class="zh-text">檔期演出時刻表</span><span class="en-text">Festival timetable</span></button>
+        <button type="button" data-view="cards" class="on" onclick="setTcfView('cards')"><span class="zh-text">全部一覽</span><span class="en-text">All shows</span></button>
+        <button type="button" data-view="agenda" onclick="setTcfView('agenda')"><span class="zh-text">每日時刻表</span><span class="en-text">Daily schedule</span></button>
+        <button type="button" data-view="period" onclick="setTcfView('period')"><span class="zh-text">全活動時刻表</span><span class="en-text">Full schedule</span></button>
       </div>
     </div>
     <div class="tcf-date-bar" id="tcf-date-bar">
@@ -5462,9 +5434,9 @@ function renderTcfDateChips(){
   const DOW = en ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : ['日','一','二','三','四','五','六'];
   const base = tcfBaseList();
   const total = base.length;
-  const cur = (tcfView==='period') ? tcfPeriodDay : fTcfDate; // 檔期時刻表有自己選的那一天
+  const cur = fTcfDate;
   const cnt = n => n>0 ? (en?`${n}`:`${n} 場`) : '';
-  wrap.innerHTML = `<button class="tcf-date-chip${cur==='all'?' on':''}" onclick="setTcfDate('all')"><b>${en?'All dates':'全部日期'}</b><small>${total>0?(en?`${total} shows`:`共 ${total} 場`):'\u00a0'}</small></button>` +
+  wrap.innerHTML = (`<button class="tcf-date-chip${cur==='all'?' on':''}" onclick="setTcfDate('all')"><b>${en?'All dates':'全部日期'}</b><small>${total>0?(en?`${total} shows`:`共 ${total} 場`):'\u00a0'}</small></button>`) +
     tcfDateList().map(x=>{
       const n = base.filter(s=>tcfShowHasDate(s, x.ds)).length;
       const dim = (total>0 && n===0) ? ' empty' : '';
@@ -5523,15 +5495,8 @@ function setTcfVenue(id){
   renderShows();
 }
 let tcfView = 'cards'; // 'cards' | 'agenda'（agenda 只在選了單一日期時有效）| 'period'
-let tcfPeriodDay = 'all'; // 檔期演出時刻表目前顯示的日期：'all'＝每一天各一張表，或單一 YYYY-MM-DD
+let tcfPeriodDay = 'all'; // （保留變數；全活動時刻表是總表，不再選日期）
 function setTcfDate(ds){
-  // 檔期時刻表：日期 chip＝切換要看哪一天的表（全部日期＝每天各一張表），不捲動、不篩選演出列表
-  if(tcfView==='period'){
-    tcfPeriodDay = (ds==='all' || tcfPeriodDay===ds) ? 'all' : ds; // 再點一次同一天 = 回到全部日期
-    renderTcfDateChips();
-    renderTcfPeriod();
-    return;
-  }
   fTcfDate = (fTcfDate===ds) ? 'all' : ds; // 再點一次同一天 = 取消
   if(fTcfDate==='all') tcfView = 'cards';
   showsPage = 1;
@@ -5557,7 +5522,6 @@ function setTcfView(v){
     renderTcfDateChips(); renderShows();
   }
   if(v==='period' && fTcfDate!=='all'){
-    tcfPeriodDay = fTcfDate; // 原本選了哪一天，檔期時刻表就先顯示那一天的表
     fTcfDate = 'all'; showsPage = 1;
     renderTcfDateChips(); renderShows();
   }
@@ -5572,10 +5536,13 @@ function applyTcfView(){
   const host = document.getElementById('tcf-shows-host'), ag = document.getElementById('tcf-agenda'), tg = document.getElementById('tcf-view-toggle');
   if(tg) tg.querySelectorAll('button').forEach(b=>b.classList.toggle('on', b.dataset.view === tcfView));
   if(host) host.style.display = (agendaOn||periodOn) ? 'none' : '';
+  const dBar = document.getElementById('tcf-date-bar');
+  if(dBar) dBar.style.display = periodOn ? 'none' : ''; // 全活動時刻表＝總表，不用選日期
   if(ag){
     ag.hidden = !(agendaOn||periodOn);
     if(agendaOn) renderTcfAgenda(); else if(periodOn) renderTcfPeriod();
   }
+  if(typeof tcfBarHeightSync==='function') tcfBarHeightSync();
 }
 function tcfEsc(v){ return String(v==null?'':v).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function tcfStartTime(s){
@@ -5621,7 +5588,7 @@ function tcfDayBlockHTML(d, list, en, adminMode){
       <div class="tcf-ag-items">${g.items.map(s=>tcfAgendaRowHTML(s, d.ds, en, adminMode)).join('')}</div>
     </div>`).join('');
 }
-// 當日演出時刻表：選定的那一天
+// 每日時刻表：選定的那一天
 function renderTcfAgenda(){
   const box = document.getElementById('tcf-agenda');
   if(!box) return;
@@ -5634,7 +5601,7 @@ function renderTcfAgenda(){
   box.innerHTML = tcfDayBlockHTML(d, list, en, adminMode);
   if(typeof initPriceExpand==='function') initPriceExpand(box); // 票價展開：沿用演出卡片同一套
 }
-// 檔期演出時刻表：每個日期一張獨立表格（時間／場地／演出）。
+// 全活動時刻表：一張總表，列＝日期、欄＝場地，一次看到所有演出，不用選日期。
 // 日期 chip 選「全部日期」＝每一天各一張表依序排開；選單一天＝只顯示那天的表。
 function tcfBarHeightSync(){
   const bar = document.getElementById('tcf-date-bar');
@@ -5659,31 +5626,33 @@ function renderTcfPeriod(){
   const base = tcfBaseList();
   const days = tcfDateList();
   const fmt = ds => ds.slice(5).replace('-','.');
+  const summary = `<div class="tcf-ag-summary" id="tcf-period-top">${fmt(TCF_DATE_START)}–${fmt(TCF_DATE_END)}<span>${en?`${base.length} shows`:`共 ${base.length} 場`}</span></div>`;
   tcfBarHeightSync();
+  // ── 全活動時刻表：一張總表，列＝日期、欄＝場地（電腦版與手機版共用；手機版外層可滑動，日期欄與表頭固定）──
   const DOW = en ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : ['日','一','二','三','四','五','六'];
-  const pick = days.some(d=>d.ds===tcfPeriodDay) ? tcfPeriodDay : 'all';
-  const shown = pick==='all' ? days : days.filter(d=>d.ds===pick);
-  const venueName = s => {
-    const v = TCF_VENUES.find(x=>tcfVenueMatch(s, x.id, true));
-    return v ? (en ? v.en : v.zh) : (s.venueLabel || s.venue || (en ? 'Other' : '其他'));
-  };
-  const row = s => {
-    const st = s.status || 'published';
+  const colOf = x => { const v = TCF_VENUES.find(y=>tcfVenueMatch(x, y.id, true)); return v ? v.id : 'other'; };
+  const cols = TCF_VENUES.map(v=>({id:v.id, label: en ? v.en : v.zh}));
+  if(base.some(x=>colOf(x)==='other')) cols.push({id:'other', label: en ? 'Other' : '其他'});
+  const item = x => {
+    const st = x.status || 'published';
     const tag = (adminMode && st!=='published') ? `<em class="tcf-tt-tag">${st==='postponed'?'延期':st==='hidden'?'隱藏':tcfEsc(st)}</em>` : '';
-    const sold = s.soldOut ? `<em class="tcf-tt-sold">${en?'Sold out':'已售完'}</em>` : '';
-    const tip = tcfEsc(tcfTTTitle(s.title) + (s.performer ? '｜' + s.performer : ''));
-    return `<tr class="${s.soldOut?'is-sold':''}" onclick="openShowDetail('${tcfEsc(s.id)}')" title="${tip}"><td class="c-time">${tcfEsc(tcfStartTime(s) || (en?'TBA':'時間未定'))}</td><td class="c-venue">${tcfEsc(venueName(s))}</td><td class="c-title">${tcfEsc(tcfTTTitle(s.title))}${sold}${tag}</td></tr>`;
+    const sold = x.soldOut ? `<em class="tcf-tt-sold">${en?'Sold out':'已售完'}</em>` : '';
+    const tip = tcfEsc(tcfTTTitle(x.title) + (x.performer ? '｜' + x.performer : ''));
+    return `<div class="tcf-tt-item${x.soldOut?' is-sold':''}" onclick="openShowDetail('${tcfEsc(x.id)}')" title="${tip}"><b>${tcfEsc(tcfStartTime(x) || (en?'TBA':'時間未定'))}</b><span>${tcfEsc(tcfTTTitle(x.title))}</span>${sold}${tag}</div>`;
   };
-  const section = d => {
-    const list = tcfSortByTime(base.filter(s=>tcfShowHasDate(s, d.ds)));
+  const head = `<thead><tr><th class="tcf-tt-date"></th>${cols.map(c=>`<th>${tcfEsc(c.label)}</th>`).join('')}</tr></thead>`;
+  const rows = days.map(d=>{
+    const list = tcfSortByTime(base.filter(x=>tcfShowHasDate(x, d.ds)));
     const wk = (d.dow===0 || d.dow===6) ? ' is-weekend' : '';
-    const head = `<div class="tcf-dt-head${wk}" id="tcf-pday-${d.ds}"><b>${d.mm}.${d.dd}</b><em>${en?DOW[d.dow]:'週'+DOW[d.dow]}</em><span>${en?`${list.length} shows`:`共 ${list.length} 場`}</span></div>`;
-    if(!list.length) return `<section class="tcf-dt-day">${head}<div class="tcf-dt-empty">${en?'No shows announced yet':'尚未公布演出'}</div></section>`;
-    const th = en ? ['Time','Venue','Show'] : ['時間','場地','演出'];
-    return `<section class="tcf-dt-day">${head}<div class="tcf-tt-wrap"><table class="tcf-dt"><thead><tr><th class="c-time">${th[0]}</th><th class="c-venue">${th[1]}</th><th class="c-title">${th[2]}</th></tr></thead><tbody>${list.map(row).join('')}</tbody></table></div></section>`;
-  };
-  const summary = pick==='all' ? `<div class="tcf-ag-summary" id="tcf-period-top">${fmt(TCF_DATE_START)}–${fmt(TCF_DATE_END)}<span>${en?`${base.length} shows`:`共 ${base.length} 場`}</span></div>` : '';
-  box.innerHTML = summary + shown.map(section).join('');
+    const dateCell = `<th class="tcf-tt-date${wk}"><b>${d.mm}/${d.dd}</b><small>${DOW[d.dow]}</small></th>`;
+    if(!list.length) return `<tr id="tcf-day-${d.ds}" class="tcf-tt-emptyrow">${dateCell}<td colspan="${cols.length}">${en?'No shows announced yet':'尚未公布演出'}</td></tr>`;
+    return `<tr id="tcf-day-${d.ds}">${dateCell}${cols.map(c=>{
+      const here = list.filter(x=>colOf(x)===c.id);
+      return `<td${here.length?'':' class="is-empty"'}>${here.map(item).join('')}</td>`;
+    }).join('')}</tr>`;
+  }).join('');
+  const tblStyle = window.innerWidth <= 768 ? ` style="width:${62+cols.length*124}px;max-width:none"` : '';
+  box.innerHTML = summary + `<div class="tcf-tt-wrap"><table class="tcf-tt"${tblStyle}>${head}<tbody>${rows}</tbody></table></div>`;
 }
 // 喜劇節頁「回到頂端」：只在喜劇節頁、捲過一段距離後顯示（不改 showPage，改用 class 觀察 + scroll 事件）
 (function(){
