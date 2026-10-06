@@ -2077,9 +2077,9 @@ body.edit .bt-admin-btn{display:inline-flex}
     <div class="tcf-entry">
       <div class="tcf-entry-txt">
         <div class="tag"><span class="zh-text">台北喜劇節　11.26-12.06</span><span class="en-text">Taipei Comedy Festival　11.26-12.06</span></div>
-        <h3><span class="zh-text">今年有哪些演出？嘻嘻幫你整理好了！</span><span class="en-text">This year's Taipei Comedy Festival, all in one place</span></h3>
+        <h3><span class="zh-text">歡迎來客製化你的喜劇節行程表！</span><span class="en-text">Build your own Comedy Festival schedule!</span></h3>
       </div>
-      <button class="tcf-entry-btn" onclick="showPage('tcf')"><span class="zh-text">查看喜劇節 →</span><span class="en-text">Explore →</span></button>
+      <button class="tcf-entry-btn" onclick="showPage('tcf');setTcfView('plan')"><span class="zh-text">開始客製化 →</span><span class="en-text">Start planning →</span></button>
     </div>
   </section>
 
@@ -6818,7 +6818,9 @@ let _tcfPlanInbox = null;
 // ══ 分享圖片（Canvas 專用 share card，由 planner state 直接繪製；不是網頁截圖）══
 // 9:16（1080×1920）。場次多時依日期自動分成多張，優先保持字級可讀，而不是硬塞成一張。
 // 圖片只放：日期、時間、演出名稱、場地、場次數（票價／人數由使用者勾選才放）；不輸出任何身心障礙／陪同／票種資格資訊
-const TCF_SHARE = {W:1080, H:1920, HEAD:450, FOOT:210, PAD:60, GAP:26, BODYPAD:40,
+// Instagram 限時動態：上下各約 250px（14%）會被帳號列、回覆列蓋住，所有文字與 logo 都放在 y＝250～1670 之間；上下方只有背景色與點點。
+const TCF_SHARE_SAFE = {top:250, bottom:250};
+const TCF_SHARE = {W:1080, H:1920, HEAD:600, FOOT:370, PAD:60, GAP:26, BODYPAD:36,
   // 雙欄：往橫向發展，左右兩欄各自由上往下排，標題最多三行（不截斷）；同一天可以跨欄／跨張（標「續」）
   wide:{k:'W', cols:2, colW:468, colGap:24, date:64, title:32, venue:24, time:42, lh:40, maxLines:3, rowBy:[0,146,186,226]},
   tiers:[ // 由大到小；row2＝標題兩行的卡片高度、row1＝標題一行的卡片高度（依實際標題行數決定）
@@ -6949,17 +6951,17 @@ function tcfPlanDrawPage(page, tier, meta, opts, logo){
   c.fillStyle = YEL; c.fillRect(0, S.HEAD - 8, W, 8); // 黃色底線（同表頭）
   c.save(); tcfPlanRR(c, 0, -80, W, S.HEAD + 80, 70); c.clip(); c.fillStyle = YEL; c.fillRect(0, S.HEAD - 8, W, 8); c.restore();
   // 品牌識別
-  if(logo){ c.save(); c.beginPath(); c.arc(S.PAD + 44, 84, 44, 0, 7); c.clip(); c.drawImage(logo, S.PAD, 40, 88, 88); c.restore(); }
-  c.fillStyle = '#fff'; c.textBaseline = 'alphabetic'; c.font = `900 38px ${TCF_SHARE_FONT_ZH}`; c.textAlign = 'left';
-  c.fillText('嘻嘻哪哩唷', S.PAD + (logo ? 108 : 0), 82);
-  c.fillStyle = YEL; c.font = `800 24px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, 'CICI RADIO', S.PAD + (logo ? 110 : 2), 116, 6, 'left');
-  if(meta.pages > 1){ c.fillStyle = 'rgba(255,255,255,.95)'; tcfPlanRR(c, W - S.PAD - 150, 54, 150, 58, 29); c.fill(); c.fillStyle = BLUE; c.font = `900 30px ${TCF_SHARE_FONT_DI}`; c.textAlign = 'center'; c.fillText(`${meta.page} / ${meta.pages}`, W - S.PAD - 75, 95); }
+  if(logo){ c.save(); c.beginPath(); c.arc(S.PAD + 38, 304, 38, 0, 7); c.clip(); c.drawImage(logo, S.PAD, 266, 76, 76); c.restore(); }
+  c.fillStyle = '#fff'; c.textBaseline = 'alphabetic'; c.font = `900 34px ${TCF_SHARE_FONT_ZH}`; c.textAlign = 'left';
+  c.fillText('嘻嘻哪哩唷', S.PAD + (logo ? 94 : 0), 300);
+  c.fillStyle = YEL; c.font = `800 22px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, 'CICI RADIO', S.PAD + (logo ? 96 : 2), 332, 6, 'left');
+  if(meta.pages > 1){ c.fillStyle = 'rgba(255,255,255,.95)'; tcfPlanRR(c, W - S.PAD - 150, 268, 150, 54, 27); c.fill(); c.fillStyle = BLUE; c.font = `900 30px ${TCF_SHARE_FONT_DI}`; c.textAlign = 'center'; c.fillText(`${meta.page} / ${meta.pages}`, W - S.PAD - 75, 306); }
   // 標題
-  c.fillStyle = YEL; c.font = `700 24px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, 'TAIPEI INTERNATIONAL COMEDY FESTIVAL', W / 2, 206, 5, 'center');
-  c.fillStyle = '#fff'; c.font = `900 96px ${TCF_SHARE_FONT_ZH}`; c.textAlign = 'center'; c.shadowColor = 'rgba(0,0,0,.18)'; c.shadowBlur = 16; c.shadowOffsetY = 4;
-  c.fillText('我的台北喜劇節', W / 2, 306); c.shadowColor = 'transparent';
-  c.fillStyle = YEL; c.font = `900 58px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, 'MY COMEDY FESTIVAL', W / 2, 370, 8, 'center');
-  c.fillStyle = 'rgba(255,255,255,.95)'; c.font = `700 30px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, meta.range, W / 2, 418, 4, 'center');
+  c.fillStyle = YEL; c.font = `700 22px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, 'TAIPEI INTERNATIONAL COMEDY FESTIVAL', W / 2, 394, 5, 'center');
+  c.fillStyle = '#fff'; c.font = `900 84px ${TCF_SHARE_FONT_ZH}`; c.textAlign = 'center'; c.shadowColor = 'rgba(0,0,0,.18)'; c.shadowBlur = 16; c.shadowOffsetY = 4;
+  c.fillText('我的台北喜劇節', W / 2, 474); c.shadowColor = 'transparent';
+  c.fillStyle = YEL; c.font = `900 46px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, 'MY COMEDY FESTIVAL', W / 2, 532, 8, 'center');
+  c.fillStyle = 'rgba(255,255,255,.95)'; c.font = `700 28px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, meta.range, W / 2, 574, 4, 'center');
   // 內容
   let y = S.HEAD + S.BODYPAD;
   const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
@@ -7001,10 +7003,10 @@ function tcfPlanDrawPage(page, tier, meta, opts, logo){
   const fg = c.createLinearGradient(0, H - S.FOOT, W, H); fg.addColorStop(0, BLUE); fg.addColorStop(1, BLUE2);
   c.fillStyle = fg; c.fillRect(0, H - S.FOOT, W, S.FOOT + 80); c.restore();
   c.fillStyle = YEL; c.fillRect(0, H - S.FOOT, W, 0);
-  c.textAlign = 'left'; c.fillStyle = '#fff'; c.font = `900 70px ${TCF_SHARE_FONT_ZH}`; c.fillText(`這次要看 ${meta.total} 場！`, S.PAD, H - S.FOOT + 92);
-  if(opts.price && meta.priceText){ c.fillStyle = YEL; c.font = `800 32px ${TCF_SHARE_FONT_ZH}`; c.fillText(meta.priceText, S.PAD, H - S.FOOT + 168); }
-  c.textAlign = 'right'; c.fillStyle = '#fff'; c.font = `800 34px ${TCF_SHARE_FONT_DI}`; c.fillText('cici-radio.vercel.app', W - S.PAD, H - S.FOOT + 88);
-  c.fillStyle = YEL; c.font = `700 24px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, '嘻嘻哪哩唷 CICI RADIO', W - S.PAD, H - S.FOOT + 130, 3, 'right');
+  c.textAlign = 'left'; c.fillStyle = '#fff'; c.font = `900 52px ${TCF_SHARE_FONT_ZH}`; c.fillText(`這次要看 ${meta.total} 場！`, S.PAD, H - S.FOOT + 62);
+  if(opts.price && meta.priceText){ c.fillStyle = YEL; c.font = `800 28px ${TCF_SHARE_FONT_ZH}`; c.fillText(meta.priceText, S.PAD, H - S.FOOT + 106); }
+  c.textAlign = 'right'; c.fillStyle = '#fff'; c.font = `800 30px ${TCF_SHARE_FONT_DI}`; c.fillText('cici-radio.vercel.app', W - S.PAD, H - S.FOOT + 60);
+  c.fillStyle = YEL; c.font = `700 24px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, '嘻嘻哪哩唷 CICI RADIO', W - S.PAD, H - S.FOOT + 102, 3, 'right');
   return c0;
 }
 // ── 預覽視窗 ──
@@ -7019,7 +7021,7 @@ function tcfPlanEnsureShareDom(){
   ov.innerHTML = `<div class="tcf-share-box" role="dialog" aria-label="我的台北喜劇節 分享圖片">
     <button type="button" class="ts-close" aria-label="關閉" onclick="tcfPlanCloseShare()">✕</button>
     <h3>我的台北喜劇節・分享圖片</h3>
-    <p class="ts-sub">這張就是你要分享的觀演表（9:16，適合 Instagram 限時動態）。圖片只有日期、時間、演出與場地，不會包含人數、身心障礙、陪同或票種資格資訊。</p>
+    <p class="ts-sub">這張就是你要分享的觀演表（9:16，已預留 Instagram 限時動態上下的安全區，文字不會被帳號列或回覆列蓋住）。圖片只有日期、時間、演出與場地，不會包含人數、身心障礙、陪同或票種資格資訊。</p>
     <div class="ts-daysbox"><div class="ts-days-h"><span>要生成哪幾天？</span><span><button type="button" onclick="tcfPlanShareDaysAll(true)">全選</button><button type="button" onclick="tcfPlanShareDaysAll(false)">全不選</button></span></div><div id="ts-days" class="ts-days"></div></div>
     <div class="ts-opts"><label><input type="checkbox" id="ts-price" onchange="tcfPlanShareOpt('price',this.checked)"> 顯示預估票價</label><label><input type="checkbox" id="ts-wide" onchange="tcfPlanShareOpt('wide',this.checked)"> 雙欄排列（橫向，張數較少）</label></div>
     <div id="ts-auto" class="ts-auto"></div>
