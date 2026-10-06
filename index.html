@@ -1736,6 +1736,18 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .ts-btn.ghost{background:#fff;color:var(--tcf-pink);border:1.5px solid var(--tcf-pink)}
 .ts-hint{margin-top:12px;font-size:.68rem;line-height:1.6;color:var(--ts)}
 html.ts-lock{overflow:hidden}
+/* ── 修正手機版跑版：grid／flex 的子元素預設 min-width:auto，會被不換行的日期列撐出螢幕寬度 ── */
+#tcf-plan,.pl-wrap,.pl-grid,.pl-mainc,.pl-card,.pl-list,.pl-tabs{min-width:0;max-width:100%}
+.pl-mainc .tcf-m-ds{max-width:100%}
+.pl-tabs button{padding:8px 16px}
+@media(max-width:768px){
+  .pl-grid{grid-template-columns:minmax(0,1fr)}
+  .pl-tabs{display:flex;width:100%}
+  .pl-tabs button{flex:1 1 auto;padding:8px 10px;font-size:.78rem;line-height:1.3}
+  .pl-tabs button:first-child{flex:0 0 auto}
+  .tcf-view-toggle{max-width:100%}
+  .tcf-view-toggle button[data-view="plan"]{white-space:normal;text-align:center;line-height:1.25;max-width:118px;padding:5px 10px}
+}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -2600,7 +2612,7 @@ html.ts-lock{overflow:hidden}
         <button type="button" data-view="cards" class="on" onclick="setTcfView('cards')"><span class="zh-text">全部一覽</span><span class="en-text">All shows</span></button>
         <button type="button" data-view="agenda" class="tcf-vw-agenda" onclick="setTcfView('agenda')"><span class="zh-text">每日時刻表</span><span class="en-text">Daily schedule</span></button>
         <button type="button" data-view="period" onclick="setTcfView('period')"><span class="zh-text"><span class="tcf-lbl-d">全活動時刻表</span><span class="tcf-lbl-m">時刻表</span></span><span class="en-text"><span class="tcf-lbl-d">Full schedule</span><span class="tcf-lbl-m">Schedule</span></span></button>
-        <button type="button" data-view="plan" onclick="setTcfView('plan')"><span class="zh-text"><span class="tcf-lbl-d">規劃我的行程</span><span class="tcf-lbl-m">我的行程</span></span><span class="en-text">My plan</span></button>
+        <button type="button" data-view="plan" onclick="setTcfView('plan')"><span class="zh-text">客製化我的喜劇節行程</span><span class="en-text">My custom plan</span></button>
       </div>
     </div>
     <div class="tcf-date-bar" id="tcf-date-bar">
@@ -3796,7 +3808,7 @@ html.ts-lock{overflow:hidden}
   <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path></svg></span> <span class="zh-text">台北喜劇節官網</span><span class="en-text">Official Site</span>
 </a>
 
-<!-- 「規劃我的行程」手機版底部摘要列（放在頁面外層：頁面進場動畫會讓 fixed 定位失準） -->
+<!-- 「客製化我的喜劇節行程」手機版底部摘要列（放在頁面外層：頁面進場動畫會讓 fixed 定位失準） -->
 <div id="tcf-plan-bar" class="tcf-plan-bar" hidden></div>
 
 <!-- 台北喜劇節「回到頂端」按鈕（只在喜劇節頁、捲動超過一段距離後出現；位置在官網浮動鈕正上方） -->
@@ -5811,7 +5823,7 @@ function applyTcfView(){
   if(tg) tg.querySelectorAll('button').forEach(b=>b.classList.toggle('on', b.dataset.view === tcfView));
   if(host) host.style.display = (agendaOn||periodOn||planOn) ? 'none' : '';
   const dBar = document.getElementById('tcf-date-bar');
-  if(dBar) dBar.style.display = (periodOn||planOn) ? 'none' : ''; // 全活動時刻表＝總表、規劃我的行程有自己的日期列，都不用上方日期列
+  if(dBar) dBar.style.display = (periodOn||planOn) ? 'none' : ''; // 全活動時刻表＝總表、客製化我的喜劇節行程有自己的日期列，都不用上方日期列
   if(ag){
     ag.hidden = !(agendaOn||periodOn);
     if(agendaOn) renderTcfAgenda(); else if(periodOn) renderTcfPeriod();
@@ -6387,7 +6399,7 @@ function tcfPlanSummaryHTML(ctx, compact){
     <div class="pl-sum-total"><span>預估票價</span><b>${tcfMoney(ctx.total)}</b></div>
     ${ctx.uncalc ? `<div class="pl-sum-un">另有 ${ctx.uncalc} 場票價未納入試算。</div>` : ''}
     ${ctx.clashes.length ? `<div class="pl-sum-warn">有 ${ctx.clashes.length} 組時間撞到了</div>` : ''}
-    <button type="button" class="pl-cta" onclick="tcfPlanTab('mine')">查看我的行程</button>
+    <button type="button" class="pl-cta" onclick="tcfPlanTab('mine')">查看客製化行程</button>
     <button type="button" class="pl-cta2" onclick="tcfPlanOpenShare()">產生我的觀演表</button>
     <p class="pl-fine">票價依目前公開資訊與販售期間估算，實際票價、剩餘票券與購票規則請以官方售票頁面為準。</p></div>`;
 }
@@ -6418,7 +6430,7 @@ function tcfPlanMineHTML(ctx){
     ${body}
     <div class="pl-total"><div><span>共 ${ctx.selected.length} 場${ctx.uncalc ? `，${ctx.okN} 場可試算` : ''}</span><b>預估票價 ${tcfMoney(ctx.total)}</b>${ctx.uncalc ? `<small>另有 ${ctx.uncalc} 場票價未納入試算。</small>` : ''}</div></div>
     ${checks}
-    <div class="pl-final"><button type="button" class="pl-cta" onclick="tcfPlanOpenShare()">產生我的觀演表</button><button type="button" class="pl-clear" onclick="tcfPlanClear()">清空我的行程</button></div>
+    <div class="pl-final"><button type="button" class="pl-cta" onclick="tcfPlanOpenShare()">產生我的觀演表</button><button type="button" class="pl-clear" onclick="tcfPlanClear()">清空客製化行程</button></div>
     <p class="pl-fine">票價依目前公開資訊與販售期間估算，實際票價、剩餘票券與購票規則請以官方售票頁面為準。特殊票種可能有資格、證件、席位或購票方式限制，實際規定請以官方售票頁面為準。</p>`;
 }
 function tcfPlanRender(){
@@ -6427,7 +6439,7 @@ function tcfPlanRender(){
   const ctx = tcfPlanBuildCtx();
   const tab = _tcfPlanUI.tab;
   box.innerHTML = `<div class="pl-wrap">
-    <div class="pl-tabs"><button type="button" class="${tab === 'pick' ? 'on' : ''}" onclick="tcfPlanTab('pick')">選演出</button><button type="button" class="${tab === 'mine' ? 'on' : ''}" onclick="tcfPlanTab('mine')">我的行程${ctx.selected.length ? `（${ctx.selected.length}）` : ''}</button></div>
+    <div class="pl-tabs"><button type="button" class="${tab === 'pick' ? 'on' : ''}" onclick="tcfPlanTab('pick')">選演出</button><button type="button" class="${tab === 'mine' ? 'on' : ''}" onclick="tcfPlanTab('mine')">客製化我的喜劇節行程${ctx.selected.length ? `（${ctx.selected.length}）` : ''}</button></div>
     <div class="pl-grid"><div class="pl-mainc">${tab === 'pick' ? tcfPlanPickHTML(ctx) : tcfPlanMineHTML(ctx)}</div><aside class="pl-side">${tcfPlanSummaryHTML(ctx)}</aside></div></div>`;
   tcfPlanBarSync(ctx);
 }
@@ -6439,7 +6451,7 @@ function tcfPlanBarSync(ctx){
   document.body.classList.toggle('tcf-plan-mode', !!(pg && pg.classList.contains('active')) && tcfView === 'plan');
   if(!on){ bar.hidden = true; return; }
   bar.hidden = false;
-  bar.innerHTML = `<div class="pl-bar-in"><div class="pl-bar-t"><b>已選 ${ctx.selected.length} 場｜預估 ${tcfMoney(ctx.total)}</b>${ctx.uncalc ? `<small>${ctx.uncalc} 場票價未計入</small>` : ''}</div><button type="button" onclick="tcfPlanTab('mine')">查看我的行程</button></div>`;
+  bar.innerHTML = `<div class="pl-bar-in"><div class="pl-bar-t"><b>已選 ${ctx.selected.length} 場｜預估 ${tcfMoney(ctx.total)}</b>${ctx.uncalc ? `<small>${ctx.uncalc} 場票價未計入</small>` : ''}</div><button type="button" onclick="tcfPlanTab('mine')">查看客製化行程</button></div>`;
 }
 
 // ══ 分享圖片（Canvas 專用 share card，由 planner state 直接繪製；不是網頁截圖）══
