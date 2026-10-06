@@ -1338,7 +1338,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-tt td{vertical-align:top;padding:6px;border-top:1px solid rgba(45,43,31,.08);border-left:1px solid rgba(45,43,31,.06);background:#fff}
 .tcf-tt td.is-empty{background:rgba(45,43,31,.025)}
 .tcf-tt tr.tcf-tt-emptyrow td{text-align:center;color:var(--ts);font-size:.76rem;padding:9px;background:rgba(45,43,31,.025)}
-.tcf-tt tbody tr:last-child th.tcf-tt-date{border-bottom-left-radius:12px}
+.tcf-tt tbody:last-of-type tr:first-child th.tcf-tt-date{border-bottom-left-radius:12px}
 .tcf-tt-item{display:block;background:rgba(30,71,218,.07);border-left:3px solid var(--tcf-pink);border-radius:7px;padding:5px 7px;margin-bottom:5px;cursor:pointer;transition:.15s;font-size:.74rem;line-height:1.35}
 .tcf-tt-item:last-child{margin-bottom:0}
 .tcf-tt-item:hover{background:rgba(30,71,218,.14);box-shadow:0 3px 10px rgba(30,71,218,.16)}
@@ -1482,6 +1482,29 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tt-del:hover{border-color:#c0392b;color:#c0392b}
 .tt-note{margin-top:8px;font-size:.76rem;line-height:1.6;color:#8a5a00;background:var(--py);border:1.5px solid rgba(245,213,88,.8);border-radius:var(--r-md);padding:8px 12px;font-family:var(--f-zh)}
 @media(max-width:600px){.tt-row{grid-template-columns:1fr 1fr}.tt-row .tt-f:first-child{grid-column:1/-1}.tt-row .tt-sale{grid-template-columns:1fr}}
+/* 全活動時刻表：日與日之間用實線分隔，同一天內不同開演時間用虛線分隔，方便看出先後 */
+.tcf-tt tbody+tbody th,.tcf-tt tbody+tbody td{border-top:2px solid rgba(30,71,218,.2)}
+.tcf-tt tbody tr+tr td{border-top:1px dashed rgba(45,43,31,.14)}
+/* ── 全活動時刻表：每天交錯底色（以「天」為單位，同一天的多個時間列同色；週末日期格維持橘調）── */
+.tcf-tt tbody:nth-of-type(even) td{background:#eaf0ff}
+.tcf-tt tbody:nth-of-type(even) td.is-empty{background:#dfe6f9}
+.tcf-tt tbody:nth-of-type(even) th.tcf-tt-date{background:#d9e3ff}
+.tcf-tt tbody:nth-of-type(even) th.tcf-tt-date.is-weekend{background:#ffe9d2}
+.tcf-tt tbody:nth-of-type(even) tr.tcf-tt-emptyrow td{background:#e3e9fa}
+.tcf-tt tbody:nth-of-type(even) .tcf-tt-item{background:rgba(255,255,255,.88);box-shadow:0 1px 0 rgba(30,71,218,.1)}
+.tcf-tt tbody:nth-of-type(even) .tcf-tt-item:hover{background:#fff}
+/* ── 全活動時刻表：手機版＝同一張總表，可上下左右滑動；日期欄與表頭固定 ── */
+@media(max-width:768px){
+  .tcf-tt-wrap{overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;max-height:calc(100vh - var(--nav) - var(--tcf-bar-h,0px) - 28px);max-height:calc(100dvh - var(--nav) - var(--tcf-bar-h,0px) - 28px);border-radius:14px;border:1.5px solid rgba(30,71,218,.2);background:#fff}
+  .tcf-tt{border:0;border-radius:0}
+  .tcf-tt thead th{top:0;font-size:.7rem;padding:8px 4px}
+  .tcf-tt thead th:first-child,.tcf-tt thead th:last-child{border-radius:0}
+  .tcf-tt thead th.tcf-tt-date{left:0;z-index:8}
+  .tcf-tt tbody th.tcf-tt-date{position:sticky;left:0;z-index:4;box-shadow:2px 0 0 rgba(30,71,218,.12)}
+  .tcf-tt tbody:last-of-type tr:first-child th.tcf-tt-date{border-bottom-left-radius:0}
+  .tcf-tt-item{font-size:.7rem}
+  .tcf-tt tr.tcf-tt-emptyrow td{position:sticky;left:62px;text-align:left;white-space:nowrap}
+}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -5641,18 +5664,22 @@ function renderTcfPeriod(){
     return `<div class="tcf-tt-item${x.soldOut?' is-sold':''}" onclick="openShowDetail('${tcfEsc(x.id)}')" title="${tip}"><b>${tcfEsc(tcfStartTime(x) || (en?'TBA':'時間未定'))}</b><span>${tcfEsc(tcfTTTitle(x.title))}</span>${sold}${tag}</div>`;
   };
   const head = `<thead><tr><th class="tcf-tt-date"></th>${cols.map(c=>`<th>${tcfEsc(c.label)}</th>`).join('')}</tr></thead>`;
+  // 每天一個 <tbody>；同一天裡「每個不同的開演時間」各占一列 → 同時間開演的演出跨場地水平對齊，先開演的在上、後開演的在下
   const rows = days.map(d=>{
     const list = tcfSortByTime(base.filter(x=>tcfShowHasDate(x, d.ds)));
     const wk = (d.dow===0 || d.dow===6) ? ' is-weekend' : '';
-    const dateCell = `<th class="tcf-tt-date${wk}"><b>${d.mm}/${d.dd}</b><small>${DOW[d.dow]}</small></th>`;
-    if(!list.length) return `<tr id="tcf-day-${d.ds}" class="tcf-tt-emptyrow">${dateCell}<td colspan="${cols.length}">${en?'No shows announced yet':'尚未公布演出'}</td></tr>`;
-    return `<tr id="tcf-day-${d.ds}">${dateCell}${cols.map(c=>{
-      const here = list.filter(x=>colOf(x)===c.id);
+    const dateCell = n => `<th class="tcf-tt-date${wk}"${n>1?` rowspan="${n}"`:''}><b>${d.mm}/${d.dd}</b><small>${DOW[d.dow]}</small></th>`;
+    if(!list.length) return `<tbody><tr id="tcf-day-${d.ds}" class="tcf-tt-emptyrow">${dateCell(1)}<td colspan="${cols.length}">${en?'No shows announced yet':'尚未公布演出'}</td></tr></tbody>`;
+    const times = [];
+    list.forEach(x=>{ const t = tcfStartTime(x) || ''; if(!times.includes(t)) times.push(t); });
+    times.sort((x,y)=>(x||'99:99').localeCompare(y||'99:99')); // 沒填時間的放最後
+    return '<tbody>' + times.map((t,i)=>`<tr${i===0?` id="tcf-day-${d.ds}"`:''}>${i===0?dateCell(times.length):''}${cols.map(c=>{
+      const here = list.filter(x=>colOf(x)===c.id && (tcfStartTime(x)||'')===t);
       return `<td${here.length?'':' class="is-empty"'}>${here.map(item).join('')}</td>`;
-    }).join('')}</tr>`;
+    }).join('')}</tr>`).join('') + '</tbody>';
   }).join('');
   const tblStyle = window.innerWidth <= 768 ? ` style="width:${62+cols.length*124}px;max-width:none"` : '';
-  box.innerHTML = summary + `<div class="tcf-tt-wrap"><table class="tcf-tt"${tblStyle}>${head}<tbody>${rows}</tbody></table></div>`;
+  box.innerHTML = summary + `<div class="tcf-tt-wrap"><table class="tcf-tt"${tblStyle}>${head}${rows}</table></div>`;
 }
 // 喜劇節頁「回到頂端」：只在喜劇節頁、捲過一段距離後顯示（不改 showPage，改用 class 觀察 + scroll 事件）
 (function(){
