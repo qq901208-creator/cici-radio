@@ -25,8 +25,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="dns-prefetch" href="https://firestore.googleapis.com">
 <link rel="dns-prefetch" href="https://www.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=Big+Shoulders+Display:wght@900&display=swap" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=Big+Shoulders+Display:wght@900&display=swap" rel="stylesheet"></noscript>
 <style>
 :root{
   --y:#f5d558;--py:#ffefa6;--cr:#ebecd7;--or:#ef6f20;
@@ -1436,6 +1436,49 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   .tcf-hero-actions .tcf-hero-shortcuts{display:flex;gap:10px;justify-content:center}
 }
 @media(max-width:768px){.sc-age-badge{top:5px;right:5px;font-size:.56rem;padding:1px 5px}}
+
+/* ── Phase 2：檔期時刻表「每天交錯底色」（奇數天白、偶數天淡藍；週末日期格維持橘調）── */
+.tcf-tt tbody tr:nth-child(even) td{background:#eaf0ff}
+.tcf-tt tbody tr:nth-child(even) td.is-empty{background:#dfe6f9}
+.tcf-tt tbody tr:nth-child(even) th.tcf-tt-date{background:#d9e3ff}
+.tcf-tt tbody tr:nth-child(even) th.tcf-tt-date.is-weekend{background:#ffe9d2}
+.tcf-tt tbody tr:nth-child(even).tcf-tt-emptyrow td{background:#e3e9fa}
+.tcf-tt tbody tr:nth-child(even) .tcf-tt-item{background:rgba(255,255,255,.88);box-shadow:0 1px 0 rgba(30,71,218,.1)}
+.tcf-tt tbody tr:nth-child(even) .tcf-tt-item:hover{background:#fff}
+/* ── Phase 2：手機版檔期時刻表＝同桌機的「日期 × 場地」表格，可上下左右滑動；日期欄與表頭固定 ── */
+@media(max-width:768px){
+  .tcf-tt-wrap{overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;max-height:calc(100vh - var(--nav) - var(--tcf-bar-h,57px) - 28px);max-height:calc(100dvh - var(--nav) - var(--tcf-bar-h,57px) - 28px);border-radius:14px;border:1.5px solid rgba(30,71,218,.2);background:#fff}
+  .tcf-tt{border:0;border-radius:0}
+  .tcf-tt thead th{top:0;font-size:.7rem;padding:8px 4px}
+  .tcf-tt thead th:first-child,.tcf-tt thead th:last-child{border-radius:0}
+  .tcf-tt thead th.tcf-tt-date{left:0;z-index:8}
+  .tcf-tt tbody th.tcf-tt-date{position:sticky;left:0;z-index:4;box-shadow:2px 0 0 rgba(30,71,218,.12)}
+  .tcf-tt tbody tr:last-child th.tcf-tt-date{border-bottom-left-radius:0}
+  .tcf-tt-item{font-size:.7rem}
+  .tcf-tt tr.tcf-tt-emptyrow td{position:sticky;left:62px;text-align:left;white-space:nowrap}
+}
+/* ── Phase 2：手機版「重置」改到搜尋欄右側（搜尋欄縮短）；桌機維持原本位置 ── */
+.shows-search-reset{display:none}
+@media(max-width:768px){
+  .shows-search-row{flex-direction:row;flex-wrap:wrap;align-items:stretch;gap:8px}
+  .shows-search-row .shows-search-wrap{flex:1 1 0;min-width:0}
+  .shows-search-row .shows-search-reset{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;padding:0 14px}
+  .shows-search-row #tcf-quickfilter-row{flex:0 0 100%}
+  .filter-reset-wrap{display:none!important}
+  #page-tcf .filter-dropdowns{display:none!important}
+}
+/* ── Phase 2：喜劇節頁「回到頂端」按鈕 ── */
+.tcf-top-btn{position:fixed;right:26px;bottom:76px;z-index:249;width:44px;height:44px;padding:0;border-radius:50%;border:1.5px solid var(--tcf-pink);background:#fff;color:var(--tcf-pink);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 18px rgba(30,71,218,.28);opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .2s,transform .2s,visibility .2s,background .15s,color .15s}
+.tcf-top-btn.show{opacity:1;visibility:visible;transform:none}
+.tcf-top-btn:hover{background:var(--tcf-pink);color:#fff}
+@media(max-width:768px){.tcf-top-btn{width:42px;height:42px}}
+/* ── Phase 2：橫幅日期（G：Big Shoulders 起迄兩段＋箭頭）── */
+.tcf-hero-date{display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,20px);margin:4px 0 14px;letter-spacing:0;text-shadow:none}
+.tcf-hero-date .hd-p{display:flex;flex-direction:column;align-items:center;line-height:.95}
+.tcf-hero-date .hd-p b{font-family:'Big Shoulders Display',var(--f-di),sans-serif;font-weight:900;font-size:clamp(2.5rem,9vw,3.9rem);letter-spacing:.01em;color:var(--y);text-shadow:0 3px 0 rgba(0,0,0,.2)}
+.tcf-hero-date .hd-p small{font-family:var(--f-bo);font-weight:700;font-size:.7rem;letter-spacing:.2em;text-indent:.2em;color:#fff;margin-top:5px}
+.tcf-hero-date .hd-line{width:clamp(26px,7vw,56px);height:3px;background:linear-gradient(90deg,transparent,#fff);border-radius:3px;position:relative;margin-bottom:18px}
+.tcf-hero-date .hd-line::after{content:'';position:absolute;right:-1px;top:50%;width:8px;height:8px;border-top:3px solid #fff;border-right:3px solid #fff;transform:translateY(-50%) rotate(45deg)}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -1826,6 +1869,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
       <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
       <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="showsPage=1;renderShows();syncFiltersToURL()">
     </div>
+    <button type="button" onclick="resetAllFilters()" class="filter-reset-btn shows-search-reset" aria-label="重置篩選 Reset">✕ <span class="zh-text">重置</span><span class="en-text">Reset</span></button>
     <div id="tcf-quickfilter-row">
       <button class="tcf-quickfilter" id="tcf-quickfilter-btn" onclick="toggleTcfFilter()"><span class="zh-text">台北喜劇節</span><span class="en-text">Comedy Festival</span></button>
     </div>
@@ -1913,7 +1957,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
           </select>
         </div>
         <!-- 重置篩選按鈕 -->
-        <div class="filter-dropdown-wrap" style="display:flex;align-items:flex-end">
+        <div class="filter-dropdown-wrap filter-reset-wrap" style="display:flex;align-items:flex-end">
           <button onclick="resetAllFilters()" class="filter-reset-btn">✕ <span class="zh-text">重置</span><span class="en-text">Reset</span></button>
         </div>
       </div>
@@ -2277,7 +2321,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
     <div class="tcf-hero-inner">
       <div class="eyebrow">TAIPEI INTERNATIONAL COMEDY FESTIVAL</div>
       <h1 class="zh-only">2026台北喜劇節</h1>
-      <div class="tcf-hero-date">11.26-12.06</div>
+      <div class="tcf-hero-date" aria-label="11.26-12.06"><div class="hd-p"><b>11.26</b><small>THU</small></div><div class="hd-line"></div><div class="hd-p"><b>12.06</b><small>SUN</small></div></div>
       <div class="tcf-hero-actions">
       <a href="#" id="tcf-official-link" class="tcf-hero-official" target="_blank" rel="noopener">↗ <span class="zh-text">台北喜劇節官方網站</span><span class="en-text">Official Website</span></a>
       <div class="tcf-hero-shortcuts">
@@ -3480,6 +3524,9 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 <a href="#" id="tcf-official-fab" class="tcf-official-fab" target="_blank" rel="noopener">
   <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path></svg></span> <span class="zh-text">台北喜劇節官網</span><span class="en-text">Official Site</span>
 </a>
+
+<!-- 台北喜劇節「回到頂端」按鈕（只在喜劇節頁、捲動超過一段距離後出現；位置在官網浮動鈕正上方） -->
+<button type="button" id="tcf-top-btn" class="tcf-top-btn" aria-label="回到頂端 Back to top" title="回到頂端 Back to top"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
 
 <!-- 資訊回報浮動按鈕 -->
 <button class="report-fab" id="report-fab-btn" onclick="document.getElementById('modal-report').classList.add('open')">
@@ -5385,7 +5432,8 @@ function renderTcfDateChips(){
 // ── 喜劇節頁專用場地 pills（獨立於全站場地資料，只用在喜劇節頁）──
 // 合作場地尚未完整公開：之後要增減，只要改這份清單。kws = 比對 venueLabel／venue 的關鍵字；id 與全站場地相同者也會用 s.venue 精準比對
 const TCF_VENUES = [
-  {id:'comedy-plus', zh:'卡米地＋',       en:'Comedy Plus',      kws:['卡米地','comedy plus']},
+  {id:'comedy-plus-main',  zh:'卡米地＋大廳', en:'Comedy Plus Main Hall',  kws:['卡米地','comedy plus'], hall:'main'},
+  {id:'comedy-plus-small', zh:'卡米地＋小廳', en:'Comedy Plus Small Hall', kws:['卡米地','comedy plus'], hall:'small'},
   {id:'two-three',   zh:'23喜劇',         en:'Two Three Comedy', kws:['23喜劇','two three']},
   {id:'ponwo',       zh:'月半窩',         en:'Ponwo Cafe',       kws:['月半窩','ponwo']},
   {id:'dikia',       zh:'底加書店',       en:'Titsia Bookstore', kws:['底加','titsia']},
@@ -5393,9 +5441,26 @@ const TCF_VENUES = [
   {id:'tcf-zhongying-bade', zh:'中影八德大樓', en:'Auditorium Room - Central Motion Picture Corporation', kws:['中影','八德']},
   {id:'tcf-redhouse',       zh:'西門紅樓',       en:'The Red House 2F Theater', kws:['西門紅樓','紅樓','red house']},
 ];
-function tcfVenueMatch(s, id){
+// 卡米地＋的廳別：從 venueLabel／venue 文字判斷（含「大廳」或「小廳」）；沒標廳別回傳空字串
+function tcfHallOf(s){
+  const t = ((s.venueLabel||'') + ' ' + (s.venue||'')).toLowerCase();
+  if(/大廳|main hall|big hall/.test(t)) return 'main';
+  if(/小廳|small hall/.test(t)) return 'small';
+  return '';
+}
+// strict=true：卡米地＋沒標廳別的演出不算任何一廳（檔期時刻表用，歸「其他」欄）；
+// strict=false（預設，場地 pills 篩選用）：沒標廳別的卡米地＋演出，大廳／小廳兩顆 pill 都會顯示，不會漏掉
+function tcfVenueMatch(s, id, strict){
   const lbl = ((s.venueLabel||'') + ' ' + (s.venue||'')).toLowerCase();
-  const hit = v => s.venue===v.id || v.kws.some(k=>lbl.includes(k.toLowerCase()));
+  const hit = v => {
+    if(v.hall){
+      const isCP = s.venue==='comedy-plus' || v.kws.some(k=>lbl.includes(k.toLowerCase()));
+      if(!isCP) return false;
+      const h = tcfHallOf(s);
+      return h===v.hall || (h==='' && !strict);
+    }
+    return s.venue===v.id || v.kws.some(k=>lbl.includes(k.toLowerCase()));
+  };
   if(id==='other') return !TCF_VENUES.some(hit);
   const v = TCF_VENUES.find(x=>x.id===id);
   return v ? hit(v) : false;
@@ -5519,7 +5584,7 @@ function renderTcfAgenda(){
   if(typeof initPriceExpand==='function') initPriceExpand(box); // 票價展開：沿用演出卡片同一套
 }
 // 檔期演出時刻表：整個喜劇節檔期。
-// 電腦版＝表格（列＝日期、欄＝場地，格子裡依開演時間列出該場地當天的演出）；手機版＝逐日條列（表格放不下 8 欄）
+// 列＝日期、欄＝場地，格子裡依開演時間列出該場地當天的演出；手機版同一張表，外層可滑動
 function tcfBarHeightSync(){
   const bar = document.getElementById('tcf-date-bar');
   if(bar) document.documentElement.style.setProperty('--tcf-bar-h', bar.offsetHeight + 'px');
@@ -5534,16 +5599,9 @@ function renderTcfPeriod(){
   const fmt = ds => ds.slice(5).replace('-','.');
   const summary = `<div class="tcf-ag-summary" id="tcf-period-top">${fmt(TCF_DATE_START)}–${fmt(TCF_DATE_END)}<span>${en?`${base.length} shows`:`共 ${base.length} 場`}</span></div>`;
   tcfBarHeightSync();
-  if(window.innerWidth <= 768){
-    box.innerHTML = summary + days.map(d=>
-      `<section class="tcf-ag-day">${tcfDayBlockHTML(d, tcfSortByTime(base.filter(s=>tcfShowHasDate(s, d.ds))), en, adminMode)}</section>`
-    ).join('');
-    if(typeof initPriceExpand==='function') initPriceExpand(box);
-    return;
-  }
-  // ── 電腦版：日期 × 場地 表格 ──
+  // ── 日期 × 場地 表格（電腦版與手機版共用；手機版表格較寬，外層可橫向／縱向滑動，日期欄與表頭固定）──
   const DOW = en ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : ['日','一','二','三','四','五','六'];
-  const colOf = s => { const v = TCF_VENUES.find(x=>tcfVenueMatch(s, x.id)); return v ? v.id : 'other'; };
+  const colOf = s => { const v = TCF_VENUES.find(x=>tcfVenueMatch(s, x.id, true)); return v ? v.id : 'other'; };
   const cols = TCF_VENUES.map(v=>({id:v.id, label: en ? v.en : v.zh}));
   if(base.some(s=>colOf(s)==='other')) cols.push({id:'other', label: en ? 'Other' : '其他'});
   const item = s => {
@@ -5564,18 +5622,43 @@ function renderTcfPeriod(){
       return `<td${here.length?'':' class="is-empty"'}>${here.map(item).join('')}</td>`;
     }).join('')}</tr>`;
   }).join('');
-  box.innerHTML = summary + `<div class="tcf-tt-wrap"><table class="tcf-tt">${head}<tbody>${rows}</tbody></table></div>`;
+  const tblStyle = window.innerWidth <= 768 ? ` style="width:${62+cols.length*124}px;max-width:none"` : '';
+  box.innerHTML = summary + `<div class="tcf-tt-wrap"><table class="tcf-tt"${tblStyle}>${head}<tbody>${rows}</tbody></table></div>`;
 }
 // 檔期時刻表：日期 chip 的「跳到那一天」
 function tcfScrollToDay(ds){
   const el = ds==='all' ? document.getElementById('tcf-period-top') : document.getElementById('tcf-day-'+ds);
   if(!el) return;
+  // 手機版：表格外層自己會捲動，直接把那一天捲到表頭下方
+  const wrap = el.closest ? el.closest('.tcf-tt-wrap') : null;
+  if(wrap && wrap.scrollHeight > wrap.clientHeight + 2 && getComputedStyle(wrap).overflowY !== 'visible'){
+    const th = wrap.querySelector('thead');
+    const y = el.getBoundingClientRect().top - wrap.getBoundingClientRect().top + wrap.scrollTop - (th ? th.offsetHeight : 0);
+    wrap.scrollTo({top: Math.max(0, y), behavior:'smooth'});
+    return;
+  }
   const bar = document.getElementById('tcf-date-bar');
   const stickyTop = bar ? (parseFloat(getComputedStyle(bar).top) || 0) : 0;
   const thead = document.querySelector('#tcf-agenda .tcf-tt thead');
   const offset = stickyTop + (bar ? bar.offsetHeight : 0) + (thead ? thead.offsetHeight : 0) + 10;
   window.scrollTo({top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - offset), behavior:'smooth'});
 }
+// 喜劇節頁「回到頂端」：只在喜劇節頁、捲過一段距離後顯示（不改 showPage，改用 class 觀察 + scroll 事件）
+(function(){
+  const btn = document.getElementById('tcf-top-btn');
+  if(!btn) return;
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const onTcf = !!document.getElementById('page-tcf')?.classList.contains('active');
+    btn.classList.toggle('show', onTcf && window.scrollY > 480);
+  };
+  window.addEventListener('scroll', () => { if(!ticking){ ticking = true; requestAnimationFrame(update); } }, {passive:true});
+  btn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+  const pg = document.getElementById('page-tcf');
+  if(pg) new MutationObserver(update).observe(pg, {attributes:true, attributeFilter:['class']});
+  update();
+})();
 // 演出資訊月曆：喜劇節期間的日期上色（MutationObserver 後置標記，不更動 renderCalendar 系列函式）
 (function(){
   function mark(box){
