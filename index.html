@@ -1457,7 +1457,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 /* ── Phase 2：橫幅日期（G：Big Shoulders 起迄兩段＋箭頭）── */
 .tcf-hero-date{display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,20px);margin:4px 0 14px;letter-spacing:0;text-shadow:none}
 .tcf-hero-date .hd-p{display:flex;flex-direction:column;align-items:center;line-height:.95}
-.tcf-hero-date .hd-p b{font-family:'Big Shoulders Display',var(--f-di),sans-serif;font-weight:900;font-size:clamp(2.5rem,9vw,3.9rem);letter-spacing:.01em;color:var(--y);text-shadow:0 3px 0 rgba(0,0,0,.2)}
+.tcf-hero-date .hd-p b{font-family:'Big Shoulders Display',var(--f-di),sans-serif;font-weight:900;font-size:clamp(2.2rem,8vw,3.2rem);letter-spacing:.01em;color:var(--y);text-shadow:0 3px 0 rgba(0,0,0,.2)}
 .tcf-hero-date .hd-p small{font-family:var(--f-bo);font-weight:700;font-size:.7rem;letter-spacing:.2em;text-indent:.2em;color:#fff;margin-top:5px}
 .tcf-hero-date .hd-line{width:clamp(26px,7vw,56px);height:3px;background:linear-gradient(90deg,transparent,#fff);border-radius:3px;position:relative;margin-bottom:18px}
 .tcf-hero-date .hd-line::after{content:'';position:absolute;right:-1px;top:50%;width:8px;height:8px;border-top:3px solid #fff;border-right:3px solid #fff;transform:translateY(-50%) rotate(45deg)}
@@ -1566,6 +1566,39 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-m-ft .sc-price{margin-top:0}
 .tcf-m-buy{flex:0 0 auto;text-decoration:none;font-family:var(--f-zh);font-size:.76rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--tcf-pink),var(--tcf-pink2));padding:6px 13px;border-radius:999px;white-space:nowrap}
 .tcf-m-door{flex:0 0 auto;font-family:var(--f-zh);font-size:.72rem;font-weight:700;color:var(--ts);white-space:nowrap;padding-top:4px}
+/* ── 喜劇節頁進場動畫（比照首頁 hero：元素依序進場；每次切換到這一頁都會重播）── */
+@keyframes tcfLineWipe{from{clip-path:inset(-6px 100% -6px 0)}to{clip-path:inset(-6px -12px -6px 0)}}
+#page-tcf.active .tcf-hero-inner .eyebrow{animation:fadeUp .5s .05s ease both}
+.tcf-hero-inner h1 .kchar{display:inline-block;opacity:0;animation:kCharIn .5s cubic-bezier(.34,1.56,.64,1) both}
+.tcf-hero-inner h1,.tcf-hero-inner h1 .kchar{color:#fff}
+#page-tcf.active .tcf-hero-date .hd-p:first-child{animation:fadeUp .5s .42s ease both}
+#page-tcf.active .tcf-hero-date .hd-line{animation:tcfLineWipe .45s .6s ease both}
+#page-tcf.active .tcf-hero-date .hd-p:last-child{animation:fadeUp .5s .68s ease both}
+#page-tcf.active .tcf-hero-actions{animation:fadeUp .5s .88s ease both}
+#page-tcf.active .tcf-explore-tags{animation:fadeUp .5s .98s ease both}
+@media(prefers-reduced-motion:reduce){
+  #page-tcf.active .tcf-hero-inner .eyebrow,#page-tcf.active .tcf-hero-date .hd-p,#page-tcf.active .tcf-hero-date .hd-line,#page-tcf.active .tcf-hero-actions,#page-tcf.active .tcf-explore-tags{animation:none}
+  .tcf-hero-inner h1 .kchar{animation:none;opacity:1}
+}
+/* ── 喜劇節橫幅高度與首頁一致（--home-hero-h 由 tcfSyncHeroHeight 量首頁 hero 後寫入）；內容置中，版面比首頁略緊湊以確保放得下 ── */
+.tcf-hero{padding:44px 6vw 40px;display:flex;flex-direction:column;justify-content:center;min-height:var(--home-hero-h,0px)}
+.tcf-hero-inner{width:100%}
+.tcf-hero-inner h1{margin:4px 0 6px}
+.tcf-hero-date{margin:2px 0 10px}
+.tcf-hero-date .hd-line{margin-bottom:16px}
+@media(max-width:768px){
+  .tcf-hero{padding:26px 6vw 22px}
+  .tcf-hero-inner .eyebrow{font-size:.66rem}
+  .tcf-hero-inner h1{font-size:1.5rem;margin:3px 0 4px;line-height:1.25}
+  .tcf-hero-date{margin:0 0 8px;gap:12px}
+  .tcf-hero-date .hd-p b{font-size:clamp(1.7rem,7vw,2.1rem)}
+  .tcf-hero-date .hd-p small{font-size:.6rem;margin-top:3px}
+  .tcf-hero-date .hd-line{margin-bottom:12px;width:30px}
+  .tcf-hero-actions{margin-top:8px;gap:6px}
+  .tcf-hero-official{padding:8px 16px;font-size:.78rem}
+  .tcf-hero-actions .tcf-hero-shortcuts{gap:6px}
+  .tcf-hero-shortcuts a{padding:6px 12px;font-size:.72rem}
+}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -5860,6 +5893,72 @@ function renderTcfPeriod(){
   if(pg) new MutationObserver(update).observe(pg, {attributes:true, attributeFilter:['class']});
   update();
 })();
+// ── 喜劇節頁：橫幅高度與首頁 hero 一致 ＋ 首次進入時放彩帶 ──
+// 首頁 hero 高度由內容決定（桌機／手機不同），所以每次進入喜劇節頁時實際量一次，寫入 --home-hero-h，喜劇節橫幅以它為最小高度
+function tcfSyncHeroHeight(){
+  const home = document.getElementById('page-home');
+  const hero = home && home.querySelector('.hero');
+  if(!hero) return;
+  let h = 0;
+  if(home.classList.contains('active')){ h = hero.offsetHeight; }
+  else{
+    // 首頁目前是隱藏的：暫時讓它「看不見地」排版，量完立刻還原（同一個同步區段內，畫面不會閃）
+    const prev = home.getAttribute('style');
+    home.style.cssText = (prev ? prev + ';' : '') + 'display:block;visibility:hidden;position:absolute;left:0;right:0;top:0;pointer-events:none;animation:none';
+    h = hero.offsetHeight;
+    if(prev == null) home.removeAttribute('style'); else home.setAttribute('style', prev);
+  }
+  if(h > 60) document.documentElement.style.setProperty('--home-hero-h', h + 'px');
+}
+// 彩帶：canvas-confetti（CDN，進入喜劇節頁才載入；載入失敗就略過，不影響網站）。每次開啟網頁只放第一次
+let _tcfConfettiDone = false, _tcfConfettiLoading = null;
+function tcfLoadConfetti(){
+  if(window.confetti) return Promise.resolve(window.confetti);
+  if(_tcfConfettiLoading) return _tcfConfettiLoading;
+  _tcfConfettiLoading = new Promise(res=>{
+    const sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js';
+    sc.async = true;
+    sc.onload = () => res(window.confetti || null);
+    sc.onerror = () => res(null);
+    document.head.appendChild(sc);
+  });
+  return _tcfConfettiLoading;
+}
+function tcfFireConfetti(){
+  if(_tcfConfettiDone) return;
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return; // 系統設定「減少動態效果」就不放
+  _tcfConfettiDone = true;
+  const mobile = window.innerWidth <= 768;
+  tcfLoadConfetti().then(confetti=>{
+    if(!confetti) return;
+    const pg = document.getElementById('page-tcf');
+    if(!pg || !pg.classList.contains('active')) return; // 載入期間已離開喜劇節頁就不放
+    const base = {colors:['#1e47da','#319ef1','#7cc4f8','#e9c433','#f5d558','#ffffff'], zIndex:150, scalar: mobile ? .75 : .85, ticks:150, gravity:1.1, disableForReducedMotion:true}; // 低調版：量少、顆粒小、停留短
+    const n = mobile ? 14 : 24;
+    confetti({...base, particleCount:n, angle:60,  spread:55, startVelocity:32, origin:{x:0, y:.55}});   // 左側
+    confetti({...base, particleCount:n, angle:120, spread:55, startVelocity:32, origin:{x:1, y:.55}});   // 右側
+    setTimeout(()=>confetti({...base, particleCount: mobile ? 16 : 30, spread:80, startVelocity:26, origin:{x:.5, y:.3}}), 260); // 中央上方
+  }).catch(()=>{});
+}
+(function(){
+  const pg = document.getElementById('page-tcf');
+  if(!pg) return;
+  let was = pg.classList.contains('active');
+  new MutationObserver(()=>{
+    const now = pg.classList.contains('active');
+    if(now && !was){
+      try{ tcfSyncHeroHeight(); }catch(e){}
+      setTimeout(tcfFireConfetti, 450); // 等標題逐字彈入開始後再放
+    }
+    was = now;
+  }).observe(pg, {attributes:true, attributeFilter:['class']});
+  window.addEventListener('resize', ()=>{
+    if(!pg.classList.contains('active')) return;
+    clearTimeout(window._tcfHT);
+    window._tcfHT = setTimeout(()=>{ try{ tcfSyncHeroHeight(); }catch(e){} }, 200);
+  });
+})();
 // 演出資訊月曆：喜劇節期間的日期上色（MutationObserver 後置標記，不更動 renderCalendar 系列函式）
 (function(){
   function mark(box){
@@ -8549,6 +8648,24 @@ function kineticHeroTitle(){
   wrap(h1.querySelector('.en-text'), null);
 }
 
+// ── 喜劇節頁標題逐字彈入（比照首頁 hero；全部白色）──
+function kineticTcfTitle(){
+  const h1 = document.querySelector('#page-tcf .tcf-hero-inner h1');
+  if(!h1 || h1.dataset.kinetic) return;
+  h1.dataset.kinetic = '1';
+  const text = h1.textContent;
+  h1.setAttribute('aria-label', text);
+  h1.textContent = '';
+  [...text].forEach((ch,i)=>{
+    const span = document.createElement('span');
+    span.className = 'kchar';
+    span.setAttribute('aria-hidden','true');
+    span.textContent = ch === ' ' ? '\u00A0' : ch;
+    span.style.animationDelay = (0.12 + i*0.045)+'s';
+    h1.appendChild(span);
+  });
+}
+
 function initReveal(){
   const obs = new IntersectionObserver(entries=>{
     entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('revealed'); });
@@ -8606,6 +8723,7 @@ function restorePageFromHash(){
 window.addEventListener('load', ()=>{
   try { initReveal(); } catch(e){ console.error('initReveal:', e); }
   try { kineticHeroTitle(); } catch(e){ console.error('kineticHeroTitle:', e); }
+  try { kineticTcfTitle(); } catch(e){ console.error('kineticTcfTitle:', e); }
   try { restorePageFromHash(); } catch(e){ console.error('restorePageFromHash:', e); }
   document.body.classList.add('ready');
   try {
