@@ -1599,6 +1599,15 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   .tcf-hero-actions .tcf-hero-shortcuts{gap:6px}
   .tcf-hero-shortcuts a{padding:6px 12px;font-size:.72rem}
 }
+.tt-acc{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:.78rem;font-weight:600;color:var(--tm);font-family:var(--f-zh);cursor:pointer}
+.tt-acc input{width:15px;height:15px;accent-color:var(--or);cursor:pointer}
+.tt-acc-hint{display:none;margin-top:4px;font-size:.7rem;line-height:1.55;color:var(--ts);font-family:var(--f-zh)}
+.tt-box.acc-on .tt-acc-hint{display:block}
+.tt-row .tt-elig{grid-column:1/-1;display:none}
+.tt-box.acc-on .tt-row .tt-elig{display:flex}
+.tt-row .tt-elig-in{display:flex;gap:6px}
+.tt-row .tt-elig-in .fi.tt-el{flex:1}
+.tt-row .tt-elig-in .fi.tt-el-custom{flex:1.2}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -3279,6 +3288,8 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
         <button type="button" class="tt-add" onclick="ttAddRow()">＋ 新增票種</button>
       </div>
       <div class="tt-hint">給之後的「個人觀演規劃」計算用，前台仍顯示上方「票價」文字。不填也可以正常儲存與上架。</div>
+      <label class="tt-acc"><input type="checkbox" id="s-tt-acc" onchange="ttToggleAcc()"> 此演出提供身心障礙者／陪同者相關票種（選填，預設否）</label>
+      <div class="tt-acc-hint">勾選後，每個票種可以設定「票種資格」。價格與限制請依該演出的公開資訊填寫；官方只有身心障礙優惠票、沒有陪同優惠時，不要自行新增陪同票。嘻嘻只整理公開票價，不驗證資格。</div>
       <div id="s-tt-list"></div>
       <div class="tt-note" id="s-tt-tcf-note" style="display:none">此演出已加入台北喜劇節，但尚未設定可計算票種。演出仍會正常顯示，但未來無法納入行程預算計算。</div>
     </div>
@@ -7582,6 +7593,8 @@ function toggleEdit(){
 // ══════════════════════════════════════════════════════════
 // 票種設定（選填）：show.ticketTypes = [{name, price, peopleCount, saleStart, saleEnd}]
 //  - price：數字（新台幣）；peopleCount：整數 ≥1，預設 1
+//  - eligibility：此票種適用的資格（字串）。'general'＝一般（預設，舊資料沒有這個欄位＝一般）、'disability'＝身心障礙者、'companion'＝陪同者；
+//    也可以是任意自訂字串（未來要加其他資格票種不用改程式）。價格、資格、限制都以該演出公開資訊為準，嘻嘻不假設陪同者一定有優惠
 //  - saleStart / saleEnd：選填。完整格式 'YYYY-MM-DDTHH:mm:00+08:00'（固定台灣時間，不受瀏覽器時區影響）；沒填＝空字串＝沒有該端限制
 //    後台只填日期時：開始預設 00:00、截止預設 23:59
 //  - 舊演出沒有 ticketTypes 欄位＝視為空陣列；前台票價仍只讀 show.price（自由文字），這裡的資料不影響任何前台顯示
@@ -7598,6 +7611,8 @@ function ttJoin(d, t, defTime){
 function ttRowHTML(t){
   t = t || {};
   const a = ttSplit(t.saleStart), b = ttSplit(t.saleEnd);
+  const elig = (t.eligibility && String(t.eligibility).trim()) || 'general';
+  const eligPreset = ['general','disability','companion'].includes(elig);
   const pc = (t.peopleCount!=null && t.peopleCount!=='') ? t.peopleCount : 1;
   const pr = (t.price!=null && !isNaN(Number(t.price))) ? t.price : '';
   return `<div class="tt-row">
@@ -7608,8 +7623,27 @@ function ttRowHTML(t){
       <div class="tt-f"><label>販售開始（選填，只填日期＝當天 00:00）</label><div class="tt-dt"><input class="fi tt-sd" type="date" value="${ttEsc(a.d)}"><input class="fi tt-st" type="time" value="${ttEsc(a.t)}"></div></div>
       <div class="tt-f"><label>販售截止（選填，只填日期＝當天 23:59）</label><div class="tt-dt"><input class="fi tt-ed" type="date" value="${ttEsc(b.d)}"><input class="fi tt-et" type="time" value="${ttEsc(b.t)}"></div></div>
     </div>
+    <div class="tt-f tt-elig"><label>票種資格</label><div class="tt-elig-in"><select class="fi tt-el" onchange="ttElChange(this)"><option value="general"${elig==='general'?' selected':''}>一般</option><option value="disability"${elig==='disability'?' selected':''}>身心障礙者</option><option value="companion"${elig==='companion'?' selected':''}>陪同者</option><option value="__custom"${eligPreset?'':' selected'}>其他資格…</option></select><input class="fi tt-el-custom" type="text" maxlength="30" placeholder="自訂資格，例：senior" value="${eligPreset?'':ttEsc(elig)}" style="${eligPreset?'display:none':''}"></div></div>
     <div class="tt-foot"><span class="tt-warn"></span><button type="button" class="tt-del" onclick="ttDelRow(this)">刪除此票種</button></div>
   </div>`;
+}
+// 「提供身心障礙者／陪同者相關票種」開關：預設否，不顯示「票種資格」欄位；取消勾選時若已有非一般資格的票種，先確認再移除（避免把優惠價誤變成一般票）
+function ttToggleAcc(){
+  const cb = document.getElementById('s-tt-acc'), w = document.getElementById('s-tt-wrap');
+  if(!cb || !w) return;
+  if(!cb.checked){
+    const special = Array.from(document.querySelectorAll('#s-tt-list .tt-row')).filter(r=>{ const v = r.querySelector('.tt-el')?.value; return v && v!=='general'; });
+    if(special.length){
+      if(!confirm('取消後，資格為「身心障礙者／陪同者／其他」的 ' + special.length + ' 個票種會被移除，確定嗎？')){ cb.checked = true; return; }
+      special.forEach(r=>r.remove());
+    }
+  }
+  w.classList.toggle('acc-on', cb.checked);
+  ttUpdateNote();
+}
+function ttElChange(sel){
+  const row = sel && sel.closest('.tt-row'), c = row && row.querySelector('.tt-el-custom');
+  if(c) c.style.display = sel.value==='__custom' ? '' : 'none';
 }
 function ttAddRow(t){
   const list = document.getElementById('s-tt-list'); if(!list) return;
@@ -7620,7 +7654,11 @@ function ttDelRow(btn){ const r = btn && btn.closest('.tt-row'); if(r) r.remove(
 function ttFill(arr){
   const list = document.getElementById('s-tt-list'); if(!list) return;
   list.innerHTML = '';
-  (Array.isArray(arr) ? arr : []).forEach(t=>{ if(t && typeof t==='object') list.insertAdjacentHTML('beforeend', ttRowHTML(t)); });
+  const items = (Array.isArray(arr) ? arr : []).filter(t=>t && typeof t==='object');
+  items.forEach(t=>list.insertAdjacentHTML('beforeend', ttRowHTML(t)));
+  const accOn = items.some(t=>t.eligibility && String(t.eligibility).trim() && t.eligibility!=='general');
+  const cb = document.getElementById('s-tt-acc'); if(cb) cb.checked = accOn;
+  const w = document.getElementById('s-tt-wrap'); if(w) w.classList.toggle('acc-on', accOn);
   ttUpdateNote();
 }
 // 讀取表單目前的票種：整列都空白的忽略；不完整的照樣保留（價格無效存 null），不阻擋儲存
@@ -7633,10 +7671,14 @@ function ttCollect(){
     if(!name && !rawP) return;
     const pNum = rawP==='' ? NaN : Number(rawP);
     const pcNum = parseInt(q('.tt-people')?.value, 10);
+    const selV = q('.tt-el')?.value || 'general';
+    let eligV = selV==='__custom' ? (q('.tt-el-custom')?.value||'').trim().slice(0,30) : selV;
+    if(!eligV) eligV = 'general';
     out.push({
       name,
       price: (isFinite(pNum) && pNum>=0) ? pNum : null,
       peopleCount: (isFinite(pcNum) && pcNum>=1) ? pcNum : 1,
+      eligibility: eligV,
       saleStart: ttJoin(q('.tt-sd')?.value||'', q('.tt-st')?.value||'', '00:00'),
       saleEnd:   ttJoin(q('.tt-ed')?.value||'', q('.tt-et')?.value||'', '23:59')
     });
