@@ -6449,9 +6449,7 @@ function tcfPlanCombo(key, idx, d){
 function tcfPlanComboReset(key){ const e = tcfPlanState().shows[key]; if(e){ tcfPlanPush(); e.selectedTicketCombination = null; tcfPlanSyncBundle(key); tcfPlanRefresh(); } }
 function tcfPlanDay(ds){ _tcfPlanUI.day = ds; const st = tcfPlanState(); st.day = ds; tcfPlanSave(); tcfPlanRender({top:true, center:true}); }
 function tcfPlanTab(tab){
-  _tcfPlanUI.tab = tab; tcfPlanRender();
-  const el = document.getElementById('tcf-plan');
-  if(el) window.scrollTo({top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - 150), behavior:'smooth'});
+  _tcfPlanUI.tab = tab; tcfPlanRender({top:true, center:true});
 }
 function tcfPlanClear(){
   const st = tcfPlanState();
@@ -6585,6 +6583,14 @@ function tcfPlanMineHTML(ctx){
     <div class="pl-final"><button type="button" class="pl-cta" onclick="tcfPlanOpenShare()">產生我的觀演表</button></div>
     <p class="pl-fine">票價依目前公開資訊與販售期間估算，實際票價、剩餘票券與購票規則請以官方售票頁面為準。特殊票種可能有資格、證件、席位或購票方式限制，實際規定請以官方售票頁面為準。</p>`;
 }
+// 「選演出／已選行程」分頁列在畫面最上方（剛好在導覽列下面）時的捲動位置
+function tcfPlanTabsTop(){
+  const box = document.getElementById('tcf-plan'), tabs = box && box.querySelector('.pl-tabs');
+  if(!tabs) return null;
+  let nav = 70;
+  try{ nav = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav'), 10) || 70; }catch(e){}
+  return Math.max(0, tabs.getBoundingClientRect().top + window.scrollY - nav - 10);
+}
 function tcfPlanRender(opts){
   const box = document.getElementById('tcf-plan'); if(!box) return;
   if(!window._dataReady){ box.innerHTML = tcfLoadingHTML(); tcfPlanBarSync(null); return; }
@@ -6610,8 +6616,8 @@ function tcfPlanRender(opts){
   const root = document.documentElement, oldSB = root.style.scrollBehavior;
   if(opts && opts.top){
     root.style.scrollBehavior = 'auto'; window.scrollTo(0, prevY); root.style.scrollBehavior = oldSB;
-    const y = Math.max(0, box.getBoundingClientRect().top + window.scrollY - 150);
-    window.scrollTo({top:y, behavior:'smooth'});
+    const y = tcfPlanTabsTop(); // 切換日期／分頁：跳到「選演出／已選行程」分頁列當頂部
+    if(y != null) window.scrollTo({top:y, behavior:'smooth'});
   } else if(Math.abs(window.scrollY - prevY) > 1){
     root.style.scrollBehavior = 'auto'; window.scrollTo(0, prevY); root.style.scrollBehavior = oldSB; // 網站全域是平滑捲動，還原位置時要暫時關掉，不然會看到畫面滑動
   }
