@@ -1746,8 +1746,16 @@ html.ts-lock{overflow:hidden}
   .pl-tabs button{flex:1 1 auto;padding:8px 10px;font-size:.78rem;line-height:1.3}
   .pl-tabs button:first-child{flex:0 0 auto}
   .tcf-view-toggle{max-width:100%}
-  .tcf-view-toggle button[data-view="plan"]{white-space:normal;text-align:center;line-height:1.25;max-width:118px;padding:5px 10px}
 }
+/* ── 客製化我的喜劇節行程：入口在橫幅、左右留白與其他檢視一致 ── */
+.tcf-plan{padding:6px 5vw 8px}
+.pl-heading{font-family:var(--f-zh);font-weight:900;font-size:1.1rem;color:var(--tcf-pink);margin:0 0 8px}
+.tcf-hero-shortcuts a.tcf-hero-plan{background:var(--tcf-yellow);border-color:var(--tcf-yellow);color:var(--sd)}
+.tcf-hero-shortcuts a.tcf-hero-plan:hover{background:#fff;border-color:#fff;color:var(--tcf-pink)}
+.tt-btns{display:inline-flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.tt-add.ghost{border-color:rgba(45,43,31,.25);color:var(--ts)}
+.tt-add.ghost:hover{background:var(--sd);border-color:var(--sd);color:#fff}
+@media(max-width:768px){.tcf-hero-shortcuts a{padding:6px 10px}}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -2595,6 +2603,7 @@ html.ts-lock{overflow:hidden}
       <a href="#" id="tcf-official-link" class="tcf-hero-official" target="_blank" rel="noopener">↗ <span class="zh-text">台北喜劇節官方網站</span><span class="en-text">Official Website</span></a>
       <div class="tcf-hero-shortcuts">
         <a onclick="tcfScrollTo('tcf-performers-section')"><span class="zh-text">參演演員</span><span class="en-text">Performers</span></a>
+        <a class="tcf-hero-plan" onclick="setTcfView('plan')"><span class="zh-text">客製化我的喜劇節行程</span><span class="en-text">Custom plan</span></a>
         <a onclick="showPage('guide')"><span class="zh-text">第一次看喜劇？</span><span class="en-text">First time?</span></a>
       </div>
       </div>
@@ -2612,7 +2621,6 @@ html.ts-lock{overflow:hidden}
         <button type="button" data-view="cards" class="on" onclick="setTcfView('cards')"><span class="zh-text">全部一覽</span><span class="en-text">All shows</span></button>
         <button type="button" data-view="agenda" class="tcf-vw-agenda" onclick="setTcfView('agenda')"><span class="zh-text">每日時刻表</span><span class="en-text">Daily schedule</span></button>
         <button type="button" data-view="period" onclick="setTcfView('period')"><span class="zh-text"><span class="tcf-lbl-d">全活動時刻表</span><span class="tcf-lbl-m">時刻表</span></span><span class="en-text"><span class="tcf-lbl-d">Full schedule</span><span class="tcf-lbl-m">Schedule</span></span></button>
-        <button type="button" data-view="plan" onclick="setTcfView('plan')"><span class="zh-text">客製化我的喜劇節行程</span><span class="en-text">My custom plan</span></button>
       </div>
     </div>
     <div class="tcf-date-bar" id="tcf-date-bar">
@@ -3427,7 +3435,7 @@ html.ts-lock{overflow:hidden}
     <div class="fg-g full tt-box" id="s-tt-wrap">
       <div class="tt-head">
         <label class="fl" style="margin:0">票種設定（選填）</label>
-        <button type="button" class="tt-add" onclick="ttAddRow()">＋ 新增票種</button>
+        <span class="tt-btns"><button type="button" class="tt-add ghost" onclick="ttFromPrice()">從票價文字帶入</button><button type="button" class="tt-add" onclick="ttAddRow()">＋ 新增票種</button></span>
       </div>
       <div class="tt-hint">給之後的「個人觀演規劃」計算用，前台仍顯示上方「票價」文字。不填也可以正常儲存與上架。</div>
       <label class="tt-acc"><input type="checkbox" id="s-tt-acc" onchange="ttToggleAcc()"> 此演出提供「身心障礙及陪同席」（選填，預設否）</label>
@@ -6439,6 +6447,7 @@ function tcfPlanRender(){
   const ctx = tcfPlanBuildCtx();
   const tab = _tcfPlanUI.tab;
   box.innerHTML = `<div class="pl-wrap">
+    <div class="pl-heading">客製化我的喜劇節行程</div>
     <div class="pl-tabs"><button type="button" class="${tab === 'pick' ? 'on' : ''}" onclick="tcfPlanTab('pick')">選演出</button><button type="button" class="${tab === 'mine' ? 'on' : ''}" onclick="tcfPlanTab('mine')">客製化我的喜劇節行程${ctx.selected.length ? `（${ctx.selected.length}）` : ''}</button></div>
     <div class="pl-grid"><div class="pl-mainc">${tab === 'pick' ? tcfPlanPickHTML(ctx) : tcfPlanMineHTML(ctx)}</div><aside class="pl-side">${tcfPlanSummaryHTML(ctx)}</aside></div></div>`;
   tcfPlanBarSync(ctx);
@@ -6525,7 +6534,7 @@ function tcfPlanDrawPage(page, tier, meta, opts, logo){
   c.fillStyle = CREAM; c.fillRect(0, 0, W, H);
   // 上方橫幅（延續喜劇節頁：藍色漸層＋點點）
   c.save(); tcfPlanRR(c, 0, -80, W, S.HEAD + 80, 70); c.clip();
-  const g = c.createLinearGradient(0, 0, W, S.HEAD); g.addColorStop(0, BLUE); g.addColorStop(.55, BLUE2); g.addColorStop(1.2, CYAN);
+  const g = c.createLinearGradient(0, 0, W, S.HEAD); g.addColorStop(0, BLUE); g.addColorStop(.55, BLUE2); g.addColorStop(1, CYAN);
   c.fillStyle = g; c.fillRect(0, 0, W, S.HEAD);
   c.fillStyle = 'rgba(255,255,255,.2)';
   for(let y = 14; y < S.HEAD; y += 28) for(let x = 14 + ((y / 28) % 2 ? 14 : 0); x < W; x += 28){ c.beginPath(); c.arc(x, y, 2.6, 0, 7); c.fill(); }
@@ -6621,6 +6630,11 @@ async function tcfPlanOpenShare(){
   await tcfPlanShareRender();
 }
 async function tcfPlanShareRender(){
+  const listEl0 = document.getElementById('ts-list'); if(!listEl0) return;
+  try{ await tcfPlanShareRenderInner(); }
+  catch(e){ console.error('tcfPlanShareRender:', e); listEl0.innerHTML = '<div class="ts-loading">圖片產生失敗，請重新整理後再試一次。<br><small>' + String(e && e.message || e).replace(/[<>&]/g, '') + '</small></div>'; }
+}
+async function tcfPlanShareRenderInner(){
   const seq = ++_tcfShareSeq, listEl = document.getElementById('ts-list'); if(!listEl) return;
   const ctx = tcfPlanBuildCtx(), st = ctx.st;
   const cbP = document.getElementById('ts-price'), cbN = document.getElementById('ts-people');
@@ -6658,7 +6672,8 @@ async function tcfPlanShareRender(){
   _tcfShareUrls = blobs.map(b=>URL.createObjectURL(b));
   const names = blobs.map((_, i)=>blobs.length === 1 ? 'cici-taipei-comedy-festival-my-schedule.png' : `cici-tcf-my-schedule-${String(i + 1).padStart(2, '0')}.png`);
   _tcfShareFiles = blobs.map((b, i)=>{ try{ return new File([b], names[i], {type:'image/png'}); }catch(e){ return null; } });
-  const canShare = !!(navigator.share && navigator.canShare && _tcfShareFiles[0] && navigator.canShare({files:[_tcfShareFiles[0]]}));
+  let canShare = false;
+  try{ canShare = !!(navigator.share && navigator.canShare && _tcfShareFiles[0] && navigator.canShare({files:[_tcfShareFiles[0]]})); }catch(e){ canShare = false; } // 不支援檔案分享的瀏覽器：只顯示「儲存圖片」
   listEl.innerHTML = _tcfShareUrls.map((u, i)=>`<figure class="ts-fig"><img src="${u}" alt="我的台北喜劇節 ${i + 1}/${blobs.length}"><figcaption>${blobs.length > 1 ? `第 ${i + 1} 張／共 ${blobs.length} 張` : ''}<div class="ts-btns"><a class="ts-btn" href="${u}" download="${names[i]}">儲存圖片</a>${canShare ? `<button type="button" class="ts-btn ghost" onclick="tcfPlanShareFile(${i})">分享</button>` : ''}</div></figcaption></figure>`).join('');
 }
 async function tcfPlanShareFile(i){
@@ -8432,6 +8447,38 @@ function ttToggleAcc(){
 function ttElChange(sel){
   const row = sel && sel.closest('.tt-row'), c = row && row.querySelector('.tt-el-custom');
   if(c) c.style.display = sel.value==='__custom' ? '' : 'none';
+}
+// 從「票價」文字猜出票種（只做簡單的「名稱 $金額」切分，帶入後請自己檢查）：
+//  - 區間價（NT$ 350 ～ NT$ 500）與只寫「$500 起」無法確定單一價格，不自動帶入
+//  - 人數從名稱判斷（雙人／2 人／四人套票…），判斷不出來就是 1 人
+//  - 販售期間（例如早鳥截止日）文字裡通常沒有，需要自己補
+function ttParsePrice(text){
+  const out = [];
+  String(text || '').replace(/[，、；;|｜\/\n]/g, '／').split('／').forEach(seg=>{
+    seg = seg.trim(); if(!seg || /起/.test(seg)) return;
+    const hits = seg.match(/(?:NT\$|NTD|\$|＄)\s*[\d,]+|[\d,]+\s*元/gi) || [];
+    if(hits.length !== 1) return; // 沒有價格或是區間價
+    const m = hits[0].match(/([\d,]+)/), price = parseInt(m[1].replace(/,/g, ''), 10);
+    if(!isFinite(price) || price < 0) return;
+    let name = seg.replace(hits[0], ' ').replace(/[：:()（）\[\]【】]/g, ' ').replace(/\s+/g, ' ').trim().replace(/^[-—–·・\s]+|[-—–·・\s]+$/g, '');
+    if(/^(早鳥|預售|一般|學生|優待|全票|愛心|現場|VIP)$/i.test(name)) name += '票';
+    if(!name) name = '一般票';
+    let people = 1; const pm = name.match(/(\d+)\s*人/);
+    if(pm) people = Math.max(1, parseInt(pm[1], 10));
+    else if(/雙人|兩人|二人/.test(name)) people = 2; else if(/三人/.test(name)) people = 3; else if(/四人/.test(name)) people = 4; else if(/五人/.test(name)) people = 5; else if(/六人/.test(name)) people = 6;
+    out.push({name, price, peopleCount:people, eligibility:'general'});
+  });
+  return out;
+}
+function ttFromPrice(){
+  const txt = document.getElementById('s-price')?.value || '';
+  const found = ttParsePrice(txt), cur = ttCollect();
+  const fresh = found.filter(f=>!cur.some(c=>c.name === f.name && c.price === f.price));
+  const toast = m=>{ try{ if(typeof showToast === 'function') showToast(m, found.length ? 'ok' : 'err'); }catch(e){} };
+  if(!found.length){ toast('這段票價文字無法自動辨識（區間價或「起」需要手動建立票種）'); return; }
+  if(!fresh.length){ toast('這些票種已經在下面了'); return; }
+  fresh.forEach(f=>ttAddRow(f));
+  toast('已帶入 ' + fresh.length + ' 個票種，請檢查名稱、人數，並補上販售期間（例如早鳥截止日）');
 }
 function ttAddRow(t){
   const list = document.getElementById('s-tt-list'); if(!list) return;
