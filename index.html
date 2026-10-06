@@ -1827,6 +1827,7 @@ body.edit .bt-admin-btn{display:inline-flex}
 .bt-foot .ts-btn:disabled{opacity:.5;cursor:default}
 .pl-bundle{text-decoration:none;font-style:normal;font-size:.66rem;font-weight:800;color:var(--sd);background:var(--tcf-yellow);border-radius:6px;padding:1px 7px}
 .pl-bundle-note{margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--py);font-size:.78rem;line-height:1.6;color:#7a5200;font-weight:700}
+.ts-all{width:100%;margin-bottom:4px}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -7007,7 +7008,7 @@ function tcfPlanDrawPage(page, tier, meta, opts, logo){
   return c0;
 }
 // ── 預覽視窗 ──
-let _tcfShareUrls = [], _tcfShareFiles = [], _tcfShareSeq = 0;
+let _tcfShareUrls = [], _tcfShareFiles = [], _tcfShareNames = [], _tcfShareSeq = 0;
 const _tcfShareOff = new Set(); // 使用者取消勾選（不要生成）的日期；只存在記憶體，每次打開預覽視窗沿用
 function tcfPlanShareDay(ds, on){ if(on) _tcfShareOff.delete(ds); else _tcfShareOff.add(ds); tcfPlanShareRender(); }
 function tcfPlanShareDaysAll(on){ const ctx = tcfPlanBuildCtx(); ctx.selected.forEach(x=>{ if(on) _tcfShareOff.delete(x.ds); else _tcfShareOff.add(x.ds); }); tcfPlanShareRender(); }
@@ -7023,7 +7024,7 @@ function tcfPlanEnsureShareDom(){
     <div class="ts-opts"><label><input type="checkbox" id="ts-price" onchange="tcfPlanShareOpt('price',this.checked)"> 顯示預估票價</label><label><input type="checkbox" id="ts-wide" onchange="tcfPlanShareOpt('wide',this.checked)"> 雙欄排列（橫向，張數較少）</label></div>
     <div id="ts-auto" class="ts-auto"></div>
     <div id="ts-list" class="ts-list"></div>
-    <p class="ts-hint">iPhone 如果按「儲存圖片」沒有直接存進相簿：請長按圖片，選「加入照片」或「儲存到照片」。</p>
+    <p class="ts-hint">iPhone：按「分享＆儲存圖片」後選「儲存影像」就會存進相簿；如果沒有跳出選單，請長按圖片選「加入照片」。電腦會直接下載圖片檔。</p>
   </div>`;
   ov.addEventListener('click', e=>{ if(e.target === ov) tcfPlanCloseShare(); });
   document.addEventListener('keydown', e=>{ if(e.key === 'Escape' && !ov.hidden) tcfPlanCloseShare(); });
@@ -7093,16 +7094,27 @@ async function tcfPlanShareRenderInner(){
   _tcfShareUrls.forEach(u=>{ try{ URL.revokeObjectURL(u); }catch(e){} });
   _tcfShareUrls = blobs.map(b=>URL.createObjectURL(b));
   const names = blobs.map((_, i)=>blobs.length === 1 ? 'cici-taipei-comedy-festival-my-schedule.png' : `cici-tcf-my-schedule-${String(i + 1).padStart(2, '0')}.png`);
+  _tcfShareNames = names;
   _tcfShareFiles = blobs.map((b, i)=>{ try{ return new File([b], names[i], {type:'image/png'}); }catch(e){ return null; } });
-  let canShare = false;
-  try{ canShare = !!(navigator.share && navigator.canShare && _tcfShareFiles[0] && navigator.canShare({files:[_tcfShareFiles[0]]})); }catch(e){ canShare = false; } // 不支援檔案分享的瀏覽器：只顯示「儲存圖片」
-  listEl.innerHTML = _tcfShareUrls.map((u, i)=>`<figure class="ts-fig"><img src="${u}" alt="我的台北喜劇節 ${i + 1}/${blobs.length}"><figcaption>${blobs.length > 1 ? `第 ${i + 1} 張／共 ${blobs.length} 張` : ''}<div class="ts-btns"><a class="ts-btn" href="${u}" download="${names[i]}">儲存圖片</a>${canShare ? `<button type="button" class="ts-btn ghost" onclick="tcfPlanShareFile(${i})">分享</button>` : ''}</div></figcaption></figure>`).join('');
+  const allBtn = blobs.length > 1 ? `<button type="button" class="ts-btn ts-all" onclick="tcfPlanShareSave(-1)">分享＆儲存全部圖片（${blobs.length} 張）</button>` : '';
+  listEl.innerHTML = allBtn + _tcfShareUrls.map((u, i)=>`<figure class="ts-fig"><img src="${u}" alt="我的台北喜劇節 ${i + 1}/${blobs.length}"><figcaption>${blobs.length > 1 ? `第 ${i + 1} 張／共 ${blobs.length} 張` : ''}<div class="ts-btns"><button type="button" class="ts-btn" onclick="tcfPlanShareSave(${i})">分享＆儲存圖片</button></div></figcaption></figure>`).join('');
 }
-async function tcfPlanShareFile(i){
-  const f = _tcfShareFiles[i];
-  try{ if(f && navigator.share) await navigator.share({files:[f], title:'我的台北喜劇節'}); }
-  catch(e){ if(e && e.name === 'AbortError') return; // 使用者取消：不處理
-    const a = document.createElement('a'); a.href = _tcfShareUrls[i]; a.download = f ? f.name : 'cici-tcf-my-schedule.png'; document.body.appendChild(a); a.click(); a.remove(); } // 分享失敗 → 退回下載
+// 「分享＆儲存圖片」：手機會跳出系統分享選單（可選「儲存影像」存進相簿，或直接分享到 Instagram 等 App）；
+// 瀏覽器不支援分享圖片檔（例如多數電腦瀏覽器）或分享失敗時，自動改成下載圖片。使用者自己取消分享不會再下載。
+// i＝第幾張；-1＝全部
+async function tcfPlanShareSave(i){
+  const idxs = i < 0 ? _tcfShareUrls.map((_, k)=>k) : [i];
+  const files = idxs.map(k=>_tcfShareFiles[k]).filter(Boolean);
+  try{
+    if(files.length === idxs.length && navigator.share && navigator.canShare && navigator.canShare({files})){
+      await navigator.share({files, title:'我的台北喜劇節'});
+      return;
+    }
+  }catch(e){ if(e && e.name === 'AbortError') return; }
+  idxs.forEach((k, n)=>setTimeout(()=>{
+    const a = document.createElement('a'); a.href = _tcfShareUrls[k]; a.download = _tcfShareNames[k] || 'cici-tcf-my-schedule.png';
+    document.body.appendChild(a); a.click(); a.remove();
+  }, n * 450));
 }
 
 // 離開喜劇節頁／視窗大小改變時，同步底部摘要列
