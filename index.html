@@ -1599,11 +1599,7 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   .tcf-hero-actions .tcf-hero-shortcuts{gap:6px}
   .tcf-hero-shortcuts a{padding:6px 12px;font-size:.72rem}
 }
-.tt-acc{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:.78rem;font-weight:600;color:var(--tm);font-family:var(--f-zh);cursor:pointer}
-.tt-acc input{width:15px;height:15px;accent-color:var(--or);cursor:pointer}
-.tt-acc-hint{display:none;margin-top:4px;font-size:.7rem;line-height:1.55;color:var(--ts);font-family:var(--f-zh)}
-.tt-box.acc-on .tt-acc-hint{display:block}
-.tt-row .tt-elig{grid-column:1/-1;display:none}
+.tt-box.acc-on .tt-row .tt-elig{grid-column:1/-1;display:none}
 .tt-box.acc-on .tt-row .tt-elig{display:flex}
 .tt-row .tt-elig-in{display:flex;gap:6px}
 .tt-row .tt-elig-in .fi.tt-el{flex:1}
@@ -1756,6 +1752,79 @@ html.ts-lock{overflow:hidden}
 .tt-add.ghost{border-color:rgba(45,43,31,.25);color:var(--ts)}
 .tt-add.ghost:hover{background:var(--sd);border-color:var(--sd);color:#fff}
 @media(max-width:768px){.tcf-hero-shortcuts a{padding:6px 10px}}
+/* ── 橫幅：主要兩顆（官網、客製化我的喜劇節行程）同一排、同尺寸；次要兩顆小一點放下一排 ── */
+.tcf-hero-actions{flex-direction:column;flex-wrap:nowrap;gap:10px;align-items:center}
+.tcf-hero-primary{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.tcf-hero-primary .tcf-hero-official{margin-top:0}
+.tcf-hero-actions .tcf-hero-shortcuts{display:flex;gap:8px;justify-content:center;margin-top:0}
+.tcf-hero-primary a.tcf-hero-plan{display:inline-flex;align-items:center;padding:10px 22px;border-radius:var(--r-pill);background:var(--tcf-yellow);color:var(--sd);font-family:var(--f-zh);font-weight:800;font-size:.86rem;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.14);cursor:pointer;white-space:nowrap;transition:transform .15s}
+.tcf-hero-primary a.tcf-hero-plan:hover{transform:translateY(-2px)}
+.tcf-hero{padding-top:38px;padding-bottom:34px}
+@media(max-width:768px){
+  .tcf-hero{padding-top:26px;padding-bottom:22px}
+  .tcf-hero-primary{gap:6px}
+  .tcf-hero-primary a.tcf-hero-plan{padding:8px 14px;font-size:.78rem}
+}
+/* ── 客製化行程頁：頂端返回／上一步／重置 ── */
+.pl-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:0 0 4px;font-family:var(--f-zh)}
+.pl-top button{min-height:36px;padding:0 14px;border-radius:999px;border:1.5px solid rgba(30,71,218,.3);background:#fff;color:var(--tcf-pink);font-family:var(--f-zh);font-size:.78rem;font-weight:700;cursor:pointer}
+.pl-top button:disabled{opacity:.4;cursor:default}
+.pl-top .pl-back{border-color:transparent;background:transparent;padding-left:0}
+.pl-top-r{display:flex;gap:8px}
+.pl-top .pl-reset{color:#c0392b;border-color:rgba(192,57,43,.35)}
+.pl-hint{display:block;font-size:.66rem;font-weight:600;color:var(--ts);margin-top:1px}
+body.tcf-plan-mode .tcf-official-fab{display:none!important}
+.pl-disclaimer{display:flex;flex-direction:column;gap:2px;margin:2px 0 10px;padding:9px 12px;border-radius:12px;background:var(--py);border:1.5px solid rgba(233,196,51,.7);font-family:var(--f-zh);color:#7a5200}
+.pl-disclaimer b{font-size:.86rem;font-weight:900}
+.pl-disclaimer span{font-size:.72rem;line-height:1.55}
+.ts-auto{margin:0 0 8px;font-size:.74rem;line-height:1.55;color:var(--ts)}
+.ts-auto:empty{display:none}
+.ts-daysbox{margin:0 0 10px;background:#fff;border:1.5px solid rgba(30,71,218,.16);border-radius:12px;padding:8px 10px}
+.ts-days-h{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;font-weight:800;color:var(--tcf-pink);margin-bottom:6px}
+.ts-days-h button{border:0;background:none;color:var(--or);font-family:var(--f-zh);font-size:.72rem;font-weight:700;text-decoration:underline;cursor:pointer;margin-left:8px}
+.ts-days{display:flex;flex-wrap:wrap;gap:6px}
+.ts-day{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;border:1.5px solid rgba(30,71,218,.3);font-size:.78rem;font-weight:700;color:var(--tcf-pink);cursor:pointer;background:#fff}
+.ts-day input{width:16px;height:16px;accent-color:var(--tcf-pink)}
+.ts-day small{font-size:.66rem;color:var(--ts);font-weight:600}
+.pl-saved{margin:-2px 0 8px;font-size:.7rem;color:var(--ts);font-family:var(--f-zh)}
+.tt-footl{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tt-soldlab{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;font-weight:700;color:var(--ts);cursor:pointer;font-family:var(--f-zh)}
+.tt-soldlab input{width:16px;height:16px;accent-color:#c0392b}
+.pl-sold{text-decoration:none;font-style:normal;font-size:.66rem;font-weight:800;color:#fff;background:#c0392b;border-radius:6px;padding:1px 7px}
+.bk-sec{margin-top:12px;padding:10px 12px;background:#fff;border:1.5px solid rgba(30,71,218,.16);border-radius:12px}
+.bk-sec>b{font-size:.86rem;color:var(--tcf-pink)}
+.bk-sec p{margin:4px 0 6px;font-size:.76rem;line-height:1.6;color:var(--ts)}
+.bk-sec textarea{width:100%;border:1.5px solid rgba(45,43,31,.18);border-radius:10px;padding:8px 10px;font-size:.74rem;font-family:var(--f-bo);resize:vertical;background:#fafaf5;color:var(--tm);word-break:break-all}
+.bk-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.bk-btns .ts-btn:disabled{opacity:.4;cursor:default}
+.bk-msg{margin-top:6px;font-size:.76rem;font-weight:700;color:var(--or);min-height:1em}
+.bk-sec .bk-fine{font-size:.68rem;margin:8px 0 0}
+.pl-top .pl-bak{border-color:rgba(45,43,31,.25);color:var(--ts)}
+.bt-admin-btn{display:none;margin-left:10px;padding:6px 14px;border-radius:999px;border:1.5px dashed var(--or);background:#fff;color:var(--or);font-family:var(--f-zh);font-size:.76rem;font-weight:800;cursor:pointer}
+body.edit .bt-admin-btn{display:inline-flex}
+.bt-box{width:min(720px,100%)}
+.bt-sum{font-size:.8rem;font-weight:700;margin:8px 0}
+.bt-msg{margin:6px 0;padding:8px 12px;border-radius:10px;background:var(--py);font-size:.8rem;line-height:1.6}
+.bt-row{background:#fff;border:1.5px solid rgba(30,71,218,.16);border-radius:12px;padding:8px 12px;margin-top:8px}
+.bt-row.partial{border-color:rgba(233,196,51,.9)}
+.bt-row.manual{opacity:.75;border-style:dashed}
+.bt-head{display:flex;align-items:flex-start;gap:8px;cursor:pointer}
+.bt-head input{width:20px;height:20px;margin-top:2px;accent-color:var(--tcf-pink)}
+.bt-head>span{flex:1;min-width:0}
+.bt-head b{font-size:.86rem}
+.bt-head small{display:block;font-size:.7rem;color:var(--ts)}
+.bt-tag{font-style:normal;font-size:.66rem;font-weight:800;border-radius:6px;padding:1px 8px;background:rgba(30,71,218,.1);color:var(--tcf-pink);white-space:nowrap}
+.bt-row.partial .bt-tag{background:var(--py);color:#8a5a00}
+.bt-row.manual .bt-tag{background:rgba(45,43,31,.1);color:var(--ts)}
+.bt-price{margin-top:4px;font-size:.74rem;color:var(--ts);word-break:break-all}
+.bt-tix{display:flex;flex-wrap:wrap;gap:4px 6px;margin-top:5px}
+.bt-t{font-size:.74rem;background:rgba(30,71,218,.07);border-radius:8px;padding:2px 8px}
+.bt-t b{color:var(--tcf-pink)}
+.bt-notes{margin-top:4px;font-size:.72rem;color:#c0392b;line-height:1.5}
+.bt-early{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:.74rem;font-weight:700;color:var(--ts)}
+.bt-early input{padding:4px 8px;border:1.5px solid rgba(45,43,31,.2);border-radius:8px;font-family:var(--f-bo)}
+.bt-foot{position:sticky;bottom:-18px;display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding:10px 0 2px;background:var(--cr)}
+.bt-foot .ts-btn:disabled{opacity:.5;cursor:default}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -2600,10 +2669,12 @@ html.ts-lock{overflow:hidden}
       <h1 class="zh-only">2026台北喜劇節</h1>
       <div class="tcf-hero-date" aria-label="11.26-12.06"><div class="hd-p"><b>11.26</b><small>THU</small></div><div class="hd-line"></div><div class="hd-p"><b>12.06</b><small>SUN</small></div></div>
       <div class="tcf-hero-actions">
+      <div class="tcf-hero-primary">
       <a href="#" id="tcf-official-link" class="tcf-hero-official" target="_blank" rel="noopener">↗ <span class="zh-text">台北喜劇節官方網站</span><span class="en-text">Official Website</span></a>
+        <a class="tcf-hero-plan" onclick="setTcfView('plan')"><span class="zh-text">客製化我的喜劇節行程</span><span class="en-text">Custom plan</span></a>
+      </div>
       <div class="tcf-hero-shortcuts">
         <a onclick="tcfScrollTo('tcf-performers-section')"><span class="zh-text">參演演員</span><span class="en-text">Performers</span></a>
-        <a class="tcf-hero-plan" onclick="setTcfView('plan')"><span class="zh-text">客製化我的喜劇節行程</span><span class="en-text">Custom plan</span></a>
         <a onclick="showPage('guide')"><span class="zh-text">第一次看喜劇？</span><span class="en-text">First time?</span></a>
       </div>
       </div>
@@ -2622,6 +2693,7 @@ html.ts-lock{overflow:hidden}
         <button type="button" data-view="agenda" class="tcf-vw-agenda" onclick="setTcfView('agenda')"><span class="zh-text">每日時刻表</span><span class="en-text">Daily schedule</span></button>
         <button type="button" data-view="period" onclick="setTcfView('period')"><span class="zh-text"><span class="tcf-lbl-d">全活動時刻表</span><span class="tcf-lbl-m">時刻表</span></span><span class="en-text"><span class="tcf-lbl-d">Full schedule</span><span class="tcf-lbl-m">Schedule</span></span></button>
       </div>
+      <button type="button" class="bt-admin-btn" onclick="tcfBatchOpen()">票種批次帶入</button>
     </div>
     <div class="tcf-date-bar" id="tcf-date-bar">
       <div class="tcf-date-row" id="tcf-date-row"></div>
@@ -3438,8 +3510,6 @@ html.ts-lock{overflow:hidden}
         <span class="tt-btns"><button type="button" class="tt-add ghost" onclick="ttFromPrice()">從票價文字帶入</button><button type="button" class="tt-add" onclick="ttAddRow()">＋ 新增票種</button></span>
       </div>
       <div class="tt-hint">給之後的「個人觀演規劃」計算用，前台仍顯示上方「票價」文字。不填也可以正常儲存與上架。</div>
-      <label class="tt-acc"><input type="checkbox" id="s-tt-acc" onchange="ttToggleAcc()"> 此演出提供「身心障礙及陪同席」（選填，預設否）</label>
-      <div class="tt-acc-hint">勾選後，每個票種可以設定「票種資格」（一般／身心障礙及陪同席）。身心障礙席與陪同席價格一致時，新增一個「身心障礙及陪同席」票種即可；價格與限制請依該演出的公開資訊填寫。嘻嘻只整理公開票價，不驗證資格。</div>
       <div id="s-tt-list"></div>
       <div class="tt-note" id="s-tt-tcf-note" style="display:none">此演出已加入台北喜劇節，但尚未設定可計算票種。演出仍會正常顯示，但未來無法納入行程預算計算。</div>
     </div>
@@ -5836,6 +5906,7 @@ function applyTcfView(){
     ag.hidden = !(agendaOn||periodOn);
     if(agendaOn) renderTcfAgenda(); else if(periodOn) renderTcfPeriod();
   }
+  const vrow = document.querySelector('#page-tcf .tcf-view-row'); if(vrow) vrow.style.display = planOn ? 'none' : '';
   if(pl){ pl.hidden = !planOn; if(planOn) tcfPlanRender(); }
   if(!planOn){ const pb = document.getElementById('tcf-plan-bar'); if(pb) pb.hidden = true; document.body.classList.remove('tcf-plan-mode'); }
   if(typeof tcfBarHeightSync==='function') tcfBarHeightSync();
@@ -6067,7 +6138,7 @@ function tcfMoney(n){ return '$' + Math.round(Number(n)||0).toLocaleString('en-U
 //   badgeEnabled:false,   // 預留：喜劇徽章官方規則公布後才會啟用，目前不做任何徽章試算
 //   share:{ price:false, people:false } }
 // 只存人數與選擇，不存姓名、證件、障礙類別或程度等任何個資
-function tcfPlanDefault(){ return {version:TCF_PLAN_VERSION, selectedShowIds:[], shows:{}, badgeEnabled:false, share:{price:false, people:false}}; }
+function tcfPlanDefault(){ return {version:TCF_PLAN_VERSION, selectedShowIds:[], shows:{}, badgeEnabled:false, share:{price:false, people:false, wide:null}}; } // share.wide：null＝依場次多寡自動、true＝雙欄、false＝單欄
 function tcfPlanClamp(v, lo, hi, d){ const n = parseInt(v, 10); return isFinite(n) ? Math.min(hi, Math.max(lo, n)) : d; }
 function tcfPlanSanitizeEntry(e){
   e = (e && typeof e === 'object') ? e : {};
@@ -6095,6 +6166,7 @@ function tcfPlanLoad(){
         });
         st.share.price = !!(o.share && o.share.price);
         st.share.people = !!(o.share && o.share.people);
+        st.share.wide = (o.share && typeof o.share.wide === 'boolean') ? o.share.wide : null;
       }
     }
   }catch(e){}
@@ -6135,13 +6207,14 @@ function tcfPlanTickets(show){
     const okPrice = t.price !== null && t.price !== '' && t.price !== undefined && isFinite(Number(t.price)) && Number(t.price) >= 0;
     if(!name || !okPrice) return; // 不完整的票種不納入試算
     const pc = parseInt(t.peopleCount, 10);
-    out.push({idx:i, name, price:Number(t.price), people:(isFinite(pc) && pc >= 1) ? pc : 1,
+    out.push({idx:i, name, price:Number(t.price), people:(isFinite(pc) && pc >= 1) ? pc : 1, soldOut:t.soldOut === true,
       saleStart:t.saleStart||'', saleEnd:t.saleEnd||'', elig:(t.eligibility && String(t.eligibility).trim()) || 'general'});
   });
   return out;
 }
 // 販售期間（台灣時間，資料內已含 +08:00，用絕對時間比較不受裝置時區影響）；沒填的那一端不判定失效
 function tcfPlanSaleStatus(t, now){
+  if(t.soldOut) return 'soldout'; // 後台標示已售完：不納入試算
   const a = t.saleStart ? Date.parse(t.saleStart) : NaN, b = t.saleEnd ? Date.parse(t.saleEnd) : NaN;
   if(isFinite(a) && now < a) return 'notyet';
   if(isFinite(b) && now > b) return 'ended';
@@ -6180,6 +6253,7 @@ function tcfPlanSpecialAvail(show){
 }
 function tcfPlanCalc(sess, ent, now){
   const res = {ok:false, reason:'', pools:[], total:0, lines:[], alts:[], saved:0, manual:false, warns:[], unresolved:[]};
+  if(sess.show && sess.show.soldOut){ res.reason = 'showSoldOut'; return res; } // 整場已售完（後台標示）
   const tix = tcfPlanTickets(sess.show);
   if(!tix.length){ res.reason = 'noTickets'; return res; }
   const n = ent.viewerCount, dis = ent.disabilityCount, comp = ent.companionCount;
@@ -6193,7 +6267,7 @@ function tcfPlanCalc(sess, ent, now){
     const valid = cand.filter(t=>tcfPlanSaleStatus(t, now) === 'ok');
     if(!valid.length){
       const sts = cand.map(t=>tcfPlanSaleStatus(t, now));
-      res.unresolved.push({pool:p, why: !cand.length ? 'none' : sts.every(x=>x==='ended') ? 'ended' : sts.every(x=>x==='notyet') ? 'notyet' : 'unavailable'});
+      res.unresolved.push({pool:p, why: !cand.length ? 'none' : sts.every(x=>x==='soldout') ? 'soldout' : sts.every(x=>x==='ended') ? 'ended' : sts.every(x=>x==='notyet') ? 'notyet' : 'unavailable'});
       return;
     }
     const sol = tcfPlanSolve(valid, nd);
@@ -6214,10 +6288,10 @@ function tcfPlanCalc(sess, ent, now){
     });
     p.cap = cap;
     if(man){
-      if(cap < p.need) res.warns.push(`${p.label}：票券只涵蓋 ${cap} 人，還差 ${p.need - cap} 人。`);
-      else if(cap > p.need) res.warns.push(`${p.label}：票券涵蓋 ${cap} 人，比實際人數多 ${cap - p.need} 人份。`);
+      if(cap < p.need) res.warns.push(`${p.label}：票券只涵蓋 ${cap} 張，還差 ${p.need - cap} 張。`);
+      else if(cap > p.need) res.warns.push(`${p.label}：票券涵蓋 ${cap} 張，比實際張數多 ${cap - p.need} 張。`);
     }else{
-      if(p.overRec) res.warns.push(`${p.label}：票券人數無法剛好湊成，需多買 ${p.rec.over} 人份。`);
+      if(p.overRec) res.warns.push(`${p.label}：票券張數無法剛好湊成，需多買 ${p.rec.over} 張。`);
       if(p.base != null && p.base > p.rec.cost) res.saved += p.base - p.rec.cost;
       if(p.alt) res.alts.push({label:p.label, cost:p.alt.cost, over:p.alt.over, save:p.rec.cost - p.alt.cost, counts:p.alt.counts, valid:p.valid});
     }
@@ -6262,8 +6336,25 @@ function tcfPlanBuildCtx(){
 // ══ 互動處理（每次改動：存 localStorage → 重新繪製；所有處理函式都不會因資料不完整而報錯）══
 function tcfPlanFind(key){ return tcfPlanSessions().find(s=>s.key === key); }
 function tcfPlanRefresh(){ tcfPlanSave(); tcfPlanRender(); }
-function tcfPlanToast(msg){ try{ if(typeof showToast === 'function') showToast(msg, 'err'); }catch(e){} }
+function tcfPlanToast(msg, type){ try{ if(typeof showToast === 'function') showToast(msg, type || 'err'); }catch(e){} }
+// 上一步：每次實際改動前先存一份快照（只存在記憶體，最多 40 步；重新整理後歸零）
+let _tcfPlanHist = [];
+function tcfPlanPush(){
+  const st = tcfPlanState();
+  _tcfPlanHist.push(JSON.stringify({ids:st.selectedShowIds, shows:st.shows}));
+  if(_tcfPlanHist.length > 40) _tcfPlanHist.shift();
+}
+function tcfPlanUndo(){
+  const j = _tcfPlanHist.pop(); if(!j) return;
+  try{
+    const o = JSON.parse(j), st = tcfPlanState();
+    st.selectedShowIds = Array.isArray(o.ids) ? o.ids : []; st.shows = (o.shows && typeof o.shows === 'object') ? o.shows : {};
+  }catch(e){ return; }
+  _tcfPlanUI.combo.clear(); _tcfPlanUI.special.clear();
+  tcfPlanRefresh();
+}
 function tcfPlanToggle(key){
+  tcfPlanPush();
   const st = tcfPlanState(), i = st.selectedShowIds.indexOf(key);
   if(i >= 0){ st.selectedShowIds.splice(i, 1); delete st.shows[key]; _tcfPlanUI.combo.delete(key); _tcfPlanUI.special.delete(key); }
   else { st.selectedShowIds.push(key); st.shows[key] = tcfPlanSanitizeEntry({}); } // 預設 1 人，系統直接試算
@@ -6271,7 +6362,10 @@ function tcfPlanToggle(key){
 }
 function tcfPlanViewers(key, d){
   const e = tcfPlanState().shows[key]; if(!e) return;
-  e.viewerCount = tcfPlanClamp(e.viewerCount + d, 1, TCF_PLAN_CFG.maxViewers, 1);
+  const nv = tcfPlanClamp(e.viewerCount + d, 1, TCF_PLAN_CFG.maxViewers, 1);
+  if(nv === e.viewerCount) return;
+  tcfPlanPush();
+  e.viewerCount = nv;
   let over = e.disabilityCount + e.companionCount - e.viewerCount; // 特殊席位人數不可超過總人數
   if(over > 0){ const c = Math.min(over, e.companionCount); e.companionCount -= c; over -= c; if(over > 0) e.disabilityCount -= over; }
   e.selectedTicketCombination = null; // 人數變了，手動票種組合作廢，回到自動推薦
@@ -6280,10 +6374,10 @@ function tcfPlanViewers(key, d){
 function tcfPlanSpecialToggle(key, w){
   const e = tcfPlanState().shows[key]; if(!e) return;
   const f = w === 'dis' ? 'disabilityCount' : 'companionCount';
-  if(e[f] > 0) e[f] = 0;
+  if(e[f] > 0){ tcfPlanPush(); e[f] = 0; }
   else{
-    if(e.disabilityCount + e.companionCount + 1 > e.viewerCount){ tcfPlanToast('特殊席位人數不能超過觀演人數，請先增加「幾個人一起看」。'); return; }
-    e[f] = 1;
+    if(e.disabilityCount + e.companionCount + 1 > e.viewerCount){ tcfPlanToast('特殊席位人數不能超過張數，請先增加張數。'); return; }
+    tcfPlanPush(); e[f] = 1;
   }
   e.selectedTicketCombination = null; tcfPlanRefresh();
 }
@@ -6292,13 +6386,14 @@ function tcfPlanSpecialStep(key, w, d){
   const f = w === 'dis' ? 'disabilityCount' : 'companionCount';
   const nv = e[f] + d;
   if(nv < 0) return;
-  if(d > 0 && e.disabilityCount + e.companionCount + d > e.viewerCount){ tcfPlanToast('特殊席位人數不能超過觀演人數。'); return; }
-  e[f] = nv; e.selectedTicketCombination = null; tcfPlanRefresh();
+  if(d > 0 && e.disabilityCount + e.companionCount + d > e.viewerCount){ tcfPlanToast('特殊席位人數不能超過張數。'); return; }
+  tcfPlanPush(); e[f] = nv; e.selectedTicketCombination = null; tcfPlanRefresh();
 }
 function tcfPlanUIToggle(kind, key){ const set = _tcfPlanUI[kind]; if(set.has(key)) set.delete(key); else set.add(key); tcfPlanRender(); }
 function tcfPlanCombo(key, idx, d){
   const e = tcfPlanState().shows[key], sess = tcfPlanFind(key); if(!e || !sess) return;
   const calc = tcfPlanCalc(sess, e, Date.now()); if(!calc.pools.length) return;
+  tcfPlanPush();
   let man = e.selectedTicketCombination;
   if(!man){ man = {}; calc.lines.forEach(l=>{ man[String(l.idx)] = l.count; }); } // 從目前推薦開始調整
   const k = String(idx), c = Math.max(0, Math.min(99, (man[k] || 0) + d));
@@ -6306,7 +6401,7 @@ function tcfPlanCombo(key, idx, d){
   e.selectedTicketCombination = man;
   tcfPlanRefresh();
 }
-function tcfPlanComboReset(key){ const e = tcfPlanState().shows[key]; if(e){ e.selectedTicketCombination = null; tcfPlanRefresh(); } }
+function tcfPlanComboReset(key){ const e = tcfPlanState().shows[key]; if(e){ tcfPlanPush(); e.selectedTicketCombination = null; tcfPlanRefresh(); } }
 function tcfPlanDay(ds){ _tcfPlanUI.day = ds; tcfPlanRender(); }
 function tcfPlanTab(tab){
   _tcfPlanUI.tab = tab; tcfPlanRender();
@@ -6316,7 +6411,8 @@ function tcfPlanTab(tab){
 function tcfPlanClear(){
   const st = tcfPlanState();
   if(!st.selectedShowIds.length) return;
-  if(st.selectedShowIds.length > 1 && !confirm('確定要清空目前的觀演行程嗎？')) return;
+  if(st.selectedShowIds.length > 1 && !confirm('確定要重置嗎？會清空目前所有已選演出與設定（可以按「上一步」還原）。')) return;
+  tcfPlanPush();
   st.selectedShowIds = []; st.shows = {}; _tcfPlanUI.combo.clear(); _tcfPlanUI.special.clear();
   tcfPlanRefresh();
 }
@@ -6331,20 +6427,20 @@ function tcfPlanLinesText(counts, tickets){
 }
 function tcfPlanEstimateHTML(sess, e, calc){
   if(!calc.ok){
-    const why = calc.reason === 'noTickets' ? '這場目前沒有可計算的票種資料。' : calc.unresolved.map(u=>{
+    const why = calc.reason === 'noTickets' ? '這場目前沒有可計算的票種資料。' : calc.reason === 'showSoldOut' ? '這場已售完（依後台標示）。' : calc.unresolved.map(u=>{
       const l = u.pool.label;
-      return u.why === 'ended' ? `${l}的票種已結束販售。` : u.why === 'notyet' ? `${l}的票種尚未開賣。` : `${l}目前沒有可購買的有效票種。`;
+      return u.why === 'soldout' ? `${l}的票種已售完。` : u.why === 'ended' ? `${l}的票種已結束販售。` : u.why === 'notyet' ? `${l}的票種尚未開賣。` : `${l}目前沒有可購買的有效票種。`;
     }).join('');
     const pt = sess.show.price ? `公開票價：${tcfEsc(parseFeeRange(sess.show.price).range)}` : '';
     return `<div class="pl-est none"><b>此場目前無法自動試算票價</b><small>${why} ${pt}</small></div>`;
   }
   const lines = calc.lines.map(l=>`<li><span>${tcfEsc(l.name)} × ${l.count}${l.people > 1 ? `<small>（每組 ${l.people} 人）</small>` : ''}</span><span>${tcfMoney(l.sub)}</span></li>`).join('');
-  const alts = calc.alts.map(a=>`<div class="pl-alt">可能更省的套票方案：${tcfPlanLinesText(a.counts, a.valid)}，${tcfMoney(a.cost)}（比推薦省 ${tcfMoney(a.save)}，會多買 ${a.over} 人份）</div>`).join('');
+  const alts = calc.alts.map(a=>`<div class="pl-alt">可能更省的套票方案：${tcfPlanLinesText(a.counts, a.valid)}，${tcfMoney(a.cost)}（比推薦省 ${tcfMoney(a.save)}，會多買 ${a.over} 張）</div>`).join('');
   return `<div class="pl-est ok">
     <div class="pl-est-top"><span>預估票價${calc.manual ? '<em>自訂票種</em>' : ''}</span><b>${tcfMoney(calc.total)}</b></div>
     <ul class="pl-lines">${lines || '<li><span>尚未選擇票券</span><span>$0</span></li>'}</ul>
     ${(calc.saved > 0 && !calc.manual) ? `<div class="pl-save">比全部買單人票省 ${tcfMoney(calc.saved)}</div>` : ''}
-    ${e.viewerCount > 1 && calc.total > 0 ? `<div class="pl-avg">約 ${tcfMoney(calc.total / e.viewerCount)}／人</div>` : ''}
+    ${e.viewerCount > 1 && calc.total > 0 ? `<div class="pl-avg">約 ${tcfMoney(calc.total / e.viewerCount)}／張</div>` : ''}
     ${calc.warns.map(w=>`<div class="pl-warn-s">${tcfEsc(w)}</div>`).join('')}
     ${alts}
   </div>`;
@@ -6358,11 +6454,11 @@ function tcfPlanComboHTML(sess, e, calc){
     const tr = p.cand.map(t=>{
       const stt = tcfPlanSaleStatus(t, now);
       const cur = man ? (man[String(t.idx)] || 0) : ((p.rec.counts[String(t.idx)]) || 0);
-      const lab = stt === 'notyet' ? '尚未開賣' : stt === 'ended' ? '已結束' : '';
+      const lab = stt === 'notyet' ? '尚未開賣' : stt === 'ended' ? '已結束' : stt === 'soldout' ? '已售完' : '';
       const sub = `${tcfMoney(t.price)} ／ ${t.people} 人${lab ? ` ・ ${lab}` : ''}`;
       return `<div class="pl-tk${lab ? ' off' : ''}"><div><b>${tcfEsc(t.name)}</b><small>${sub}</small></div>${lab ? '' : tcfPlanStepper(`tcfPlanCombo('${key}',${t.idx},-1)`, `tcfPlanCombo('${key}',${t.idx},1)`, `${cur}`, cur <= 0, cur >= 99)}</div>`;
     }).join('');
-    return `<div class="pl-pool"><div class="pl-pool-h">${p.label}　需涵蓋 ${p.need} 人</div>${tr}</div>`;
+    return `<div class="pl-pool"><div class="pl-pool-h">${p.label}　需涵蓋 ${p.need} 張</div>${tr}</div>`;
   }).join('');
   return `<div class="pl-panel"><div class="pl-panel-h"><span>更改票種</span><button type="button" onclick="tcfPlanComboReset('${key}')">改回推薦</button></div>${rows}<div class="pl-note">票券人數需涵蓋實際觀演人數，系統會即時重新計算預估票價。</div></div>`;
 }
@@ -6380,8 +6476,8 @@ function tcfPlanCardHTML(sess, ctx, mine){
   const price = s.price ? tcfEsc(parseFeeRange(s.price).range) : '';
   const venue = tcfEsc(tcfPlanVenueLabel(s));
   const main = mine
-    ? `<div class="pl-main static"><span class="pl-time">${tcfEsc(sess.timeStr || '未定')}</span><span class="pl-body"><b class="pl-title">${tcfEsc(tcfTTTitle(s.title))}</b><span class="pl-meta"><em>${venue}</em>${price ? `<i>${price}</i>` : ''}</span></span><button type="button" class="pl-remove" onclick="tcfPlanToggle('${key}')">移除</button></div>`
-    : `<button type="button" class="pl-main" aria-pressed="${sel}" onclick="tcfPlanToggle('${key}')"><span class="pl-time">${tcfEsc(sess.timeStr || '未定')}</span><span class="pl-body"><b class="pl-title">${tcfEsc(tcfTTTitle(s.title))}</b><span class="pl-meta"><em>${venue}</em>${price ? `<i>${price}</i>` : ''}</span></span><span class="pl-tick">${sel ? '✓ 已加入' : '＋ 加入'}</span></button>`;
+    ? `<div class="pl-main static"><span class="pl-time">${tcfEsc(sess.timeStr || '未定')}</span><span class="pl-body"><b class="pl-title">${tcfEsc(tcfTTTitle(s.title))}</b><span class="pl-meta"><em>${venue}</em>${price ? `<i>${price}</i>` : ''}${s.soldOut ? '<u class="pl-sold">已售完</u>' : ''}</span></span><button type="button" class="pl-remove" onclick="tcfPlanToggle('${key}')">移除</button></div>`
+    : `<button type="button" class="pl-main" aria-pressed="${sel}" onclick="tcfPlanToggle('${key}')"><span class="pl-time">${tcfEsc(sess.timeStr || '未定')}</span><span class="pl-body"><b class="pl-title">${tcfEsc(tcfTTTitle(s.title))}</b><span class="pl-meta"><em>${venue}</em>${price ? `<i>${price}</i>` : ''}${s.soldOut ? '<u class="pl-sold">已售完</u>' : ''}</span></span><span class="pl-tick">${sel ? '✓ 已加入' : '＋ 加入'}</span></button>`;
   let detail = '', flags = '';
   if(sel){
     const calc = ctx.calcs[sess.key], av = tcfPlanSpecialAvail(s);
@@ -6391,7 +6487,7 @@ function tcfPlanCardHTML(sess, ctx, mine){
     if(cl) flags += `<div class="pl-warn">時間撞到了！與「${cl.map(o=>tcfEsc(tcfTTTitle(o.show.title))).join('」「')}」重疊</div>`;
     if(mv) flags += `<div class="pl-warn mv">兩場演出場地不同，且中間只有 ${mv.gap} 分鐘，請留意移動時間。</div>`;
     detail = `<div class="pl-detail">${flags}
-      <div class="pl-row"><span>這場有幾個人一起看？</span>${tcfPlanStepper(`tcfPlanViewers('${key}',-1)`, `tcfPlanViewers('${key}',1)`, `${e.viewerCount} 人`, e.viewerCount <= 1, e.viewerCount >= TCF_PLAN_CFG.maxViewers)}</div>
+      <div class="pl-row"><span>要買幾張？<small class="pl-hint">加張數，系統自動換成最划算的票</small></span>${tcfPlanStepper(`tcfPlanViewers('${key}',-1)`, `tcfPlanViewers('${key}',1)`, `${e.viewerCount} 張`, e.viewerCount <= 1, e.viewerCount >= TCF_PLAN_CFG.maxViewers)}</div>
       ${tcfPlanEstimateHTML(sess, e, calc)}
       <div class="pl-acts">${calc.pools.length ? `<button type="button" class="${comboOpen ? 'on' : ''}" onclick="tcfPlanUIToggle('combo','${key}')">更改票種</button>` : ''}${hasSpecial ? `<button type="button" class="${spOpen ? 'on' : ''}" onclick="tcfPlanUIToggle('special','${key}')">特殊席位／票種需求（選填）</button>` : ''}</div>
       ${comboOpen ? tcfPlanComboHTML(sess, e, calc) : ''}${(hasSpecial && spOpen) ? tcfPlanSpecialHTML(sess, e) : ''}
@@ -6433,12 +6529,12 @@ function tcfPlanMineHTML(ctx){
   const DOW = ['日','一','二','三','四','五','六'];
   const groups = []; ctx.selected.forEach(s=>{ const g = groups[groups.length-1]; if(g && g.ds === s.ds) g.list.push(s); else groups.push({ds:s.ds, list:[s]}); });
   const body = groups.map(g=>{ const d = new Date(g.ds + 'T00:00:00'); return `<div class="pl-dayh"><b>${g.ds.slice(5).replace('-', '/')}</b><em>週${DOW[d.getDay()]}</em></div>${g.list.map(s=>tcfPlanCardHTML(s, ctx, true)).join('')}`; }).join('');
-  const checks = `<div class="pl-shareopts"><label><input type="checkbox" ${ctx.st.share.price ? 'checked' : ''} onchange="tcfPlanShareOpt('price',this.checked)"> 分享圖顯示預估票價</label><label><input type="checkbox" ${ctx.st.share.people ? 'checked' : ''} onchange="tcfPlanShareOpt('people',this.checked)"> 分享圖顯示每場人數</label></div>`;
+  const checks = `<div class="pl-shareopts"><label><input type="checkbox" ${ctx.st.share.price ? 'checked' : ''} onchange="tcfPlanShareOpt('price',this.checked)"> 分享圖顯示預估票價</label></div>`;
   return `${alerts ? `<div class="pl-alerts">${alerts}<small>撞場與場地移動以「開演時間＋約 ${TCF_PLAN_CFG.defaultShowMin} 分鐘」估算。</small></div>` : ''}
     ${body}
     <div class="pl-total"><div><span>共 ${ctx.selected.length} 場${ctx.uncalc ? `，${ctx.okN} 場可試算` : ''}</span><b>預估票價 ${tcfMoney(ctx.total)}</b>${ctx.uncalc ? `<small>另有 ${ctx.uncalc} 場票價未納入試算。</small>` : ''}</div></div>
     ${checks}
-    <div class="pl-final"><button type="button" class="pl-cta" onclick="tcfPlanOpenShare()">產生我的觀演表</button><button type="button" class="pl-clear" onclick="tcfPlanClear()">清空客製化行程</button></div>
+    <div class="pl-final"><button type="button" class="pl-cta" onclick="tcfPlanOpenShare()">產生我的觀演表</button></div>
     <p class="pl-fine">票價依目前公開資訊與販售期間估算，實際票價、剩餘票券與購票規則請以官方售票頁面為準。特殊票種可能有資格、證件、席位或購票方式限制，實際規定請以官方售票頁面為準。</p>`;
 }
 function tcfPlanRender(){
@@ -6447,8 +6543,11 @@ function tcfPlanRender(){
   const ctx = tcfPlanBuildCtx();
   const tab = _tcfPlanUI.tab;
   box.innerHTML = `<div class="pl-wrap">
+    <div class="pl-top"><button type="button" class="pl-back" onclick="setTcfView('cards')">← 返回全部一覽</button><div class="pl-top-r"><button type="button" class="pl-bak" onclick="tcfPlanOpenBackup()">備份／還原</button><button type="button" class="pl-undo" onclick="tcfPlanUndo()"${_tcfPlanHist.length ? '' : ' disabled'}>↩ 上一步</button><button type="button" class="pl-reset" onclick="tcfPlanClear()"${ctx.selected.length ? '' : ' disabled'}>重置</button></div></div>
     <div class="pl-heading">客製化我的喜劇節行程</div>
-    <div class="pl-tabs"><button type="button" class="${tab === 'pick' ? 'on' : ''}" onclick="tcfPlanTab('pick')">選演出</button><button type="button" class="${tab === 'mine' ? 'on' : ''}" onclick="tcfPlanTab('mine')">客製化我的喜劇節行程${ctx.selected.length ? `（${ctx.selected.length}）` : ''}</button></div>
+    <div class="pl-disclaimer"><b>票價為預估，未必正確</b><span>依目前公開資訊與販售期間估算；實際票價、剩餘票券與購票規則請以官方售票頁面為準。</span></div>
+    <div class="pl-saved">✓ 行程會自動儲存在這個瀏覽器；換裝置或清除瀏覽資料前，請先按「備份／還原」存一份</div>
+    <div class="pl-tabs"><button type="button" class="${tab === 'pick' ? 'on' : ''}" onclick="tcfPlanTab('pick')">選演出</button><button type="button" class="${tab === 'mine' ? 'on' : ''}" onclick="tcfPlanTab('mine')">已選行程${ctx.selected.length ? `（${ctx.selected.length}）` : ''}</button></div>
     <div class="pl-grid"><div class="pl-mainc">${tab === 'pick' ? tcfPlanPickHTML(ctx) : tcfPlanMineHTML(ctx)}</div><aside class="pl-side">${tcfPlanSummaryHTML(ctx)}</aside></div></div>`;
   tcfPlanBarSync(ctx);
 }
@@ -6460,32 +6559,221 @@ function tcfPlanBarSync(ctx){
   document.body.classList.toggle('tcf-plan-mode', !!(pg && pg.classList.contains('active')) && tcfView === 'plan');
   if(!on){ bar.hidden = true; return; }
   bar.hidden = false;
-  bar.innerHTML = `<div class="pl-bar-in"><div class="pl-bar-t"><b>已選 ${ctx.selected.length} 場｜預估 ${tcfMoney(ctx.total)}</b>${ctx.uncalc ? `<small>${ctx.uncalc} 場票價未計入</small>` : ''}</div><button type="button" onclick="tcfPlanTab('mine')">查看客製化行程</button></div>`;
+  bar.innerHTML = `<div class="pl-bar-in"><div class="pl-bar-t"><b>已選 ${ctx.selected.length} 場｜預估 ${tcfMoney(ctx.total)}</b><small>預估票價，未必正確${ctx.uncalc ? `・${ctx.uncalc} 場未計入` : ''}</small></div><button type="button" onclick="tcfPlanTab('mine')">查看客製化行程</button></div>`;
 }
+
+
+
+// ══ 後台：票種批次帶入（管理者專用）══
+// 把「票價」文字辨識出的票種，一次寫進「還沒有任何票種」的喜劇節演出。只新增 ticketTypes 欄位，其他資料原樣保留；
+// 區間價、只寫「起」、辨識不完整的演出不會自動勾選，留給你逐場手動處理。已經有票種的演出完全不動。
+let _tcfBatchCache = [];
+function tcfBatchCandidates(){
+  const seen = new Set(), out = [];
+  tcfBaseList().forEach(s=>{
+    if(!s || seen.has(s.id)) return; seen.add(s.id);
+    if(Array.isArray(s.ticketTypes) && s.ticketTypes.length) return; // 已有票種：不動
+    const r = ttParsePriceEx(s.price);
+    out.push({s, list:r.list, notes:r.notes, status: r.list.length ? (r.notes.length ? 'partial' : 'ok') : 'manual'});
+  });
+  const order = {ok:0, partial:1, manual:2};
+  out.sort((a, b)=>order[a.status] - order[b.status] || String(a.s.date).localeCompare(String(b.s.date)) || String(a.s.time || '').localeCompare(String(b.s.time || '')));
+  return out;
+}
+function tcfBatchIsEarly(name){ return /早鳥|預售|限量|early/i.test(name); }
+function tcfBatchRender(msg){
+  const box = document.getElementById('bt-body'); if(!box) return;
+  _tcfBatchCache = tcfBatchCandidates();
+  const n = {ok:0, partial:0, manual:0}; _tcfBatchCache.forEach(c=>n[c.status]++);
+  const rows = _tcfBatchCache.map((c, i)=>{
+    const tix = c.list.map(t=>`<span class="bt-t">${tcfEsc(t.name)} <b>${t.price === 0 ? '免費' : '$' + t.price.toLocaleString('en-US')}</b>${t.peopleCount > 1 ? `・${t.peopleCount} 人` : ''}${t.eligibility === 'accessible' ? '・身心障礙及陪同席' : ''}</span>`).join('');
+    const early = c.list.some(t=>tcfBatchIsEarly(t.name));
+    const date = String(c.s.date || '').split(',')[0];
+    return `<div class="bt-row ${c.status}" data-i="${i}">
+      <label class="bt-head"><input type="checkbox" class="bt-ck" ${c.status === 'ok' ? 'checked' : ''} ${c.status === 'manual' ? 'disabled' : ''}><span><b>${tcfEsc(tcfTTTitle(c.s.title))}</b><small>${tcfEsc(date)} ${tcfEsc(c.s.time || '')}　${tcfEsc(tcfPlanVenueLabel(c.s))}</small></span><em class="bt-tag">${c.status === 'ok' ? '可帶入' : c.status === 'partial' ? '部分辨識' : '需手動'}</em></label>
+      <div class="bt-price">票價文字：${tcfEsc(c.s.price || '（空白）')}</div>
+      ${tix ? `<div class="bt-tix">${tix}</div>` : ''}
+      ${c.notes.length ? `<div class="bt-notes">${c.notes.map(x=>tcfEsc(x)).join('；')}</div>` : ''}
+      ${early ? `<label class="bt-early">早鳥／預售截止日（選填）<input type="date" class="bt-end"></label>` : ''}
+    </div>`;
+  }).join('');
+  box.innerHTML = `<p class="bt-sum">還沒有票種的演出共 ${_tcfBatchCache.length} 場：可帶入 ${n.ok}、部分辨識 ${n.partial}、需手動 ${n.manual}。已經有票種的演出不會出現在這裡，也不會被動到。</p>
+    ${msg ? `<div class="bt-msg">${msg}</div>` : ''}
+    ${rows || '<div class="ts-loading">沒有需要處理的演出 🎉</div>'}`;
+  const ap = document.getElementById('bt-apply'); if(ap) ap.disabled = !_tcfBatchCache.length;
+}
+function tcfBatchOpen(){
+  if(!(typeof isLoggedIn === 'function' && isLoggedIn())){ tcfPlanToast('請先登入管理者帳號', 'err'); return; }
+  let ov = document.getElementById('tcf-bt-ov');
+  if(!ov){
+    ov = document.createElement('div'); ov.id = 'tcf-bt-ov'; ov.className = 'tcf-share-ov'; ov.hidden = true;
+    ov.innerHTML = `<div class="tcf-share-box bt-box" role="dialog" aria-label="票種批次帶入">
+      <button type="button" class="ts-close" aria-label="關閉" onclick="tcfBatchClose()">✕</button>
+      <h3>票種批次帶入</h3>
+      <p class="ts-sub">把「票價」文字辨識出的票種，一次寫進還沒有票種的喜劇節演出。請掃一遍確認名稱、金額和人數；勾選後按下方按鈕才會寫入資料庫。早鳥／預售的截止日沒填的話，會一直被當成有效。</p>
+      <div id="bt-body"></div>
+      <div class="bt-foot"><button type="button" class="ts-btn" id="bt-apply" onclick="tcfBatchApply()">寫入勾選的演出</button><button type="button" class="ts-btn ghost" onclick="tcfBatchAll(true)">全選可帶入</button><button type="button" class="ts-btn ghost" onclick="tcfBatchAll(false)">全部取消</button></div>
+    </div>`;
+    ov.addEventListener('click', e=>{ if(e.target === ov) tcfBatchClose(); });
+    document.body.appendChild(ov);
+  }
+  tcfBatchRender(''); ov.hidden = false; document.documentElement.classList.add('ts-lock');
+}
+function tcfBatchClose(){ const ov = document.getElementById('tcf-bt-ov'); if(ov) ov.hidden = true; document.documentElement.classList.remove('ts-lock'); }
+function tcfBatchAll(on){ document.querySelectorAll('#tcf-bt-ov .bt-row.ok .bt-ck').forEach(c=>{ c.checked = !!on; }); if(!on) document.querySelectorAll('#tcf-bt-ov .bt-row .bt-ck').forEach(c=>{ c.checked = false; }); }
+async function tcfBatchApply(){
+  if(!(typeof isLoggedIn === 'function' && isLoggedIn())){ tcfPlanToast('請先登入管理者帳號', 'err'); return; }
+  const picked = Array.from(document.querySelectorAll('#tcf-bt-ov .bt-row')).filter(r=>r.querySelector('.bt-ck') && r.querySelector('.bt-ck').checked);
+  if(!picked.length){ tcfPlanToast('還沒有勾選任何演出', 'err'); return; }
+  if(!confirm(`要把票種寫入 ${picked.length} 場演出嗎？\n（只會新增「票種」欄位，票價文字與其他資料都不會改動。）`)) return;
+  const btn = document.getElementById('bt-apply'); if(btn) btn.disabled = true;
+  let ok = 0; const failed = [];
+  for(const r of picked){
+    const c = _tcfBatchCache[parseInt(r.dataset.i, 10)]; if(!c) continue;
+    const endDate = (r.querySelector('.bt-end') || {}).value || '';
+    const tickets = c.list.map(t=>({name:t.name, price:t.price, peopleCount:t.peopleCount, eligibility:t.eligibility, soldOut:false, saleStart:'', saleEnd:(endDate && tcfBatchIsEarly(t.name)) ? `${endDate}T23:59:00+08:00` : ''}));
+    try{
+      await window.FB.save('shows', c.s.id, Object.assign({}, c.s, {ticketTypes:tickets}));
+      c.s.ticketTypes = tickets; // 立刻反映在畫面（資料庫的即時更新也會同步）
+      ok++;
+    }catch(e){ console.error('tcfBatchApply:', e); failed.push(tcfTTTitle(c.s.title)); }
+  }
+  tcfBatchRender(`<b>已寫入 ${ok} 場。</b>${failed.length ? `<br>寫入失敗 ${failed.length} 場：${failed.map(x=>tcfEsc(x)).join('、')}（可重試）` : ''}`);
+  try{ if(typeof tcfPlanRender === 'function' && tcfView === 'plan') tcfPlanRender(); }catch(e){}
+}
+
+// ══ 備份／還原行程：把「選了哪些場次、張數、特殊席位人數、自訂票種組合」存成一段備份碼／連結，換裝置或清除資料後貼回來還原 ══
+// 不含姓名、證件或任何個資；備份碼只有場次代號與人數，仍請不要公開分享（含特殊席位人數）
+function tcfPlanB64e(str){ return btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function tcfPlanB64d(b){ b = b.replace(/-/g, '+').replace(/_/g, '/'); while(b.length % 4) b += '='; return decodeURIComponent(escape(atob(b))); }
+function tcfPlanEncode(){
+  const st = tcfPlanState();
+  const rows = st.selectedShowIds.filter(k=>st.shows[k]).map(k=>{
+    const e = st.shows[k], r = [k, e.viewerCount, e.disabilityCount, e.companionCount];
+    if(e.selectedTicketCombination) r.push(e.selectedTicketCombination);
+    return r;
+  });
+  return 'CICI1.' + tcfPlanB64e(JSON.stringify({v:1, r:rows}));
+}
+// 接受：完整備份連結、備份碼（含或不含 CICI1. 前綴）。格式不對回傳 null，不會報錯
+function tcfPlanDecode(text){
+  let t = String(text || '').trim(); if(!t) return null;
+  const m = t.match(/[?&#]tcfplan=([^&#\s]+)/);
+  if(m){ try{ t = decodeURIComponent(m[1]); }catch(e){ return null; } }
+  t = t.replace(/^CICI1\./, '').replace(/\s+/g, '');
+  try{
+    const o = JSON.parse(tcfPlanB64d(t));
+    if(!o || o.v !== 1 || !Array.isArray(o.r)) return null;
+    const out = [];
+    o.r.slice(0, 300).forEach(r=>{
+      if(!Array.isArray(r) || typeof r[0] !== 'string' || !r[0] || r[0].length >= 120) return;
+      out.push([r[0], tcfPlanSanitizeEntry({viewerCount:r[1], disabilityCount:r[2], companionCount:r[3], selectedTicketCombination:r[4]})]);
+    });
+    return out;
+  }catch(e){ return null; }
+}
+function tcfPlanLink(){ return location.href.split(/[?#]/)[0] + '?tcfplan=' + encodeURIComponent(tcfPlanEncode()) + '#tcf'; }
+function tcfPlanApplyBackup(rows, mode){ // mode：'replace' 取代目前行程；'merge' 合併（同一場以目前的為準，只加入沒有的）
+  tcfPlanPush();
+  const st = tcfPlanState();
+  if(mode === 'replace'){ st.selectedShowIds = []; st.shows = {}; }
+  rows.forEach(r=>{ const k = r[0]; if(mode === 'merge' && st.shows[k]) return; if(!st.shows[k]) st.selectedShowIds.push(k); st.shows[k] = r[1]; });
+  _tcfPlanUI.combo.clear(); _tcfPlanUI.special.clear();
+  tcfPlanRefresh();
+}
+function tcfPlanCopy(text, okMsg){
+  const done = ()=>tcfPlanToast(okMsg || '已複製', 'ok');
+  const fallback = ()=>{ try{ const ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;left:-999px;top:0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }catch(e){ tcfPlanToast('複製失敗，請手動選取上方文字複製', 'err'); } };
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(fallback); } else fallback();
+}
+function tcfPlanOpenBackup(prefill, msg){
+  let ov = document.getElementById('tcf-bak-ov');
+  if(!ov){
+    ov = document.createElement('div'); ov.id = 'tcf-bak-ov'; ov.className = 'tcf-share-ov'; ov.hidden = true;
+    ov.innerHTML = `<div class="tcf-share-box" role="dialog" aria-label="備份／還原行程">
+      <button type="button" class="ts-close" aria-label="關閉" onclick="tcfPlanCloseBackup()">✕</button>
+      <h3>備份／還原行程</h3>
+      <div class="bk-sec"><b>備份</b>
+        <p id="bk-info"></p>
+        <textarea id="bk-out" readonly rows="3" onclick="this.select()"></textarea>
+        <div class="bk-btns"><button type="button" class="ts-btn" id="bk-copy-link" onclick="tcfPlanCopy(tcfPlanLink(),'已複製備份連結')">複製備份連結</button><button type="button" class="ts-btn ghost" id="bk-copy-code" onclick="tcfPlanCopy(tcfPlanEncode(),'已複製備份碼')">複製備份碼</button></div>
+        <p class="bk-fine">備份內容只有選了哪些場次、張數、特殊席位人數和自訂票種組合，不含任何個資；仍請不要公開分享。</p></div>
+      <div class="bk-sec"><b>還原</b>
+        <textarea id="bk-in" rows="3" placeholder="貼上備份連結或備份碼"></textarea>
+        <div id="bk-msg" class="bk-msg"></div>
+        <div class="bk-btns"><button type="button" class="ts-btn" onclick="tcfPlanBackupRestore('replace')">取代目前行程</button><button type="button" class="ts-btn ghost" onclick="tcfPlanBackupRestore('merge')">合併到目前行程</button></div></div>
+    </div>`;
+    ov.addEventListener('click', e=>{ if(e.target === ov) tcfPlanCloseBackup(); });
+    document.body.appendChild(ov);
+  }
+  const n = tcfPlanBuildCtx().selected.length, out = document.getElementById('bk-out');
+  document.getElementById('bk-info').textContent = n ? `目前已選 ${n} 場。複製連結或備份碼存起來，之後（或換裝置）貼回「還原」就能找回。` : '目前還沒有選演出，沒有可以備份的內容。';
+  if(out) out.value = n ? tcfPlanLink() : '';
+  ['bk-copy-link', 'bk-copy-code'].forEach(id=>{ const b = document.getElementById(id); if(b) b.disabled = !n; });
+  document.getElementById('bk-in').value = prefill || '';
+  document.getElementById('bk-msg').textContent = msg || '';
+  ov.hidden = false; document.documentElement.classList.add('ts-lock');
+}
+function tcfPlanCloseBackup(){ const ov = document.getElementById('tcf-bak-ov'); if(ov) ov.hidden = true; document.documentElement.classList.remove('ts-lock'); }
+function tcfPlanBackupRestore(mode){
+  const msgEl = document.getElementById('bk-msg'), rows = tcfPlanDecode(document.getElementById('bk-in').value);
+  if(!rows || !rows.length){ if(msgEl) msgEl.textContent = '無法辨識這段備份碼，請確認有完整複製（連結或備份碼都可以）。'; return; }
+  const have = new Set(tcfPlanSessions().map(x=>x.key)), missing = rows.filter(r=>!have.has(r[0])).length;
+  tcfPlanApplyBackup(rows, mode);
+  if(msgEl) msgEl.textContent = `已${mode === 'merge' ? '合併' : '還原'} ${rows.length - missing} 場${missing ? `；另有 ${missing} 場目前找不到（演出可能已下架或更動），已略過` : ''}。`;
+  if(tcfPlanBuildCtx().selected.length){ const out = document.getElementById('bk-out'); if(out) out.value = tcfPlanLink(); }
+}
+// 開啟備份連結（?tcfplan=…）：資料載入後，目前行程是空的就直接還原，否則讓使用者選「取代」或「合併」
+let _tcfPlanInbox = null;
+(function(){
+  try{
+    const q = new URLSearchParams(location.search).get('tcfplan');
+    if(q){ _tcfPlanInbox = q; const u = new URL(location.href); u.searchParams.delete('tcfplan'); history.replaceState(history.state, '', u.pathname + u.search + u.hash); }
+  }catch(e){}
+  if(!_tcfPlanInbox) return;
+  let tries = 0;
+  const t = setInterval(()=>{
+    tries++;
+    if(window._dataReady){
+      clearInterval(t);
+      try{
+        const rows = tcfPlanDecode(_tcfPlanInbox);
+        if(typeof showPage === 'function') showPage('tcf');
+        setTcfView('plan');
+        if(!rows || !rows.length){ tcfPlanToast('這個備份連結無法辨識', 'err'); return; }
+        if(!tcfPlanState().selectedShowIds.length){ tcfPlanApplyBackup(rows, 'replace'); tcfPlanToast(`已從備份連結還原 ${rows.length} 場`, 'ok'); }
+        else tcfPlanOpenBackup(_tcfPlanInbox, `偵測到備份連結（${rows.length} 場）。目前已有行程，請選擇「取代」或「合併」。`);
+      }catch(e){ console.error('tcfPlan inbox:', e); }
+    } else if(tries > 80) clearInterval(t);
+  }, 400);
+})();
 
 // ══ 分享圖片（Canvas 專用 share card，由 planner state 直接繪製；不是網頁截圖）══
 // 9:16（1080×1920）。場次多時依日期自動分成多張，優先保持字級可讀，而不是硬塞成一張。
 // 圖片只放：日期、時間、演出名稱、場地、場次數（票價／人數由使用者勾選才放）；不輸出任何身心障礙／陪同／票種資格資訊
 const TCF_SHARE = {W:1080, H:1920, HEAD:450, FOOT:210, PAD:60, GAP:26, BODYPAD:40,
+  // 雙欄：往橫向發展，左右兩欄各自由上往下排，標題最多三行（不截斷）；同一天可以跨欄／跨張（標「續」）
+  wide:{k:'W', cols:2, colW:468, colGap:24, date:64, title:32, venue:24, time:42, lh:40, maxLines:3, rowBy:[0,146,186,226]},
   tiers:[ // 由大到小；row2＝標題兩行的卡片高度、row1＝標題一行的卡片高度（依實際標題行數決定）
     {k:'L', date:112, title:54, venue:34, time:68, lh:67, row2:245, row1:178},
     {k:'M', date:96,  title:44, venue:30, time:54, lh:55, row2:214, row1:159},
     {k:'S', date:84,  title:36, venue:26, time:44, lh:45, row2:187, row1:142}
   ]};
-// 標題可用寬度（需與繪製時一致；有勾「顯示每場人數」時右側要留位置）
+// 標題可用寬度（需與繪製時一致；people 參數目前一律為 false，分享圖不顯示每場人數）
 function tcfPlanShareTextW(tier, people){ return (TCF_SHARE.W - TCF_SHARE.PAD * 2) - 28 - 16 - Math.round(tier.time * 3.3) - 30 - (people ? 100 : 0); }
 // measure(sess, tier) → 標題實際行數（1 或 2）。回傳 pages: [{items:[{t:'date',ds,cont}|{t:'ses',s,lines,rowH}], h}]
 function tcfPlanSharePack(list, tier, measure){
   const BODY = TCF_SHARE.H - TCF_SHARE.HEAD - TCF_SHARE.FOOT - TCF_SHARE.BODYPAD;
-  const rowOf = s=>{ const n = Math.min(2, Math.max(1, measure ? measure(s, tier) : 2)); return {lines:n, rowH: n === 1 ? tier.row1 : tier.row2}; };
+  const mx = tier.maxLines || 2;
+  const rowOf = s=>{ const n = Math.min(mx, Math.max(1, measure ? measure(s, tier) : mx)); return {lines:n, rowH: tier.rowBy ? tier.rowBy[n] : (n === 1 ? tier.row1 : tier.row2)}; };
   const groups = [];
   list.forEach(s=>{ const g = groups[groups.length-1]; if(g && g.ds === s.ds) g.list.push(s); else groups.push({ds:s.ds, list:[s]}); });
   const pages = []; let cur = {items:[], h:0};
   const newPage = ()=>{ if(cur.items.length) pages.push(cur); cur = {items:[], h:0}; };
   groups.forEach(g=>{
     const rows = g.list.map(rowOf);
-    const full = tier.date + rows.reduce((a, r)=>a + r.rowH, 0) + TCF_SHARE.GAP;
-    if(full <= BODY){
+    const full = tier.date + rows.reduce((a, r)=>a + r.rowH, 0) + (tier.gap != null ? tier.gap : TCF_SHARE.GAP);
+    if(full <= BODY){ // 整天放得下：放不下目前這張就換新的一張
       if(cur.h + full > BODY) newPage();
       cur.items.push({t:'date', ds:g.ds}); g.list.forEach((s, i)=>cur.items.push({t:'ses', s, lines:rows[i].lines, rowH:rows[i].rowH})); cur.h += full; return;
     }
@@ -6496,13 +6784,37 @@ function tcfPlanSharePack(list, tier, measure){
       while(idx < g.list.length && cur.h + rows[idx].rowH <= BODY){ cur.items.push({t:'ses', s:g.list[idx], lines:rows[idx].lines, rowH:rows[idx].rowH}); cur.h += rows[idx].rowH; idx++; }
       if(idx < g.list.length) newPage();
     }
-    cur.h += TCF_SHARE.GAP;
+    cur.h += (tier.gap != null ? tier.gap : TCF_SHARE.GAP);
   });
   newPage();
   return pages;
 }
-function tcfPlanShareLayout(list, measure){
-  const packs = TCF_SHARE.tiers.map(t=>({tier:t, pages:tcfPlanSharePack(list, t, measure)}));
+// 雙欄分頁：一張有左右兩欄，先排滿左欄再排右欄，兩欄都滿才換下一張
+function tcfPlanSharePackWide(list, tier, measure){
+  const BODY = TCF_SHARE.H - TCF_SHARE.HEAD - TCF_SHARE.FOOT - TCF_SHARE.BODYPAD;
+  const rowOf = s=>{ const n = Math.min(tier.maxLines, Math.max(1, measure ? measure(s, tier) : tier.maxLines)); return {lines:n, rowH:tier.rowBy[n]}; };
+  const groups = [];
+  list.forEach(s=>{ const g = groups[groups.length-1]; if(g && g.ds === s.ds) g.list.push(s); else groups.push({ds:s.ds, list:[s]}); });
+  const pages = []; let cur = {items:[], col:0, h:0};
+  const nextCol = ()=>{ if(cur.col === 0){ cur.col = 1; cur.h = 0; } else { pages.push(cur); cur = {items:[], col:0, h:0}; } };
+  groups.forEach(g=>{
+    let idx = 0, first = true;
+    while(idx < g.list.length){
+      if(cur.h + tier.date + rowOf(g.list[idx]).rowH > BODY) nextCol(); // 放不下「日期標題＋至少一場」→ 換欄（右欄也滿了就換頁）
+      cur.items.push({t:'date', ds:g.ds, cont:!first, col:cur.col}); cur.h += tier.date; first = false;
+      while(idx < g.list.length){
+        const r = rowOf(g.list[idx]);
+        if(cur.h + r.rowH > BODY) break;
+        cur.items.push({t:'ses', s:g.list[idx], lines:r.lines, rowH:r.rowH, col:cur.col}); cur.h += r.rowH; idx++;
+      }
+      if(idx < g.list.length) nextCol();
+    }
+  });
+  if(cur.items.length) pages.push(cur);
+  return pages;
+}
+function tcfPlanShareLayout(list, measure, wide){
+  const packs = (wide ? [TCF_SHARE.wide] : TCF_SHARE.tiers).map(t=>({tier:t, pages:(t.k === 'W' ? tcfPlanSharePackWide : tcfPlanSharePack)(list, t, measure)}));
   const minPages = Math.min.apply(null, packs.map(p=>p.pages.length));
   return packs.find(p=>p.pages.length === minPages); // 在「頁數最少」的前提下，選字級最大的
 }
@@ -6525,6 +6837,34 @@ function tcfPlanSpaced(c, text, x, y, sp, align){
   let cx = align === 'center' ? x - total / 2 : align === 'right' ? x - total : x;
   c.textAlign = 'left';
   chars.forEach((ch, i)=>{ c.fillText(ch, cx, y); cx += widths[i] + sp; });
+}
+function tcfPlanDrawWideItem(c, it, tier, ys){
+  const S = TCF_SHARE, BLUE = '#1e47da', BLUE2 = '#319ef1', YEL = '#f5d558', INK = '#2d2b1f';
+  const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const x = S.PAD + it.col * (tier.colW + tier.colGap), y = ys[it.col];
+  if(it.t === 'date'){
+    const d = new Date(it.ds + 'T00:00:00'), label = it.ds.slice(5).replace('-', '.'), wd = DOW[d.getDay()], ph = tier.date - 14;
+    c.font = `900 ${Math.round(ph * .74)}px ${TCF_SHARE_FONT_DI}`; const w1 = c.measureText(label).width;
+    c.font = `800 ${Math.round(ph * .34)}px ${TCF_SHARE_FONT_DI}`; const w2 = c.measureText(wd).width;
+    const pw = 32 + w1 + 16 + w2 + 32 + (it.cont ? 84 : 0);
+    c.fillStyle = YEL; tcfPlanRR(c, x, y, pw, ph, ph / 2); c.fill();
+    c.fillStyle = INK; c.textAlign = 'left'; c.font = `900 ${Math.round(ph * .74)}px ${TCF_SHARE_FONT_DI}`; c.fillText(label, x + 32, y + ph * .78);
+    c.fillStyle = BLUE; c.font = `800 ${Math.round(ph * .34)}px ${TCF_SHARE_FONT_DI}`; c.fillText(wd, x + 32 + w1 + 16, y + ph * .76);
+    if(it.cont){ c.fillStyle = INK; c.font = `700 ${Math.round(ph * .3)}px ${TCF_SHARE_FONT_ZH}`; c.fillText('（續）', x + 32 + w1 + 16 + w2 + 10, y + ph * .72); }
+    ys[it.col] += tier.date; return;
+  }
+  const s = it.s, w = tier.colW, h = it.rowH - 14;
+  c.save(); c.shadowColor = 'rgba(30,71,218,.16)'; c.shadowBlur = 18; c.shadowOffsetY = 5; c.fillStyle = '#fff'; tcfPlanRR(c, x, y, w, h, 28); c.fill(); c.restore();
+  const tw = 136, th = 50, tg = c.createLinearGradient(x + 14, y + 14, x + 14 + tw, y + 14 + th); tg.addColorStop(0, BLUE); tg.addColorStop(1, BLUE2);
+  c.fillStyle = tg; tcfPlanRR(c, x + 14, y + 14, tw, th, 25); c.fill();
+  c.fillStyle = YEL; c.font = `900 ${tier.time}px ${TCF_SHARE_FONT_DI}`; c.textAlign = 'center'; c.fillText(s.timeStr || '--:--', x + 14 + tw / 2, y + 14 + th / 2 + tier.time * .34);
+  c.textAlign = 'left'; c.fillStyle = BLUE; c.font = `700 ${tier.venue}px ${TCF_SHARE_FONT_ZH}`;
+  c.fillText(tcfPlanWrap(c, tcfPlanVenueLabel(s.show), w - 14 - tw - 12 - 16, 1)[0] || '', x + 14 + tw + 12, y + 14 + th / 2 + tier.venue * .36);
+  c.fillStyle = INK; c.font = `900 ${tier.title}px ${TCF_SHARE_FONT_ZH}`;
+  const lines = tcfPlanWrap(c, tcfTTTitle(s.show.title), w - 32, tier.maxLines);
+  let ty = y + 14 + th + 14 + tier.lh * .78;
+  lines.forEach(l=>{ c.fillText(l, x + 16, ty); ty += tier.lh; });
+  ys[it.col] += it.rowH;
 }
 function tcfPlanDrawPage(page, tier, meta, opts, logo){
   const S = TCF_SHARE, W = S.W, H = S.H, c0 = document.createElement('canvas');
@@ -6556,7 +6896,9 @@ function tcfPlanDrawPage(page, tier, meta, opts, logo){
   // 內容
   let y = S.HEAD + S.BODYPAD;
   const DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const ys = [y, y]; // 雙欄：左右兩欄各自的目前高度
   page.items.forEach(it=>{
+    if(tier.k === 'W'){ tcfPlanDrawWideItem(c, it, tier, ys); return; }
     if(it.t === 'date'){
       const d = new Date(it.ds + 'T00:00:00'), label = it.ds.slice(5).replace('-', '.'), wd = DOW[d.getDay()];
       const ph = tier.date - 26;
@@ -6577,18 +6919,13 @@ function tcfPlanDrawPage(page, tier, meta, opts, logo){
       c.fillStyle = YEL; c.font = `900 ${tier.time}px ${TCF_SHARE_FONT_DI}`; c.textAlign = 'center'; c.fillText(s.timeStr || '--:--', x + 16 + tw / 2, y + 16 + th / 2 + tier.time * .34);
       const tx = x + 16 + tw + 30, maxW = tcfPlanShareTextW(tier, opts.people);
       c.textAlign = 'left'; c.fillStyle = INK; c.font = `900 ${tier.title}px ${TCF_SHARE_FONT_ZH}`;
-      const lines = tcfPlanWrap(c, tcfTTTitle(s.show.title), maxW, 2);
+      const lines = tcfPlanWrap(c, tcfTTTitle(s.show.title), maxW, tier.maxLines || 2);
       const lh = tier.lh, blockH = lines.length * lh + 10 + tier.venue * 1.2;
       let ty = y + (h - blockH) / 2 + tier.title * .98;
       lines.forEach(l=>{ c.fillText(l, tx, ty); ty += lh; });
       c.fillStyle = BLUE; c.font = `700 ${tier.venue}px ${TCF_SHARE_FONT_ZH}`;
       c.beginPath(); c.arc(tx + 8, ty - lh + tier.venue * 1.05 + 10 - tier.venue * .38, 7, 0, 7); c.fill();
       c.fillText(tcfPlanWrap(c, tcfPlanVenueLabel(s.show), maxW - 28, 1)[0], tx + 26, ty - lh + tier.venue * 1.05 + 10);
-      if(opts.people){
-        const n = (meta.people && meta.people[s.key]) || 1;
-        c.fillStyle = 'rgba(30,71,218,.1)'; tcfPlanRR(c, x + w - 24 - 84, y + h / 2 - 28, 84, 56, 28); c.fill();
-        c.fillStyle = BLUE; c.font = `800 28px ${TCF_SHARE_FONT_ZH}`; c.textAlign = 'center'; c.fillText(`${n} 人`, x + w - 24 - 42, y + h / 2 + 10);
-      }
       y += it.rowH;
     }
   });
@@ -6598,13 +6935,16 @@ function tcfPlanDrawPage(page, tier, meta, opts, logo){
   c.fillStyle = fg; c.fillRect(0, H - S.FOOT, W, S.FOOT + 80); c.restore();
   c.fillStyle = YEL; c.fillRect(0, H - S.FOOT, W, 0);
   c.textAlign = 'left'; c.fillStyle = '#fff'; c.font = `900 70px ${TCF_SHARE_FONT_ZH}`; c.fillText(`這次要看 ${meta.total} 場！`, S.PAD, H - S.FOOT + 92);
-  if(opts.price && meta.priceText){ c.fillStyle = YEL; c.font = `800 36px ${TCF_SHARE_FONT_ZH}`; c.fillText(meta.priceText, S.PAD, H - S.FOOT + 146); }
+  if(opts.price && meta.priceText){ c.fillStyle = YEL; c.font = `800 32px ${TCF_SHARE_FONT_ZH}`; c.fillText(meta.priceText, S.PAD, H - S.FOOT + 168); }
   c.textAlign = 'right'; c.fillStyle = '#fff'; c.font = `800 34px ${TCF_SHARE_FONT_DI}`; c.fillText('cici-radio.vercel.app', W - S.PAD, H - S.FOOT + 88);
   c.fillStyle = YEL; c.font = `700 24px ${TCF_SHARE_FONT_DI}`; tcfPlanSpaced(c, '嘻嘻哪哩唷 CICI RADIO', W - S.PAD, H - S.FOOT + 130, 3, 'right');
   return c0;
 }
 // ── 預覽視窗 ──
 let _tcfShareUrls = [], _tcfShareFiles = [], _tcfShareSeq = 0;
+const _tcfShareOff = new Set(); // 使用者取消勾選（不要生成）的日期；只存在記憶體，每次打開預覽視窗沿用
+function tcfPlanShareDay(ds, on){ if(on) _tcfShareOff.delete(ds); else _tcfShareOff.add(ds); tcfPlanShareRender(); }
+function tcfPlanShareDaysAll(on){ const ctx = tcfPlanBuildCtx(); ctx.selected.forEach(x=>{ if(on) _tcfShareOff.delete(x.ds); else _tcfShareOff.add(x.ds); }); tcfPlanShareRender(); }
 function tcfPlanEnsureShareDom(){
   let ov = document.getElementById('tcf-share-ov');
   if(ov) return ov;
@@ -6612,8 +6952,10 @@ function tcfPlanEnsureShareDom(){
   ov.innerHTML = `<div class="tcf-share-box" role="dialog" aria-label="我的台北喜劇節 分享圖片">
     <button type="button" class="ts-close" aria-label="關閉" onclick="tcfPlanCloseShare()">✕</button>
     <h3>我的台北喜劇節・分享圖片</h3>
-    <p class="ts-sub">這張就是你要分享的觀演表（9:16，適合 Instagram 限時動態）。圖片不會包含身心障礙、陪同或票種資格資訊。</p>
-    <div class="ts-opts"><label><input type="checkbox" id="ts-price" onchange="tcfPlanShareOpt('price',this.checked)"> 顯示預估票價</label><label><input type="checkbox" id="ts-people" onchange="tcfPlanShareOpt('people',this.checked)"> 顯示每場人數</label></div>
+    <p class="ts-sub">這張就是你要分享的觀演表（9:16，適合 Instagram 限時動態）。圖片只有日期、時間、演出與場地，不會包含人數、身心障礙、陪同或票種資格資訊。</p>
+    <div class="ts-daysbox"><div class="ts-days-h"><span>要生成哪幾天？</span><span><button type="button" onclick="tcfPlanShareDaysAll(true)">全選</button><button type="button" onclick="tcfPlanShareDaysAll(false)">全不選</button></span></div><div id="ts-days" class="ts-days"></div></div>
+    <div class="ts-opts"><label><input type="checkbox" id="ts-price" onchange="tcfPlanShareOpt('price',this.checked)"> 顯示預估票價</label><label><input type="checkbox" id="ts-wide" onchange="tcfPlanShareOpt('wide',this.checked)"> 雙欄排列（橫向，張數較少）</label></div>
+    <div id="ts-auto" class="ts-auto"></div>
     <div id="ts-list" class="ts-list"></div>
     <p class="ts-hint">iPhone 如果按「儲存圖片」沒有直接存進相簿：請長按圖片，選「加入照片」或「儲存到照片」。</p>
   </div>`;
@@ -6637,8 +6979,8 @@ async function tcfPlanShareRender(){
 async function tcfPlanShareRenderInner(){
   const seq = ++_tcfShareSeq, listEl = document.getElementById('ts-list'); if(!listEl) return;
   const ctx = tcfPlanBuildCtx(), st = ctx.st;
-  const cbP = document.getElementById('ts-price'), cbN = document.getElementById('ts-people');
-  if(cbP) cbP.checked = !!st.share.price; if(cbN) cbN.checked = !!st.share.people;
+  const cbP = document.getElementById('ts-price');
+  if(cbP) cbP.checked = !!st.share.price;
   if(!ctx.selected.length){ listEl.innerHTML = '<div class="ts-loading">還沒有選演出</div>'; return; }
   listEl.innerHTML = '<div class="ts-loading">圖片產生中…</div>';
   // 字型：等網頁字型載入（逾時就用系統字型，不卡住）
@@ -6650,20 +6992,34 @@ async function tcfPlanShareRenderInner(){
   let logo = await loadLogo();
   if(seq !== _tcfShareSeq) return;
   const mc = document.createElement('canvas').getContext('2d');
-  const measure = (sess, tier)=>{ mc.font = `900 ${tier.title}px ${TCF_SHARE_FONT_ZH}`; return tcfPlanWrap(mc, tcfTTTitle(sess.show.title), tcfPlanShareTextW(tier, !!st.share.people), 2).length; };
-  const lay = tcfPlanShareLayout(ctx.selected, measure);
-  const days = ctx.selected.map(s=>s.ds), fmt = ds=>ds.slice(5).replace('-', '.');
+  const measure = (sess, tier)=>{ mc.font = `900 ${tier.title}px ${TCF_SHARE_FONT_ZH}`; return tcfPlanWrap(mc, tcfTTTitle(sess.show.title), tier.k === 'W' ? tier.colW - 32 : tcfPlanShareTextW(tier, false), tier.maxLines || 2).length; };
+  // 要生成哪幾天
+  const dayList = [], dayCount = {};
+  ctx.selected.forEach(x=>{ if(!(x.ds in dayCount)){ dayCount[x.ds] = 0; dayList.push(x.ds); } dayCount[x.ds]++; });
+  const daysEl = document.getElementById('ts-days');
+  if(daysEl) daysEl.innerHTML = dayList.map(ds=>`<label class="ts-day"><input type="checkbox" ${_tcfShareOff.has(ds) ? '' : 'checked'} onchange="tcfPlanShareDay('${ds}',this.checked)"> ${ds.slice(5).replace('-', '/')}<small>${dayCount[ds]} 場</small></label>`).join('');
+  const inc = ctx.selected.filter(x=>!_tcfShareOff.has(x.ds));
+  const autoEl = document.getElementById('ts-auto');
+  if(!inc.length){ listEl.innerHTML = '<div class="ts-loading">請至少勾選一天</div>'; if(autoEl) autoEl.textContent = ''; return; }
+  const incOk = inc.filter(x=>ctx.calcs[x.key] && ctx.calcs[x.key].ok);
+  ctx.total = incOk.reduce((a2, x)=>a2 + ctx.calcs[x.key].total, 0); ctx.okN = incOk.length; ctx.uncalc = inc.length - incOk.length;
+  const single = tcfPlanShareLayout(inc, measure, false), wideLay = tcfPlanShareLayout(inc, measure, true);
+  const auto = st.share.wide == null;
+  const useWide = auto ? (single.pages.length > 2 && wideLay.pages.length < single.pages.length) : !!st.share.wide; // 單欄超過 2 張、雙欄比較少張 → 自動雙欄（使用者可手動切換）
+  const lay = useWide ? wideLay : single;
+  const cbW = document.getElementById('ts-wide'); if(cbW) cbW.checked = useWide;
+  if(autoEl) autoEl.textContent = (auto && useWide) ? `場次較多（${inc.length} 場），已自動改用雙欄排列，共 ${lay.pages.length} 張；取消勾選可改回單欄（共 ${single.pages.length} 張）。` : (lay.pages.length > 1 ? `共 ${lay.pages.length} 張，依日期分頁。` : '');
+  const days = inc.map(s=>s.ds), fmt = ds=>ds.slice(5).replace('-', '.');
   const range = days.length ? (days[0] === days[days.length-1] ? fmt(days[0]) : `${fmt(days[0])} – ${fmt(days[days.length-1])}`) : '';
-  const people = {}; ctx.selected.forEach(s=>{ people[s.key] = st.shows[s.key].viewerCount; });
-  const priceText = ctx.okN > 0 ? `預估票價 ${tcfMoney(ctx.total)}${ctx.uncalc ? `（另有 ${ctx.uncalc} 場未計入）` : ''}` : '';
+  const priceText = ctx.okN > 0 ? `預估票價 ${tcfMoney(ctx.total)}（未必正確${ctx.uncalc ? `，另有 ${ctx.uncalc} 場未計入` : ''}）` : '';
   const toBlob = cv=>new Promise((res, rej)=>{ try{ cv.toBlob(b=>b ? res(b) : rej(new Error('toBlob')), 'image/png'); }catch(e){ rej(e); } });
   const blobs = [];
   for(let i = 0; i < lay.pages.length; i++){
-    const meta = {page:i + 1, pages:lay.pages.length, total:ctx.selected.length, range, people, priceText};
-    let cv = tcfPlanDrawPage(lay.pages[i], lay.tier, meta, {price:!!st.share.price, people:!!st.share.people}, logo);
+    const meta = {page:i + 1, pages:lay.pages.length, total:inc.length, range, priceText};
+    let cv = tcfPlanDrawPage(lay.pages[i], lay.tier, meta, {price:!!st.share.price, people:false}, logo);
     try{ blobs.push(await toBlob(cv)); }
     catch(e){ // 圖片來源造成 canvas 被標記為不安全（CORS）→ 不放 logo 重畫，確保一定能輸出
-      logo = null; cv = tcfPlanDrawPage(lay.pages[i], lay.tier, meta, {price:!!st.share.price, people:!!st.share.people}, null);
+      logo = null; cv = tcfPlanDrawPage(lay.pages[i], lay.tier, meta, {price:!!st.share.price, people:false}, null);
       blobs.push(await toBlob(cv));
     }
   }
@@ -8398,6 +8754,7 @@ function toggleEdit(){
 //  - price：數字（新台幣）；peopleCount：整數 ≥1，預設 1
 //  - eligibility：此票種適用的資格（字串）。'general'＝一般（預設，舊資料沒有這個欄位＝一般）、'accessible'＝身心障礙及陪同席（身障者與陪同者價格一致，同一個票種；規劃器兩者都用它計算）；
 //    'disability'／'companion' 為保留值（若日後兩者價格不同才需要分開）；也可以是任意自訂字串（未來要加其他資格票種不用改程式）。價格、資格、限制都以該演出公開資訊為準，嘻嘻不假設陪同者一定有優惠
+//  - soldOut：選填布林，此票種已售完（後台手動標示；客製化行程試算會排除，不會自行判斷庫存）
 //  - saleStart / saleEnd：選填。完整格式 'YYYY-MM-DDTHH:mm:00+08:00'（固定台灣時間，不受瀏覽器時區影響）；沒填＝空字串＝沒有該端限制
 //    後台只填日期時：開始預設 00:00、截止預設 23:59
 //  - 舊演出沒有 ticketTypes 欄位＝視為空陣列；前台票價仍只讀 show.price（自由文字），這裡的資料不影響任何前台顯示
@@ -8427,22 +8784,8 @@ function ttRowHTML(t){
       <div class="tt-f"><label>販售截止（選填，只填日期＝當天 23:59）</label><div class="tt-dt"><input class="fi tt-ed" type="date" value="${ttEsc(b.d)}"><input class="fi tt-et" type="time" value="${ttEsc(b.t)}"></div></div>
     </div>
     <div class="tt-f tt-elig"><label>票種資格</label><div class="tt-elig-in"><select class="fi tt-el" onchange="ttElChange(this)"><option value="general"${elig==='general'?' selected':''}>一般</option><option value="accessible"${elig==='accessible'?' selected':''}>身心障礙及陪同席</option>${(elig==='disability'||elig==='companion')?`<option value="${elig}" selected>${elig==='disability'?'身心障礙席（舊資料）':'陪同席（舊資料）'}</option>`:''}<option value="__custom"${eligPreset?'':' selected'}>其他資格…</option></select><input class="fi tt-el-custom" type="text" maxlength="30" placeholder="自訂資格，例：senior" value="${eligPreset?'':ttEsc(elig)}" style="${eligPreset?'display:none':''}"></div></div>
-    <div class="tt-foot"><span class="tt-warn"></span><button type="button" class="tt-del" onclick="ttDelRow(this)">刪除此票種</button></div>
+    <div class="tt-foot"><span class="tt-footl"><label class="tt-soldlab"><input type="checkbox" class="tt-soldout"${t.soldOut ? ' checked' : ''}> 此票種已售完</label><span class="tt-warn"></span></span><button type="button" class="tt-del" onclick="ttDelRow(this)">刪除此票種</button></div>
   </div>`;
-}
-// 「提供身心障礙及陪同席」開關：預設否，不顯示「票種資格」欄位；取消勾選時若已有非一般資格的票種，先確認再移除（避免把優惠價誤變成一般票）
-function ttToggleAcc(){
-  const cb = document.getElementById('s-tt-acc'), w = document.getElementById('s-tt-wrap');
-  if(!cb || !w) return;
-  if(!cb.checked){
-    const special = Array.from(document.querySelectorAll('#s-tt-list .tt-row')).filter(r=>{ const v = r.querySelector('.tt-el')?.value; return v && v!=='general'; });
-    if(special.length){
-      if(!confirm('取消後，資格為「身心障礙及陪同席／其他資格」的 ' + special.length + ' 個票種會被移除，確定嗎？')){ cb.checked = true; return; }
-      special.forEach(r=>r.remove());
-    }
-  }
-  w.classList.toggle('acc-on', cb.checked);
-  ttUpdateNote();
 }
 function ttElChange(sel){
   const row = sel && sel.closest('.tt-row'), c = row && row.querySelector('.tt-el-custom');
@@ -8452,24 +8795,33 @@ function ttElChange(sel){
 //  - 區間價（NT$ 350 ～ NT$ 500）與只寫「$500 起」無法確定單一價格，不自動帶入
 //  - 人數從名稱判斷（雙人／2 人／四人套票…），判斷不出來就是 1 人
 //  - 販售期間（例如早鳥截止日）文字裡通常沒有，需要自己補
-function ttParsePrice(text){
-  const out = [];
-  String(text || '').replace(/[，、；;|｜\/\n]/g, '／').split('／').forEach(seg=>{
-    seg = seg.trim(); if(!seg || /起/.test(seg)) return;
+function ttParsePriceEx(text){
+  const list = [], notes = [], raw = String(text || '').trim();
+  if(!raw){ notes.push('沒有票價文字'); return {list, notes}; }
+  raw.replace(/[，、；;|｜\/\n]/g, '／').split('／').forEach(seg=>{
+    seg = seg.trim(); if(!seg) return;
+    if(/起/.test(seg)){ notes.push(`「${seg}」只寫「起」，無法確定單一價格`); return; }
     const hits = seg.match(/(?:NT\$|NTD|\$|＄)\s*[\d,]+|[\d,]+\s*元/gi) || [];
-    if(hits.length !== 1) return; // 沒有價格或是區間價
+    if(hits.length > 1){ notes.push(`「${seg}」是區間價`); return; }
+    if(!hits.length){
+      if(/免費|免票/.test(seg)){ list.push({name:seg.replace(/[：:]/g, ' ').replace(/\s+/g, ' ').trim() || '免費', price:0, peopleCount:1, eligibility:'general'}); return; }
+      notes.push(`「${seg}」沒有辨識到金額`); return;
+    }
     const m = hits[0].match(/([\d,]+)/), price = parseInt(m[1].replace(/,/g, ''), 10);
-    if(!isFinite(price) || price < 0) return;
+    if(!isFinite(price) || price < 0){ notes.push(`「${seg}」金額無法辨識`); return; }
     let name = seg.replace(hits[0], ' ').replace(/[：:()（）\[\]【】]/g, ' ').replace(/\s+/g, ' ').trim().replace(/^[-—–·・\s]+|[-—–·・\s]+$/g, '');
-    if(/^(早鳥|預售|一般|學生|優待|全票|愛心|現場|VIP)$/i.test(name)) name += '票';
+    if(/^(早鳥|預售|一般|學生|優待|愛心|現場|VIP)$/i.test(name)) name += '票';
     if(!name) name = '一般票';
     let people = 1; const pm = name.match(/(\d+)\s*人/);
     if(pm) people = Math.max(1, parseInt(pm[1], 10));
     else if(/雙人|兩人|二人/.test(name)) people = 2; else if(/三人/.test(name)) people = 3; else if(/四人/.test(name)) people = 4; else if(/五人/.test(name)) people = 5; else if(/六人/.test(name)) people = 6;
-    out.push({name, price, peopleCount:people, eligibility:'general'});
+    list.push({name, price, peopleCount:people, eligibility:'general'});
   });
-  return out;
+  // 名稱含身心障礙／愛心／陪同 → 歸到「身心障礙及陪同席」（價格一致、同一票種）
+  list.forEach(t=>{ if(/身心障礙|身障|愛心|陪同/.test(t.name)) t.eligibility = 'accessible'; });
+  return {list, notes};
 }
+function ttParsePrice(text){ return ttParsePriceEx(text).list; }
 function ttFromPrice(){
   const txt = document.getElementById('s-price')?.value || '';
   const found = ttParsePrice(txt), cur = ttCollect();
@@ -8492,7 +8844,6 @@ function ttFill(arr){
   const items = (Array.isArray(arr) ? arr : []).filter(t=>t && typeof t==='object');
   items.forEach(t=>list.insertAdjacentHTML('beforeend', ttRowHTML(t)));
   const accOn = items.some(t=>t.eligibility && String(t.eligibility).trim() && t.eligibility!=='general');
-  const cb = document.getElementById('s-tt-acc'); if(cb) cb.checked = accOn;
   const w = document.getElementById('s-tt-wrap'); if(w) w.classList.toggle('acc-on', accOn);
   ttUpdateNote();
 }
@@ -8509,11 +8860,13 @@ function ttCollect(){
     const selV = q('.tt-el')?.value || 'general';
     let eligV = selV==='__custom' ? (q('.tt-el-custom')?.value||'').trim().slice(0,30) : selV;
     if(!eligV) eligV = 'general';
+    if(eligV === 'general' && /身心障礙|身障|愛心|陪同/.test(name)) eligV = 'accessible'; // 名稱判斷（沒有勾選框後的做法）
     out.push({
       name,
       price: (isFinite(pNum) && pNum>=0) ? pNum : null,
       peopleCount: (isFinite(pcNum) && pcNum>=1) ? pcNum : 1,
       eligibility: eligV,
+      soldOut: !!(q('.tt-soldout') && q('.tt-soldout').checked), // 此票種已售完（依公開資訊由後台手動標示）；客製化行程試算會排除它
       saleStart: ttJoin(q('.tt-sd')?.value||'', q('.tt-st')?.value||'', '00:00'),
       saleEnd:   ttJoin(q('.tt-ed')?.value||'', q('.tt-et')?.value||'', '23:59')
     });
@@ -8522,15 +8875,17 @@ function ttCollect(){
 }
 // 提示（不阻擋）：每列缺價格時列內提醒；喜劇節演出沒有任何「可計算票種」時顯示黃色提醒
 function ttUpdateNote(){
-  let computable = 0;
+  let computable = 0, special = false;
   document.querySelectorAll('#s-tt-list .tt-row').forEach(r=>{
     const name = (r.querySelector('.tt-name')?.value||'').trim();
     const rawP = (r.querySelector('.tt-price')?.value||'').trim();
     const warn = r.querySelector('.tt-warn');
+    const elv = r.querySelector('.tt-el')?.value; if(elv && elv !== 'general') special = true;
     const hasP = rawP!=='' && isFinite(Number(rawP)) && Number(rawP)>=0;
     if(warn) warn.textContent = (name && !hasP) ? '尚未填價格，這個票種未來無法納入計算（仍可儲存）' : '';
     if(name && hasP) computable++;
   });
+  const wrap = document.getElementById('s-tt-wrap'); if(wrap) wrap.classList.toggle('acc-on', special); // 有「身心障礙及陪同席」等非一般票種時，才顯示每列的「票種資格」欄
   const note = document.getElementById('s-tt-tcf-note');
   if(note) note.style.display = (document.getElementById('s-tcf')?.checked && computable===0) ? '' : 'none';
 }
