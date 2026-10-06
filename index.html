@@ -1505,6 +1505,32 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
   .tcf-tt-item{font-size:.7rem}
   .tcf-tt tr.tcf-tt-emptyrow td{position:sticky;left:62px;text-align:left;white-space:nowrap}
 }
+/* ── 全活動時刻表（A–C）：時間移到左側「時間欄」、卡片精簡、日期格放大且捲動時固定 ── */
+.tcf-tt th.tcf-tt-date{width:76px}
+.tcf-tt th.tcf-tt-time{width:60px}
+.tcf-tt thead th.tcf-tt-time{text-align:center}
+.tcf-tt tbody th.tcf-tt-date{vertical-align:top;padding:8px 4px}
+.tcf-tt tbody th.tcf-tt-date .dwrap{position:sticky;top:calc(var(--nav) + 58px);padding:2px 0}
+.tcf-tt tbody th.tcf-tt-date b{font-size:1.08rem;line-height:1.2}
+.tcf-tt tbody th.tcf-tt-date small{display:block;font-size:.76rem;margin-top:2px;opacity:.9}
+.tcf-tt tbody th.tcf-tt-time{background:#fafbff;color:var(--tcf-pink);font-family:var(--f-bo);font-weight:700;font-size:.8rem;text-align:center;vertical-align:top;padding:9px 2px 4px;border-top:1px solid rgba(45,43,31,.08);border-left:1px solid rgba(45,43,31,.06)}
+.tcf-tt tbody:nth-of-type(even) th.tcf-tt-time{background:#e2e9ff}
+.tcf-tt tbody tr+tr th.tcf-tt-time{border-top:1px dashed rgba(45,43,31,.14)}
+.tcf-tt tbody+tbody th.tcf-tt-time{border-top:2px solid rgba(30,71,218,.2)}
+.tcf-tt td{padding:4px}
+.tcf-tt-item{padding:5px 8px;margin-bottom:4px}
+.tcf-tt-item span{line-height:1.35}
+@media(max-width:768px){
+  .tcf-tt th.tcf-tt-date{width:54px}
+  .tcf-tt th.tcf-tt-time{width:50px}
+  .tcf-tt thead th.tcf-tt-time{left:54px;z-index:8}
+  .tcf-tt tbody th.tcf-tt-time{position:sticky;left:54px;z-index:4;box-shadow:2px 0 0 rgba(30,71,218,.12);font-size:.7rem}
+  .tcf-tt tbody th.tcf-tt-date{box-shadow:none}
+  .tcf-tt tbody th.tcf-tt-date b{font-size:.92rem}
+  .tcf-tt tbody th.tcf-tt-date small{font-size:.68rem}
+  .tcf-tt tbody th.tcf-tt-date .dwrap{top:44px}
+  .tcf-tt tr.tcf-tt-emptyrow td{left:104px}
+}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -5661,24 +5687,24 @@ function renderTcfPeriod(){
     const tag = (adminMode && st!=='published') ? `<em class="tcf-tt-tag">${st==='postponed'?'延期':st==='hidden'?'隱藏':tcfEsc(st)}</em>` : '';
     const sold = x.soldOut ? `<em class="tcf-tt-sold">${en?'Sold out':'已售完'}</em>` : '';
     const tip = tcfEsc(tcfTTTitle(x.title) + (x.performer ? '｜' + x.performer : ''));
-    return `<div class="tcf-tt-item${x.soldOut?' is-sold':''}" onclick="openShowDetail('${tcfEsc(x.id)}')" title="${tip}"><b>${tcfEsc(tcfStartTime(x) || (en?'TBA':'時間未定'))}</b><span>${tcfEsc(tcfTTTitle(x.title))}</span>${sold}${tag}</div>`;
+    return `<div class="tcf-tt-item${x.soldOut?' is-sold':''}" onclick="openShowDetail('${tcfEsc(x.id)}')" title="${tip}"><span>${tcfEsc(tcfTTTitle(x.title))}</span>${sold}${tag}</div>`;
   };
-  const head = `<thead><tr><th class="tcf-tt-date"></th>${cols.map(c=>`<th>${tcfEsc(c.label)}</th>`).join('')}</tr></thead>`;
+  const head = `<thead><tr><th class="tcf-tt-date"></th><th class="tcf-tt-time">${en?'Time':'開演'}</th>${cols.map(c=>`<th>${tcfEsc(c.label)}</th>`).join('')}</tr></thead>`;
   // 每天一個 <tbody>；同一天裡「每個不同的開演時間」各占一列 → 同時間開演的演出跨場地水平對齊，先開演的在上、後開演的在下
   const rows = days.map(d=>{
     const list = tcfSortByTime(base.filter(x=>tcfShowHasDate(x, d.ds)));
     const wk = (d.dow===0 || d.dow===6) ? ' is-weekend' : '';
-    const dateCell = n => `<th class="tcf-tt-date${wk}"${n>1?` rowspan="${n}"`:''}><b>${d.mm}/${d.dd}</b><small>${DOW[d.dow]}</small></th>`;
-    if(!list.length) return `<tbody><tr id="tcf-day-${d.ds}" class="tcf-tt-emptyrow">${dateCell(1)}<td colspan="${cols.length}">${en?'No shows announced yet':'尚未公布演出'}</td></tr></tbody>`;
+    const dateCell = n => `<th class="tcf-tt-date${wk}"${n>1?` rowspan="${n}"`:''}><div class="dwrap"><b>${d.mm}/${d.dd}</b><small>${en?DOW[d.dow]:'週'+DOW[d.dow]}</small></div></th>`;
+    if(!list.length) return `<tbody><tr id="tcf-day-${d.ds}" class="tcf-tt-emptyrow">${dateCell(1)}<td colspan="${cols.length+1}">${en?'No shows announced yet':'尚未公布演出'}</td></tr></tbody>`;
     const times = [];
     list.forEach(x=>{ const t = tcfStartTime(x) || ''; if(!times.includes(t)) times.push(t); });
     times.sort((x,y)=>(x||'99:99').localeCompare(y||'99:99')); // 沒填時間的放最後
-    return '<tbody>' + times.map((t,i)=>`<tr${i===0?` id="tcf-day-${d.ds}"`:''}>${i===0?dateCell(times.length):''}${cols.map(c=>{
+    return '<tbody>' + times.map((t,i)=>`<tr${i===0?` id="tcf-day-${d.ds}"`:''}>${i===0?dateCell(times.length):''}<th class="tcf-tt-time">${tcfEsc(t || (en?'TBA':'未定'))}</th>${cols.map(c=>{
       const here = list.filter(x=>colOf(x)===c.id && (tcfStartTime(x)||'')===t);
       return `<td${here.length?'':' class="is-empty"'}>${here.map(item).join('')}</td>`;
     }).join('')}</tr>`).join('') + '</tbody>';
   }).join('');
-  const tblStyle = window.innerWidth <= 768 ? ` style="width:${62+cols.length*124}px;max-width:none"` : '';
+  const tblStyle = window.innerWidth <= 768 ? ` style="width:${104+cols.length*124}px;max-width:none"` : '';
   box.innerHTML = summary + `<div class="tcf-tt-wrap"><table class="tcf-tt"${tblStyle}>${head}${rows}</table></div>`;
 }
 // 喜劇節頁「回到頂端」：只在喜劇節頁、捲過一段距離後顯示（不改 showPage，改用 class 觀察 + scroll 事件）
@@ -7259,12 +7285,13 @@ function selectCalDay(ds){
   const banner=document.getElementById('cal-banner');
   const result=document.getElementById('cal-result');
   banner.classList.add('show');
+  // 注意：橫幅內含圖示的 HTML，必須用 innerHTML（用 textContent 會把 <span><svg…> 原始碼直接顯示成文字）。內容只有日期與場數，沒有使用者輸入。
   if(dayShows.length){
-    banner.textContent=`<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${ds} 的演出（${dayShows.length} 場）`;
+    banner.innerHTML=`<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${ds} 的演出（${dayShows.length} 場）`;
     result.innerHTML=`<div class="shows-layout">${dayShows.map(showCardHTML).join('')}</div>`;
     initPriceExpand(result);
   }else{
-    banner.textContent=`<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${ds} — 這天暫無演出資訊`;
+    banner.innerHTML=`<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${ds} — 這天暫無演出資訊`;
     result.innerHTML='';
   }
 }
