@@ -5990,7 +5990,7 @@ function tcfTTTitle(t){
 // 每一行＝一個開演時間（同時間開演的演出在同一行，仍看得出先後）；桌機版維持日期 × 場地的對齊總表。
 let _tcfMOpen = null;      // 已展開的日期（Set）；null＝尚未初始化
 let _tcfMVenue = 'all';    // 場地篩選：'all' 或 TCF_VENUES 的 id 或 'other'
-function tcfMSetVenue(id){ _tcfMVenue = id; _tcfMOpen = null; renderTcfPeriod(); } // 換場地後，重新預設展開第一個有符合演出的日子
+function tcfMSetVenue(id){ _tcfMVenue = id; _tcfMOpen = null; renderTcfPeriod(); } // 換場地後回到預設（全部收合）
 // 日期列：點哪天＝只展開那一天（其餘收合）並捲到那天；等於舊的「每日時刻表」
 function tcfMSyncChips(){
   document.querySelectorAll('#tcf-agenda .tcf-m-dchip').forEach(c=>c.classList.toggle('on', !!_tcfMOpen && _tcfMOpen.size===1 && _tcfMOpen.has(c.dataset.ds)));
@@ -6031,14 +6031,9 @@ function renderTcfPeriodMobile(box, en, adminMode, base, days){
   const shows = _tcfMVenue==='all' ? base : base.filter(x=>colOf(x)===_tcfMVenue);
   const chips = `<div class="tcf-m-vf"><button type="button" class="tcf-m-chip${_tcfMVenue==='all'?' on':''}" onclick="tcfMSetVenue('all')">${en?'All venues':'全部場地'}</button>` +
     used.map(u=>`<button type="button" class="tcf-m-chip${_tcfMVenue===u.id?' on':''}" onclick="tcfMSetVenue('${u.id}')">${tcfEsc(u.label)}</button>`).join('') + '</div>';
-  // 預設只展開一天：今天（在檔期內且有演出）→ 否則第一個有演出的日子
+  // 預設全部收合：使用者自己點日期標籤或標題橫條才展開
   const dayList = d => tcfSortByTime(shows.filter(x=>tcfShowHasDate(x, d.ds)));
-  if(!_tcfMOpen){
-    const now = new Date();
-    const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-    const first = days.find(d=>d.ds===today && dayList(d).length) || days.find(d=>dayList(d).length);
-    _tcfMOpen = new Set(first ? [first.ds] : []);
-  }
+  if(!_tcfMOpen) _tcfMOpen = new Set();
   const item = (x, ds) => {
     const st = x.status || 'published';
     const tag = (adminMode && st!=='published') ? `<em class="tcf-tt-tag">${st==='postponed'?'延期':st==='hidden'?'隱藏':tcfEsc(st)}</em>` : '';
