@@ -1561,6 +1561,11 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 .tcf-m-day{scroll-margin-top:calc(var(--nav) + 54px)}
 .tcf-m-it .sc-price{margin-top:4px;font-size:.78rem;font-weight:800;color:var(--or);line-height:1.5}
 .tcf-m-it .sc-price+div{text-align:left}
+.tcf-m-ft{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-top:5px}
+.tcf-m-pr{flex:1;min-width:0}
+.tcf-m-ft .sc-price{margin-top:0}
+.tcf-m-buy{flex:0 0 auto;text-decoration:none;font-family:var(--f-zh);font-size:.76rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--tcf-pink),var(--tcf-pink2));padding:6px 13px;border-radius:999px;white-space:nowrap}
+.tcf-m-door{flex:0 0 auto;font-family:var(--f-zh);font-size:.72rem;font-weight:700;color:var(--ts);white-space:nowrap;padding-top:4px}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -5764,8 +5769,14 @@ function renderTcfPeriodMobile(box, en, adminMode, base, days){
     const st = x.status || 'published';
     const tag = (adminMode && st!=='published') ? `<em class="tcf-tt-tag">${st==='postponed'?'延期':st==='hidden'?'隱藏':tcfEsc(st)}</em>` : '';
     const sold = x.soldOut ? `<em class="tcf-tt-sold">${en?'Sold out':'已售完'}</em>` : '';
+    // 購票：已售完不顯示按鈕（卡片上已有「已售完」標示）；現場付費顯示文字；有有效的購票連結才顯示按鈕
+    let act = '';
+    if(!x.soldOut){
+      if(x.platform==='door') act = `<span class="tcf-m-door">${en?'Pay at door':'現場付費'}</span>`;
+      else if(x.ticketUrl && /^https?:\/\//i.test(String(x.ticketUrl).trim())) act = `<a class="tcf-m-buy" href="${tcfEsc(String(x.ticketUrl).trim())}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${en?'Tickets':'購票'} →</a>`;
+    }
     const price = x.price ? `<div class="sc-price" data-fullprice="${String(x.price).replace(/"/g,'&quot;').replace(/`/g,'&#96;')}" data-showid="mt-${tcfEsc(x.id)}-${ds}">${tcfEsc(parseFeeRange(x.price).range)}</div>` : ''; // 票價可展開：沿用演出卡片的展開元件
-    return `<div class="tcf-m-it${x.soldOut?' is-sold':''}" onclick="openShowDetail('${tcfEsc(x.id)}')"><span class="tt">${tcfEsc(tcfTTTitle(x.title))}</span><em class="vn">${tcfEsc(venueTag(x))}</em>${sold}${tag}${price}</div>`;
+    return `<div class="tcf-m-it${x.soldOut?' is-sold':''}" onclick="openShowDetail('${tcfEsc(x.id)}')"><span class="tt">${tcfEsc(tcfTTTitle(x.title))}</span><em class="vn">${tcfEsc(venueTag(x))}</em>${sold}${tag}${(price||act)?`<div class="tcf-m-ft"><div class="tcf-m-pr">${price}</div>${act}</div>`:''}</div>`;
   };
   const secs = days.map(d=>{
     const list = dayList(d);
