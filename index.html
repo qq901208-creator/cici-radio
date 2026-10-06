@@ -1825,6 +1825,8 @@ body.edit .bt-admin-btn{display:inline-flex}
 .bt-early input{padding:4px 8px;border:1.5px solid rgba(45,43,31,.2);border-radius:8px;font-family:var(--f-bo)}
 .bt-foot{position:sticky;bottom:-18px;display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding:10px 0 2px;background:var(--cr)}
 .bt-foot .ts-btn:disabled{opacity:.5;cursor:default}
+.pl-bundle{text-decoration:none;font-style:normal;font-size:.66rem;font-weight:800;color:var(--sd);background:var(--tcf-yellow);border-radius:6px;padding:1px 7px}
+.pl-bundle-note{margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--py);font-size:.78rem;line-height:1.6;color:#7a5200;font-weight:700}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -6198,6 +6200,11 @@ function tcfPlanVenueKey(s){
 }
 
 // ── 票種：price＝買「一組」實際付的總價；peopleCount＝這一組可供幾人使用（不除成人均價）──
+// 名稱含這些字的票種一律視為「身心障礙及陪同席」，就算資料裡的資格欄是「一般」（舊資料、手動輸入沒標到）也一樣，
+// 避免「一般觀眾」被自動推薦到身心障礙票的低價
+const TCF_PLAN_ACCESS_RE = /身心障礙|身障|愛心|陪同/;
+// 其他需要資格／證件的票種（學生、敬老、優待、兒童…）：估價以早鳥票、一般票為主，這些不納入推薦與試算
+const TCF_PLAN_COND_RE = /學生|敬老|優待|兒童|長者|老人|軍警|持證/;
 function tcfPlanTickets(show){
   const arr = Array.isArray(show && show.ticketTypes) ? show.ticketTypes : [];
   const out = [];
@@ -6208,7 +6215,7 @@ function tcfPlanTickets(show){
     if(!name || !okPrice) return; // 不完整的票種不納入試算
     const pc = parseInt(t.peopleCount, 10);
     out.push({idx:i, name, price:Number(t.price), people:(isFinite(pc) && pc >= 1) ? pc : 1, soldOut:t.soldOut === true,
-      saleStart:t.saleStart||'', saleEnd:t.saleEnd||'', elig:(t.eligibility && String(t.eligibility).trim()) || 'general'});
+      saleStart:t.saleStart||'', saleEnd:t.saleEnd||'', elig:(function(){ const e = (t.eligibility && String(t.eligibility).trim()) || 'general'; return e !== 'general' ? e : TCF_PLAN_ACCESS_RE.test(name) ? 'accessible' : TCF_PLAN_COND_RE.test(name) ? 'conditional' : e; })()});
   });
   return out;
 }
@@ -6323,12 +6330,24 @@ function tcfPlanBuildCtx(){
   const selected = sessions.filter(s=>st.shows[s.key] && st.selectedShowIds.indexOf(s.key) >= 0); // 已不存在的場次：安全忽略
   const calcs = {};
   selected.forEach(s=>{ calcs[s.key] = tcfPlanCalc(s, st.shows[s.key], now); });
+  // 一票多場：票價與張數只計入最早的一場，其他場標示「含在同一套票」，不重複計價
+  const bundle = {}, seenGroup = new Set(), fm = x=>`${x.ds.slice(5).replace('-', '/')} ${x.timeStr || ''}`.trim();
+  selected.forEach(s=>{
+    const keys = tcfPlanBundleKeys(s.key, sessions); if(keys.length < 2) return;
+    const members = selected.filter(x=>keys.indexOf(x.key) >= 0), gk = keys.slice().sort().join('|');
+    if(seenGroup.has(gk) || members.length < 2) return; seenGroup.add(gk);
+    const primary = members[0];
+    members.forEach((m, idx)=>{
+      bundle[m.key] = {primary:primary.key, primaryLabel:fm(primary), secondary: idx > 0, members:members.map(x=>x.key)};
+      if(idx > 0) calcs[m.key] = Object.assign({}, calcs[primary.key], {total:0, lines:[], alts:[], warns:[], saved:0, secondary:true, primaryKey:primary.key});
+    });
+  });
   const okList = selected.filter(s=>calcs[s.key].ok);
   const conf = tcfPlanConflicts(selected);
   const clashKeys = {}, moveKeys = {};
   conf.clashes.forEach(p=>{ (clashKeys[p[0].key] = clashKeys[p[0].key] || []).push(p[1]); (clashKeys[p[1].key] = clashKeys[p[1].key] || []).push(p[0]); });
   conf.moves.forEach(m=>{ moveKeys[m.b.key] = m; });
-  return {st, sessions, selected, calcs, now,
+  return {st, sessions, selected, calcs, now, bundle,
     total: okList.reduce((a,s)=>a + calcs[s.key].total, 0), okN: okList.length, uncalc: selected.length - okList.length,
     clashes: conf.clashes, moves: conf.moves, clashKeys, moveKeys};
 }
@@ -6337,6 +6356,25 @@ function tcfPlanBuildCtx(){
 function tcfPlanFind(key){ return tcfPlanSessions().find(s=>s.key === key); }
 function tcfPlanRefresh(){ tcfPlanSave(); tcfPlanRender(); }
 function tcfPlanToast(msg, type){ try{ if(typeof showToast === 'function') showToast(msg, type || 'err'); }catch(e){} }
+
+// ── 一票多場（綑綁套票，例如《未完待續》一票含 11/28、12/03 兩場）──
+// 判斷：演出名稱含「一票兩場／一票三場／一票多場」，同名稱的場次（同一筆演出的多個日期，或名稱相同的多筆演出）視為同一套票。
+// 加入其中一場 → 其他場一起加入；移除也是一起；人數、票種選擇同步；票價只計入「最早的一場」，其他場標示「含在同一套票」。
+const TCF_PLAN_BUNDLE_RE = /一票[兩二三四五六七八九十\d多]+場/;
+function tcfPlanTitleKey(t){ return String(tcfTTTitle(t) || '').replace(/[^\p{L}\p{N}]/gu, ''); }
+function tcfPlanBundleKeys(key, sessions){
+  sessions = sessions || tcfPlanSessions();
+  const me = sessions.find(x=>x.key === key);
+  if(!me || !TCF_PLAN_BUNDLE_RE.test(String(me.show.title || ''))) return [key];
+  const tk = tcfPlanTitleKey(me.show.title);
+  const group = sessions.filter(x=>TCF_PLAN_BUNDLE_RE.test(String(x.show.title || '')) && tcfPlanTitleKey(x.show.title) === tk).map(x=>x.key);
+  return group.length > 1 ? group : [key];
+}
+function tcfPlanSyncBundle(key){
+  const st = tcfPlanState(), src = st.shows[key]; if(!src) return;
+  tcfPlanBundleKeys(key).forEach(k=>{ if(k !== key && st.shows[k]) st.shows[k] = JSON.parse(JSON.stringify(src)); });
+}
+
 // 上一步：每次實際改動前先存一份快照（只存在記憶體，最多 40 步；重新整理後歸零）
 let _tcfPlanHist = [];
 function tcfPlanPush(){
@@ -6355,9 +6393,13 @@ function tcfPlanUndo(){
 }
 function tcfPlanToggle(key){
   tcfPlanPush();
-  const st = tcfPlanState(), i = st.selectedShowIds.indexOf(key);
-  if(i >= 0){ st.selectedShowIds.splice(i, 1); delete st.shows[key]; _tcfPlanUI.combo.delete(key); _tcfPlanUI.special.delete(key); }
-  else { st.selectedShowIds.push(key); st.shows[key] = tcfPlanSanitizeEntry({}); } // 預設 1 人，系統直接試算
+  const st = tcfPlanState(), keys = tcfPlanBundleKeys(key), selecting = st.selectedShowIds.indexOf(key) < 0;
+  keys.forEach(k=>{
+    const i = st.selectedShowIds.indexOf(k);
+    if(selecting){ if(i < 0){ st.selectedShowIds.push(k); st.shows[k] = tcfPlanSanitizeEntry({}); } } // 預設 1 張，系統直接試算
+    else if(i >= 0){ st.selectedShowIds.splice(i, 1); delete st.shows[k]; _tcfPlanUI.combo.delete(k); _tcfPlanUI.special.delete(k); }
+  });
+  if(keys.length > 1) tcfPlanToast(selecting ? `這是「一票多場」：已一起加入 ${keys.length} 場，票價只算一次。` : `這是「一票多場」：已一起移除 ${keys.length} 場。`, 'ok');
   tcfPlanRefresh();
 }
 function tcfPlanViewers(key, d){
@@ -6368,7 +6410,8 @@ function tcfPlanViewers(key, d){
   e.viewerCount = nv;
   let over = e.disabilityCount + e.companionCount - e.viewerCount; // 特殊席位人數不可超過總人數
   if(over > 0){ const c = Math.min(over, e.companionCount); e.companionCount -= c; over -= c; if(over > 0) e.disabilityCount -= over; }
-  e.selectedTicketCombination = null; // 人數變了，手動票種組合作廢，回到自動推薦
+  e.selectedTicketCombination = null; // 張數變了，手動票種組合作廢，回到自動推薦
+  tcfPlanSyncBundle(key);
   tcfPlanRefresh();
 }
 function tcfPlanSpecialToggle(key, w){
@@ -6379,7 +6422,7 @@ function tcfPlanSpecialToggle(key, w){
     if(e.disabilityCount + e.companionCount + 1 > e.viewerCount){ tcfPlanToast('特殊席位人數不能超過張數，請先增加張數。'); return; }
     tcfPlanPush(); e[f] = 1;
   }
-  e.selectedTicketCombination = null; tcfPlanRefresh();
+  e.selectedTicketCombination = null; tcfPlanSyncBundle(key); tcfPlanRefresh();
 }
 function tcfPlanSpecialStep(key, w, d){
   const e = tcfPlanState().shows[key]; if(!e) return;
@@ -6387,7 +6430,7 @@ function tcfPlanSpecialStep(key, w, d){
   const nv = e[f] + d;
   if(nv < 0) return;
   if(d > 0 && e.disabilityCount + e.companionCount + d > e.viewerCount){ tcfPlanToast('特殊席位人數不能超過張數。'); return; }
-  tcfPlanPush(); e[f] = nv; e.selectedTicketCombination = null; tcfPlanRefresh();
+  tcfPlanPush(); e[f] = nv; e.selectedTicketCombination = null; tcfPlanSyncBundle(key); tcfPlanRefresh();
 }
 function tcfPlanUIToggle(kind, key){ const set = _tcfPlanUI[kind]; if(set.has(key)) set.delete(key); else set.add(key); tcfPlanRender(); }
 function tcfPlanCombo(key, idx, d){
@@ -6399,9 +6442,10 @@ function tcfPlanCombo(key, idx, d){
   const k = String(idx), c = Math.max(0, Math.min(99, (man[k] || 0) + d));
   if(c > 0) man[k] = c; else delete man[k];
   e.selectedTicketCombination = man;
+  tcfPlanSyncBundle(key);
   tcfPlanRefresh();
 }
-function tcfPlanComboReset(key){ const e = tcfPlanState().shows[key]; if(e){ tcfPlanPush(); e.selectedTicketCombination = null; tcfPlanRefresh(); } }
+function tcfPlanComboReset(key){ const e = tcfPlanState().shows[key]; if(e){ tcfPlanPush(); e.selectedTicketCombination = null; tcfPlanSyncBundle(key); tcfPlanRefresh(); } }
 function tcfPlanDay(ds){ _tcfPlanUI.day = ds; tcfPlanRender(); }
 function tcfPlanTab(tab){
   _tcfPlanUI.tab = tab; tcfPlanRender();
@@ -6476,8 +6520,8 @@ function tcfPlanCardHTML(sess, ctx, mine){
   const price = s.price ? tcfEsc(parseFeeRange(s.price).range) : '';
   const venue = tcfEsc(tcfPlanVenueLabel(s));
   const main = mine
-    ? `<div class="pl-main static"><span class="pl-time">${tcfEsc(sess.timeStr || '未定')}</span><span class="pl-body"><b class="pl-title">${tcfEsc(tcfTTTitle(s.title))}</b><span class="pl-meta"><em>${venue}</em>${price ? `<i>${price}</i>` : ''}${s.soldOut ? '<u class="pl-sold">已售完</u>' : ''}</span></span><button type="button" class="pl-remove" onclick="tcfPlanToggle('${key}')">移除</button></div>`
-    : `<button type="button" class="pl-main" aria-pressed="${sel}" onclick="tcfPlanToggle('${key}')"><span class="pl-time">${tcfEsc(sess.timeStr || '未定')}</span><span class="pl-body"><b class="pl-title">${tcfEsc(tcfTTTitle(s.title))}</b><span class="pl-meta"><em>${venue}</em>${price ? `<i>${price}</i>` : ''}${s.soldOut ? '<u class="pl-sold">已售完</u>' : ''}</span></span><span class="pl-tick">${sel ? '✓ 已加入' : '＋ 加入'}</span></button>`;
+    ? `<div class="pl-main static"><span class="pl-time">${tcfEsc(sess.timeStr || '未定')}</span><span class="pl-body"><b class="pl-title">${tcfEsc(tcfTTTitle(s.title))}</b><span class="pl-meta"><em>${venue}</em>${price ? `<i>${price}</i>` : ''}${s.soldOut ? '<u class="pl-sold">已售完</u>' : ''}${TCF_PLAN_BUNDLE_RE.test(String(s.title || '')) ? '<u class="pl-bundle">一票多場</u>' : ''}</span></span><button type="button" class="pl-remove" onclick="tcfPlanToggle('${key}')">移除</button></div>`
+    : `<button type="button" class="pl-main" aria-pressed="${sel}" onclick="tcfPlanToggle('${key}')"><span class="pl-time">${tcfEsc(sess.timeStr || '未定')}</span><span class="pl-body"><b class="pl-title">${tcfEsc(tcfTTTitle(s.title))}</b><span class="pl-meta"><em>${venue}</em>${price ? `<i>${price}</i>` : ''}${s.soldOut ? '<u class="pl-sold">已售完</u>' : ''}${TCF_PLAN_BUNDLE_RE.test(String(s.title || '')) ? '<u class="pl-bundle">一票多場</u>' : ''}</span></span><span class="pl-tick">${sel ? '✓ 已加入' : '＋ 加入'}</span></button>`;
   let detail = '', flags = '';
   if(sel){
     const calc = ctx.calcs[sess.key], av = tcfPlanSpecialAvail(s);
@@ -6493,6 +6537,8 @@ function tcfPlanCardHTML(sess, ctx, mine){
       ${comboOpen ? tcfPlanComboHTML(sess, e, calc) : ''}${(hasSpecial && spOpen) ? tcfPlanSpecialHTML(sess, e) : ''}
     </div>`;
   }
+  const bdi = ctx.bundle && ctx.bundle[sess.key];
+  if(sel && bdi && bdi.secondary) detail = `<div class="pl-detail">${flags}<div class="pl-bundle-note">這是「一票多場」的同一套票：票價與張數已計入 ${tcfEsc(bdi.primaryLabel)} 那一場，要調整張數或票種請到那一場的卡片。</div></div>`;
   return `<div class="pl-card${sel ? ' sel' : ''}${ctx.clashKeys[sess.key] && sel ? ' clash' : ''}" id="pl-${key}">${main}${detail}</div>`;
 }
 function tcfPlanSummaryHTML(ctx, compact){
