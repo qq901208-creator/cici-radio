@@ -4272,6 +4272,22 @@ function _snapWanted(){
   if(typeof isLoggedIn === 'function' && isLoggedIn()) return false;
   return SNAP_CFG.enabled || window._SNAP_REQ === '1';
 }
+// 壓縮：快照 JSON 先 gzip 再轉 base64 存進 Firestore（體積大約縮到原來的 1/5～1/8，訪客下載量與分份數一起下降）
+// 瀏覽器不支援（CompressionStream／DecompressionStream）時：管理者端改存未壓縮版本、訪客端改走原本的讀法
+async function _snapGzip(str){
+  const cs = new CompressionStream('gzip'), w = cs.writable.getWriter();
+  w.write(new TextEncoder().encode(str)).catch(()=>{}); w.close().catch(()=>{}); // 錯誤會由讀取端的 await 接住，這裡避免出現未處理的 Promise 錯誤
+  const buf = new Uint8Array(await new Response(cs.readable).arrayBuffer());
+  let bin = ''; for(let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode.apply(null, buf.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+async function _snapGunzip(b64){
+  const bin = atob(b64), buf = new Uint8Array(bin.length);
+  for(let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  const ds = new DecompressionStream('gzip'), w = ds.writable.getWriter();
+  w.write(buf).catch(()=>{}); w.close().catch(()=>{}); // 資料損壞時錯誤由下面的 await 丟出，上層會改走原本的讀法
+  return await new Response(ds.readable).text();
+}
 // 讀快照：任何一個環節不對（缺份、時間戳對不上、長度不符、格式不對）都回傳 null → 改走原本的讀法
 async function _snapLoad(){
   const mSnap = await getDoc(doc(db, 'meta', 'snapshot'));
@@ -4287,6 +4303,11 @@ async function _snapLoad(){
     txt += d.p;
   }
   if(txt.length !== mf.len) return null;
+  if(mf.enc === 'gz'){
+    if(typeof DecompressionStream !== 'function') return null; // 這個瀏覽器不能解壓 → 走原本的讀法
+    try{ txt = await _snapGunzip(txt); }catch(e){ return null; }
+    if(mf.raw && txt.length !== mf.raw) return null;
+  } else if(mf.enc) return null; // 不認得的格式
   let data; try{ data = JSON.parse(txt); }catch(e){ return null; } // JSON 損毀：當作沒有快照，改走原本的讀法
   if(!data || data.v !== 1) return null;
   if(!['shows', 'mics', 'venues', 'courses', 'performers'].every(k=>Array.isArray(data[k]))) return null;
@@ -4319,11 +4340,14 @@ async function _snapBuild(opts){
   const data = {v:1, ts, cut, shows, mics, venues, courses, performers,
     meta:{lastUpdated: m1.exists() ? m1.data() : {}, showVenues: m2.exists() ? m2.data().items : null, showAreas: m3.exists() ? m3.data().items : null}};
   const txt = JSON.stringify(data), size = opts.chunkChars || SNAP_CFG.chunkChars, parts = [];
-  for(let i = 0; i < txt.length; i += size) parts.push(txt.slice(i, i + size));
+  let payload = txt, enc = null;
+  if(typeof CompressionStream === 'function' && !opts.noGzip){ try{ payload = await _snapGzip(txt); enc = 'gz'; }catch(e){ payload = txt; enc = null; } }
+  for(let i = 0; i < payload.length; i += size) parts.push(payload.slice(i, i + size));
   if(parts.length > 20) throw new Error('快照太大（超過 20 份）');
   for(let i = 0; i < parts.length; i++) await setDoc(doc(db, 'meta', 'snapshot_' + i), {p:parts[i], t:ts, i}); // 先寫內容
-  await setDoc(doc(db, 'meta', 'snapshot'), {v:1, n:parts.length, ts, len:txt.length, shows:shows.length}); // 最後才更新「目錄」，訪客不會讀到寫一半的快照
-  return {chunks:parts.length, chars:txt.length, shows:shows.length};
+  const mf = {v:1, n:parts.length, ts, len:payload.length, raw:txt.length, shows:shows.length}; if(enc) mf.enc = enc;
+  await setDoc(doc(db, 'meta', 'snapshot'), mf); // 最後才更新「目錄」，訪客不會讀到寫一半的快照
+  return {chunks:parts.length, chars:txt.length, packed:payload.length, enc, shows:shows.length};
 }
 // 儲存／刪除後 8 秒再重建（連續儲存、批次帶入只會重建一次）
 window._snapSchedule = function(colName, id){
@@ -4343,7 +4367,7 @@ window.snapPublishNow = async function(){
   if(!(typeof isLoggedIn === 'function' && isLoggedIn())){ if(typeof showToast === 'function') showToast('請先登入管理者帳號', 'err'); return; }
   if(_snapBusy){ showToast('快照正在更新中，請稍候', 'err'); return; }
   _snapBusy = true; showToast('⏳ 正在從資料庫重建快照…');
-  try{ const r = await _snapBuild({fromDb:true}); showToast(`✅ 快照已發布：${r.shows} 場演出、約 ${Math.round(r.chars / 1024)} KB（${r.chunks} 份）`, 'ok'); }
+  try{ const r = await _snapBuild({fromDb:true}); showToast(`✅ 快照已發布：${r.shows} 場演出、${Math.round(r.chars / 1024)} KB${r.enc ? ' → 壓縮後 ' + Math.round(r.packed / 1024) + ' KB' : '（未壓縮）'}（${r.chunks} 份）`, 'ok'); }
   catch(e){ console.error(e); showToast('❌ 快照發布失敗：' + ((e && e.message) || e), 'err'); }
   finally{ _snapBusy = false; }
 };
