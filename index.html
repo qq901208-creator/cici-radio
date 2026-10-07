@@ -4330,6 +4330,10 @@ async function _snapBuild(opts){
     const st = s.status || 'published';
     if(st === 'hidden' || st === 'postponed') return false; // 只有管理者看得到的演出不放進快照
     return String(s.date || '') >= cut;                      // 與原本訪客查詢（date >= 31 天前）相同的比較方式
+  }).map(s=>{
+    // 簡介（description）是演出資料裡最大、也最難壓縮的欄位，列表與月曆都用不到：快照不放，標記 _dl，訪客打開詳情時才讀那一場
+    if(!s.description) return s;
+    const o = Object.assign({}, s); delete o.description; o._dl = 1; return o;
   });
   const [mics, venues, courses, perf0, m1, m2, m3] = await Promise.all([
     rd('mics'), rd('venues'), rd('courses'), rd('performers'),
@@ -4350,6 +4354,11 @@ async function _snapBuild(opts){
   return {chunks:parts.length, chars:txt.length, packed:payload.length, enc, shows:shows.length};
 }
 // 儲存／刪除後 8 秒再重建（連續儲存、批次帶入只會重建一次）
+// 訪客打開某場詳情時，補讀那一場的簡介（1 次讀取）。失敗回傳 null，下次打開再試
+window._snapFetchDesc = async function(id){
+  try{ const d = await getDoc(doc(db, 'shows', id)); return d.exists() ? (d.data().description || '') : ''; }
+  catch(e){ return null; }
+};
 window._snapSchedule = function(colName, id){
   if(['shows', 'mics', 'venues', 'courses', 'performers', 'meta'].indexOf(colName) < 0) return;
   if(colName === 'meta' && String(id || '').indexOf('snapshot') === 0) return;
@@ -4911,9 +4920,20 @@ function isFeaturedShowClick(id) {
   }
   return false;
 }
+function _sdLazyDesc(s){
+  window._snapFetchDesc(s.id).then(desc=>{
+    const slot = document.getElementById('sd-desc-slot');
+    const mine = slot && slot.dataset.sid === String(s.id); // 讀取期間使用者可能已經關掉或換看別場
+    if(desc === null){ if(mine){ slot.style.opacity = ''; slot.textContent = '（簡介暫時無法載入，請稍後再試）'; } return; }
+    s.description = desc; delete s._dl;
+    if(!mine) return;
+    if(desc){ slot.style.opacity = ''; slot.innerHTML = desc; } else slot.remove();
+  }).catch(()=>{});
+}
 function openShowDetail(id, skipPageSwitch) {
   const allShows = window._SHOWS || SHOWS || [];
   const s = allShows.find(x=>x.id===id); if (!s) return;
+  if (s._dl && typeof window._snapFetchDesc === 'function') setTimeout(()=>_sdLazyDesc(s), 0); // 快照模式：簡介沒放在快照裡，打開詳情後才補讀
   if (typeof gtag === 'function') {
     gtag('event', 'card_click', {
       card_type: isFeaturedShowClick(id) ? 'featured_show' : 'regular_show',
@@ -4956,7 +4976,7 @@ function openShowDetail(id, skipPageSwitch) {
       <button onclick="openStoryCard('${s.id}')" style="padding:5px 14px;border-radius:var(--r-pill);border:1.5px solid rgba(45,43,31,.2);background:transparent;font-size:.76rem;font-family:var(--f-zh);color:var(--ts);cursor:pointer;display:inline-flex;align-items:center;gap:5px" onmouseover="this.style.borderColor='var(--or)';this.style.color='var(--or)'" onmouseout="this.style.borderColor='rgba(45,43,31,.2)';this.style.color='var(--ts)'">📱 <span class="zh-text">生成限動圖</span><span class="en-text">Story Card</span></button>
     </div>
     </div>
-    ${s.description?`<p class="sd-desc">${s.description}</p>`:''}
+    ${s.description?`<p class="sd-desc">${s.description}</p>`:(s._dl?`<p class="sd-desc" id="sd-desc-slot" data-sid="${s.id}" style="opacity:.55">簡介載入中…</p>`:'')}
     ${s.production?`<div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(45,43,31,.1)"><div style="font-size:.75rem;font-weight:700;color:var(--ts);font-family:var(--f-bo);margin-bottom:5px;letter-spacing:.05em">${getLang()==='en'?'Production Team':'製作團隊 Production Team'}</div><p style="font-size:.83rem;line-height:1.75;color:var(--ts);font-family:var(--f-zh);white-space:pre-line;margin:0">${s.production}</p></div>`:''}
     ${s.ticketUrl&&s.ticketUrl!=='#'?`<a href="${s.ticketUrl}" target="_blank" rel="noopener" class="sd-ticket-btn" style="margin-top:20px;display:inline-block">${getLang()==='en'?'Buy Tickets ↗':'前往售票頁面 ↗'}</a><p class="sd-disclaimer"><span class="zh-text">本站僅提供資訊整理，購票、退票及演出變動請洽原售票平台與主辦單位。</span><span class="en-text">For ticketing, refunds, or event changes, please contact the original platform or organizer.</span></p>`:''}
     ${s.imgSrc?`<p class="sd-imgsrc" style="margin-top:8px">📷 ${s.imgSrc}</p>`:''}
