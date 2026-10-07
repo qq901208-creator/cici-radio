@@ -1850,6 +1850,9 @@ body.edit .bt-admin-btn{display:inline-flex}
 .by-note{display:flex;align-items:center;justify-content:center;width:100%;min-height:40px;border-radius:999px;background:rgba(45,43,31,.07);color:var(--ts);font-size:.8rem;font-weight:700}
 .pl-cta-ghost{background:#fff;color:var(--tcf-pink);border:1.5px solid var(--tcf-pink)}
 .pl-final{flex-wrap:wrap}
+.pl-sub{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;width:100%;margin:-4px 0 0;padding:0 14px 10px 78px;border:0;background:transparent;text-align:left;cursor:pointer;font-family:var(--f-zh)}
+.pl-perf{flex:1;min-width:0;font-size:.74rem;line-height:1.55;color:var(--ts);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.pl-more{flex:0 0 auto;font-size:.74rem;font-weight:800;color:var(--tcf-pink);padding:2px 0}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google Analytics -->
@@ -6555,9 +6558,11 @@ function tcfPlanCardHTML(sess, ctx, mine){
       ${comboOpen ? tcfPlanComboHTML(sess, e, calc) : ''}${(hasSpecial && spOpen) ? tcfPlanSpecialHTML(sess, e) : ''}
     </div>`;
   }
+  const perf = String(s.performer || '').trim();
+  const sub = `<button type="button" class="pl-sub" onclick="openShowDetail('${tcfEsc(s.id)}')"><span class="pl-perf">${perf ? '出演：' + tcfEsc(perf) : ''}</span><span class="pl-more">詳情 ›</span></button>`;
   const bdi = ctx.bundle && ctx.bundle[sess.key];
   if(sel && bdi && bdi.secondary) detail = `<div class="pl-detail">${flags}<div class="pl-bundle-note">這是「一票多場」的同一套票：票價與張數已計入 ${tcfEsc(bdi.primaryLabel)} 那一場，要調整張數或票種請到那一場的卡片。</div></div>`;
-  return `<div class="pl-card${sel ? ' sel' : ''}${ctx.clashKeys[sess.key] && sel ? ' clash' : ''}" id="pl-${key}">${main}${detail}</div>`;
+  return `<div class="pl-card${sel ? ' sel' : ''}${ctx.clashKeys[sess.key] && sel ? ' clash' : ''}" id="pl-${key}">${main}${sub}${detail}</div>`;
 }
 // ══ 購票清單：依你安排的行程順序，一場一場去官方售票頁購票；買完勾「已購買」追蹤進度（存在這個瀏覽器，也會一起備份）══
 // 一票多場（例如《未完待續》）只算一組，由最早的一場代表；要買的票種與張數就是客製化行程算出來的推薦組合。
@@ -7099,7 +7104,6 @@ function tcfPlanEnsureShareDom(){
   ov.innerHTML = `<div class="tcf-share-box" role="dialog" aria-label="我的台北喜劇節 分享圖片">
     <button type="button" class="ts-close" aria-label="關閉" onclick="tcfPlanCloseShare()">✕</button>
     <h3>我的台北喜劇節・分享圖片</h3>
-    <p class="ts-sub">這張就是你要分享的觀演表（9:16，已預留 Instagram 限時動態上下的安全區，文字不會被帳號列或回覆列蓋住，上下只有淡淡的背景）。圖片只有日期、時間、演出與場地，不會包含人數、身心障礙、陪同或票種資格資訊。</p>
     <div class="ts-daysbox"><div class="ts-days-h"><span>要生成哪幾天？</span><span><button type="button" onclick="tcfPlanShareDaysAll(true)">全選</button><button type="button" onclick="tcfPlanShareDaysAll(false)">全不選</button></span></div><div id="ts-days" class="ts-days"></div></div>
     <div class="ts-opts"><label><input type="checkbox" id="ts-price" onchange="tcfPlanShareOpt('price',this.checked)"> 顯示預估票價</label><label><input type="checkbox" id="ts-wide" onchange="tcfPlanShareOpt('wide',this.checked)"> 雙欄排列（橫向，張數較少）</label></div>
     <div id="ts-auto" class="ts-auto"></div>
@@ -7176,12 +7180,29 @@ async function tcfPlanShareRenderInner(){
   const names = blobs.map((_, i)=>blobs.length === 1 ? 'cici-taipei-comedy-festival-my-schedule.png' : `cici-tcf-my-schedule-${String(i + 1).padStart(2, '0')}.png`);
   _tcfShareNames = names;
   _tcfShareFiles = blobs.map((b, i)=>{ try{ return new File([b], names[i], {type:'image/png'}); }catch(e){ return null; } });
-  const allBtn = blobs.length > 1 ? `<button type="button" class="ts-btn ts-all" onclick="tcfPlanShareSave(-1)">分享＆儲存全部圖片（${blobs.length} 張）</button>` : '';
-  listEl.innerHTML = allBtn + _tcfShareUrls.map((u, i)=>`<figure class="ts-fig"><img src="${u}" alt="我的台北喜劇節 ${i + 1}/${blobs.length}"><figcaption>${blobs.length > 1 ? `第 ${i + 1} 張／共 ${blobs.length} 張` : ''}<div class="ts-btns"><button type="button" class="ts-btn" onclick="tcfPlanShareSave(${i})">分享＆儲存圖片</button></div></figcaption></figure>`).join('');
+  // 手機：單一「分享＆儲存圖片」（系統分享選單裡可選「儲存影像」）；桌機（有滑鼠）：直接「儲存圖片」，瀏覽器支援分享圖片檔時再多一顆「分享」
+  const desktop = !!(window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches);
+  let canShare = false;
+  try{ canShare = !!(navigator.share && navigator.canShare && _tcfShareFiles[0] && navigator.canShare({files:[_tcfShareFiles[0]]})); }catch(e){ canShare = false; }
+  const figBtns = i=>desktop
+    ? `<button type="button" class="ts-btn" onclick="tcfPlanShareDownload(${i})">儲存圖片</button>${canShare ? `<button type="button" class="ts-btn ghost" onclick="tcfPlanShareSave(${i})">分享</button>` : ''}`
+    : `<button type="button" class="ts-btn" onclick="tcfPlanShareSave(${i})">分享＆儲存圖片</button>`;
+  const allBtn = blobs.length > 1 ? (desktop
+    ? `<button type="button" class="ts-btn ts-all" onclick="tcfPlanShareDownload(-1)">儲存全部圖片（${blobs.length} 張）</button>`
+    : `<button type="button" class="ts-btn ts-all" onclick="tcfPlanShareSave(-1)">分享＆儲存全部圖片（${blobs.length} 張）</button>`) : '';
+  listEl.innerHTML = allBtn + _tcfShareUrls.map((u, i)=>`<figure class="ts-fig"><img src="${u}" alt="我的台北喜劇節 ${i + 1}/${blobs.length}"><figcaption>${blobs.length > 1 ? `第 ${i + 1} 張／共 ${blobs.length} 張` : ''}<div class="ts-btns">${figBtns(i)}</div></figcaption></figure>`).join('');
 }
 // 「分享＆儲存圖片」：手機會跳出系統分享選單（可選「儲存影像」存進相簿，或直接分享到 Instagram 等 App）；
 // 瀏覽器不支援分享圖片檔（例如多數電腦瀏覽器）或分享失敗時，自動改成下載圖片。使用者自己取消分享不會再下載。
 // i＝第幾張；-1＝全部
+// 直接下載圖片檔（桌機的「儲存圖片」；也是分享失敗時的備案）。i＝第幾張；-1＝全部
+function tcfPlanShareDownload(i){
+  const idxs = i < 0 ? _tcfShareUrls.map((_, k)=>k) : [i];
+  idxs.forEach((k, n)=>setTimeout(()=>{
+    const a = document.createElement('a'); a.href = _tcfShareUrls[k]; a.download = _tcfShareNames[k] || 'cici-tcf-my-schedule.png';
+    document.body.appendChild(a); a.click(); a.remove();
+  }, n * 450)); // 多張依序下載，避免被瀏覽器當成一次大量下載而擋掉
+}
 async function tcfPlanShareSave(i){
   const idxs = i < 0 ? _tcfShareUrls.map((_, k)=>k) : [i];
   const files = idxs.map(k=>_tcfShareFiles[k]).filter(Boolean);
@@ -7191,10 +7212,7 @@ async function tcfPlanShareSave(i){
       return;
     }
   }catch(e){ if(e && e.name === 'AbortError') return; }
-  idxs.forEach((k, n)=>setTimeout(()=>{
-    const a = document.createElement('a'); a.href = _tcfShareUrls[k]; a.download = _tcfShareNames[k] || 'cici-tcf-my-schedule.png';
-    document.body.appendChild(a); a.click(); a.remove();
-  }, n * 450));
+  tcfPlanShareDownload(i); // 不支援分享圖片檔或分享失敗：改成下載
 }
 
 // 離開喜劇節頁／視窗大小改變時，同步底部摘要列
