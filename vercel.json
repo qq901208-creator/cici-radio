@@ -5,5 +5,16 @@
     { "source": "/show/:id", "destination": "/api/show/:id" },
     { "source": "/guide", "destination": "/api/guide" },
     { "source": "/course/:id", "destination": "/api/course/course?id=:id" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=31536000" }
+      ]
+    }
   ]
 }
