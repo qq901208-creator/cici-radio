@@ -4080,8 +4080,14 @@ window._ensureFullShowsLoaded = async function () {
   if (!window._showsScoped) return; // 本來就是完整資料，不用再抓
   window._showsScoped = false; // 先設 false 避免重複觸發
   try {
-    const snap = await getDocs(collection(db, 'shows'));
-    const full = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    let full = null;
+    if(window._snapUsed){ // 訪客用快照載入：優先讀歷史快照（約 3 次讀取），讀不到才退回完整讀取
+      try{ const hist = await _snapHistLoad(); if(hist) full = hist.shows; }catch(e){ full = null; }
+    }
+    if(!full){
+      const snap = await getDocs(collection(db, 'shows'));
+      full = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    }
     const existingIds = new Set((window._SHOWS || []).map(s => s.id));
     const toAdd = full.filter(s => !existingIds.has(s.id));
     if (toAdd.length) {
@@ -4105,6 +4111,7 @@ async function loadAllData(retryCount = 0) {
     if(_snapData){
       // 使用快照：演出／擂台／場地／課程／表演者／設定都來自快照，只有留言仍即時讀取
       window._showsScoped = true; // 和原本一般訪客一致：需要更早的歷史資料時才補抓完整資料
+      window._snapUsed = true;    // 記下「這位訪客用的是快照」：補抓歷史時改讀歷史快照，統計也改用預先算好的數字
       showsSnap = _snapDocs(_snapData.shows); micsSnap = _snapDocs(_snapData.mics); venuesSnap = _snapDocs(_snapData.venues);
       coursesSnap = _snapDocs(_snapData.courses); performersSnap = _snapDocs(_snapData.performers);
       const sm = _snapData.meta || {};
@@ -4320,6 +4327,59 @@ async function _snapLoad(){
 // 轉成跟 getDocs 結果同樣的形狀（.docs[].id／.data()），讓後面原本的處理程式完全不用改
 const _snapDocs = arr => ({ docs: arr.map(o=>{ const rest = Object.assign({}, o); const id = rest.id; delete rest.id; return {id, data:()=>rest}; }) });
 
+
+
+// ── 歷史快照：比「近 31 天」更早的演出（一樣壓縮、不含簡介、不含隱藏／延期）──
+// 訪客在月曆按「上個月」時，原本會讀完整的演出集合（約 1,400 次讀取、1.5MB）；有歷史快照就只讀它（約 3 次讀取）
+async function _snapPack(obj, size, noGzip){
+  const txt = JSON.stringify(obj); let payload = txt, enc = null;
+  if(typeof CompressionStream === 'function' && !noGzip){ try{ payload = await _snapGzip(txt); enc = 'gz'; }catch(e){ payload = txt; enc = null; } }
+  const parts = []; for(let i = 0; i < payload.length; i += size) parts.push(payload.slice(i, i + size));
+  return {txt, payload, enc, parts};
+}
+async function _snapUnpack(mf, texts){
+  let txt = texts.join('');
+  if(txt.length !== mf.len) return null;
+  if(mf.enc === 'gz'){
+    if(typeof DecompressionStream !== 'function') return null;
+    try{ txt = await _snapGunzip(txt); }catch(e){ return null; }
+    if(mf.raw && txt.length !== mf.raw) return null;
+  } else if(mf.enc) return null;
+  try{ return JSON.parse(txt); }catch(e){ return null; }
+}
+function _snapHash(str){ let h = 5381; for(let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0; return h + ':' + str.length; }
+async function _snapHistBuild(histShows, opts){
+  opts = opts || {};
+  if(!histShows.length) return {skipped:true, count:0};
+  const h = _snapHash(JSON.stringify(histShows));
+  const old = await getDoc(doc(db, 'meta', 'snaphist'));
+  if(old.exists() && old.data().h === h && !opts.force) return {skipped:true, count:histShows.length}; // 歷史資料沒變，不重寫（省寫入）
+  const ts = Date.now();
+  const pk = await _snapPack({v:1, ts, shows:histShows}, SNAP_CFG.chunkChars, opts.noGzip);
+  if(pk.parts.length > 20) throw new Error('歷史快照太大（超過 20 份）');
+  for(let i = 0; i < pk.parts.length; i++) await setDoc(doc(db, 'meta', 'snaphist_' + i), {p:pk.parts[i], t:ts, i});
+  const mf = {v:1, n:pk.parts.length, ts, len:pk.payload.length, raw:pk.txt.length, count:histShows.length, h}; if(pk.enc) mf.enc = pk.enc;
+  await setDoc(doc(db, 'meta', 'snaphist'), mf);
+  return {skipped:false, count:histShows.length, chunks:pk.parts.length, packed:pk.payload.length};
+}
+async function _snapHistLoad(){
+  const m = await getDoc(doc(db, 'meta', 'snaphist'));
+  if(!m.exists()) return null;
+  const mf = m.data();
+  if(!mf || mf.v !== 1 || !(mf.n >= 1 && mf.n <= 20)) return null;
+  const parts = await Promise.all(Array.from({length:mf.n}, (_, i)=>getDoc(doc(db, 'meta', 'snaphist_' + i))));
+  const texts = [];
+  for(const part of parts){
+    if(!part.exists()) return null;
+    const d = part.data();
+    if(!d || d.t !== mf.ts || typeof d.p !== 'string') return null;
+    texts.push(d.p);
+  }
+  const data = await _snapUnpack(mf, texts);
+  if(!data || data.v !== 1 || !Array.isArray(data.shows)) return null;
+  return data;
+}
+
 // 累計統計（關於我們頁的「收錄演出場數」、每月長條圖、類型圓餅圖）：算法與 renderAboutStats 原本完全相同，
 // 但用「完整」的演出資料算；訪客只載入近 31 天到未來，自己算會少掉之前的資料
 function _snapStats(allShows){
@@ -4363,6 +4423,16 @@ async function _snapBuild(opts){
     if(!s.description) return s;
     const o = Object.assign({}, s); delete o.description; o._dl = 1; return o;
   });
+  // 更早的演出（歷史）：同樣規則（不含隱藏／延期、不含簡介），放進另一份歷史快照
+  const histShows = showsAll.filter(s=>{
+    if(!s || !s.id) return false;
+    const st = s.status || 'published';
+    if(st === 'hidden' || st === 'postponed') return false;
+    return String(s.date || '') < cut;
+  }).map(s=>{
+    if(!s.description) return s;
+    const o = Object.assign({}, s); delete o.description; o._dl = 1; return o;
+  });
   const [mics, venues, courses, perf0, m1, m2, m3] = await Promise.all([
     rd('mics'), rd('venues'), rd('courses'), rd('performers'),
     getDoc(doc(db, 'meta', 'lastUpdated')), getDoc(doc(db, 'meta', 'showVenues')), getDoc(doc(db, 'meta', 'showAreas'))
@@ -4381,7 +4451,9 @@ async function _snapBuild(opts){
   await setDoc(doc(db, 'meta', 'stats'), Object.assign({v:1, ts}, stats)); // 很小的一份累計統計，訪客另外讀（約 1 次讀取）
   const mf = {v:1, n:parts.length, ts, len:payload.length, raw:txt.length, shows:shows.length}; if(enc) mf.enc = enc;
   await setDoc(doc(db, 'meta', 'snapshot'), mf); // 最後才更新「目錄」，訪客不會讀到寫一半的快照
-  return {chunks:parts.length, chars:txt.length, packed:payload.length, enc, shows:shows.length, statsTotal:stats.total};
+  let hist = null;
+  try{ hist = await _snapHistBuild(histShows, opts); }catch(e){ console.warn('歷史快照更新失敗（不影響主快照）：', e); hist = {failed:true, count:histShows.length}; }
+  return {chunks:parts.length, chars:txt.length, packed:payload.length, enc, shows:shows.length, statsTotal:stats.total, hist};
 }
 // 儲存／刪除後 8 秒再重建（連續儲存、批次帶入只會重建一次）
 // 訪客打開某場詳情時，補讀那一場的簡介（1 次讀取）。失敗回傳 null，下次打開再試
@@ -4406,7 +4478,7 @@ window.snapPublishNow = async function(){
   if(!(typeof isLoggedIn === 'function' && isLoggedIn())){ if(typeof showToast === 'function') showToast('請先登入管理者帳號', 'err'); return; }
   if(_snapBusy){ showToast('快照正在更新中，請稍候', 'err'); return; }
   _snapBusy = true; showToast('⏳ 正在從資料庫重建快照…');
-  try{ const r = await _snapBuild({fromDb:true}); showToast(`✅ 快照已發布：${r.shows} 場演出（累計統計 ${r.statsTotal} 場）、${Math.round(r.chars / 1024)} KB${r.enc ? ' → 壓縮後 ' + Math.round(r.packed / 1024) + ' KB' : '（未壓縮）'}（${r.chunks} 份）`, 'ok'); }
+  try{ const r = await _snapBuild({fromDb:true}); showToast(`✅ 快照已發布：${r.shows} 場演出（累計統計 ${r.statsTotal} 場；歷史 ${r.hist ? (r.hist.failed ? '更新失敗' : r.hist.skipped ? r.hist.count + ' 場，沒變動' : r.hist.count + ' 場，' + Math.round(r.hist.packed / 1024) + ' KB') : '無'}）、${Math.round(r.chars / 1024)} KB${r.enc ? ' → 壓縮後 ' + Math.round(r.packed / 1024) + ' KB' : '（未壓縮）'}（${r.chunks} 份）`, 'ok'); }
   catch(e){ console.error(e); showToast('❌ 快照發布失敗：' + ((e && e.message) || e), 'err'); }
   finally{ _snapBusy = false; }
 };
@@ -5312,7 +5384,7 @@ function renderAboutStats(){
   if(!numsEl) return;
   const LAUNCH = new Date('2026-05-22T00:00');
   // 訪客只載入近 31 天～未來的演出，累計數字改讀後台預先算好的 meta/stats；管理者（完整資料）或讀不到時維持原本的算法
-  const _ST = (window._showsScoped && window._SNAP_STATS && window._SNAP_STATS.v === 1) ? window._SNAP_STATS : null;
+  const _ST = ((window._showsScoped || window._snapUsed) && window._SNAP_STATS && window._SNAP_STATS.v === 1) ? window._SNAP_STATS : null;
   const totalShows = _ST ? _ST.total : countShows.filter(s=>{ const d=new Date((s.date||'').split(',')[0].trim()+'T00:00'); return d>=LAUNCH; }).length;
   const statItems = [
     {n: totalShows,       label: lang==='en'?'Shows Listed':'收錄演出場數', emoji:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>'},
