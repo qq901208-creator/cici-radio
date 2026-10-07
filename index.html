@@ -3323,9 +3323,9 @@ body.edit .bt-admin-btn{display:inline-flex}
       <div class="ft-en">Cici Radio · Comedy Guide Taiwan</div>
       <p><span class="zh-text">台灣現場喜劇演出資訊整理，由人工更新維護。</span><span class="en-text">Hand-curated comedy show guide in Taiwan.</span></p>
       <div class="socials">
-        <a class="soc-btn" href="https://www.facebook.com/profile.php?id=100083411285720" target="_blank">f</a>
-        <a class="soc-btn" href="https://www.instagram.com/cici._.radio/" target="_blank">ig</a>
-        <a class="soc-btn" href="https://linktr.ee/cici._.radio" target="_blank">🔗</a>
+        <a class="soc-btn" href="https://www.facebook.com/profile.php?id=100083411285720" target="_blank" rel="noopener">f</a>
+        <a class="soc-btn" href="https://www.instagram.com/cici._.radio/" target="_blank" rel="noopener">ig</a>
+        <a class="soc-btn" href="https://linktr.ee/cici._.radio" target="_blank" rel="noopener">🔗</a>
         <a class="soc-btn" href="mailto:ciciradio3@gmail.com">@</a>
       </div>
     </div>
@@ -7988,9 +7988,9 @@ function venueCardHTML(v) {
     ${v.partner?`<div style="margin-top:2px"><span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:600;background:rgba(45,43,31,.06);color:var(--ts);border:1px solid rgba(45,43,31,.14);border-radius:var(--r-pill);padding:2px 8px;font-family:var(--f-zh)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span> ${v.partner}</span></div>`:''}
     ${(v.tags&&v.tags.length)?`<div class="venue-tags">${v.tags.map(t=>`<span class="venue-tag">${t}</span>`).join('')}</div>`:''}
     <div class="venue-links" onclick="event.stopPropagation()" style="margin-top:auto">
-      ${v.fb?`<a class="vlb vlb-fb" href="${v.fb}" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> FB</a>`:''}
-      ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> Instagram</a>`:''}
-      ${v.address||v.mapUrl?`<a class="vlb vlb-map" href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> Map</a>`:''}
+      ${v.fb?`<a class="vlb vlb-fb" href="${v.fb}" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> FB</a>`:''}
+      ${v.ig?`<a class="vlb vlb-ig" href="${v.ig}" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> Instagram</a>`:''}
+      ${v.address||v.mapUrl?`<a class="vlb vlb-map" href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> Map</a>`:''}
     </div>
     ${v.tip?`<div style="margin-top:8px;padding:7px 10px;background:rgba(45,43,31,.04);border-left:2px solid rgba(45,43,31,.18);border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:.74rem;font-family:var(--f-zh);color:var(--ts);line-height:1.55;white-space:pre-line"><span style="font-weight:700;color:var(--tm)"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> 嘻嘻小建議</span><br>${v.tip}</div>`:''}
     <div class="card-eo">
@@ -8109,9 +8109,9 @@ function showVenueDetail(id) {
     </table>
     ${v.tip?`<div style="padding:10px 14px;background:rgba(245,213,88,.18);border-left:3px solid var(--y);border-radius:0 var(--r-md) var(--r-md) 0;margin-bottom:14px"><div style="font-size:.78rem;font-weight:700;color:var(--or);margin-bottom:4px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span> 嘻嘻小建議</div><div style="font-size:.85rem;font-family:var(--f-zh);color:var(--tm);line-height:1.65;white-space:pre-line">${v.tip}</div></div>`:''}
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-      ${v.fb?`<a href="${v.fb}" target="_blank" class="btn-ww" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">FB ↗</a>`:`<span></span>`}
-      ${v.ig?`<a href="${v.ig}" target="_blank" class="btn-ww" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">IG ↗</a>`:`<span></span>`}
-      ${v.address||v.mapUrl?`<a href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank" class="btn-ww" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">Maps ↗</a>`:`<span></span>`}
+      ${v.fb?`<a href="${v.fb}" target="_blank" rel="noopener" class="btn-ww" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">FB ↗</a>`:`<span></span>`}
+      ${v.ig?`<a href="${v.ig}" target="_blank" rel="noopener" class="btn-ww" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">IG ↗</a>`:`<span></span>`}
+      ${v.address||v.mapUrl?`<a href="${v.mapUrl||'https://maps.google.com/?q='+encodeURIComponent(v.address)}" target="_blank" rel="noopener" class="btn-ww" style="padding:8px 4px;font-size:.8rem;text-align:center;justify-content:center">Maps ↗</a>`:`<span></span>`}
     </div>`;
   // 近期演出：用場地名稱關鍵字比對
   const allShows = window._SHOWS||[];
@@ -10424,7 +10424,11 @@ async function parseShowTicket(){
   setParseLoad('show',true);
   setPS('show','','');
   try{
-    const r=await fetch('/api/parse-ticket',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url})});
+    // 伺服器端 /api/parse-ticket 只允許管理者使用：帶上管理者的 Firebase 登入憑證
+    let tk=''; try{ const u=window._fbAuth&&window._fbAuth.currentUser; if(u) tk=await u.getIdToken(); }catch(e){}
+    if(!tk){ setPS('show','err','⚠️ 需要管理者登入狀態才能使用自動帶入，請登出後重新登入再試'); return; }
+    const r=await fetch('/api/parse-ticket',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tk},body:JSON.stringify({url})});
+    if(r.status===401||r.status===403){ setPS('show','err','⚠️ 管理者登入已失效，請登出後重新登入再試'); return; }
     const data=await r.json();
     if(!data.ok){setPS('show','err','⚠️ '+(data.error||'解析失敗，請手動輸入'));return;}
     const titleEl=document.getElementById('s-title');
@@ -10496,7 +10500,7 @@ function renderFpList(){
   const list=document.getElementById('fpList');
   const isAdmin=isLoggedIn() && editMode;
   const q=(document.getElementById('fp-search')?.value||'').trim().toLowerCase();
-  const allComments = window._COMMENTS || COMMENTS || [];
+  const allComments = (window._COMMENTS || COMMENTS || []).filter(_cmtOk); // 格式不對的留言（例如 id 含特殊字元）直接不顯示
   let fil=allComments.filter(c=>(!c.hidden||isAdmin)&&(fpTab==='all'||c.page===fpTab));
   if(q) fil=fil.filter(c=>(c.text||'').toLowerCase().includes(q)||(c.name||'').toLowerCase().includes(q));
   // 精選留言置頂
@@ -10510,20 +10514,20 @@ function renderFpList(){
   if(window._fpPage > totalPages) window._fpPage = totalPages;
   const paged = fil.slice((window._fpPage-1)*perPage, window._fpPage*perPage);
   document.getElementById('fpCnt').textContent=allComments.filter(c=>!c.hidden).length;
-  if(!fil.length){list.innerHTML=`<div style="text-align:center;padding:36px;color:var(--ts);font-family:var(--f-zh)">${q?`<span class="zh-text">沒有符合「${q}」的留言</span><span class="en-text">No comments matching "${q}"</span>`:'目前沒有留言'}</div>`;const pp=document.getElementById('fp-pagination');if(pp)pp.innerHTML='';return;}
+  if(!fil.length){list.innerHTML=`<div style="text-align:center;padding:36px;color:var(--ts);font-family:var(--f-zh)">${q?`<span class="zh-text">沒有符合「${escHtml(q)}」的留言</span><span class="en-text">No comments matching "${escHtml(q)}"</span>`:'目前沒有留言'}</div>`;const pp=document.getElementById('fp-pagination');if(pp)pp.innerHTML='';return;}
   list.innerHTML=paged.map(c=>{const pl=PAGE_LBL[c.page]||PAGE_LBL.general;return`<div class="fp-item" ${c.hidden?'style="opacity:.4"':''}>
-    <div class="fp-ih"><div class="fp-iav" style="background:hsl(${c.avatar.charCodeAt(0)*13%360},55%,82%)">${c.avatar}</div><div class="fp-im"><div class="fp-in">${c.name} ${c.rating?'⭐'.repeat(c.rating):''}</div><div class="fp-it">${relTime(c.time)}</div></div>
+    <div class="fp-ih"><div class="fp-iav" style="background:hsl(${(String(c.avatar||'?').charCodeAt(0)||0)*13%360},55%,82%)">${escHtml(c.avatar)}</div><div class="fp-im"><div class="fp-in">${escHtml(c.name)} ${_cmtRating(c)?'⭐'.repeat(_cmtRating(c)):''}</div><div class="fp-it">${relTime(c.time)}</div></div>
     <span class="fp-pt" style="background:${pl.c};color:${pl.tc}">${pl.zh}</span>${c.pinned?`<span class="fp-pin">📌 精選</span>`:''}
     </div>
     <div class="fp-itxt">${linkify(c.text)}</div>
     ${c.reply?`<div class="fp-reply"><img class="fp-reply-logo" src="https://cici-radio.vercel.app/assets/ciciradio.jpg" alt="logo" onerror="this.style.display='none'"><div class="fp-reply-body"><div class="fp-reply-name">嘻嘻哪哩唷 官方回覆</div><div class="fp-reply-text">${linkify(c.reply)}</div></div></div>`:''}
     <div class="fp-if">
-      <button class="fp-rb ${(()=>{try{const r=JSON.parse(localStorage.getItem('cici_reactions')||'{}');return (r[c.id]||[]).includes('like');}catch(e){return false;}})()? 'on':''}" onclick="react('${c.id}','like')">👍 ${c.reactions.like}</button>
-      <button class="fp-rb ${(()=>{try{const r=JSON.parse(localStorage.getItem('cici_reactions')||'{}');return (r[c.id]||[]).includes('fire');}catch(e){return false;}})()? 'on':''}" onclick="react('${c.id}','fire')">🔥 ${c.reactions.fire}</button>
-      <button class="fp-rb ${(()=>{try{const r=JSON.parse(localStorage.getItem('cici_reactions')||'{}');return (r[c.id]||[]).includes('haha');}catch(e){return false;}})()? 'on':''}" onclick="react('${c.id}','haha')">😂 ${c.reactions.haha}</button>
+      <button class="fp-rb ${(()=>{try{const r=JSON.parse(localStorage.getItem('cici_reactions')||'{}');return (r[c.id]||[]).includes('like');}catch(e){return false;}})()? 'on':''}" onclick="react('${c.id}','like')">👍 ${_cmtN(c,'like')}</button>
+      <button class="fp-rb ${(()=>{try{const r=JSON.parse(localStorage.getItem('cici_reactions')||'{}');return (r[c.id]||[]).includes('fire');}catch(e){return false;}})()? 'on':''}" onclick="react('${c.id}','fire')">🔥 ${_cmtN(c,'fire')}</button>
+      <button class="fp-rb ${(()=>{try{const r=JSON.parse(localStorage.getItem('cici_reactions')||'{}');return (r[c.id]||[]).includes('haha');}catch(e){return false;}})()? 'on':''}" onclick="react('${c.id}','haha')">😂 ${_cmtN(c,'haha')}</button>
     </div>
     ${isAdmin?`<div class="fp-admin-btns"><button class="fp-ab fp-pin-btn" onclick="pinC('${c.id}')">${c.pinned?'取消精選':'📌 精選'}</button><button class="fp-ab fp-del-btn" onclick="delC('${c.id}')">刪除</button><button class="fp-ab fp-hide-btn" onclick="hideC('${c.id}')">${c.hidden?'顯示':'隱藏'}</button></div>
-    <div class="fp-ra"><input class="fp-ri" id="ri-${c.id}" placeholder="官方回覆…" value="${(c.reply||'').replace(/"/g,'&quot;')}" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendReply('${c.id}')}"><button class="fp-rs" onclick="sendReply('${c.id}')">${c.reply?'更新回覆':'回覆'}</button>${c.reply?`<button class="fp-ab fp-del-btn" style="margin-left:4px" onclick="delReply('${c.id}')">刪除回覆</button>`:''}</div>`:''}
+    <div class="fp-ra"><input class="fp-ri" id="ri-${c.id}" placeholder="官方回覆…" value="${escHtml(c.reply||'')}" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendReply('${c.id}')}"><button class="fp-rs" onclick="sendReply('${c.id}')">${c.reply?'更新回覆':'回覆'}</button>${c.reply?`<button class="fp-ab fp-del-btn" style="margin-left:4px" onclick="delReply('${c.id}')">刪除回覆</button>`:''}</div>`:''}
   </div>`;}).join('');
   // 分頁控制
   const pp = document.getElementById('fp-pagination');
@@ -10546,9 +10550,27 @@ function checkCaptcha(){
   if(errEl) errEl.style.display = ok?'none':'block';
   return ok;
 }
+// ── 輸出安全：訪客可以輸入的內容（留言暱稱、內文）一律先跳脫再放進 HTML ──
+function escHtml(v){ return String(v == null ? '' : v).replace(/[&<>"'`]/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[ch])); }
+// 留言資料來自訪客，不能信任：id 只接受英數、底線、連字號（會放進 onclick）；評分只接受 1～5；讚數只接受非負整數
+const _cmtOk = c => !!c && typeof c === 'object' && /^[A-Za-z0-9_-]{1,64}$/.test(String(c.id));
+const _cmtRating = c => { const n = Math.round(Number(c && c.rating)); return (n >= 1 && n <= 5) ? n : 0; };
+const _cmtN = (c, k) => { const n = Number(c && c.reactions && c.reactions[k]); return (isFinite(n) && n >= 0) ? Math.floor(n) : 0; };
+// 網址只接受 http(s)；整段文字先跳脫，網址的引號、角括號不可能跳出 href 屬性
 function linkify(text){
-  return text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:var(--or);text-decoration:underline;text-underline-offset:2px;word-break:break-all">$1</a>');
+  // 網址只收 ASCII 網址字元：遇到中文、全形標點、空白、引號、角括號就結束，連結不會把後面的中文吃進去
+  const raw = String(text == null ? '' : text), re = /https?:\/\/[A-Za-z0-9\-._~:\/?#@!$&()*+,;=%\[\]]+/g;
+  let out = '', last = 0, m;
+  while((m = re.exec(raw))){
+    out += escHtml(raw.slice(last, m.index));
+    let url = m[0]; const trail = (url.match(/[.,;:!?)\]]+$/) || [''])[0];
+    if(trail) url = url.slice(0, url.length - trail.length);
+    out += `<a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" style="color:var(--or);text-decoration:underline;text-underline-offset:2px;word-break:break-all">${escHtml(url)}</a>` + escHtml(trail);
+    last = m.index + m[0].length;
+  }
+  return out + escHtml(raw.slice(last));
 }
+
 function scrollToGuidelines(){
   const el = document.getElementById('comment-guidelines');
   if(!el) return;
@@ -10640,7 +10662,7 @@ function delC(id){if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管
 function hideC(id){if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.hidden=!c.hidden;window.FB.save('comments',id,c).then(()=>{renderFpList();showToast(c.hidden?'已隱藏':'已顯示','ok');});}
 function sendReply(id){if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}const inp=document.getElementById('ri-'+id);if(!inp||!inp.value.trim())return;const c=COMMENTS.find(x=>x.id===id);if(!c)return;c.reply=inp.value.trim();window.FB.save('comments',id,c).then(()=>{renderFpList();showToast('✅ 回覆已儲存','ok');});}
 function delReply(id){if(!isLoggedIn()||!editMode){showToast('⚠️ 請先進入管理模式','err');return;}if(!confirm('確定刪除這則回覆？'))return;const c=COMMENTS.find(x=>x.id===id);if(!c)return;delete c.reply;window.FB.save('comments',id,c).then(()=>{renderFpList();showToast('回覆已刪除','ok');});}
-function renderRatBar(){const fil=COMMENTS.filter(c=>!c.hidden&&c.rating>0&&(fpTab==='all'||c.page===fpTab));const el=document.getElementById('fpRating');if(!fil.length){el.innerHTML='';el.style.display='none';return;}el.style.display='';const avg=(fil.reduce((a,c)=>a+c.rating,0)/fil.length).toFixed(1);el.innerHTML=`<div class="fp-avg">${avg}</div><div><div style="color:#f5d558;font-size:.95rem">${'⭐'.repeat(Math.round(parseFloat(avg)))}</div><div class="fp-avg-sub">${fil.length} 則評分</div></div>`;}
+function renderRatBar(){const fil=COMMENTS.filter(c=>_cmtOk(c)&&!c.hidden&&_cmtRating(c)>0&&(fpTab==='all'||c.page===fpTab));const el=document.getElementById('fpRating');if(!fil.length){el.innerHTML='';el.style.display='none';return;}el.style.display='';const avg=(fil.reduce((a,c)=>a+_cmtRating(c),0)/fil.length).toFixed(1);el.innerHTML=`<div class="fp-avg">${avg}</div><div><div style="color:#f5d558;font-size:.95rem">${'⭐'.repeat(Math.round(parseFloat(avg)))}</div><div class="fp-avg-sub">${fil.length} 則評分</div></div>`;}
 let _homeCommentTimer = null;
 let _homeCommentPage = 0;
 
@@ -10649,7 +10671,7 @@ function renderHomeComments(){
   const row2 = document.getElementById('marquee-row-2');
   const wrap = document.getElementById('home-comments-marquee');
   if(!row1 || !row2 || !wrap) return;
-  const all = COMMENTS.filter(c=>!c.hidden).sort((a,b)=>{
+  const all = COMMENTS.filter(c=>_cmtOk(c)&&!c.hidden).sort((a,b)=>{
     if(a.pinned && !b.pinned) return -1;
     if(!a.pinned && b.pinned) return 1;
     return (b.time||0)-(a.time||0);
@@ -10666,7 +10688,7 @@ function renderHomeComments(){
 }
 
 function _commentCardHTML(c){
-  return `<div class="marquee-card"><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><div style="width:34px;height:34px;border-radius:50%;background:hsl(${c.avatar.charCodeAt(0)*13%360},55%,82%);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;font-family:var(--f-bo);flex-shrink:0">${c.avatar}</div><div><div style="font-weight:700;font-size:.85rem;font-family:var(--f-zh)">${c.name}</div><div style="font-size:.68rem;color:var(--ts)">${'⭐'.repeat(c.rating||0)} ${relTime(c.time)}</div></div>${c.pinned?`<span style="margin-left:auto;background:var(--y);color:var(--sd);font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:var(--r-pill);flex-shrink:0"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span> 精選</span>`:''}</div><div style="font-size:.85rem;color:var(--tm);font-family:var(--f-zh);line-height:1.62;white-space:pre-line;overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical">${c.text}</div></div>`;
+  return `<div class="marquee-card"><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><div style="width:34px;height:34px;border-radius:50%;background:hsl(${(String(c.avatar||'?').charCodeAt(0)||0)*13%360},55%,82%);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;font-family:var(--f-bo);flex-shrink:0">${escHtml(c.avatar)}</div><div><div style="font-weight:700;font-size:.85rem;font-family:var(--f-zh)">${escHtml(c.name)}</div><div style="font-size:.68rem;color:var(--ts)">${'⭐'.repeat(_cmtRating(c))} ${relTime(c.time)}</div></div>${c.pinned?`<span style="margin-left:auto;background:var(--y);color:var(--sd);font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:var(--r-pill);flex-shrink:0"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span> 精選</span>`:''}</div><div style="font-size:.85rem;color:var(--tm);font-family:var(--f-zh);line-height:1.62;white-space:pre-line;overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical">${escHtml(c.text)}</div></div>`;
 }
 function updFbBadge(){const cnt=COMMENTS.filter(c=>!c.hidden).length;const b=document.getElementById('fbBadge');if(!b)return;b.textContent=cnt;b.classList.toggle('show',cnt>0);}
 </script>
