@@ -3355,7 +3355,7 @@ body.edit .bt-admin-btn{display:inline-flex}
 
 <!-- Edit bar (only visible in edit mode) -->
 <span id="sessionBadge" style="display:none"></span>
-<div class="edit-bar"><span class="eb-dot"></span><span class="zh-text">編輯模式啟用中</span><span class="en-text">Edit Mode Active</span><span id="expired-count-badge" style="font-size:.72rem;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:var(--r-pill);font-family:var(--f-bo)"></span><button class="eb-btn" onclick="archiveAllExpired()" style="background:#6b6440"><span class="zh-text">📦 封存過期</span><span class="en-text">Archive Expired</span></button><button class="eb-btn" onclick="migrateHiddenToArchived()" style="background:#5a4e7a"><span class="zh-text">🔄 舊隱藏→封存</span></button><button class="eb-btn" onclick="saveAll()"><span class="zh-text">儲存</span><span class="en-text">Save</span></button><button class="eb-ghost" onclick="ciciLogout()"><span class="zh-text">登出</span><span class="en-text">Logout</span></button></div>
+<div class="edit-bar"><span class="eb-dot"></span><span class="zh-text">編輯模式啟用中</span><span class="en-text">Edit Mode Active</span><span id="expired-count-badge" style="font-size:.72rem;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:var(--r-pill);font-family:var(--f-bo)"></span><button class="eb-btn" onclick="archiveAllExpired()" style="background:#6b6440"><span class="zh-text">📦 封存過期</span><span class="en-text">Archive Expired</span></button><button class="eb-btn" onclick="migrateHiddenToArchived()" style="background:#5a4e7a"><span class="zh-text">🔄 舊隱藏→封存</span></button><button class="eb-btn" onclick="snapPublishNow()" style="background:#1e47da" title="把訪客看得到的資料重新整理成一份快照（平常儲存後會自動更新）"><span class="zh-text">📸 發布快照</span><span class="en-text">Publish Snapshot</span></button><button class="eb-btn" onclick="saveAll()"><span class="zh-text">儲存</span><span class="en-text">Save</span></button><button class="eb-ghost" onclick="ciciLogout()"><span class="zh-text">登出</span><span class="en-text">Logout</span></button></div>
 
 <!-- ═══ MODALS ═══ -->
 
@@ -4099,7 +4099,22 @@ async function loadAllData(retryCount = 0) {
   const safe = p => p.catch(()=>null);
   const MAX_RETRIES = 3;
   try {
-    const [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, performersSnap, metaSnap, showVenuesSnap, showAreasSnap] = await Promise.all([
+    let showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, performersSnap, metaSnap, showVenuesSnap, showAreasSnap;
+    let _snapData = null;
+    if(_snapWanted()){ try{ _snapData = await _snapLoad(); }catch(e){ console.warn('快照讀取失敗，改用原本的讀法：', e); _snapData = null; } }
+    if(_snapData){
+      // 使用快照：演出／擂台／場地／課程／表演者／設定都來自快照，只有留言仍即時讀取
+      window._showsScoped = true; // 和原本一般訪客一致：需要更早的歷史資料時才補抓完整資料
+      showsSnap = _snapDocs(_snapData.shows); micsSnap = _snapDocs(_snapData.mics); venuesSnap = _snapDocs(_snapData.venues);
+      coursesSnap = _snapDocs(_snapData.courses); performersSnap = _snapDocs(_snapData.performers);
+      const sm = _snapData.meta || {};
+      metaSnap = {exists:()=>true, data:()=>sm.lastUpdated || {}};
+      showVenuesSnap = {exists:()=>!!sm.showVenues, data:()=>({items:sm.showVenues})};
+      showAreasSnap = {exists:()=>!!sm.showAreas, data:()=>({items:sm.showAreas})};
+      commentsSnap = await safe(getDocs(collection(db,'comments')));
+      console.info('[cici] 從快照載入資料');
+    } else {
+    [showsSnap, micsSnap, venuesSnap, coursesSnap, commentsSnap, performersSnap, metaSnap, showVenuesSnap, showAreasSnap] = await Promise.all([
       safe(getDocs(_showsQueryForLoad())),
       safe(getDocs(collection(db,'mics'))),
       safe(getDocs(collection(db,'venues'))),
@@ -4110,6 +4125,7 @@ async function loadAllData(retryCount = 0) {
       safe(getDoc(doc(db,'meta','showVenues'))),
       safe(getDoc(doc(db,'meta','showAreas'))),
     ]);
+    }
     window._LAST_UPDATED = metaSnap?.exists() ? metaSnap.data() : {};
     window._PERFORMERS = performersSnap ? performersSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
     // 載入自訂場地和地區
@@ -4239,6 +4255,99 @@ const PAGE_META_MAP = {
   shows: 'shows', mics: 'opmic', venues: 'venues', courses: 'courses', comments: 'board', performers: 'performers'
 };
 
+
+// ══════════════════════════════════════════════════════════
+// 公開資料快照（降低 Firestore 讀取量）
+// 管理者每次儲存／刪除後，把「訪客看得到的資料」壓成一份快照存進 meta/snapshot（＋ meta/snapshot_0…）；
+// 訪客載入時只讀這份快照＋留言（約 12 次讀取），不再逐筆讀取全部集合（原本約 790 次）。
+//  - 快照不含「隱藏」「延期」的演出、「隱藏」的表演者；演出只放近 31 天到未來（和原本訪客的範圍相同）
+//  - 讀不到、格式不對、版本對不上時，自動退回原本的讀法，網站不會變空白
+//  - 目前預設關閉：訪客在網址後面加 ?snap=1 才會使用（測試用）；?snap=0 強制使用原本讀法。確認沒問題後，把 SNAP_CFG.enabled 改成 true
+//  - 管理者（已登入）一律讀完整資料，不受影響
+// ══════════════════════════════════════════════════════════
+const SNAP_CFG = { enabled:false, chunkChars:200000, debounceMs:8000 };
+window._SNAP_REQ = (function(){ try{ const m = location.search.match(/[?&]snap=(\d)/); return m ? m[1] : null; }catch(e){ return null; } })();
+function _snapWanted(){
+  if(window._SNAP_REQ === '0') return false;
+  if(typeof isLoggedIn === 'function' && isLoggedIn()) return false;
+  return SNAP_CFG.enabled || window._SNAP_REQ === '1';
+}
+// 讀快照：任何一個環節不對（缺份、時間戳對不上、長度不符、格式不對）都回傳 null → 改走原本的讀法
+async function _snapLoad(){
+  const mSnap = await getDoc(doc(db, 'meta', 'snapshot'));
+  if(!mSnap.exists()) return null;
+  const mf = mSnap.data();
+  if(!mf || mf.v !== 1 || !(mf.n >= 1 && mf.n <= 20)) return null;
+  const parts = await Promise.all(Array.from({length:mf.n}, (_, i)=>getDoc(doc(db, 'meta', 'snapshot_' + i))));
+  let txt = '';
+  for(const part of parts){
+    if(!part.exists()) return null;
+    const d = part.data();
+    if(!d || d.t !== mf.ts || typeof d.p !== 'string') return null;
+    txt += d.p;
+  }
+  if(txt.length !== mf.len) return null;
+  let data; try{ data = JSON.parse(txt); }catch(e){ return null; } // JSON 損毀：當作沒有快照，改走原本的讀法
+  if(!data || data.v !== 1) return null;
+  if(!['shows', 'mics', 'venues', 'courses', 'performers'].every(k=>Array.isArray(data[k]))) return null;
+  return data;
+}
+// 轉成跟 getDocs 結果同樣的形狀（.docs[].id／.data()），讓後面原本的處理程式完全不用改
+const _snapDocs = arr => ({ docs: arr.map(o=>{ const rest = Object.assign({}, o); const id = rest.id; delete rest.id; return {id, data:()=>rest}; }) });
+
+let _snapTimer = null, _snapBusy = false;
+async function _snapBuild(opts){
+  opts = opts || {};
+  if(!(typeof isLoggedIn === 'function' && isLoggedIn()) || !_auth.currentUser) throw new Error('需要先以管理者帳號登入');
+  const c = new Date(); c.setDate(c.getDate() - 31);
+  const cut = c.toISOString().slice(0, 10);
+  const rd = async name => (await getDocs(collection(db, name))).docs.map(d=>({id:d.id, ...d.data()}));
+  // 演出：平常用管理者畫面上已載入的資料（不用重讀 600 多筆）；按「發布快照」時才從資料庫完整重讀
+  const showsAll = opts.fromDb ? await rd('shows') : (window._SHOWS || []);
+  const shows = showsAll.filter(s=>{
+    if(!s || !s.id) return false;
+    const st = s.status || 'published';
+    if(st === 'hidden' || st === 'postponed') return false; // 只有管理者看得到的演出不放進快照
+    return String(s.date || '') >= cut;                      // 與原本訪客查詢（date >= 31 天前）相同的比較方式
+  });
+  const [mics, venues, courses, perf0, m1, m2, m3] = await Promise.all([
+    rd('mics'), rd('venues'), rd('courses'), rd('performers'),
+    getDoc(doc(db, 'meta', 'lastUpdated')), getDoc(doc(db, 'meta', 'showVenues')), getDoc(doc(db, 'meta', 'showAreas'))
+  ]);
+  const performers = perf0.filter(p=>(p.status || 'published') !== 'hidden');
+  const ts = Date.now();
+  const data = {v:1, ts, cut, shows, mics, venues, courses, performers,
+    meta:{lastUpdated: m1.exists() ? m1.data() : {}, showVenues: m2.exists() ? m2.data().items : null, showAreas: m3.exists() ? m3.data().items : null}};
+  const txt = JSON.stringify(data), size = opts.chunkChars || SNAP_CFG.chunkChars, parts = [];
+  for(let i = 0; i < txt.length; i += size) parts.push(txt.slice(i, i + size));
+  if(parts.length > 20) throw new Error('快照太大（超過 20 份）');
+  for(let i = 0; i < parts.length; i++) await setDoc(doc(db, 'meta', 'snapshot_' + i), {p:parts[i], t:ts, i}); // 先寫內容
+  await setDoc(doc(db, 'meta', 'snapshot'), {v:1, n:parts.length, ts, len:txt.length, shows:shows.length}); // 最後才更新「目錄」，訪客不會讀到寫一半的快照
+  return {chunks:parts.length, chars:txt.length, shows:shows.length};
+}
+// 儲存／刪除後 8 秒再重建（連續儲存、批次帶入只會重建一次）
+window._snapSchedule = function(colName, id){
+  if(['shows', 'mics', 'venues', 'courses', 'performers', 'meta'].indexOf(colName) < 0) return;
+  if(colName === 'meta' && String(id || '').indexOf('snapshot') === 0) return;
+  if(!(typeof isLoggedIn === 'function' && isLoggedIn())) return;
+  clearTimeout(_snapTimer);
+  _snapTimer = setTimeout(async ()=>{
+    if(_snapBusy){ window._snapSchedule(colName, id); return; }
+    _snapBusy = true;
+    try{ const r = await _snapBuild({}); console.info('[cici] 快照已更新', r); }
+    catch(e){ console.warn('快照更新失敗：', e); if(typeof showToast === 'function') showToast('⚠️ 快照更新失敗（訪客看到的資料可能還沒更新），請按編輯列的「發布快照」重試', 'err'); }
+    finally{ _snapBusy = false; }
+  }, SNAP_CFG.debounceMs);
+};
+window.snapPublishNow = async function(){
+  if(!(typeof isLoggedIn === 'function' && isLoggedIn())){ if(typeof showToast === 'function') showToast('請先登入管理者帳號', 'err'); return; }
+  if(_snapBusy){ showToast('快照正在更新中，請稍候', 'err'); return; }
+  _snapBusy = true; showToast('⏳ 正在從資料庫重建快照…');
+  try{ const r = await _snapBuild({fromDb:true}); showToast(`✅ 快照已發布：${r.shows} 場演出、約 ${Math.round(r.chars / 1024)} KB（${r.chunks} 份）`, 'ok'); }
+  catch(e){ console.error(e); showToast('❌ 快照發布失敗：' + ((e && e.message) || e), 'err'); }
+  finally{ _snapBusy = false; }
+};
+
 window.FB = {
   async save(colName, id, data) {
     try {
@@ -4259,6 +4368,7 @@ window.FB = {
         window._LAST_UPDATED[metaKey] = now;
         if(typeof updateLastUpdatedDisplay==='function') updateLastUpdatedDisplay();
       }
+      try{ window._snapSchedule(colName, id); }catch(e){} // 快照：儲存成功後排程重建（失敗不影響儲存）
       return id;
     } catch(e) { console.error('FB.save error:', e); throw e; }
   },
@@ -4275,6 +4385,7 @@ window.FB = {
         window._LAST_UPDATED[metaKey] = now;
         if(typeof updateLastUpdatedDisplay==='function') updateLastUpdatedDisplay();
       }
+      try{ window._snapSchedule(colName, id); }catch(e){} // 快照：刪除成功後排程重建
     }
     catch(e) { console.error('FB.del error:', e); throw e; }
   },
