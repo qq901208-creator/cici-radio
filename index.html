@@ -4126,6 +4126,10 @@ async function loadAllData(retryCount = 0) {
       safe(getDoc(doc(db,'meta','showAreas'))),
     ]);
     }
+    window._SNAP_STATS = null;
+    if(window._showsScoped){ // 訪客（只載入近 31 天～未來）：另外讀累計統計；管理者載入的是完整資料，自己算
+      try{ const st = await getDoc(doc(db,'meta','stats')); if(st.exists()) window._SNAP_STATS = st.data(); }catch(e){}
+    }
     window._LAST_UPDATED = metaSnap?.exists() ? metaSnap.data() : {};
     window._PERFORMERS = performersSnap ? performersSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
     // 載入自訂場地和地區
@@ -4262,10 +4266,10 @@ const PAGE_META_MAP = {
 // 訪客載入時只讀這份快照＋留言（約 12 次讀取），不再逐筆讀取全部集合（原本約 790 次）。
 //  - 快照不含「隱藏」「延期」的演出、「隱藏」的表演者；演出只放近 31 天到未來（和原本訪客的範圍相同）
 //  - 讀不到、格式不對、版本對不上時，自動退回原本的讀法，網站不會變空白
-//  - 目前預設關閉：訪客在網址後面加 ?snap=1 才會使用（測試用）；?snap=0 強制使用原本讀法。確認沒問題後，把 SNAP_CFG.enabled 改成 true
+//  - 目前預設啟用（SNAP_CFG.enabled = true）：所有訪客預設使用快照；網址加 ?snap=0 強制使用原本讀法。緊急停用：把 enabled 改回 false 再部署
 //  - 管理者（已登入）一律讀完整資料，不受影響
 // ══════════════════════════════════════════════════════════
-const SNAP_CFG = { enabled:false, chunkChars:200000, debounceMs:8000 };
+const SNAP_CFG = { enabled:true, chunkChars:200000, debounceMs:8000 }; // enabled：true＝所有訪客預設使用快照；網址加 ?snap=0 可強制改回原本的讀法（出問題時用來比對或緊急停用：把這裡改回 false 再部署）
 window._SNAP_REQ = (function(){ try{ const m = location.search.match(/[?&]snap=(\d)/); return m ? m[1] : null; }catch(e){ return null; } })();
 function _snapWanted(){
   if(window._SNAP_REQ === '0') return false;
@@ -4316,6 +4320,24 @@ async function _snapLoad(){
 // 轉成跟 getDocs 結果同樣的形狀（.docs[].id／.data()），讓後面原本的處理程式完全不用改
 const _snapDocs = arr => ({ docs: arr.map(o=>{ const rest = Object.assign({}, o); const id = rest.id; delete rest.id; return {id, data:()=>rest}; }) });
 
+// 累計統計（關於我們頁的「收錄演出場數」、每月長條圖、類型圓餅圖）：算法與 renderAboutStats 原本完全相同，
+// 但用「完整」的演出資料算；訪客只載入近 31 天到未來，自己算會少掉之前的資料
+function _snapStats(allShows){
+  const LAUNCH = new Date('2026-05-22T00:00');
+  const total0 = {total:0, monthly:{}, types:{}};
+  (allShows || []).forEach(s=>{
+    const st = s.status || 'published';
+    if(st === 'hidden' || st === 'cancelled') return; // 隱藏、取消的場次不計入統計
+    const ts = s.types || (s.type ? [s.type] : []);
+    ts.forEach(t=>{ if(t) total0.types[t] = (total0.types[t] || 0) + 1; });
+    const d = new Date(String(s.date || '').split(',')[0].trim() + 'T00:00');
+    if(isNaN(d) || d < LAUNCH) return;
+    total0.total++;
+    const key = `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}`;
+    total0.monthly[key] = (total0.monthly[key] || 0) + 1;
+  });
+  return total0;
+}
 let _snapTimer = null, _snapBusy = false;
 async function _snapBuild(opts){
   opts = opts || {};
@@ -4324,7 +4346,13 @@ async function _snapBuild(opts){
   const cut = c.toISOString().slice(0, 10);
   const rd = async name => (await getDocs(collection(db, name))).docs.map(d=>({id:d.id, ...d.data()}));
   // 演出：平常用管理者畫面上已載入的資料（不用重讀 600 多筆）；按「發布快照」時才從資料庫完整重讀
-  const showsAll = opts.fromDb ? await rd('shows') : (window._SHOWS || []);
+  let showsAll;
+  if(opts.fromDb) showsAll = await rd('shows');
+  else{
+    // 統計需要「完整」演出資料：管理者畫面若還只載入近 31 天（登入前載入的頁面），先補載完整資料；補不到就直接從資料庫讀
+    if(window._showsScoped && typeof window._ensureFullShowsLoaded === 'function'){ try{ await window._ensureFullShowsLoaded(); }catch(e){} }
+    showsAll = window._showsScoped ? await rd('shows') : (window._SHOWS || []);
+  }
   const shows = showsAll.filter(s=>{
     if(!s || !s.id) return false;
     const st = s.status || 'published';
@@ -4341,6 +4369,7 @@ async function _snapBuild(opts){
   ]);
   const performers = perf0.filter(p=>(p.status || 'published') !== 'hidden');
   const ts = Date.now();
+  const stats = _snapStats(showsAll);
   const data = {v:1, ts, cut, shows, mics, venues, courses, performers,
     meta:{lastUpdated: m1.exists() ? m1.data() : {}, showVenues: m2.exists() ? m2.data().items : null, showAreas: m3.exists() ? m3.data().items : null}};
   const txt = JSON.stringify(data), size = opts.chunkChars || SNAP_CFG.chunkChars, parts = [];
@@ -4349,9 +4378,10 @@ async function _snapBuild(opts){
   for(let i = 0; i < payload.length; i += size) parts.push(payload.slice(i, i + size));
   if(parts.length > 20) throw new Error('快照太大（超過 20 份）');
   for(let i = 0; i < parts.length; i++) await setDoc(doc(db, 'meta', 'snapshot_' + i), {p:parts[i], t:ts, i}); // 先寫內容
+  await setDoc(doc(db, 'meta', 'stats'), Object.assign({v:1, ts}, stats)); // 很小的一份累計統計，訪客另外讀（約 1 次讀取）
   const mf = {v:1, n:parts.length, ts, len:payload.length, raw:txt.length, shows:shows.length}; if(enc) mf.enc = enc;
   await setDoc(doc(db, 'meta', 'snapshot'), mf); // 最後才更新「目錄」，訪客不會讀到寫一半的快照
-  return {chunks:parts.length, chars:txt.length, packed:payload.length, enc, shows:shows.length};
+  return {chunks:parts.length, chars:txt.length, packed:payload.length, enc, shows:shows.length, statsTotal:stats.total};
 }
 // 儲存／刪除後 8 秒再重建（連續儲存、批次帶入只會重建一次）
 // 訪客打開某場詳情時，補讀那一場的簡介（1 次讀取）。失敗回傳 null，下次打開再試
@@ -4367,7 +4397,7 @@ window._snapSchedule = function(colName, id){
   _snapTimer = setTimeout(async ()=>{
     if(_snapBusy){ window._snapSchedule(colName, id); return; }
     _snapBusy = true;
-    try{ const r = await _snapBuild({}); console.info('[cici] 快照已更新', r); }
+    try{ const r = await _snapBuild({}); console.info('[cici] 快照已更新', r); if(typeof showToast === 'function') showToast('📸 訪客頁面已同步更新', 'ok'); }
     catch(e){ console.warn('快照更新失敗：', e); if(typeof showToast === 'function') showToast('⚠️ 快照更新失敗（訪客看到的資料可能還沒更新），請按編輯列的「發布快照」重試', 'err'); }
     finally{ _snapBusy = false; }
   }, SNAP_CFG.debounceMs);
@@ -4376,7 +4406,7 @@ window.snapPublishNow = async function(){
   if(!(typeof isLoggedIn === 'function' && isLoggedIn())){ if(typeof showToast === 'function') showToast('請先登入管理者帳號', 'err'); return; }
   if(_snapBusy){ showToast('快照正在更新中，請稍候', 'err'); return; }
   _snapBusy = true; showToast('⏳ 正在從資料庫重建快照…');
-  try{ const r = await _snapBuild({fromDb:true}); showToast(`✅ 快照已發布：${r.shows} 場演出、${Math.round(r.chars / 1024)} KB${r.enc ? ' → 壓縮後 ' + Math.round(r.packed / 1024) + ' KB' : '（未壓縮）'}（${r.chunks} 份）`, 'ok'); }
+  try{ const r = await _snapBuild({fromDb:true}); showToast(`✅ 快照已發布：${r.shows} 場演出（累計統計 ${r.statsTotal} 場）、${Math.round(r.chars / 1024)} KB${r.enc ? ' → 壓縮後 ' + Math.round(r.packed / 1024) + ' KB' : '（未壓縮）'}（${r.chunks} 份）`, 'ok'); }
   catch(e){ console.error(e); showToast('❌ 快照發布失敗：' + ((e && e.message) || e), 'err'); }
   finally{ _snapBusy = false; }
 };
@@ -5272,6 +5302,7 @@ function renderHeroStats(){
 
 function renderAboutStats(){
   const shows = window._SHOWS||[];  // 包含封存演出
+  const countShows = shows.filter(s=>{ const st = s.status || 'published'; return st !== 'hidden' && st !== 'cancelled'; }); // 統計不計「隱藏」「取消」的場次
   const performers = window._PERFORMERS||[];
   const venues = window._VENUES||[];
   const courses = window._COURSES||[];  const lang = getLang();
@@ -5280,7 +5311,9 @@ function renderAboutStats(){
   const numsEl = document.getElementById('about-stats-nums');
   if(!numsEl) return;
   const LAUNCH = new Date('2026-05-22T00:00');
-  const totalShows = shows.filter(s=>{ const d=new Date((s.date||'').split(',')[0].trim()+'T00:00'); return d>=LAUNCH; }).length;
+  // 訪客只載入近 31 天～未來的演出，累計數字改讀後台預先算好的 meta/stats；管理者（完整資料）或讀不到時維持原本的算法
+  const _ST = (window._showsScoped && window._SNAP_STATS && window._SNAP_STATS.v === 1) ? window._SNAP_STATS : null;
+  const totalShows = _ST ? _ST.total : countShows.filter(s=>{ const d=new Date((s.date||'').split(',')[0].trim()+'T00:00'); return d>=LAUNCH; }).length;
   const statItems = [
     {n: totalShows,       label: lang==='en'?'Shows Listed':'收錄演出場數', emoji:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>'},
     {n: performers.length,label: lang==='en'?'Performers':'演員資料庫人數', emoji:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>'},
@@ -5298,7 +5331,8 @@ function renderAboutStats(){
   const monthlyEl = document.getElementById('about-monthly-chart');
   if(monthlyEl){
     const monthly = {};
-    shows.forEach(s=>{
+    if(_ST) Object.assign(monthly, _ST.monthly);
+    else countShows.forEach(s=>{
       const d = new Date((s.date||'').split(',')[0].trim()+'T00:00');
       if(isNaN(d)||d<LAUNCH) return;
       const key = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}`;
@@ -5327,7 +5361,8 @@ function renderAboutStats(){
   const legendEl = document.getElementById('about-pie-legend');
   if(canvas && legendEl){
     const typeCounts = {};
-    shows.forEach(s=>{
+    if(_ST) Object.assign(typeCounts, _ST.types);
+    else countShows.forEach(s=>{
       const types = s.types||(s.type?[s.type]:[]);
       types.forEach(t=>{ if(t) typeCounts[t]=(typeCounts[t]||0)+1; });
     });
