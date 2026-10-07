@@ -1,14 +1,64 @@
 // /api/parse-ticket.js
 // 伺服器端解析售票網站活動頁面（取代前端公用 CORS 代理，避免讀取失敗）
 // 支援：KKTIX、Accupass、OPENTIX
-// 用法：POST { url: "https://kktix.com/events/xxxx" }
+// 用法：POST { url: "https://kktix.com/events/xxxx" }，並帶 Authorization: Bearer <管理者的 Firebase ID Token>
 // 回傳：{ ok:true, platform, title, date, time, image, desc } 或 { ok:false, error }
+//
+// 與舊版的差異（資安）：
+//  1. 必須是管理者登入才能用（舊版任何人都能呼叫，等於免費的網頁抓取代理，也會耗用你的函式額度）
+//  2. 跟隨轉址時逐次檢查網址仍在允許的網站內（舊版 fetch 預設自動跟隨，可能被允許網站上的轉址帶到別處）
+//  3. 回應不快取
+
+const ADMIN_EMAIL = 'ciciradio3@gmail.com';
+const API_KEY = process.env.FIREBASE_API_KEY || process.env.FIRESTORE_API_KEY || 'AIzaSyDXW1OHmAAc8v2nbrhHYNPqmoCsUsc3RHw';
 
 const ALLOWED_HOSTS = [
   'kktix.cc', 'kktix.com',
   'accupass.com', 'www.accupass.com',
   'opentix.life', 'www.opentix.life',
 ];
+
+const isAllowedHost = (hostname) => ALLOWED_HOSTS.some((h) => hostname === h || hostname.endsWith('.' + h));
+
+// 驗證 Firebase ID Token 並確認是管理者（用 Google 的 accounts:lookup，不需要額外安裝套件）
+async function verifyAdmin(req) {
+  const h = (req.headers && (req.headers.authorization || req.headers.Authorization)) || '';
+  const m = String(h).match(/^Bearer\s+(.+)$/i);
+  if (!m) return false;
+  try {
+    const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken: m[1] }),
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!r.ok) return false;
+    const d = await r.json();
+    const u = d && d.users && d.users[0];
+    return !!u && String(u.email || '').toLowerCase() === ADMIN_EMAIL && u.emailVerified === true;
+  } catch (e) {
+    return false;
+  }
+}
+
+// 跟隨轉址，但每一步都要求仍在允許的網站（最多 3 次）
+async function safeFetch(startUrl, options) {
+  let current = startUrl;
+  for (let hop = 0; hop <= 3; hop++) {
+    const u = new URL(current);
+    if (u.protocol !== 'https:' && u.protocol !== 'http:') throw new Error('bad protocol');
+    if (!isAllowedHost(u.hostname)) throw new Error('redirect to disallowed host');
+    const response = await fetch(current, { ...options, redirect: 'manual' });
+    if (response.status >= 300 && response.status < 400) {
+      const loc = response.headers.get('location');
+      if (!loc) return response;
+      current = new URL(loc, current).toString();
+      continue;
+    }
+    return response;
+  }
+  throw new Error('too many redirects');
+}
 
 function detectPlatform(url) {
   if (url.includes('kktix')) return 'kktix';
@@ -107,8 +157,16 @@ function parseOpentixDateRange(desc) {
 }
 
 module.exports = async function handler(req, res) {
+  res.setHeader('Cache-Control', 'no-store');
+
   if (req.method !== 'POST') {
     res.status(405).json({ ok: false, error: 'Method not allowed' });
+    return;
+  }
+
+  // 只有管理者能用
+  if (!(await verifyAdmin(req))) {
+    res.status(401).json({ ok: false, error: '需要管理者登入（請重新登入後再試）' });
     return;
   }
 
@@ -126,16 +184,13 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const isAllowed = ALLOWED_HOSTS.some(
-    (h) => parsed.hostname === h || parsed.hostname.endsWith('.' + h)
-  );
-  if (!isAllowed) {
+  if (!isAllowedHost(parsed.hostname)) {
     res.status(400).json({ ok: false, error: '目前只支援 KKTIX／Accupass／OPENTIX 連結' });
     return;
   }
 
   try {
-    const response = await fetch(url, {
+    const response = await safeFetch(url, {
       headers: {
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
