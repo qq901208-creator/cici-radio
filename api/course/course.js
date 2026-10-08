@@ -1,22 +1,53 @@
-// api/course-detail.js
+// api/course-detail.js（請放進你原本處理 /course/:id 的那個檔案，例如 api/course/course.js）
 // Vercel serverless function - 為課程分享連結動態生成 OG meta tags
+// 與舊版的差異：id 驗證、先判斷爬蟲（一般使用者不再讀資料庫）、script 內網址用 JSON 序列化
+
+const SITE_URL = 'https://cici-radio.vercel.app';
+const PROJECT_ID = 'cici-radio-e7902';
+const API_KEY = process.env.FIRESTORE_API_KEY || 'AIzaSyDXW1OHmAAc8v2nbrhHYNPqmoCsUsc3RHw';
+// ID 只允許英數與 . _ ~ : -（舊資料的 ID 可能含點號等符號）；其他一律轉回首頁。斜線、問號、引號、空白、角括號都不允許
+const ID_RE = /^[A-Za-z0-9._~:-]{1,128}$/;
+const CRAWLER_RE = /facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|googlebot|bingbot|yandex|duckduckbot|applebot|linespider/i;
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+const jsString = (s) => JSON.stringify(String(s)).replace(/</g, '\\u003c');
+
 export default async function handler(req, res) {
-  const id = req.query.id;
+  const id = String(req.query.id || '');
+  if (!ID_RE.test(id)) {
+    res.writeHead(302, { Location: SITE_URL });
+    res.end();
+    return;
+  }
+
+  const redirectUrl = `${SITE_URL}/#courses?course=${id}`;
+  const ua = req.headers['user-agent'] || '';
+
+  if (!CRAWLER_RE.test(ua)) {
+    res.writeHead(302, { Location: redirectUrl });
+    res.end();
+    return;
+  }
+
   const defaultTitle = '嘻嘻哪哩唷｜台灣喜劇課程講座';
   const defaultDesc = '提供全台喜劇相關課程與講座資訊，包含站立喜劇、即興、漫才等各式課程。';
-  const defaultImg = 'https://cici-radio.vercel.app/assets/ciciradio.jpg';
-  const siteUrl = 'https://cici-radio.vercel.app';
+  const defaultImg = `${SITE_URL}/assets/ciciradio.jpg`;
+  const courseUrl = `${SITE_URL}/course/${id}`;
 
   let title = defaultTitle;
   let desc = defaultDesc;
   let img = defaultImg;
-  let courseUrl = `${siteUrl}/course/${id}`;
 
   try {
-    const projectId = 'cici-radio-e7902';
-    const apiKey = 'AIzaSyDXW1OHmAAc8v2nbrhHYNPqmoCsUsc3RHw';
-    const firestoreUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/courses/${id}?key=${apiKey}`;
-    const response = await fetch(firestoreUrl);
+    const firestoreUrl = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/courses/${encodeURIComponent(id)}?key=${API_KEY}`;
+    const response = await fetch(firestoreUrl, { signal: AbortSignal.timeout(6000) });
     if (response.ok) {
       const data = await response.json();
       const fields = data.fields || {};
@@ -34,15 +65,6 @@ export default async function handler(req, res) {
       }
     }
   } catch (e) {}
-
-  const ua = req.headers['user-agent'] || '';
-  const isCrawler = /facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|googlebot|bingbot|yandex|duckduckbot|applebot|linespider/i.test(ua);
-
-  if (!isCrawler) {
-    res.writeHead(302, { Location: `${siteUrl}/#courses?course=${id}` });
-    res.end();
-    return;
-  }
 
   const html = `<!DOCTYPE html>
 <html lang="zh-TW">
@@ -64,7 +86,7 @@ export default async function handler(req, res) {
   <meta name="twitter:title" content="${escapeHtml(title)}">
   <meta name="twitter:description" content="${escapeHtml(desc)}">
   <meta name="twitter:image" content="${escapeHtml(img)}">
-  <script>window.location.replace("${escapeHtml(siteUrl)}/#courses?course=${id}");</script>
+  <script>window.location.replace(${jsString(redirectUrl)});</script>
 </head>
 <body>
   <p>正在載入 ${escapeHtml(title)}...</p>
@@ -75,13 +97,4 @@ export default async function handler(req, res) {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
   res.status(200).send(html);
-}
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
 }
