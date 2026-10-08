@@ -4077,30 +4077,42 @@ function _showsQueryForLoad() {
 }
 // 需要看更久以前資料時（月曆往回翻超過範圍、admin 進入編輯模式）才補抓完整歷史
 window._ensureFullShowsLoaded = async function () {
-  if (!window._showsScoped) return; // 本來就是完整資料，不用再抓
+  const adminNow = typeof isLoggedIn === 'function' && isLoggedIn();
+  // 快照版的演出（帶 _dl 標記）沒有簡介；管理者看到這種資料一定要換成完整資料，否則編輯、儲存會把簡介清空
+  const hasLite = (window._SHOWS || []).some(s => s && s._dl);
+  if (!window._showsScoped && !(adminNow && hasLite)) return; // 本來就是完整資料，不用再抓
   window._showsScoped = false; // 先設 false 避免重複觸發
   try {
     let full = null;
-    if(window._snapUsed){ // 訪客用快照載入：優先讀歷史快照（約 3 次讀取），讀不到才退回完整讀取
-      try{ const hist = await _snapHistLoad(); if(hist) full = hist.shows; }catch(e){ full = null; }
+    if (window._snapUsed && !adminNow) { // 訪客用快照載入：優先讀歷史快照（約 3 次讀取），讀不到才退回完整讀取
+      try { const hist = await _snapHistLoad(); if (hist) full = hist.shows; } catch (e) { full = null; }
     }
-    if(!full){
+    if (!full) {
       const snap = await getDocs(collection(db, 'shows'));
       full = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     }
-    const existingIds = new Set((window._SHOWS || []).map(s => s.id));
-    const toAdd = full.filter(s => !existingIds.has(s.id));
-    if (toAdd.length) {
-      window._SHOWS = [...(window._SHOWS || []), ...toAdd];
+    if (adminNow) {
+      // 管理者：整份換成資料庫的完整資料（含簡介），不保留任何快照版
+      window._SHOWS = full;
+      window._snapUsed = false; // 之後的統計等都改用完整資料即時計算
       if (typeof window._syncData === 'function') try { window._syncData(); } catch (e) {}
+    } else {
+      const existingIds = new Set((window._SHOWS || []).map(s => s.id));
+      const toAdd = full.filter(s => !existingIds.has(s.id));
+      if (toAdd.length) {
+        window._SHOWS = [...(window._SHOWS || []), ...toAdd];
+        if (typeof window._syncData === 'function') try { window._syncData(); } catch (e) {}
+      }
     }
     if (typeof renderArchivedShows === 'function') try { renderArchivedShows(); } catch (e) {}
     if (typeof renderCalendar === 'function') try { renderCalendar(); } catch (e) {}
+    if (adminNow && typeof renderShows === 'function') try { renderShows(); } catch (e) {}
   } catch (e) {
     console.error('ensureFullShowsLoaded failed:', e);
     window._showsScoped = true; // 失敗的話還原狀態，下次還能重試
   }
 };
+
 async function loadAllData(retryCount = 0) {
   const safe = p => p.catch(()=>null);
   const MAX_RETRIES = 3;
@@ -4485,6 +4497,11 @@ window.snapPublishNow = async function(){
 
 window.FB = {
   async save(colName, id, data) {
+    // 保護：快照版的演出（沒有簡介、帶 _dl 標記）絕對不能存回資料庫，否則會把原本的簡介清空
+    if (colName === 'shows' && data && data._dl) {
+      if (typeof showToast === 'function') showToast('⚠️ 這筆演出的資料還沒完整載入，已阻止儲存以免清空簡介。請重新整理頁面後再試', 'err');
+      throw new Error('blocked: lite show data (_dl) must not be saved');
+    }
     try {
       if(id) {
         await setDoc(doc(db, colName, id), data);
@@ -7009,6 +7026,11 @@ function tcfBatchRender(msg){
 }
 function tcfBatchOpen(){
   if(!(typeof isLoggedIn === 'function' && isLoggedIn())){ tcfPlanToast('請先登入管理者帳號', 'err'); return; }
+  if((window._SHOWS || []).some(x=>x && x._dl)){ // 快照版資料不完整，批次寫入會清空簡介
+    tcfPlanToast('⏳ 完整資料還在載入，請等幾秒再開啟', 'err');
+    if(typeof window._ensureFullShowsLoaded === 'function') window._ensureFullShowsLoaded();
+    return;
+  }
   let ov = document.getElementById('tcf-bt-ov');
   if(!ov){
     ov = document.createElement('div'); ov.id = 'tcf-bt-ov'; ov.className = 'tcf-share-ov'; ov.hidden = true;
@@ -9332,6 +9354,12 @@ document.getElementById('s-tcf')?.addEventListener('change', ttUpdateNote);
 function openShowModal(id){
   eShowId=id||null;
   const s=id?SHOWS.find(x=>x.id===id):null;
+  if(s && s._dl){ // 快照版資料沒有簡介：先補載完整資料，再開編輯視窗，避免存檔時把簡介清空
+    eShowId=null;
+    showToast('⏳ 完整資料還在載入，請等幾秒再開啟編輯（避免簡介被清空）','err');
+    if(typeof window._ensureFullShowsLoaded==='function') window._ensureFullShowsLoaded();
+    return;
+  }
   document.getElementById('modal-show-title').textContent=s?'編輯演出':'新增演出';
   ['s-title','s-date','s-time','s-performer','s-price','s-ticketurl','s-image','s-image-id','s-imgsrc','s-desc','s-production'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
   const imgPrev=document.getElementById('s-img-prev');
@@ -9824,6 +9852,7 @@ function toggleHideExpiredCourses(){
 function copyShow(id){
   const s = (window._SHOWS||SHOWS).find(x=>x.id===id);
   if(!s) return;
+  if(s._dl){ showToast('⏳ 完整資料還在載入，請等幾秒再複製（避免簡介遺失）','err'); if(typeof window._ensureFullShowsLoaded==='function') window._ensureFullShowsLoaded(); return; }
   // 開啟新增 modal，帶入原資料，清空日期時間讓使用者自行修改
   openShowModal(null);
   // 填入原資料
