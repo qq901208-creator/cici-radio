@@ -2415,6 +2415,8 @@ body.edit .bt-admin-btn{display:inline-flex}
         <option value="standup">站立喜劇</option>
         <option value="improv">即興</option>
         <option value="mancai">漫才</option>
+        <option value="sketch">素描短劇 Sketch</option>
+        <option value="konto">短劇 コント</option>
         <option value="crosstalk">相聲</option>
         <option value="rakugo">落語</option>
         <option value="ogiri">大喜利</option>
@@ -3355,7 +3357,7 @@ body.edit .bt-admin-btn{display:inline-flex}
 
 <!-- Edit bar (only visible in edit mode) -->
 <span id="sessionBadge" style="display:none"></span>
-<div class="edit-bar"><span class="eb-dot"></span><span class="zh-text">編輯模式啟用中</span><span class="en-text">Edit Mode Active</span><span id="expired-count-badge" style="font-size:.72rem;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:var(--r-pill);font-family:var(--f-bo)"></span><button class="eb-btn" onclick="archiveAllExpired()" style="background:#6b6440"><span class="zh-text">📦 封存過期</span><span class="en-text">Archive Expired</span></button><button class="eb-btn" onclick="migrateHiddenToArchived()" style="background:#5a4e7a"><span class="zh-text">🔄 舊隱藏→封存</span></button><button class="eb-btn" onclick="snapPublishNow()" style="background:#1e47da" title="把訪客看得到的資料重新整理成一份快照（平常儲存後會自動更新）"><span class="zh-text">📸 發布快照</span><span class="en-text">Publish Snapshot</span></button><button class="eb-btn" onclick="saveAll()"><span class="zh-text">儲存</span><span class="en-text">Save</span></button><button class="eb-ghost" onclick="ciciLogout()"><span class="zh-text">登出</span><span class="en-text">Logout</span></button></div>
+<div class="edit-bar"><span class="eb-dot"></span><span class="zh-text">編輯模式啟用中</span><span class="en-text">Edit Mode Active</span><span id="expired-count-badge" style="font-size:.72rem;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:var(--r-pill);font-family:var(--f-bo)"></span><button class="eb-btn" onclick="archiveAllExpired()" style="background:#6b6440"><span class="zh-text">📦 封存過期</span><span class="en-text">Archive Expired</span></button><button class="eb-btn" onclick="migrateHiddenToArchived()" style="background:#5a4e7a"><span class="zh-text">🔄 舊隱藏→封存</span></button><button class="eb-btn" onclick="snapPublishNow()" style="background:#1e47da" title="把訪客看得到的資料重新整理成一份快照（平常儲存後會自動更新）"><span class="zh-text">📸 發布快照</span><span class="en-text">Publish Snapshot</span></button><button class="eb-btn" onclick="backupDownload()" style="background:#2d6a4f" title="把整個資料庫下載成一個檔案存在你的電腦"><span class="zh-text">📥 下載備份</span><span class="en-text">Download Backup</span></button><button class="eb-btn" onclick="saveAll()"><span class="zh-text">儲存</span><span class="en-text">Save</span></button><button class="eb-ghost" onclick="ciciLogout()"><span class="zh-text">登出</span><span class="en-text">Logout</span></button></div>
 
 <!-- ═══ MODALS ═══ -->
 
@@ -3672,6 +3674,8 @@ body.edit .bt-admin-btn{display:inline-flex}
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="standup" style="accent-color:var(--or)"> 站立喜劇</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="improv" style="accent-color:var(--or)"> 即興</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="mancai" style="accent-color:var(--or)"> 漫才</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="sketch" style="accent-color:var(--or)"> 素描短劇 Sketch</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="konto" style="accent-color:var(--or)"> 短劇 コント</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="crosstalk" style="accent-color:var(--or)"> 相聲</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="rakugo" style="accent-color:var(--or)"> 落語</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="ogiri" style="accent-color:var(--or)"> 大喜利</label>
@@ -4232,7 +4236,11 @@ async function loadAllData(retryCount = 0) {
         const tryOpenShow = (attempts) => {
           const found = (window._SHOWS||[]).find(x=>x.id===shareShowId);
           if(found){ openShowDetail(shareShowId); }
-          else if(attempts > 0){ setTimeout(()=>tryOpenShow(attempts-1), 500); }
+          else if(attempts > 0){
+            // 找不到：可能是 31 天前的舊演出（訪客一開始只載入近期資料）→ 約 1.5 秒後補載歷史資料（歷史快照約 3 次讀取），再繼續找
+            if(attempts === 17 && window._showsScoped && typeof window._ensureFullShowsLoaded === 'function') window._ensureFullShowsLoaded();
+            setTimeout(()=>tryOpenShow(attempts-1), 500);
+          }
         };
         setTimeout(()=>tryOpenShow(20), 300);
       }
@@ -4493,6 +4501,45 @@ window.snapPublishNow = async function(){
   try{ const r = await _snapBuild({fromDb:true}); showToast(`✅ 快照已發布：${r.shows} 場演出（累計統計 ${r.statsTotal} 場；歷史 ${r.hist ? (r.hist.failed ? '更新失敗' : r.hist.skipped ? r.hist.count + ' 場，沒變動' : r.hist.count + ' 場，' + Math.round(r.hist.packed / 1024) + ' KB') : '無'}）、${Math.round(r.chars / 1024)} KB${r.enc ? ' → 壓縮後 ' + Math.round(r.packed / 1024) + ' KB' : '（未壓縮）'}（${r.chunks} 份）`, 'ok'); }
   catch(e){ console.error(e); showToast('❌ 快照發布失敗：' + ((e && e.message) || e), 'err'); }
   finally{ _snapBusy = false; }
+};
+
+// ── 管理者：下載完整備份（讀取整個資料庫一次，存成 JSON 檔到本機）──
+let _backupBusy = false;
+window.backupDownload = async function(){
+  if(!(typeof isLoggedIn === 'function' && isLoggedIn()) || !_auth.currentUser){ showToast('請先登入管理者帳號', 'err'); return; }
+  if(_backupBusy){ showToast('備份進行中，請稍候', 'err'); return; }
+  if(!confirm('下載完整備份會讀取整個資料庫一次（約 1,500 次讀取，免費額度每天 5 萬次）。\n\n確定要現在下載嗎？')) return;
+  _backupBusy = true; showToast('⏳ 正在讀取資料庫，請稍候…');
+  try{
+    // Firestore 特殊型別轉成可存成 JSON 的格式
+    const conv = v => {
+      if(v === null || typeof v !== 'object') return v;
+      if(Array.isArray(v)) return v.map(conv);
+      if(typeof v.toDate === 'function' && 'seconds' in v) return {__timestamp: v.toDate().toISOString()};
+      if(typeof v.latitude === 'number' && typeof v.longitude === 'number' && Object.keys(v).length <= 4 && typeof v.isEqual === 'function') return {__geopoint:[v.latitude, v.longitude]};
+      if(typeof v.toUint8Array === 'function') return {__bytes: Array.from(v.toUint8Array())};
+      const o = {}; for(const k of Object.keys(v)) o[k] = conv(v[k]); return o;
+    };
+    const cols = ['shows','mics','venues','courses','performers','comments','meta'];
+    const out = {app:'cici-radio', project:'cici-radio-e7902', exportedAt:new Date().toISOString(), collections:{}};
+    const counts = {};
+    for(const name of cols){
+      const snap = await getDocs(collection(db, name));
+      const docs = {};
+      snap.forEach(d => { docs[d.id] = conv(d.data()); });
+      out.collections[name] = docs; counts[name] = snap.size;
+    }
+    const text = JSON.stringify(out);
+    const blob = new Blob([text], {type:'application/json'});
+    const t = new Date(), pad = n => String(n).padStart(2,'0');
+    const fname = `cici-radio-backup-${t.getFullYear()}${pad(t.getMonth()+1)}${pad(t.getDate())}-${pad(t.getHours())}${pad(t.getMinutes())}.json`;
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 30000);
+    const mb = (text.length/1048576).toFixed(1);
+    showToast(`✅ 備份完成（${mb} MB）：演出 ${counts.shows}、開放麥 ${counts.mics}、場地 ${counts.venues}、課程 ${counts.courses}、演員 ${counts.performers}、留言 ${counts.comments}`, 'ok');
+  }catch(e){ console.error(e); showToast('❌ 備份失敗：' + ((e && e.message) || e), 'err'); }
+  finally{ _backupBusy = false; }
 };
 
 window.FB = {
@@ -11427,48 +11474,38 @@ function updateFilterChipLabels(){
 window.addEventListener('resize', updateFilterChipLabels);
 document.addEventListener('DOMContentLoaded', updateFilterChipLabels);
 
+// 分享連結：只分享「網址」。
+// 以前連同一行說明文字（日期・場地）一起傳給系統分享選單，Mac 的「拷貝」會把文字和網址貼成兩行，
+// 貼到網址列整段會被當成搜尋字串，結果跳回首頁。說明文字本來就會顯示在連結預覽卡片裡，不需要另外附上。
+// 電腦（有滑鼠）：直接把網址複製到剪貼簿；手機／平板：開系統分享選單（只帶標題與網址）。
+function _shareLink(url, title){
+  const desktop = !!(window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches);
+  if(!desktop && navigator.share){
+    navigator.share({ title, url }).catch(()=>{});
+    return;
+  }
+  const done = ()=>showToast('✅ 連結已複製','ok');
+  const fallback = ()=>{
+    const el = document.createElement('input');
+    el.value = url; el.style.position='fixed'; el.style.opacity='0';
+    document.body.appendChild(el); el.focus(); el.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(el);
+    done();
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done).catch(fallback);
+  else fallback();
+}
 function shareShow(id){
   const url = `https://cici-radio.vercel.app/show/${id}`;
-  const all = window._SHOWS || [];
-  const s = all.find(x=>x.id===id);
-  const title = s ? `${s.title} | 嘻嘻哪哩唷` : '嘻嘻哪哩唷';
-  const text = s ? `${s.date} · ${s.venueLabel||s.venue||''}` : '';
-  if(navigator.share){
-    navigator.share({ title, text, url }).catch(()=>{});
-  } else {
-    navigator.clipboard.writeText(url).then(()=>{
-      showToast('✅ 連結已複製','ok');
-    }).catch(()=>{
-      const el = document.createElement('input');
-      el.value = url; el.style.position='fixed'; el.style.opacity='0';
-      document.body.appendChild(el); el.focus(); el.select();
-      try{ document.execCommand('copy'); }catch(e){}
-      document.body.removeChild(el);
-      showToast('✅ 連結已複製','ok');
-    });
-  }
+  const s = (window._SHOWS || []).find(x=>x.id===id);
+  _shareLink(url, s ? `${s.title} | 嘻嘻哪哩唷` : '嘻嘻哪哩唷');
 }
 
 function sharePerformer(id){
   const url = `https://cici-radio.vercel.app/performer/${id}`;
-  const all = window._PERFORMERS || [];
-  const p = all.find(x=>x.id===id);
-  const title = p ? `${p.name} | 嘻嘻哪哩唷` : '嘻嘻哪哩唷';
-  const text = p?.tagline || '';
-  if(navigator.share){
-    navigator.share({ title, text, url }).catch(()=>{});
-  } else {
-    navigator.clipboard.writeText(url).then(()=>{
-      showToast('✅ 連結已複製','ok');
-    }).catch(()=>{
-      const el = document.createElement('input');
-      el.value = url; el.style.position='fixed'; el.style.opacity='0';
-      document.body.appendChild(el); el.focus(); el.select();
-      try{ document.execCommand('copy'); }catch(e){}
-      document.body.removeChild(el);
-      showToast('✅ 連結已複製','ok');
-    });
-  }
+  const p = (window._PERFORMERS || []).find(x=>x.id===id);
+  _shareLink(url, p ? `${p.name} | 嘻嘻哪哩唷` : '嘻嘻哪哩唷');
 }
 
 function copyShareLink(url){
