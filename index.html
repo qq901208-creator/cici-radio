@@ -6251,17 +6251,17 @@ function renderTcfFormatTypeChips(){
   const lab = o => (o.en && o.en!==o.zh) ? `<span class="zh-text">${o.zh}</span><span class="en-text">${o.en}</span>` : o.zh;
   let base = [];
   try{ base = tcfBaseList(); }catch(e){}
-  const fill = (id, cur, list, hit, allZh, allEn, setter) => {
+  const fill = (id, cur, list, hit, allZh, allEn, setter, alwaysAll) => {
     const box = document.getElementById(id); if(!box) return;
     const btn = (v, inner) => `<button type="button" class="chip${cur===v?' on':''}" onclick="${setter}('${v}')">${inner}</button>`;
     // 沒有任何喜劇節演出的選項自動隱藏（目前選著的除外）；演出資料還沒載入時先全部顯示
-    const shown = list.filter(o => cur===o.v || !base.length || base.some(s => hit(s, o.v)));
+    const shown = alwaysAll ? list : list.filter(o => cur===o.v || !base.length || base.some(s => hit(s, o.v)));
     box.innerHTML = btn('all', `<span class="zh-text">全部<span class="mob-text">${allZh}</span></span><span class="en-text">All<span class="mob-text"> ${allEn}</span></span>`) + shown.map(o=>btn(o.v, lab(o))).join('');
     const row = box.closest('.filter-row'); if(row) row.style.display = (base.length && !shown.length && cur==='all') ? 'none' : '';
   };
   fill('tcf-format-chips', fFormat, TCF_FORMAT_PILLS, tcfCodeHit, '形式', 'Formats', 'setTcfFormat');
   fill('tcf-type-chips', fType, TCF_TYPE_PILLS, tcfCodeHit, '類型', 'Types', 'setTcfType');
-  fill('tcf-style-chips', fTcfStyle, TCF_STYLE_PILLS, tcfStyleHit, '風格', 'Styles', 'setTcfStyle');
+  fill('tcf-style-chips', fTcfStyle, TCF_STYLE_PILLS, tcfStyleHit, '風格', 'Styles', 'setTcfStyle', true); // 風格：永遠顯示全部（形式／類型才自動隱藏）
 }
 function setTcfFormat(v){ fFormat = v; setChip('format', v); showsPage = 1; renderShows(); try{ syncFiltersToURL(); }catch(e){} }
 function setTcfType(v){ fType = v; setChip('type', v); showsPage = 1; renderShows(); try{ syncFiltersToURL(); }catch(e){} }
