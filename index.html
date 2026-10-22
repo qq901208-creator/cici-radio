@@ -4652,16 +4652,16 @@ const TYPE_META = {
   english:  {bg:'#c8f5d8',color:'#0d5c2a',  label:'英文喜劇',   labelEn:'English Comedy'},
   podcast:  {bg:'#c8e8ff',color:'#0a3860',  label:'Live Podcast',labelEn:'Live Podcast'},
   spevent:   {bg:'#ddd8f8',color:'#3a1e8c',  label:'特殊企劃',   labelEn:'Special Event'},
-  competition:{bg:'#ffe3e3',color:'#8c1a1a', label:'比賽',       labelEn:'Competition'},
-  workshop: {bg:'#e3f0ff',color:'#1a4a8c',  label:'工作坊',     labelEn:'Workshop'},
-  roast:    {bg:'#ffd9c2',color:'#8c3000',  label:'火烤',       labelEn:'Roast'},
-  foreign:  {bg:'#c8f5d8',color:'#0d5c2a',  label:'外語',       labelEn:'Foreign Language'},
-  variety:  {bg:'#fff0b3',color:'#5e4a00',  label:'綜藝',       labelEn:'Variety Show'},
-  physical: {bg:'#e0f5c8',color:'#2f5c0d',  label:'肢體喜劇',   labelEn:'Physical Comedy'},
-  clown:    {bg:'#ffd0d8',color:'#8c0f2a',  label:'小丑',       labelEn:'Clown'},
-  wrestling:{bg:'#e8dccf',color:'#5c3a1a',  label:'摔角',       labelEn:'Wrestling'},
-  magic:    {bg:'#e0d8f8',color:'#3a1e8c',  label:'魔術',       labelEn:'Magic Show'},
-  ventriloquism:{bg:'#d8f0f0',color:'#0d5c5c',label:'腹語',     labelEn:'Ventriloquism'},
+  competition:{bg:'#bda8ef',color:'#31196b', label:'比賽',       labelEn:'Competition'},
+  workshop: {bg:'#efa8a8',color:'#6b1919',  label:'工作坊',     labelEn:'Workshop'},
+  roast:    {bg:'#a8efa8',color:'#196b19',  label:'火烤',       labelEn:'Roast'},
+  foreign:  {bg:'#efa8e1',color:'#6b195b',  label:'外語',       labelEn:'Foreign Language'},
+  variety:  {bg:'#d3efa8',color:'#4a6b19',  label:'綜藝',       labelEn:'Variety Show'},
+  physical: {bg:'#efa8c4',color:'#6b1939',  label:'肢體喜劇',   labelEn:'Physical Comedy'},
+  clown:    {bg:'#a8b6ef',color:'#19296b',  label:'小丑',       labelEn:'Clown'},
+  wrestling:{bg:'#a8efe8',color:'#196b63',  label:'摔角',       labelEn:'Wrestling'},
+  magic:    {bg:'#dbc0f6',color:'#42156f',  label:'魔術',       labelEn:'Magic Show'},
+  ventriloquism:{bg:'#f6c5c0',color:'#6f1d15',label:'腹語',     labelEn:'Ventriloquism'},
   other:    {bg:'#e8e8e8',color:'#444',     label:'其他',       labelEn:'Others'},
 };
 const COURSE_META = {
@@ -5064,7 +5064,7 @@ function showCardHTML(s) {
   const dowEn = ['Sun.','Mon.','Tue.','Wed.','Thu.','Fri.','Sat.'][d.getDay()];
   const dow = lang==='en' ? dowEn : `${dowZh}`;
   const types = s.types || (s.type ? [s.type] : ['opmic']);
-  const typeTags = tcfPageActive() ? tcfTypeTagsHTML(types) : types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color}">${typeLabel(t)}</span>`;}).join('');
+  const typeTags = tcfPageActive() ? tcfTypeTagsHTML(types, '', '', s) : types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color}">${typeLabel(t)}</span>`;}).join('');
   // Image: show poster if URL available, fallback to emoji
   const emojiMap = {opmic:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>',standup:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg></span>',improv:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>',sketch:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"></path><path d="m6.2 5.3 3.1 5.4"></path><path d="m12.4 3.4 3.1 5.4"></path><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path></svg></span>',mancai:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1v3l4-3"></path><path d="M18 8h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-2 2v-2"></path></svg></span>',crosstalk:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1v3l4-3"></path><path d="M18 8h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-2 2v-2"></path></svg></span>',rakugo:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span>',ogiri:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span>',musicom:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></span>',gameshow:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="13" r="1"></circle><circle cx="18" cy="11" r="1"></circle><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.544-.604-6.584-.685-7.258A4 4 0 0 0 17.32 5z"></path></svg></span>',mixed:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"></path><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"></path><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"></path></svg></span>',special:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>',english:'🇬🇧',podcast:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-8.49a6 6 0 0 0 0 8.49m11.31-11.31a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg></span>',other:'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"></path><path d="m6.2 5.3 3.1 5.4"></path><path d="m12.4 3.4 3.1 5.4"></path><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path></svg></span>'};
   const emoji = emojiMap[types[0]] || '<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></span>';
@@ -5158,7 +5158,7 @@ function openShowDetail(id, skipPageSwitch) {
   // 更新 URL，方便分享
   history.pushState({ showId: id }, '', `/show/${id}`);
   const types = s.types || (s.type ? [s.type] : []);
-  const typeTags = tcfPageActive() ? tcfTypeTagsHTML(types, ';padding:3px 10px;font-size:.72rem', ' ') : types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color};padding:3px 10px;font-size:.72rem">${typeLabel(t)}</span>`;}).join(' ');
+  const typeTags = tcfPageActive() ? tcfTypeTagsHTML(types, ';padding:3px 10px;font-size:.72rem', ' ', s) : types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return `<span class="sc-type-tag" style="background:${m.bg};color:${m.color};padding:3px 10px;font-size:.72rem">${typeLabel(t)}</span>`;}).join(' ');
   const d = new Date(s.date+'T00:00');
   const lang = getLang();
   const dowZh2 = ['日','一','二','三','四','五','六'][d.getDay()];
@@ -6242,12 +6242,14 @@ const TCF_STYLE_PILLS = [
   {v:'drag',        zh:'變裝皇后', en:'Drag Queen'},
   {v:'taiwanese',   zh:'台語/方言', en:'Taiwanese/Dialect'},
 ];
+// 風格標籤的顏色：用深色實心底＋白字，跟形式／類型的淺色標籤區分開，7 種顏色彼此不重複
+const TCF_STYLE_COLOR = { adult:'#c62828', dark:'#3d3a4a', family:'#d96a00', interactive:'#1e6fd9', nonverbal:'#7b3fbf', drag:'#d11a7a', taiwanese:'#2e8b57' };
 // 舊資料相容：一顆 pill 同時抓到舊代碼的演出（資料不用重標）
 const TCF_PILL_ALIAS = { sketch:['sketch','konto'], variety:['variety','gameshow'], foreign:['foreign','english'] };
 const TCF_ADULT_RE = /18\s*\+|18\s*禁|限制級|滿\s*18|18\s*歲/;
 function tcfPageActive(){ const pg = document.getElementById('page-tcf'); return !!(pg && pg.classList.contains('active')); }
 // 喜劇節頁的卡片標籤：用跟篩選 pills 相同的字（舊代碼也對應到新名稱；同名只顯示一次）。沒有對應 pill 的代碼維持原本的標籤
-function tcfTypeTagsHTML(types, extraStyle, sep){
+function tcfTypeTagsHTML(types, extraStyle, sep, show){
   const en = getLang()==='en', seen = new Set(), out = [];
   (types||[]).forEach(t=>{
     const m = TYPE_META[t] || TYPE_META.other;
@@ -6256,6 +6258,13 @@ function tcfTypeTagsHTML(types, extraStyle, sep){
     if(seen.has(label)) return; seen.add(label);
     out.push(`<span class="sc-type-tag" style="background:${m.bg};color:${m.color}${extraStyle||''}">${label}</span>`);
   });
+  // 風格標籤（也算舊的「觀演年齡建議」含 18+ 的演出）
+  if(show){
+    TCF_STYLE_PILLS.forEach(o=>{
+      if(!tcfStyleHit(show, o.v)) return;
+      out.push(`<span class="sc-type-tag" style="background:${TCF_STYLE_COLOR[o.v]||'#555'};color:#fff${extraStyle||''}">${en ? (o.en||o.zh) : o.zh}</span>`);
+    });
+  }
   return out.join(sep===undefined ? '' : sep);
 }
 function tcfCodeHit(s, v){ const t = s.types || (s.type ? [s.type] : []); return (TCF_PILL_ALIAS[v] || [v]).some(c => t.includes(c)); }
