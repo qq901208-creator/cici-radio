@@ -3555,8 +3555,9 @@ body.edit .bt-admin-btn{display:inline-flex}
       </div>
     </div>
     <div class="fg-g full">
-      <label class="fl">風格（可複選，供喜劇節頁「風格」篩選用；18禁請填下方「觀演年齡建議」）</label>
+      <label class="fl">風格（可複選，供喜劇節頁「風格」篩選用；「觀演年齡建議」填 18+ 也會算 18禁）</label>
       <div class="type-cbs" id="s-styles">
+        <label class="type-cb-lbl"><input type="checkbox" value="adult" onchange="syncCB(this)"><span class="zh-text">18禁</span><span class="en-text">18+ Only</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="dark" onchange="syncCB(this)"><span class="zh-text">地獄梗</span><span class="en-text">Dark Humor</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="family" onchange="syncCB(this)"><span class="zh-text">親子</span><span class="en-text">Parent & Child</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="interactive" onchange="syncCB(this)"><span class="zh-text">互動</span><span class="en-text">Interactive</span></label>
@@ -6232,7 +6233,7 @@ const TCF_TYPE_PILLS = [
   {v:'ventriloquism', zh:'腹語',   en:'Ventriloquism'},
 ];
 const TCF_STYLE_PILLS = [
-  {v:'adult',       zh:'18禁',     en:'18+ Only'},        // 讀「觀演年齡建議」欄位（含 18+ / 18禁 / 限制級）
+  {v:'adult',       zh:'18禁',     en:'18+ Only'},        // 勾選「18禁」，或「觀演年齡建議」欄位含 18+ / 18禁 / 限制級
   {v:'dark',        zh:'地獄梗',   en:'Dark Humor'},
   {v:'family',      zh:'親子',     en:'Parent & Child'},
   {v:'interactive', zh:'互動',     en:'Interactive'},
