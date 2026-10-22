@@ -2286,6 +2286,10 @@ body.edit .bt-admin-btn{display:inline-flex}
         <span class="filter-lbl"><span class="zh-text">類型</span><span class="en-text">Type</span></span>
         <div class="filter-chips" id="tcf-type-chips"></div>
       </div>
+      <div class="filter-row tcf-only" style="margin-top:8px">
+        <span class="filter-lbl"><span class="zh-text">風格</span><span class="en-text">Style</span></span>
+        <div class="filter-chips" id="tcf-style-chips"></div>
+      </div>
       <!-- 喜劇節頁專用：場地 pills（取代下拉；演出資訊頁不顯示） -->
       <div class="filter-row tcf-only" style="margin-top:8px">
         <span class="filter-lbl"><span class="zh-text">場地</span><span class="en-text">Venue</span></span>
@@ -3537,7 +3541,27 @@ body.edit .bt-admin-btn{display:inline-flex}
         <label class="type-cb-lbl"><input type="checkbox" value="english" onchange="syncCB(this)"><span class="zh-text">英文喜劇</span><span class="en-text">English Comedy</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="podcast" onchange="syncCB(this)">Live Podcast</label>
         <label class="type-cb-lbl"><input type="checkbox" value="spevent" onchange="syncCB(this)"><span class="zh-text">特殊企劃</span><span class="en-text">Special Event</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="competition" onchange="syncCB(this)"><span class="zh-text">比賽</span><span class="en-text">Competition</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="workshop" onchange="syncCB(this)"><span class="zh-text">工作坊</span><span class="en-text">Workshop</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="roast" onchange="syncCB(this)"><span class="zh-text">火烤</span><span class="en-text">Roast</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="foreign" onchange="syncCB(this)"><span class="zh-text">外語</span><span class="en-text">Foreign Language</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="variety" onchange="syncCB(this)"><span class="zh-text">綜藝</span><span class="en-text">Variety Show</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="physical" onchange="syncCB(this)"><span class="zh-text">肢體喜劇</span><span class="en-text">Physical Comedy</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="clown" onchange="syncCB(this)"><span class="zh-text">小丑</span><span class="en-text">Clown</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="wrestling" onchange="syncCB(this)"><span class="zh-text">摔角</span><span class="en-text">Wrestling</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="magic" onchange="syncCB(this)"><span class="zh-text">魔術</span><span class="en-text">Magic Show</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="ventriloquism" onchange="syncCB(this)"><span class="zh-text">腹語</span><span class="en-text">Ventriloquism</span></label>
         <label class="type-cb-lbl"><input type="checkbox" value="other" onchange="syncCB(this)"><span class="zh-text">其他</span><span class="en-text">Others</span></label>
+      </div>
+    </div>
+    <div class="fg-g full">
+      <label class="fl">風格（可複選，供喜劇節頁「風格」篩選用；18禁請填下方「觀演年齡建議」）</label>
+      <div class="type-cbs" id="s-styles">
+        <label class="type-cb-lbl"><input type="checkbox" value="dark" onchange="syncCB(this)"><span class="zh-text">地獄梗</span><span class="en-text">Dark Humor</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="family" onchange="syncCB(this)"><span class="zh-text">親子</span><span class="en-text">Parent & Child</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="interactive" onchange="syncCB(this)"><span class="zh-text">互動</span><span class="en-text">Interactive</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="drag" onchange="syncCB(this)"><span class="zh-text">變裝皇后</span><span class="en-text">Drag Queen</span></label>
+        <label class="type-cb-lbl"><input type="checkbox" value="taiwanese" onchange="syncCB(this)"><span class="zh-text">台語/方言</span><span class="en-text">Taiwanese/Dialect</span></label>
       </div>
     </div>
     <div class="fg-g"><label class="fl">演員 / 表演者</label><input class="fi" type="text" id="s-performer"></div>
@@ -3603,7 +3627,7 @@ body.edit .bt-admin-btn{display:inline-flex}
         這是台北喜劇節演出
       </label>
     </div>
-    <div class="fg-g full"><label class="fl">台北喜劇節官方標籤（選填，逗號分隔，例：遊戲企劃,觀眾互動）</label><input class="fi" type="text" id="s-tcf-tags" placeholder="遊戲企劃,觀眾互動"></div>
+    <div class="fg-g full"><label class="fl">台北喜劇節官方標籤（選填，逗號分隔）</label><input class="fi" type="text" id="s-tcf-tags" placeholder=""></div>
     <div class="fg-g full"><label class="fl">觀演年齡建議（選填，依官方實際用詞填寫，例：18+ / 輔15 / 闔家皆宜）</label><input class="fi" type="text" id="s-age-advisory" placeholder="依官方文宣用詞填寫"></div>
   </div>
   <div class="fa">
@@ -3858,7 +3882,7 @@ body.edit .bt-admin-btn{display:inline-flex}
         這是台北喜劇節課程／講座
       </label>
     </div>
-    <div class="fg-g full"><label class="fl">台北喜劇節官方標籤（選填，逗號分隔）</label><input class="fi" type="text" id="c-tcf-tags" placeholder="國際演出,觀眾互動"></div>
+    <div class="fg-g full"><label class="fl">台北喜劇節官方標籤（選填，逗號分隔）</label><input class="fi" type="text" id="c-tcf-tags" placeholder=""></div>
     <div class="fg-g"><label class="fl">平台</label><select class="fs" id="c-platform"><option value="kktix">KKTIX</option><option value="accupass">Accupass</option><option value="google-form">Google 表單</option><option value="other">其他</option></select></div>
     <div class="fg-g full"><label class="fl">報名連結</label><input class="fi" type="url" id="c-signupurl" placeholder="https://..."></div>
     <div class="fg-g full">
@@ -4626,6 +4650,16 @@ const TYPE_META = {
   english:  {bg:'#c8f5d8',color:'#0d5c2a',  label:'英文喜劇',   labelEn:'English Comedy'},
   podcast:  {bg:'#c8e8ff',color:'#0a3860',  label:'Live Podcast',labelEn:'Live Podcast'},
   spevent:   {bg:'#ddd8f8',color:'#3a1e8c',  label:'特殊企劃',   labelEn:'Special Event'},
+  competition:{bg:'#ffe3e3',color:'#8c1a1a', label:'比賽',       labelEn:'Competition'},
+  workshop: {bg:'#e3f0ff',color:'#1a4a8c',  label:'工作坊',     labelEn:'Workshop'},
+  roast:    {bg:'#ffd9c2',color:'#8c3000',  label:'火烤',       labelEn:'Roast'},
+  foreign:  {bg:'#c8f5d8',color:'#0d5c2a',  label:'外語',       labelEn:'Foreign Language'},
+  variety:  {bg:'#fff0b3',color:'#5e4a00',  label:'綜藝',       labelEn:'Variety Show'},
+  physical: {bg:'#e0f5c8',color:'#2f5c0d',  label:'肢體喜劇',   labelEn:'Physical Comedy'},
+  clown:    {bg:'#ffd0d8',color:'#8c0f2a',  label:'小丑',       labelEn:'Clown'},
+  wrestling:{bg:'#e8dccf',color:'#5c3a1a',  label:'摔角',       labelEn:'Wrestling'},
+  magic:    {bg:'#e0d8f8',color:'#3a1e8c',  label:'魔術',       labelEn:'Magic Show'},
+  ventriloquism:{bg:'#d8f0f0',color:'#0d5c5c',label:'腹語',     labelEn:'Ventriloquism'},
   other:    {bg:'#e8e8e8',color:'#444',     label:'其他',       labelEn:'Others'},
 };
 const COURSE_META = {
@@ -4716,6 +4750,7 @@ let fType='all', fVenue='all', fArea='all', fDay='all', fCtype='all', fCity='all
 let fFeatured=false;
 let fTcfTag='all'; // 喜劇節頁的探索標籤（附加）
 let fTcfDate='all'; // 喜劇節頁的日期篩選：'all' 或 'YYYY-MM-DD'（附加）
+let fTcfStyle='all'; // 喜劇節頁的「風格」pills 篩選（只在喜劇節頁使用）
 let fTcfVenue='all'; // 喜劇節頁的場地 pills 篩選：'all' 或 TCF_VENUES 的 id（附加，與演出資訊頁的 fVenue 互相獨立）
 let fTcf=false; // 台北喜劇節快捷篩選（附加，不影響既有 fFeatured/fType 等邏輯）
 let micDay = 1;
@@ -4741,7 +4776,7 @@ function syncFiltersToURL(){
 // ── 重置所有篩選 ──
 function resetAllFilters(){
   fType='all'; fVenue='all'; fArea='all'; fDay='all'; fFormat='all'; fFeatured=false; fTcf=!!window._tcfMounted;
-  fTcfVenue='all'; if(typeof renderTcfVenueChips==='function') try{ renderTcfVenueChips(); }catch(e){}
+  fTcfVenue='all'; fTcfStyle='all'; if(typeof renderTcfVenueChips==='function') try{ renderTcfVenueChips(); }catch(e){}
   if(window._tcfMounted && fTcfDate!=='all'){ fTcfDate='all'; tcfView='cards'; try{ renderTcfDateChips(); applyTcfView(); }catch(e){} } // 喜劇節頁：重置一併清掉日期
   showsPage=1;
   showFeaturedFilterBanner();
@@ -5243,6 +5278,7 @@ function goCoursesPage(p){
 
 function renderShows() {
   const grid = document.getElementById('shows-grid'); if (!grid) return;
+  if(window._tcfMounted){ try{ renderTcfFormatTypeChips(); }catch(e){} }
   const adminMode = isLoggedIn() && editMode;
   const q = (document.getElementById('shows-search')?.value||'').trim().toLowerCase();
   const shows = window._SHOWS || SHOWS || [];
@@ -5256,8 +5292,10 @@ function renderShows() {
     if (!adminMode && isExpired(s.date, s.time)) return false;
     if (adminMode && hideExpiredShows && isExpired(s.date, s.time) && st !== 'pending' && st !== 'postponed') return false;
     const types = s.types||(s.type?[s.type]:[]);
-    if (fType!=='all' && !types.includes(fType)) return false;
-    if (fFormat!=='all' && !types.includes(fFormat)) return false;
+    const _tcfPg = tcfPageActive(); // 喜劇節頁的 pill 可能對應多個舊代碼；演出資訊頁維持原本的精確比對
+    if (fType!=='all' && !(_tcfPg ? tcfCodeHit(s, fType) : types.includes(fType))) return false;
+    if (fFormat!=='all' && !(_tcfPg ? tcfCodeHit(s, fFormat) : types.includes(fFormat))) return false;
+    if (_tcfPg && fTcfStyle!=='all' && !tcfStyleHit(s, fTcfStyle)) return false;
     if (fFeatured && !s.featured) return false;
     if (fTcf && !s.isTaipeiComedyFestival) return false; // 台北喜劇節快捷篩選（附加條件）
     if (fTcf && fTcfTag!=='all' && !(s.taipeiComedyFestivalTags||[]).includes(fTcfTag)) return false; // 喜劇節探索標籤（附加條件）
@@ -6070,7 +6108,10 @@ function tcfMountShows(){
   window._tcfMounted = true;
   fTcf = true; showsPage = 1;
   // 喜劇節頁沒有地區／星期篩選：進頁時清掉，避免演出資訊頁留下的條件在這裡被隱形套用
-  fArea = 'all'; fDay = 'all'; fVenue = 'all';
+  fArea = 'all'; fDay = 'all'; fVenue = 'all'; fTcfStyle = 'all';
+  // 演出資訊頁留下的類型／形式若不在喜劇節頁的 pills 裡，進頁時清掉，避免看不見的條件被隱形套用
+  if(fType!=='all' && !TCF_TYPE_PILLS.some(o=>o.v===fType)){ fType='all'; setChip('type','all'); }
+  if(fFormat!=='all' && !TCF_FORMAT_PILLS.some(o=>o.v===fFormat)){ fFormat='all'; setChip('format','all'); }
   ['sel-venue','sel-area','sel-day'].forEach(id=>{ const el = document.getElementById(id); if(el){ el.value = 'all'; el.classList.remove('active'); } });
   document.querySelectorAll('.chip[data-f="format"]').forEach(c=>c.classList.toggle('on', c.dataset.v === fFormat));
   showTcfFilterBanner();
@@ -6080,6 +6121,9 @@ function tcfUnmountShows(){
   const layout = document.querySelector('#tcf-shows-host .shows-layout');
   if(layout && window._tcfShowsHome) window._tcfShowsHome.appendChild(layout);
   window._tcfMounted = false;
+  fTcfStyle = 'all';
+  if(fType!=='all' && !document.querySelector(`.chip[data-f="type"][data-v="${fType}"]`)){ fType='all'; setChip('type','all'); }
+  if(fFormat!=='all' && !document.querySelector(`.chip[data-f="format"][data-v="${fFormat}"]`)){ fFormat='all'; setChip('format','all'); }
   fTcf = false; fTcfTag = 'all'; fTcfDate = 'all'; fTcfVenue = 'all'; tcfView = 'cards'; tcfPeriodDay = 'all'; tcfExploreTag = 'all'; showsPage = 1;
   showTcfFilterBanner();
 }
@@ -6093,7 +6137,7 @@ function tcfScrollTo(id){
   [450, 900, 1500].forEach(ms => setTimeout(()=>{ const d = topOf(); if(d!==null && Math.abs(d - OFFSET) > 12) go('auto'); }, ms));
 }
 let tcfExploreTag = 'all';
-const TCF_EXPLORE_TAGS = ['遊戲企劃','觀眾互動','親子','國際演出']; // 官方標籤每年可能不同，之後可改從 window._TCF_TAGS 讀取
+const TCF_EXPLORE_TAGS = []; // 已移除預設分類：喜劇節的分類改由「形式／類型／風格」pills 提供（見 TCF_FORMAT_PILLS 等）
 
 function renderTcfExploreTags(){
   const wrap = document.getElementById('tcf-explore-tags');
@@ -6163,37 +6207,65 @@ function renderTcfDateChips(){
 // 新增：加一行；刪除：刪掉那一行；改名：改 zh／en 文字。v 是資料裡存的代碼，不要亂改（必須是 TYPE_META 裡有的類型代碼，或形式代碼 opmic／mixed／special／spevent）。
 // 順序就是畫面上的順序。en 省略或與 zh 相同就只顯示一種文字。
 const TCF_FORMAT_PILLS = [
-  {v:'opmic',   zh:'Open Mic',  en:'Open Mic'},
-  {v:'mixed',   zh:'拼盤秀',     en:'Mixed-bill Show'},
-  {v:'special', zh:'喜劇專場',   en:'Comedy Special'},
-  {v:'spevent', zh:'特殊企劃',   en:'Special Event'},
+  {v:'mixed',       zh:'拼盤秀',   en:'Mixed-bill Show'},
+  {v:'special',     zh:'喜劇專場', en:'Comedy Special'},
+  {v:'competition', zh:'比賽',     en:'Competition'},
+  {v:'workshop',    zh:'工作坊',   en:'Workshop'},
+  {v:'roast',       zh:'火烤',     en:'Roast'},
+  {v:'foreign',     zh:'外語',     en:'Foreign Language'},
 ];
 const TCF_TYPE_PILLS = [
-  {v:'standup',   zh:'站立喜劇', en:'Stand-up'},
-  {v:'improv',    zh:'即興',     en:'Improv'},
-  {v:'mancai',    zh:'漫才',     en:'Mancai'},
-  {v:'sketch',    zh:'素描短劇', en:'Sketch'},
-  {v:'konto',     zh:'短劇 コント', en:'Konto'},
-  {v:'crosstalk', zh:'相聲',     en:'Crosstalk'},
-  {v:'rakugo',    zh:'落語',     en:'Rakugo'},
-  {v:'ogiri',     zh:'大喜利',   en:'Ōgiri'},
-  {v:'musicom',   zh:'音樂喜劇', en:'Music Comedy'},
-  {v:'gameshow',  zh:'Game Show'},
-  {v:'english',   zh:'英文喜劇', en:'English Comedy'},
-  {v:'podcast',   zh:'Live Podcast'},
+  {v:'standup',     zh:'單口/站立喜劇', en:'Stand-up'},
+  {v:'improv',      zh:'即興',     en:'Improv'},
+  {v:'mancai',      zh:'漫才',     en:'Mancai'},
+  {v:'sketch',      zh:'短劇',     en:'Sketch'},
+  {v:'crosstalk',   zh:'相聲',     en:'Crosstalk'},
+  {v:'rakugo',      zh:'落語',     en:'Rakugo'},
+  {v:'ogiri',       zh:'大喜利',   en:'Ōgiri'},
+  {v:'musicom',     zh:'音樂喜劇', en:'Music Comedy'},
+  {v:'variety',     zh:'綜藝',     en:'Variety Show'},
+  {v:'physical',    zh:'肢體喜劇', en:'Physical Comedy'},
+  {v:'clown',       zh:'小丑',     en:'Clown'},
+  {v:'wrestling',   zh:'摔角',     en:'Wrestling'},
+  {v:'magic',       zh:'魔術',     en:'Magic Show'},
+  {v:'ventriloquism', zh:'腹語',   en:'Ventriloquism'},
 ];
+const TCF_STYLE_PILLS = [
+  {v:'adult',       zh:'18禁',     en:'18+ Only'},        // 讀「觀演年齡建議」欄位（含 18+ / 18禁 / 限制級）
+  {v:'dark',        zh:'地獄梗',   en:'Dark Humor'},
+  {v:'family',      zh:'親子',     en:'Parent & Child'},
+  {v:'interactive', zh:'互動',     en:'Interactive'},
+  {v:'drag',        zh:'變裝皇后', en:'Drag Queen'},
+  {v:'taiwanese',   zh:'台語/方言', en:'Taiwanese/Dialect'},
+];
+// 舊資料相容：一顆 pill 同時抓到舊代碼的演出（資料不用重標）
+const TCF_PILL_ALIAS = { sketch:['sketch','konto'], variety:['variety','gameshow'], foreign:['foreign','english'] };
+const TCF_ADULT_RE = /18\s*\+|18\s*禁|限制級|滿\s*18|18\s*歲/;
+function tcfPageActive(){ const pg = document.getElementById('page-tcf'); return !!(pg && pg.classList.contains('active')); }
+function tcfCodeHit(s, v){ const t = s.types || (s.type ? [s.type] : []); return (TCF_PILL_ALIAS[v] || [v]).some(c => t.includes(c)); }
+function tcfStyleHit(s, v){
+  if(v==='adult' && TCF_ADULT_RE.test(String(s.ageAdvisory||''))) return true;
+  return (s.styles||[]).includes(v);
+}
 function renderTcfFormatTypeChips(){
   const lab = o => (o.en && o.en!==o.zh) ? `<span class="zh-text">${o.zh}</span><span class="en-text">${o.en}</span>` : o.zh;
-  const fill = (id, key, cur, list, allZh, allEn, setter) => {
+  let base = [];
+  try{ base = tcfBaseList(); }catch(e){}
+  const fill = (id, cur, list, hit, allZh, allEn, setter) => {
     const box = document.getElementById(id); if(!box) return;
     const btn = (v, inner) => `<button type="button" class="chip${cur===v?' on':''}" onclick="${setter}('${v}')">${inner}</button>`;
-    box.innerHTML = btn('all', `<span class="zh-text">全部<span class="mob-text">${allZh}</span></span><span class="en-text">All<span class="mob-text"> ${allEn}</span></span>`) + list.map(o=>btn(o.v, lab(o))).join('');
+    // 沒有任何喜劇節演出的選項自動隱藏（目前選著的除外）；演出資料還沒載入時先全部顯示
+    const shown = list.filter(o => cur===o.v || !base.length || base.some(s => hit(s, o.v)));
+    box.innerHTML = btn('all', `<span class="zh-text">全部<span class="mob-text">${allZh}</span></span><span class="en-text">All<span class="mob-text"> ${allEn}</span></span>`) + shown.map(o=>btn(o.v, lab(o))).join('');
+    const row = box.closest('.filter-row'); if(row) row.style.display = (base.length && !shown.length && cur==='all') ? 'none' : '';
   };
-  fill('tcf-format-chips','format', fFormat, TCF_FORMAT_PILLS, '形式', 'Formats', 'setTcfFormat');
-  fill('tcf-type-chips','type', fType, TCF_TYPE_PILLS, '類型', 'Types', 'setTcfType');
+  fill('tcf-format-chips', fFormat, TCF_FORMAT_PILLS, tcfCodeHit, '形式', 'Formats', 'setTcfFormat');
+  fill('tcf-type-chips', fType, TCF_TYPE_PILLS, tcfCodeHit, '類型', 'Types', 'setTcfType');
+  fill('tcf-style-chips', fTcfStyle, TCF_STYLE_PILLS, tcfStyleHit, '風格', 'Styles', 'setTcfStyle');
 }
-function setTcfFormat(v){ fFormat = v; setChip('format', v); showsPage = 1; renderTcfFormatTypeChips(); renderShows(); try{ syncFiltersToURL(); }catch(e){} }
-function setTcfType(v){ fType = v; setChip('type', v); showsPage = 1; renderTcfFormatTypeChips(); renderShows(); try{ syncFiltersToURL(); }catch(e){} }
+function setTcfFormat(v){ fFormat = v; setChip('format', v); showsPage = 1; renderShows(); try{ syncFiltersToURL(); }catch(e){} }
+function setTcfType(v){ fType = v; setChip('type', v); showsPage = 1; renderShows(); try{ syncFiltersToURL(); }catch(e){} }
+function setTcfStyle(v){ fTcfStyle = v; showsPage = 1; renderShows(); }
 const TCF_VENUES = [
   {id:'comedy-plus-main',  zh:'卡米地＋大廳', en:'Comedy Plus Main Hall',  kws:['卡米地','comedy plus'], hall:'main'},
   {id:'comedy-plus-small', zh:'卡米地＋小廳', en:'Comedy Plus Small Hall', kws:['卡米地','comedy plus'], hall:'small'},
@@ -9463,7 +9535,7 @@ function openShowModal(id){
   const sFeaturedEl=document.getElementById('s-featured'); if(sFeaturedEl) sFeaturedEl.checked=false;
   const sTcfEl=document.getElementById('s-tcf'); if(sTcfEl) sTcfEl.checked=false;
   ['s-tcf-tags','s-age-advisory'].forEach(k=>{const el=document.getElementById(k);if(el)el.value='';});
-  document.querySelectorAll('#s-types input').forEach(cb=>{cb.checked=false;cb.closest('.type-cb-lbl').classList.remove('checked');});
+  document.querySelectorAll('#s-types input, #s-styles input').forEach(cb=>{cb.checked=false;cb.closest('.type-cb-lbl').classList.remove('checked');});
   // 填入動態場地/地區選單
   populateShowSelects(s?.venue||'', s?.area||'');
   if(s){
@@ -9495,6 +9567,8 @@ function openShowModal(id){
     if(s.image)livePreview('s-img-prev','s-img-hint',s.image);
     const types=s.types||(s.type?[s.type]:[]);
     document.querySelectorAll('#s-types input').forEach(cb=>{if(types.includes(cb.value)){cb.checked=true;cb.closest('.type-cb-lbl').classList.add('checked');}});
+    const _styles=s.styles||[];
+    document.querySelectorAll('#s-styles input').forEach(cb=>{if(_styles.includes(cb.value)){cb.checked=true;cb.closest('.type-cb-lbl').classList.add('checked');}});
   }
   try{ ttUpdateNote(); }catch(e){}
   document.getElementById('modal-show').classList.add('open');
@@ -9538,6 +9612,7 @@ function saveShow(status){
     isTaipeiComedyFestival:!!document.getElementById('s-tcf')?.checked,
     taipeiComedyFestivalTags:(document.getElementById('s-tcf-tags')?.value||'').split(',').map(t=>t.trim()).filter(Boolean),
     ageAdvisory:(document.getElementById('s-age-advisory')?.value||'').trim(),
+    styles:Array.from(document.querySelectorAll('#s-styles input:checked')).map(cb=>cb.value),  // 風格（喜劇節頁「風格」篩選用）
     ticketTypes:(typeof ttCollect==='function' ? ttCollect() : []),  // 票種設定（選填）；沒填＝空陣列
   };
   window.FB.save('shows', eShowId||null, item).then(newId=>{
