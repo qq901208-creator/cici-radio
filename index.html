@@ -2581,6 +2581,7 @@ body.edit .bt-admin-btn{display:inline-flex}
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="dikia" style="accent-color:var(--or)"> 底加書店</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="humorbeing" style="accent-color:var(--or)"> Humorbeing 笑場歐噴麥</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="goldens" style="accent-color:var(--or)"> 劍潭金手套 Golden's Bar</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="neihu" style="accent-color:var(--or)"> 內湖不開提內湖 - 一生・現場・聚落</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="papsximen" style="accent-color:var(--or)"> Pap's Ximen</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="otwoofour" style="accent-color:var(--or)"> 人文工坊</label>
         <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-family:var(--f-zh);cursor:pointer"><input type="checkbox" value="thinkers" style="accent-color:var(--or)"> 思劇場</label>
@@ -9828,6 +9829,10 @@ function saveVenue(){
   const tags = tagsRaw ? tagsRaw.split(',').map(t=>t.trim()).filter(Boolean) : [];
   const tip = document.getElementById('v-tip').value.trim();
   const item={nameZh,nameEn:document.getElementById('v-nameen').value,city,address:document.getElementById('v-address').value,mapUrl:document.getElementById('v-mapurl').value.trim(),fb:document.getElementById('v-fb').value,ig:document.getElementById('v-ig').value,logoUrl:document.getElementById('v-logourl').value,tagline:document.getElementById('v-tagline').value.trim(),description:document.getElementById('v-desc').value,partner:document.getElementById('v-partner').value.trim(),tags,tip};
+  // 保留原本的排序（_order）與表單沒有的欄位：存檔是整筆覆蓋，不補回來的話，編輯一次排序就被重置
+  const _oldVenue = eVenueId ? VENUES.find(x=>x.id===eVenueId) : null;
+  if(_oldVenue){ const {id:_vid, ...keep} = _oldVenue; Object.assign(item, {...keep, ...item}); }
+  else item._order = Math.max(-1, ...VENUES.map(v=>(typeof v._order==='number' ? v._order : -1))) + 1; // 新增的場地排在最後
   window.FB.save('venues', eVenueId||null, item).then(newId=>{
     if(eVenueId){const i=VENUES.findIndex(x=>x.id===eVenueId);if(i>=0)VENUES[i]={id:eVenueId,...item};}
     else VENUES.push({id:newId,...item});
@@ -10159,6 +10164,7 @@ const DEFAULT_SHOW_VENUES = [
   {id:'dikia',             labelZh:'底加書店',                               labelEn:'Titsia Bookstore'},
   {id:'humorbeing',        labelZh:'Humorbeing 笑場歐噴麥',    labelEn:'Humorbeing - Project Nomad'},
   {id:'goldens',           labelZh:'劍潭金手套',                                 labelEn:"Golden's Bar"},
+  {id:'neihu',             labelZh:'內湖不開提內湖 - 一生・現場・聚落',      labelEn:'Live To Burn'},
   {id:'papsximen',         labelZh:"Pap's Ximen",                            labelEn:"Pap's Ximen"},
   {id:'otwoofour',         labelZh:'人文工坊',                               labelEn:'O Two O Four'},
   {id:'ginting',           labelZh:'樂君亭',                                 labelEn:'Ginting Comedy'},
