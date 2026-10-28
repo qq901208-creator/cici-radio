@@ -4294,8 +4294,13 @@ async function loadAllData(retryCount = 0) {
             // 確保先切到 performers 頁面，再開 modal
             const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
             if(activePage !== 'performers' && typeof showPage==='function') showPage('performers');
-            setTimeout(()=>openPerformerDetail(sharePerformerId), 80);
-          } else if(attempts > 0){ setTimeout(()=>tryOpenPerformer(attempts-1), 500); }
+            const _early = window._perfOpenedEarly === sharePerformerId; // 已經先打開過：只刷新內容，不重複寫入瀏覽紀錄
+            setTimeout(()=>{ openPerformerDetail(sharePerformerId, _early); if(_early){ try{ history.replaceState({ performerId: sharePerformerId }, '', `/performer/${sharePerformerId}`); }catch(e){} } }, 80);
+          } else if(attempts > 0){
+            // 約 1.5 秒還找不到：直接讀這一位演員（清單載入失敗、或新演員還沒進快照時，不用再重新整理）
+            if(attempts === 17 && typeof window._fetchPerformerById === 'function') window._fetchPerformerById(sharePerformerId);
+            setTimeout(()=>tryOpenPerformer(attempts-1), 500);
+          }
         };
         setTimeout(()=>tryOpenPerformer(20), 300);
       }
@@ -4516,6 +4521,38 @@ window._snapFetchDesc = async function(id){
   try{ const d = await getDoc(doc(db, 'shows', id)); return d.exists() ? (d.data().description || '') : ''; }
   catch(e){ return null; }
 };
+// 分享連結點進來時，如果演員清單裡找不到那位（清單讀取失敗／還沒進快照），直接讀那一位（1 次讀取）
+window._fetchPerformerById = async function(id){
+  try{
+    const d = await getDoc(doc(db, 'performers', id));
+    if(!d.exists()) return null;
+    const p = {id:d.id, ...d.data()};
+    if(!Array.isArray(window._PERFORMERS)) window._PERFORMERS = [];
+    if(!window._PERFORMERS.some(x=>x.id===p.id)) window._PERFORMERS.push(p);
+    return p;
+  }catch(e){ return null; }
+};
+// 演員分享連結的快速通道：不等整站資料（演出／留言／統計…）載完，一開頁就先單獨讀那一位演員（1 次讀取）並立刻打開；
+// 整站資料載完後，原本的流程會再刷新一次（補上「近期演出」）
+(function(){
+  try{
+    let id = null;
+    const pm = location.pathname.match(/^\/performer\/([^/?#]+)/);
+    if(pm) id = decodeURIComponent(pm[1]);
+    if(!id){ const h = location.hash || ''; if(h.includes('?')) id = new URLSearchParams(h.split('?')[1]).get('performer'); }
+    if(!id || !/^[A-Za-z0-9._~:-]{1,128}$/.test(id)) return;
+    window._fetchPerformerById(id).then(p=>{
+      if(!p || window._dataReady || p.status === 'hidden') return; // 整站資料已經載完就交給原本的流程；隱藏的演員不搶先打開
+      const go = ()=>{
+        if(typeof openPerformerDetail !== 'function' || window._dataReady) return;
+        window._perfOpenedEarly = id;
+        openPerformerDetail(id, true);
+        try{ history.replaceState({ performerId: id }, '', `/performer/${id}`); }catch(e){}
+      };
+      if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go, {once:true}); else go();
+    });
+  }catch(e){}
+})();
 window._snapSchedule = function(colName, id){
   if(['shows', 'mics', 'venues', 'courses', 'performers', 'meta'].indexOf(colName) < 0) return;
   if(colName === 'meta' && String(id || '').indexOf('snapshot') === 0) return;
@@ -8964,11 +9001,11 @@ function renderPerformers(){
   }
 }
 
-function openPerformerDetail(id){
+function openPerformerDetail(id, skipPush){
   const all = window._PERFORMERS_DISPLAY || window._PERFORMERS || [];
   const p = all.find(x=>x.id===id);
   if(!p) return;
-  history.pushState({ performerId: id }, '', `/performer/${id}`);
+  if(!skipPush) history.pushState({ performerId: id }, '', `/performer/${id}`);
 
   // 動態更新 OG meta tags
   const setMeta = (prop, content, isName=false) => {
@@ -9021,7 +9058,7 @@ function openPerformerDetail(id){
       <div>${rowTcfLabel}<div style="font-size:.82rem;font-weight:700;font-family:var(--f-zh);color:var(--tm)">${s.title}</div><div style="font-size:.72rem;color:var(--ts);font-family:var(--f-zh);margin-top:2px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span> ${s.date} · <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg></span> ${s.venueLabel||s.venue||''}</div></div>
       <span style="font-size:.68rem;color:var(--or);font-family:var(--f-bo);white-space:nowrap">查看 →</span>
     </div>`;}).join('')
-    : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">近期暫無演出資訊</div>`;
+    : `<div style="font-size:.82rem;color:var(--ts);font-family:var(--f-zh);padding:8px 0">${window._dataReady ? '近期暫無演出資訊' : '近期演出載入中…'}</div>`;
   const venueDisplay = p.venueIds&&p.venueIds.length ? p.venueIds.map(v=>getShowVenueLabelById(v)||v).join('、') : (p.venues||'');
   const ICONS = {
     fb: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12"/></svg>',
