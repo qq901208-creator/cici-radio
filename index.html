@@ -27,6 +27,20 @@
 <link rel="dns-prefetch" href="https://www.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=Big+Shoulders+Display:wght@900&display=swap" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=Big+Shoulders+Display:wght@900&display=swap" rel="stylesheet"></noscript>
+<script>
+// ══ 台北喜劇節開關（活動結束後回歸平常版面）══
+// 'auto'：活動最後一天（TCF_END_DATE）過後自動關閉，不需要重新部署；'on'：永遠開啟（明年活動前改回 auto 並更新日期）；'off'：永遠關閉
+window.TCF_MODE = 'auto';
+window.TCF_END_DATE = '2026-12-06';
+window.tcfOn = function(){
+  const m = window.TCF_MODE;
+  if(m === 'on') return true;
+  if(m === 'off') return false;
+  return Date.now() < new Date(window.TCF_END_DATE + 'T23:59:59+08:00').getTime() + 1000; // 台灣時間當天結束前都算開啟
+};
+window._TCF_ON = window.tcfOn();
+if(!window._TCF_ON) document.documentElement.classList.add('tcf-off');
+</script>
 <style>
 :root{
   --y:#f5d558;--py:#ffefa6;--cr:#ebecd7;--or:#ef6f20;
@@ -1243,6 +1257,8 @@ body.nav-open .hamburger span:nth-child(1){transform:translateY(7px) rotate(45de
 body.nav-open .hamburger span:nth-child(2){opacity:0;transform:scaleX(0)}
 body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 @keyframes spin{to{transform:rotate(360deg)}}
+/* ══ 喜劇節關閉時（html.tcf-off）：隱藏所有喜劇節入口與標示，回歸平常版面 ══ */
+html.tcf-off .tcf-ui, html.tcf-off #page-tcf, html.tcf-off .tcf-official-fab, html.tcf-off .tcf-top-btn, html.tcf-off .cal-tcf-legend, html.tcf-off #tcf-plan-bar{display:none!important}
 /* ══════════ 台北喜劇節限定樣式（獨立區塊，活動結束後可整段刪除）══════════ */
 .show-card.tcf,.course-card.tcf{border:2.5px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(120deg,var(--tcf-pink) 0%,var(--tcf-pink2) 45%,var(--tcf-cyan) 100%);background-origin:border-box;background-clip:padding-box,border-box;box-shadow:0 4px 18px rgba(30,71,218,.18)}
 /* 右上角 pill 已改由斜標籤取代：只用 CSS 隱藏，render function 不動 */
@@ -1878,7 +1894,7 @@ body.edit .bt-admin-btn{display:inline-flex}
   <ul class="nav-links">
     <li><a data-page="home" onclick="showPage('home')"><span class="zh-text">首頁</span><span class="en-text">Home</span></a></li>
     <li><a data-page="shows" onclick="showPage('shows')"><span class="zh-text">演出資訊</span><span class="en-text">Shows</span></a></li>
-    <li><a data-page="tcf" onclick="showPage('tcf')"><span class="zh-text">台北喜劇節</span><span class="en-text">Comedy Festival</span><span class="tcf-navbadge">期間限定</span></a></li>
+    <li class="tcf-ui"><a data-page="tcf" onclick="showPage('tcf')"><span class="zh-text">台北喜劇節</span><span class="en-text">Comedy Festival</span><span class="tcf-navbadge">期間限定</span></a></li>
     <li><a data-page="opmic" onclick="showPage('opmic')"><span class="zh-text">Open Mic 報名資訊</span><span class="en-text">Open Mic</span></a></li>
     <li><a data-page="venues" onclick="showPage('venues')"><span class="zh-text">全台喜劇據點</span><span class="en-text">Venues</span></a></li>
     <li><a data-page="performers" onclick="showPage('performers')"><span class="zh-text">演員資料庫</span><span class="en-text">Performers</span></a></li>
@@ -1940,7 +1956,7 @@ body.edit .bt-admin-btn{display:inline-flex}
         <a href="#" class="hero-guide-btn" onclick="showPage('guide');return false">
           <span class="zh-text"><span class="hero-guide-full">第一次看喜劇嗎？從這裡開始</span><span class="hero-guide-short">第一次看喜劇？</span> <span class="btn-arrow">→</span></span><span class="en-text"><span class="hero-guide-full">First time? Start here</span><span class="hero-guide-short">First time?</span> <span class="btn-arrow">→</span></span>
         </a>
-        <a href="#" class="hero-tcf-btn" onclick="showPage('tcf');return false">
+        <a href="#" class="hero-tcf-btn tcf-ui" onclick="showPage('tcf');return false">
           <span class="zh-text">2026台北喜劇節 →</span><span class="en-text">2026 Comedy Festival →</span>
         </a>
       </div>
@@ -2098,7 +2114,7 @@ body.edit .bt-admin-btn{display:inline-flex}
   </div>
 
   <!-- 台北喜劇節 期間限定入口（獨立區塊，比照首頁其他區塊固定間距 28px 5vw，避開 .home-mid 的 2 欄 grid） -->
-  <section class="tcf-entry-sec">
+  <section class="tcf-entry-sec tcf-ui">
     <div class="tcf-entry">
       <div class="tcf-entry-txt">
         <div class="tag"><span class="zh-text">台北喜劇節　11.26-12.06</span><span class="en-text">Taipei Comedy Festival　11.26-12.06</span></div>
@@ -2244,7 +2260,7 @@ body.edit .bt-admin-btn{display:inline-flex}
       <input class="shows-search" id="shows-search" type="text" placeholder="搜尋演出名稱、表演者、場地…" oninput="showsPage=1;renderShows();syncFiltersToURL()">
     </div>
     <button type="button" onclick="resetAllFilters()" class="filter-reset-btn shows-search-reset" aria-label="重置篩選 Reset">✕ <span class="zh-text">重置</span><span class="en-text">Reset</span></button>
-    <div id="tcf-quickfilter-row">
+    <div id="tcf-quickfilter-row" class="tcf-ui">
       <button class="tcf-quickfilter" id="tcf-quickfilter-btn" onclick="toggleTcfFilter()"><span class="zh-text">台北喜劇節</span><span class="en-text">Comedy Festival</span></button>
     </div>
     </div>
@@ -5115,7 +5131,7 @@ function showCardHTML(s) {
   const hiddenTag = isLoggedIn()&&editMode ? (s.status==='postponed'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#fff0cc;color:#cc7700;border-radius:var(--r-pill);margin-left:4px">延期</span>`:(s.status==='hidden'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8e8e8;color:#666;border-radius:var(--r-pill);margin-left:4px">隱藏</span>`:(s.status==='archived'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#e8d0ff;color:#6600cc;border-radius:var(--r-pill);margin-left:4px">封存</span>`:(s.status==='cancelled'?`<span style="font-size:.6rem;font-weight:700;padding:2px 6px;background:#ffcccc;color:#cc0000;border-radius:var(--r-pill);margin-left:4px">取消</span>`:'')))): '';
   const expiredOverlay = isExpired(s.date, s.time) ? `style="opacity:.7;animation:none"` : ((s.status==='hidden'||s.status==='postponed'||s.status==='archived'||s.status==='cancelled') ? `style="opacity:.45;animation:none"` : '');
   // ── 台北喜劇節（附加邏輯，非喜劇節演出完全不受影響）──
-  const isTcf = !!s.isTaipeiComedyFestival;
+  const isTcf = tcfOn() && !!s.isTaipeiComedyFestival;
   const tcfCardClass = isTcf ? ' tcf' : '';
   const tcfLabelHTML = isTcf ? `<div class="sc-tcf-label"><span class="zh-text">台北喜劇節</span><span class="en-text">Comedy Festival</span></div>` : '';
   // 年齡建議徽章先不顯示（官方文宣用詞尚未公布），欄位資料仍會照常保存
@@ -6089,7 +6105,7 @@ function courseCardHTML(c) {
   const typeTags = allTypes.map(t=>{const mt=COURSE_META[t]||COURSE_META.other;const lbl=getLang()==='en'?mt.labelEn:mt.label;return `<span class="cc-cat" style="background:${mt.tag};color:${mt.tagC};margin-right:3px">${lbl}</span>`;}).join('');
   // 卡片日期：多堂課只顯示「首日 ～ 尾日」
   const cardDate = courseCardDateRange(c.dateDisplay || c.date);
-  const cIsTcf = !!c.isTaipeiComedyFestival;
+  const cIsTcf = tcfOn() && !!c.isTaipeiComedyFestival;
   const cTcfClass = cIsTcf ? ' tcf' : '';
   const cTcfLabelHTML = cIsTcf ? `<div class="sc-tcf-label"><span class="zh-text">台北喜劇節</span><span class="en-text">Comedy Festival</span></div>` : '';
   const cTcfRibbonHTML = cIsTcf ? `<div class="sc-tcf-ribbon">台北喜劇節</div>` : '';
@@ -7385,7 +7401,7 @@ let _tcfPlanInbox = null;
     const q = new URLSearchParams(location.search).get('tcfplan');
     if(q){ _tcfPlanInbox = q; const u = new URL(location.href); u.searchParams.delete('tcfplan'); history.replaceState(history.state, '', u.pathname + u.search + u.hash); }
   }catch(e){}
-  if(!_tcfPlanInbox) return;
+  if(!_tcfPlanInbox || !tcfOn()) return; // 喜劇節結束後：行程備份連結不再處理
   let tries = 0;
   const t = setInterval(()=>{
     tries++;
@@ -7821,7 +7837,7 @@ function tcfFireConfetti(){
   function mark(box){
     box.querySelectorAll('.cal-day:not(.other-month)').forEach(el=>{
       const m=(el.getAttribute('onclick')||'').match(/'(\d{4}-\d{2}-\d{2})'/);
-      if(m && m[1]>=TCF_DATE_START && m[1]<=TCF_DATE_END) el.classList.add('tcf-day');
+      if(tcfOn() && m && m[1]>=TCF_DATE_START && m[1]<=TCF_DATE_END) el.classList.add('tcf-day');
     });
   }
   function init(){
@@ -9052,7 +9068,7 @@ function openPerformerDetail(id, skipPush){
   }).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
   const showsList = upcoming.length
     ? upcoming.map(s=>{
-      const rowIsTcf = !!s.isTaipeiComedyFestival;
+      const rowIsTcf = tcfOn() && !!s.isTaipeiComedyFestival;
       const rowBorder = rowIsTcf ? 'border:1.5px solid transparent;background-image:linear-gradient(var(--cr),var(--cr)),linear-gradient(135deg,var(--tcf-pink),var(--tcf-cyan));background-origin:border-box;background-clip:padding-box,border-box;' : '';
       const rowTcfLabel = rowIsTcf ? `<div style="font-size:.62rem;font-weight:700;color:var(--tcf-pink);font-family:var(--f-zh)">台北喜劇節</div>` : '';
       return `<div onclick="openShowDetail('${s.id}', true)" style="padding:8px 12px;background:var(--cr);border-radius:var(--r-md);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;${rowBorder}" onmouseover="this.style.background='var(--py)'" onmouseout="this.style.background='var(--cr)'">
@@ -11110,6 +11126,7 @@ function _renderGuideShows(){
   }).join('');
 }
 function showPage(page, skipHistory){
+  if(page==='tcf' && !tcfOn()) page='home'; // 喜劇節結束後：舊連結／書籤一律回首頁
   if(page!=='tcf') try{ tcfUnmountShows(); }catch(e){}
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   // 離開首頁時停止輪播
