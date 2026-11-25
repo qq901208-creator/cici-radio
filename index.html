@@ -1262,6 +1262,21 @@ body.nav-open .hamburger span:nth-child(3){transform:translateY(-7px) rotate(-45
 html.tcf-off .tcf-ui, html.tcf-off #page-tcf, html.tcf-off .tcf-official-fab, html.tcf-off .tcf-top-btn, html.tcf-off .cal-tcf-legend, html.tcf-off #tcf-plan-bar{display:none!important}
 /* ══════════ 台北喜劇節限定樣式（獨立區塊，活動結束後可整段刪除）══════════ */
 .show-card.tcf,.course-card.tcf{border:2.5px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(120deg,var(--tcf-pink) 0%,var(--tcf-pink2) 45%,var(--tcf-cyan) 100%);background-origin:border-box;background-clip:padding-box,border-box;box-shadow:0 4px 18px rgba(30,71,218,.18)}
+/* ── 台北喜劇節限動圖（B 夜藍＋主視覺黃）：只在 #new-story-preview 加上 .sc-tcf 時生效，只換顏色，版面不動 ── */
+#new-story-preview.sc-tcf{background:linear-gradient(180deg,#0c2a9c 0%,#1e47da 50%,#319ef1 100%)!important}
+#new-story-preview.sc-tcf .sc-bg1{background:radial-gradient(ellipse at 8% 0%,rgba(124,196,248,.4) 0%,transparent 70%),radial-gradient(ellipse at 100% 100%,rgba(124,196,248,.35) 0%,transparent 55%)!important}
+#new-story-preview.sc-tcf .sc-bg2{top:0!important;left:0!important;width:100%!important;height:100%!important;transform:none!important;border-radius:0!important;box-shadow:none!important;filter:none!important;background:radial-gradient(circle,rgba(255,255,255,.14) 1.2px,transparent 1.6px) 0 0/12px 12px!important}
+#new-story-preview.sc-tcf .sc-star{color:#e9c433!important;font-size:13px!important}
+#new-story-preview.sc-tcf .sc-safe{border-color:transparent!important}
+#new-story-preview.sc-tcf #sc-new-title{background:#fff8dc!important;color:#0c2a9c!important;border:1.5px solid #e9c433!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#new-story-preview.sc-tcf .sc-info{background:rgba(255,255,255,.96)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:hidden}
+#new-story-preview.sc-tcf .sc-info::after{content:'';position:absolute;right:-14px;bottom:-14px;width:46px;height:46px;border-radius:50%;background:#e9c433;opacity:.85}
+#new-story-preview.sc-tcf .sc-info img{z-index:2;opacity:.9!important}
+#new-story-preview.sc-tcf #sc-new-performers{color:rgba(12,42,156,.6)!important;border-bottom-color:rgba(12,42,156,.14)!important}
+#new-story-preview.sc-tcf .sc-info div[style*="border-top"]{border-top-color:rgba(12,42,156,.14)!important}
+#new-story-preview.sc-tcf #sc-new-date,#new-story-preview.sc-tcf #sc-new-venue,#new-story-preview.sc-tcf #sc-new-price,#new-story-preview.sc-tcf .sc-info .ic{color:#0c2a9c!important}
+#new-story-preview.sc-tcf #sc-new-price[style*="line-through"]{opacity:.45}
+#new-story-preview.sc-tcf #sc-ticket-zone{background:rgba(233,196,51,.16)!important;border-color:rgba(233,196,51,.9)!important}
 /* 右上角 pill 已改由斜標籤取代：只用 CSS 隱藏，render function 不動 */
 .sc-tcf-label{display:none!important}
 .sc-age-badge{position:absolute;top:8px;right:8px;background:var(--tcf-ink);color:#fff;font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:6px;font-family:var(--f-bo);letter-spacing:.02em;z-index:2}
@@ -3419,18 +3434,18 @@ body.edit .bt-admin-btn{display:inline-flex}
   <div id="new-story-preview" style="width:100%;aspect-ratio:9/16;background:#ebecd7;border-radius:16px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 4px 20px rgba(0,0,0,0.15);margin-bottom:12px">
 
     <!-- 背景漸層裝飾 -->
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 10% 0%,rgba(245,213,88,0.3) 0%,transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(239,111,32,0.15) 0%,transparent 55%);pointer-events:none;z-index:0"></div>
+    <div class="sc-bg1" style="position:absolute;inset:0;background:radial-gradient(ellipse at 10% 0%,rgba(245,213,88,0.3) 0%,transparent 55%),radial-gradient(ellipse at 90% 100%,rgba(239,111,32,0.15) 0%,transparent 55%);pointer-events:none;z-index:0"></div>
     <!-- 玻璃光澤：輕微稜鏡光線 -->
-    <div style="position:absolute;top:-10%;left:-10%;width:60%;height:50%;background:linear-gradient(135deg,rgba(255,255,255,0.12) 0%,rgba(255,220,180,0.06) 40%,transparent 70%);pointer-events:none;z-index:0;transform:rotate(-10deg)"></div>
+    <div class="sc-bg2" style="position:absolute;top:-10%;left:-10%;width:60%;height:50%;background:linear-gradient(135deg,rgba(255,255,255,0.12) 0%,rgba(255,220,180,0.06) 40%,transparent 70%);pointer-events:none;z-index:0;transform:rotate(-10deg)"></div>
 
     <!-- 角落星星裝飾 -->
-    <div style="position:absolute;top:10px;left:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
-    <div style="position:absolute;top:10px;right:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
-    <div style="position:absolute;bottom:10px;left:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
-    <div style="position:absolute;bottom:10px;right:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
+    <div class="sc-star" style="position:absolute;top:10px;left:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
+    <div class="sc-star" style="position:absolute;top:10px;right:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
+    <div class="sc-star" style="position:absolute;bottom:10px;left:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
+    <div class="sc-star" style="position:absolute;bottom:10px;right:12px;color:rgba(239,111,32,0.35);font-size:10px;z-index:3;user-select:none">✦</div>
 
     <!-- IG 上方安全區 -->
-    <div id="sc-ig-safe-top" style="height:7%;border-bottom:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
+    <div id="sc-ig-safe-top" class="sc-safe" style="height:7%;border-bottom:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
 
     <!-- 演員標注預留區 -->
     <div id="sc-actor-zone" style="height:13%;flex-shrink:0;position:relative;z-index:1"></div>
@@ -3454,7 +3469,7 @@ body.edit .bt-admin-btn{display:inline-flex}
     </div>
 
     <!-- 資訊卡 -->
-    <div style="margin:1.5% 4%;background:rgba(255,255,255,0.65);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.9);border-radius:4%;padding:2% 3%;flex-shrink:0;position:relative;z-index:1;box-shadow:0 1px 8px rgba(45,43,31,0.08);font-family:'Noto Sans TC','PingFang TC',sans-serif">
+    <div class="sc-info" style="margin:1.5% 4%;background:rgba(255,255,255,0.65);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.9);border-radius:4%;padding:2% 3%;flex-shrink:0;position:relative;z-index:1;box-shadow:0 1px 8px rgba(45,43,31,0.08);font-family:'Noto Sans TC','PingFang TC',sans-serif">
       <!-- Logo 壓在右下角 -->
       <img src="https://cici-radio.vercel.app/assets/ciciradio.jpg" style="position:absolute;bottom:6px;right:8px;width:20px;height:20px;border-radius:50%;object-fit:cover;opacity:0.7" alt="logo">
       <div id="sc-new-performers" style="font-size:.67em;color:rgba(45,43,31,0.6);line-height:1.5;letter-spacing:0;padding-bottom:1%;border-bottom:1px solid rgba(45,43,31,0.08);margin-bottom:1%"></div>
@@ -3481,7 +3496,7 @@ body.edit .bt-admin-btn{display:inline-flex}
     </div>
 
     <!-- IG 下方安全區 -->
-    <div id="sc-ig-safe-bottom" style="height:7%;border-top:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
+    <div id="sc-ig-safe-bottom" class="sc-safe" style="height:7%;border-top:1px solid rgba(45,43,31,0.07);flex-shrink:0;position:relative;z-index:1"></div>
   </div>
 
   <button onclick="downloadNewStoryCard()" style="width:100%;padding:11px;background:var(--or);color:#fff;border:none;border-radius:var(--r-pill);font-size:.88rem;font-weight:700;font-family:var(--f-zh);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" id="sc-new-download-btn">⬇ <span class="zh-text">生成圖片</span><span class="en-text">Generate Image</span></button>
@@ -11312,6 +11327,7 @@ function switchStoryTab(tab){
       preview.style.fontSize = '87%';
       preview.style.background = '#ebecd7';
       preview.style.display = 'flex';
+      preview.classList.toggle('sc-tcf', !!window._storyTcf);
       restoreIgPreview();
     }
   } else {
@@ -11323,6 +11339,7 @@ function switchStoryTab(tab){
       preview.style.minHeight = '';
       preview.style.fontSize = '100%';
       preview.style.background = '#1a1000';
+      preview.classList.remove('sc-tcf'); // Threads 版維持原樣
       preview.style.display = 'block';
       renderThreadsPreview();
     }
@@ -11484,7 +11501,7 @@ function downloadNewStoryCard(){
       node.style.wordSpacing = '0';
     });
     const isThreads = window._storyTab === 'threads';
-    const bgColor = isThreads ? '#1a1000' : '#ebecd7';
+    const bgColor = isThreads ? '#1a1000' : (window._storyTcf ? '#1e47da' : '#ebecd7');
     const elWidth = el.getBoundingClientRect().width || el.offsetWidth || 320;
     const elHeight = isThreads ? (el.getBoundingClientRect().height || el.scrollHeight) : elWidth * (16/9);
     const scaleRatio = 1080 / elWidth;
@@ -11524,9 +11541,26 @@ function downloadNewStoryCard(){
   } else { setTimeout(run, 100); }
 }
 
+// 台北喜劇節限動圖配色（B 夜藍＋黃）：flag 為台北喜劇節且活動期間才套用
+function applyStoryTcfTheme(item){
+  const el = document.getElementById('new-story-preview');
+  if(!el) return false;
+  const on = !!(item && item.isTaipeiComedyFestival && window.tcfOn && tcfOn());
+  el.classList.toggle('sc-tcf', on);
+  window._storyTcf = on;
+  return on;
+}
+function storyTypePillHTML(labels){
+  if(!labels.length) return '';
+  const tcf = window._storyTcf;
+  const bg = tcf ? '#e9c433' : '#ef6f20', fg = tcf ? '#1a1a1a' : '#fff';
+  return `<span style="background:${bg};color:${fg};font-size:.52em;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.15);letter-spacing:0.02em">${labels.join('・')}</span>`;
+}
 function openCourseStoryCard(id){
   const c = (window._COURSES||COURSES||[]).find(x=>x.id===id);
   if(!c) return;
+  window._currentStoryShow = null;
+  applyStoryTcfTheme(c);
   const lang = getLang();
   // 填課程名稱
   const titleEl = document.getElementById('sc-new-title');
@@ -11544,7 +11578,7 @@ function openCourseStoryCard(id){
   if(typesEl){
     const types = (c.types&&c.types.length)?c.types:(c.type?[c.type]:[]);
     const labels = types.map(t=>{const m=COURSE_META[t]||COURSE_META.other;return m.label;});
-    typesEl.innerHTML = labels.length ? `<span style="background:#ef6f20;color:#fff;font-size:.52em;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.15);letter-spacing:0.02em">${labels.join('・')}</span>` : '';
+    typesEl.innerHTML = storyTypePillHTML(labels);
   }
   // 日期
   const dateStr = `${(c.dateDisplay||c.date||'').split(',')[0].trim()}${c.time ? ' ' + c.time : ''}`;
@@ -11576,6 +11610,7 @@ function openStoryCard(id){
   const s = (window._SHOWS||SHOWS||[]).find(x=>x.id===id);
   if(!s) return;
   window._currentStoryShow = s;
+  applyStoryTcfTheme(s);
   const lang = getLang();
   const d = new Date(s.date+'T00:00');
   const dowZh = ['日','一','二','三','四','五','六'][d.getDay()];
@@ -11604,11 +11639,7 @@ function openStoryCard(id){
   if(typesEl){
     const types = s.types||(s.type?[s.type]:[]);
     const labels = types.map(t=>{const m=TYPE_META[t]||TYPE_META.other;return m.label;});
-    if(labels.length){
-      typesEl.innerHTML = `<span style="background:#ef6f20;color:#fff;font-size:.52em;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.15);letter-spacing:0.02em">${labels.join('・')}</span>`;
-    } else {
-      typesEl.innerHTML = '';
-    }
+    typesEl.innerHTML = storyTypePillHTML(labels);
   }
 
   // 填入資料
