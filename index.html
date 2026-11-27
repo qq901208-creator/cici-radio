@@ -5401,6 +5401,11 @@ function renderShows() {
       if(aTop && !bTop) return -1;
       if(!aTop && bTop) return 1;
     }
+    // 喜劇節頁：已過期的排到最後，過期的之間依時間先後（先過期的在前）
+    if(_tcfKeep){
+      const aEx = isExpired(a.date, a.time), bEx = isExpired(b.date, b.time);
+      if(aEx !== bEx) return aEx ? 1 : -1;
+    }
     return showSortKey(a).localeCompare(showSortKey(b));
   });
 
@@ -6310,7 +6315,10 @@ function renderTcfDateChips(){
   wrap.innerHTML = (`<button class="tcf-date-chip${cur==='all'?' on':''}" onclick="setTcfDate('all')"><b>${en?'All dates':'全部日期'}</b><small>${total>0?(en?`${total} shows`:`共 ${total} 場`):'\u00a0'}</small></button>`) +
     tcfDateList().map(x=>{
       const n = base.filter(s=>tcfShowHasDate(s, x.ds)).length;
-      const dim = (total>0 && n===0) ? ' empty' : '';
+      const dayShows = base.filter(s=>tcfShowHasDate(s, x.ds));
+      const twToday = new Date(Date.now()+8*3600*1000).toISOString().slice(0,10);
+      const pastDay = x.ds < twToday || (dayShows.length>0 && dayShows.every(s=>isExpired(s.date, s.time)));
+      const dim = ((total>0 && n===0) || pastDay) ? ' empty' : '';
       return `<button class="tcf-date-chip${cur===x.ds?' on':''}${dim}" onclick="setTcfDate('${x.ds}')"><b>${x.mm}.${x.dd}</b><small>${DOW[x.dow]}${n>0?' · '+cnt(n):''}</small></button>`;
     }).join('');
 }
@@ -7920,7 +7928,7 @@ function renderTcfShowsGrid(){
     return true;
   });
   if(tcfExploreTag!=='all') list = list.filter(s=>(s.taipeiComedyFestivalTags||[]).includes(tcfExploreTag));
-  list = list.sort((a,b)=>showSortKey(a).localeCompare(showSortKey(b)));
+  list = list.sort((a,b)=>{ const ea=isExpired(a.date,a.time), eb=isExpired(b.date,b.time); if(ea!==eb) return ea?1:-1; return showSortKey(a).localeCompare(showSortKey(b)); });
   grid.innerHTML = list.length
     ? list.map(showCardHTML).join('')
     : `<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--ts);font-family:var(--f-zh)">${window._dataReady?'目前尚無台北喜劇節演出資訊':'資料載入中，請稍後'}</div>`;
