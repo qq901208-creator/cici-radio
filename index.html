@@ -5354,15 +5354,18 @@ function renderShows() {
   const adminMode = isLoggedIn() && editMode;
   const q = (document.getElementById('shows-search')?.value||'').trim().toLowerCase();
   const shows = window._SHOWS || SHOWS || [];
+  const _tcfKeep = tcfPageActive(); // 喜劇節頁：封存／已結束的喜劇節演出仍要顯示（演出資訊頁不受影響）
   const fil = shows.filter(s => {
     const st = s.status || 'published';
-    if (st === 'archived' || st === 'cancelled') return false;
+    const _keepPast = _tcfKeep && !!s.isTaipeiComedyFestival;
+    if (st === 'cancelled') return false;
+    if (st === 'archived' && !_keepPast) return false;
     if (st === 'postponed' && !adminMode) return false;
     if (st === 'hidden' && !adminMode) return false;
     if (st === 'hidden' && isExpired(s.date, s.time)) return false;
     if (!adminMode && st === 'pending') return false;
-    if (!adminMode && isExpired(s.date, s.time)) return false;
-    if (adminMode && hideExpiredShows && isExpired(s.date, s.time) && st !== 'pending' && st !== 'postponed') return false;
+    if (!adminMode && !_keepPast && isExpired(s.date, s.time)) return false;
+    if (adminMode && !_keepPast && hideExpiredShows && isExpired(s.date, s.time) && st !== 'pending' && st !== 'postponed') return false;
     const types = s.types||(s.type?[s.type]:[]);
     const _tcfPg = tcfPageActive(); // 喜劇節頁的 pill 可能對應多個舊代碼；演出資訊頁維持原本的精確比對
     if (fType!=='all' && !(_tcfPg ? tcfCodeHit(s, fType) : types.includes(fType))) return false;
@@ -6290,9 +6293,8 @@ function tcfBaseList(){
   return (window._SHOWS || SHOWS || []).filter(s=>{
     if(!s.isTaipeiComedyFestival) return false;
     const st = s.status || 'published';
-    if(st==='archived' || st==='cancelled') return false;
+    if(st==='cancelled') return false;   // 封存（archived）與已結束的演出仍留在喜劇節頁，活動期間可回看
     if((st==='postponed' || st==='hidden' || st==='pending') && !adminMode) return false;
-    if(!adminMode && isExpired(s.date, s.time)) return false;
     return true;
   });
 }
@@ -7912,10 +7914,9 @@ function renderTcfShowsGrid(){
   let list = (window._SHOWS||[]).filter(s=>{
     if(!s.isTaipeiComedyFestival) return false;
     const st = s.status || 'published';
-    if (st === 'archived' || st === 'cancelled') return false;
+    if (st === 'cancelled') return false;   // 封存（archived）與已結束的演出仍留在喜劇節頁，活動期間可回看
     if (st === 'postponed' && !adminMode) return false;
     if (st === 'hidden' && !adminMode) return false;
-    if (!adminMode && isExpired(s.date, s.time)) return false;
     return true;
   });
   if(tcfExploreTag!=='all') list = list.filter(s=>(s.taipeiComedyFestivalTags||[]).includes(tcfExploreTag));
@@ -7936,7 +7937,7 @@ function renderTcfCoursesGrid(){
 // 參演演員自動合併去重——完全比照 openPerformerDetail() 既有的字串比對演算法（僅方向相反：
 // 從「單一演員 → 找演出」變成「全部喜劇節演出 → 找演員」），不新增任何人工維護欄位
 function deriveTcfPerformers(){
-  const shows = (window._SHOWS||[]).filter(s=>s.isTaipeiComedyFestival && !isExpired(s.date,s.time) && s.status!=='hidden' && s.status!=='cancelled' && s.status!=='archived');
+  const shows = (window._SHOWS||[]).filter(s=>s.isTaipeiComedyFestival && s.status!=='hidden' && s.status!=='cancelled');
   const allPerformers = window._PERFORMERS_DISPLAY || window._PERFORMERS || [];
   const matchedIds = new Set();
   shows.forEach(s=>{
