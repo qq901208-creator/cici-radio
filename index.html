@@ -6490,7 +6490,10 @@ function setTcfView(v){
   if(v==='agenda' && fTcfDate==='all'){
     // 當日時刻表需要一個日期：預設第一個有演出的日子，都沒有就第一天
     const base = tcfBaseList(), days = tcfDateList();
-    const first = days.find(x=>base.some(s=>tcfShowHasDate(s, x.ds))) || days[0];
+    // 自動跳到「今天」（台灣時間）：活動期間內就是當天；活動前跳第一個有演出的日子；活動後跳最後一天
+    const twToday = new Date(Date.now()+8*3600*1000).toISOString().slice(0,10);
+    const firstShowDay = days.find(x=>base.some(s=>tcfShowHasDate(s, x.ds))) || days[0];
+    const first = days.find(x=>x.ds===twToday) || (twToday > days[days.length-1].ds ? days[days.length-1] : firstShowDay);
     fTcfDate = first.ds; showsPage = 1;
     renderTcfDateChips(); renderShows();
   }
